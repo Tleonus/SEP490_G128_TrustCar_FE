@@ -90,12 +90,12 @@ export async function getSimilarCars(id, limit = 4) {
   }
 }
 
-// --- CẦN BACKEND XÁC NHẬN ---
-// GET /cars/featured?limit= -> Car[]
+// GET /public/cars/featured?limit= -> { success: true, data: Car[] }
 export async function getFeaturedCars(limit = 8) {
   try {
-    const { data } = await api.get('/cars/featured', { params: { limit } })
-    return data
+    const { data } = await api.get('/public/cars/featured', { params: { limit } })
+    // Backend trả về { success: true, data: [...] }
+    return data?.data ?? data
   } catch (error) {
     if (!USE_MOCK_FALLBACK) throw error
     warnFallback('getFeaturedCars', error)

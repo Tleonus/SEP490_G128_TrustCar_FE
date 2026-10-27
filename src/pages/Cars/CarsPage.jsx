@@ -146,7 +146,7 @@ export default function CarsPage() {
               <>
                 <div className={styles.grid}>
                   {items.map((car) => (
-                    <CarCard key={car.id} car={car} />
+                    <CarCard key={car._id || car.id} car={car} />
                   ))}
                 </div>
                 <div className={styles.pagination}>

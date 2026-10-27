@@ -143,7 +143,7 @@ export default function CarDetailPage() {
             </div>
             <div className={styles.similarGrid}>
               {similarCars.map((similarCar) => (
-                <CarCard key={similarCar.id} car={similarCar} />
+                <CarCard key={similarCar._id || similarCar.id} car={similarCar} />
               ))}
             </div>
           </div>

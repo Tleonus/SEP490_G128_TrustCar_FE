@@ -6,17 +6,32 @@ import { useAuthStore } from '../../store/useAuthStore'
 import styles from './LoginPage.module.css'
 
 export default function LoginPage() {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const login = useAuthStore((state) => state.login)
-  const loading = useAuthStore((state) => state.loading)
-  const error = useAuthStore((state) => state.error)
+  const navigate  = useNavigate()
+  const location  = useLocation()
+  const login     = useAuthStore((state) => state.login)
+  const loading   = useAuthStore((state) => state.loading)
+  const error     = useAuthStore((state) => state.error)
 
   async function handleSubmit(values) {
+    console.log('[LoginPage] 🖱️ Người dùng bấm Đăng nhập:', values.email)
+
     const ok = await login(values)
+
     if (ok) {
-      const redirectTo = location.state?.from?.pathname || '/'
-      navigate(redirectTo, { replace: true })
+      // Sau khi login thành công, đọc user từ store (đã được set bởi login action)
+      const user = useAuthStore.getState().user
+      console.log('[LoginPage] ✅ Đăng nhập OK, user.role =', user?.role)
+
+      // Điều hướng theo role
+      if (user?.role === 'ADMIN' || user?.role === 'STAFF') {
+        navigate('/admin', { replace: true })
+      } else {
+        // Quay về trang trước (nếu bị redirect từ route bảo vệ) hoặc về trang chủ
+        const redirectTo = location.state?.from?.pathname || '/'
+        navigate(redirectTo, { replace: true })
+      }
+    } else {
+      console.warn('[LoginPage] ❌ Đăng nhập thất bại')
     }
   }
 
@@ -24,30 +39,50 @@ export default function LoginPage() {
     <div className={styles.page}>
       <div className={styles.card}>
         <div className={styles.logo}>
-          <img src={logo} alt="TrustCar" className={styles.logoImg} />
+          <img src={logo} alt="TrustCar Logo" className={styles.logoImg} />
         </div>
         <h1 className={styles.title}>Đăng nhập</h1>
         <p className={styles.desc}>Đăng nhập để sử dụng đầy đủ dịch vụ của TrustCar</p>
 
         {error && (
-          <Alert type="error" message={error} showIcon style={{ marginBottom: 16 }} />
+          <Alert
+            type="error"
+            title={error}
+            showIcon
+            style={{ marginBottom: 16 }}
+          />
         )}
 
-        <Form layout="vertical" onFinish={handleSubmit}>
+        <Form layout="vertical" onFinish={handleSubmit} autoComplete="off">
           <Form.Item
             name="email"
             label="Email"
-            rules={[{ required: true, message: 'Vui lòng nhập email' }]}
+            rules={[
+              { required: true, message: 'Vui lòng nhập email' },
+              { type: 'email', message: 'Email không hợp lệ' },
+            ]}
           >
-            <Input prefix={<UserOutlined />} placeholder="email@example.com" size="large" />
+            <Input
+              prefix={<UserOutlined />}
+              placeholder="email@example.com"
+              size="large"
+              autoComplete="email"
+            />
           </Form.Item>
+
           <Form.Item
             name="password"
             label="Mật khẩu"
             rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' }]}
           >
-            <Input.Password prefix={<LockOutlined />} placeholder="••••••••" size="large" />
+            <Input.Password
+              prefix={<LockOutlined />}
+              placeholder="••••••••"
+              size="large"
+              autoComplete="current-password"
+            />
           </Form.Item>
+
           <Button
             type="primary"
             htmlType="submit"
@@ -59,10 +94,6 @@ export default function LoginPage() {
             Đăng nhập
           </Button>
         </Form>
-
-        <p className={styles.note}>
-          Chức năng đăng nhập cần Backend cung cấp API xác thực (POST /auth/login).
-        </p>
       </div>
     </div>
   )
