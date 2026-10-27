@@ -60,14 +60,14 @@ export default function ContactPage() {
           <div className={styles.formCard}>
             <Form form={form} layout="vertical" onFinish={handleSubmit}>
               <Form.Item
-                name="name"
+                name="full_name"
                 label="Họ và tên"
                 rules={[{ required: true, message: 'Vui lòng nhập họ tên' }]}
               >
                 <Input placeholder="Nguyễn Văn A" size="large" />
               </Form.Item>
               <Form.Item
-                name="phone"
+                name="phone_number"
                 label="Số điện thoại"
                 rules={[{ required: true, message: 'Vui lòng nhập số điện thoại' }]}
               >
@@ -76,7 +76,7 @@ export default function ContactPage() {
               <Form.Item name="email" label="Email">
                 <Input placeholder="email@example.com" size="large" />
               </Form.Item>
-              <Form.Item name="message" label="Nội dung">
+              <Form.Item name="request_content" label="Nội dung">
                 <Input.TextArea rows={4} placeholder="Tôi cần tư vấn về..." />
               </Form.Item>
               <Button type="primary" htmlType="submit" size="large" loading={sending} block>

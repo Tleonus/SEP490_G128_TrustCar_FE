@@ -49,6 +49,8 @@
 }
 
 .thumb {
+  padding: 0;
+  background: none;
   width: 84px;
   height: 60px;
   border-radius: 8px;
@@ -169,4 +171,9 @@
   padding: 2px 8px;
   border-radius: 999px;
   margin-bottom: 12px;
+}
+
+ul.descText {
+  padding-left: 20px;
+  list-style: disc;
 }
