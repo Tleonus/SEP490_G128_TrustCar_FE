@@ -27,7 +27,6 @@
   --shadow: 0 4px 16px rgb(16 43 70 / 6%);
 }
 .app-shell * { box-sizing: border-box; }
-:global(body) { margin: 0; min-width: 320px;  margin: 0; background: #eaf0f6; }
 .app-shell button, .app-shell input, .app-shell select, .app-shell textarea { font: inherit; }
 .app-shell button, .app-shell a, .app-shell select { -webkit-tap-highlight-color: transparent; }
 .app-shell button { cursor: pointer; touch-action: manipulation; }
