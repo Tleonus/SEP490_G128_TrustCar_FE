@@ -1,47 +1,63 @@
 .brands {
   background: var(--color-surface);
-  padding: 56px 0;
+  padding: 72px 0;
 }
 
+/* Lưới dùng trọn chiều rộng .container để thẳng mép với các section khác;
+   hàng cuối (khi xuống dòng) được căn giữa thay vì dồn trái */
 .grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 24px;
-  max-width: 1040px;
-  margin: 0 auto;
+  --cols: 7;
+  --gap: 20px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--gap);
+}
+
+.item {
+  flex: 0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols));
+  min-width: 0;
 }
 
 @media (max-width: 1100px) {
   .grid {
-    grid-template-columns: repeat(4, 1fr);
+    --cols: 4;
   }
 }
 
 @media (max-width: 700px) {
   .grid {
-    grid-template-columns: repeat(3, 1fr);
+    --cols: 3;
+    --gap: 14px;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 420px) {
   .grid {
-    grid-template-columns: repeat(2, 1fr);
+    --cols: 2;
+    --gap: 12px;
   }
 }
 
 .brandCard {
-  aspect-ratio: 1;
-  border: 1px solid var(--color-border);
-  border-radius: 14px;
-  background: var(--color-surface-alt);
+  width: 100%;
+  height: 148px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px 16px;
-  gap: 10px;
-  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  gap: 14px;
+  padding: 20px 14px;
+  font: inherit;
+  color: inherit;
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
   cursor: pointer;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .brandCard:hover {
@@ -50,24 +66,35 @@
   box-shadow: var(--shadow-card-hover);
 }
 
-.brandLogo {
-  width: 48px;
-  height: 48px;
-  object-fit: contain;
-  filter: grayscale(0.6);
-  transition: filter 0.25s ease;
+.brandCard:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
 }
 
-[data-theme='dark'] .brandLogo {
-  filter: grayscale(0.6) brightness(0) invert(1);
+/* Khung logo cố định để logo vuông (Toyota...) và logo dạng chữ (VinFast) cân nhau */
+.logoBox {
+  width: 100%;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brandLogo {
+  max-width: min(100%, 112px);
+  max-height: 100%;
+  object-fit: contain;
+  opacity: 0.75;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+:root[data-theme='dark'] .brandLogo {
+  filter: brightness(0) invert(1);
 }
 
 .brandCard:hover .brandLogo {
-  filter: grayscale(0);
-}
-
-[data-theme='dark'] .brandCard:hover .brandLogo {
-  filter: grayscale(0) brightness(1) invert(0);
+  opacity: 1;
+  transform: scale(1.06);
 }
 
 .brandName {
@@ -75,4 +102,19 @@
   font-size: 14px;
   color: var(--color-text);
   text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+@media (max-width: 700px) {
+  .brandCard {
+    height: 124px;
+    padding: 16px 10px;
+  }
+
+  .logoBox {
+    height: 42px;
+  }
 }

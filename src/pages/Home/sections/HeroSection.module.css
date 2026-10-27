@@ -1,43 +1,41 @@
 .hero {
+  --hero-height: 600px;
+  --search-bottom: 64px;
+  --search-height: 80px;
   position: relative;
-  height: 640px;
+  height: var(--hero-height);
   overflow: hidden;
+  background: #0b1220;
 }
 
-@media (max-width: 768px) {
-  .hero {
-    height: 560px;
-  }
+.carousel,
+.slide {
+  height: var(--hero-height);
 }
 
 .slide {
   position: relative;
-  height: 640px;
+  background: radial-gradient(120% 90% at 0% 0%, #13284a 0%, #0b1220 60%);
 }
 
-@media (max-width: 768px) {
-  .slide {
-    height: 560px;
-  }
-}
-
+/* Ảnh chiếm phần bên phải, mép trái hoà dần vào nền để chữ không đè lên xe */
 .slideImg {
   position: absolute;
-  inset: 0;
-  width: 100%;
+  top: 0;
+  right: 0;
+  width: 64%;
   height: 100%;
   object-fit: cover;
+  object-position: center 70%;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 32%);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 32%);
 }
 
+/* Làm tối nhẹ phần đáy để thanh tìm kiếm và dots nổi rõ */
 .overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    90deg,
-    rgba(8, 15, 28, 0.88) 0%,
-    rgba(8, 15, 28, 0.55) 45%,
-    rgba(8, 15, 28, 0.25) 100%
-  );
+  background: linear-gradient(0deg, rgba(8, 15, 28, 0.7) 0%, rgba(8, 15, 28, 0) 38%);
 }
 
 .content {
@@ -45,18 +43,16 @@
   inset: 0;
   display: flex;
   align-items: center;
-}
-
-.contentInner {
-  max-width: 1240px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 0 20px;
+  padding-bottom: calc(var(--search-bottom) + var(--search-height));
 }
 
 .textBlock {
-  max-width: 620px;
-  animation: fadeUp 0.7s ease both;
+  max-width: 500px;
+  opacity: 0;
+}
+
+:global(.slick-active) .textBlock {
+  animation: fadeUp 0.7s ease 0.15s both;
 }
 
 @keyframes fadeUp {
@@ -84,60 +80,136 @@
 
 .title {
   color: #fff;
-  font-size: 44px;
+  font-size: 42px;
   line-height: 1.2;
   margin: 0 0 16px;
 }
 
-@media (max-width: 768px) {
-  .title {
-    font-size: 28px;
-  }
-}
-
 .subtitle {
-  color: #dfe2ea;
+  color: #c9cfdb;
   font-size: 17px;
   line-height: 1.6;
   margin: 0;
 }
 
+/* Thanh tìm kiếm nằm ngoài carousel nên giữ nguyên khi đổi slide */
+.searchLayer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--search-bottom);
+  z-index: 2;
+  pointer-events: none;
+}
+
 .searchBox {
-  margin-top: 32px;
-  background: rgba(255, 255, 255, 0.97);
+  pointer-events: auto;
+  background: #fff;
   border-radius: 14px;
-  padding: 18px;
+  padding: 16px;
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr auto;
+  grid-template-columns: 1.6fr 1fr 1fr 160px;
   gap: 12px;
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
 }
 
-@media (max-width: 900px) {
-  .searchBox {
-    grid-template-columns: 1fr 1fr;
-  }
+.inputIcon {
+  color: #8a93a6;
 }
 
-@media (max-width: 560px) {
-  .searchBox {
-    grid-template-columns: 1fr;
-  }
-}
-
-.searchBtn {
-  height: 44px;
-}
-
-:global(.ant-carousel .slick-dots) {
+.carousel :global(.slick-dots) {
   bottom: 24px;
 }
 
-:global(.ant-carousel .slick-dots li button) {
+.carousel :global(.slick-dots li button) {
   background: rgba(255, 255, 255, 0.5);
   height: 4px;
 }
 
-:global(.ant-carousel .slick-dots li.slick-active button) {
+.carousel :global(.slick-dots li.slick-active button) {
   background: #d9b84a;
+}
+
+@media (max-width: 1100px) {
+  .slideImg {
+    width: 72%;
+  }
+
+  .textBlock {
+    max-width: 440px;
+  }
+
+  .title {
+    font-size: 36px;
+  }
+}
+
+/* Màn hẹp: ảnh phủ toàn khung, phủ lớp tối để chữ dễ đọc */
+@media (max-width: 900px) {
+  .hero {
+    --search-bottom: 56px;
+    --search-height: 176px;
+  }
+
+  .slideImg {
+    width: 100%;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .overlay {
+    background: linear-gradient(
+      0deg,
+      rgba(8, 15, 28, 0.92) 0%,
+      rgba(8, 15, 28, 0.6) 55%,
+      rgba(8, 15, 28, 0.35) 100%
+    );
+  }
+
+  .searchBox {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .keyword,
+  .searchBtn {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 30px;
+  }
+
+  .subtitle {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 560px) {
+  .hero {
+    --hero-height: 580px;
+    --search-bottom: 48px;
+    --search-height: 168px;
+  }
+
+  .searchBox {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .title {
+    font-size: 26px;
+  }
+
+  .carousel :global(.slick-dots) {
+    bottom: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(.slick-active) .textBlock {
+    animation: none;
+    opacity: 1;
+  }
 }

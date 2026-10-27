@@ -45,7 +45,11 @@ export default function FeaturedSection() {
           <>
             <div className={styles.grid}>
               {cars.map((car) => (
-                <CarCard key={car.id} car={car} />
+<<<<<<< HEAD
+                <CarCard key={car.stock_code} car={car} />
+=======
+                <CarCard key={car._id || car.id} car={car} />
+>>>>>>> develop
               ))}
             </div>
             <div className={styles.actions}>
@@ -53,7 +57,7 @@ export default function FeaturedSection() {
                 type="primary"
                 size="large"
                 icon={<RightOutlined />}
-                iconPosition="end"
+                iconPlacement="end"
                 onClick={() => navigate('/xe')}
               >
                 Xem tất cả xe

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { getCarById, getSimilarCars } from '../services/carService'
+import { getCarByStockCode, getSimilarCars } from '../services/carService'
 
-export function useCarDetail(id) {
+export function useCarDetail(stockCode) {
   const [car, setCar] = useState(null)
   const [similarCars, setSimilarCars] = useState([])
   const [loading, setLoading] = useState(true)
@@ -13,20 +13,20 @@ export function useCarDetail(id) {
     setLoading(true)
     setError(null)
 
-    getCarById(id)
+    getCarByStockCode(stockCode)
       .then((data) => {
         if (!active) return
         setCar(data)
-        return getSimilarCars(id)
+        return getSimilarCars(stockCode)
       })
       .then((similar) => {
-        if (!active) return
-        if (similar) setSimilarCars(similar)
+        if (!active || !similar) return
+        setSimilarCars(similar.items || similar)
       })
       .catch((err) => {
         if (!active) return
         setError(
-          err.status === 404
+          err.status === 404 || err.response?.status === 404
             ? 'Không tìm thấy thông tin xe này.'
             : 'Không thể tải thông tin xe. Vui lòng thử lại.',
         )
@@ -38,7 +38,7 @@ export function useCarDetail(id) {
     return () => {
       active = false
     }
-  }, [id])
+  }, [stockCode])
 
   return { car, similarCars, loading, error }
 }
