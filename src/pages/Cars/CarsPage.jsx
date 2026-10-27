@@ -199,7 +199,11 @@ export default function CarsPage() {
               <>
                 <div className={styles.grid}>
                   {items.map((car) => (
+<<<<<<< HEAD
                     <CarCard key={car.stock_code} car={car} />
+=======
+                    <CarCard key={car._id || car.id} car={car} />
+>>>>>>> develop
                   ))}
                 </div>
                 <div className={styles.pagination}>

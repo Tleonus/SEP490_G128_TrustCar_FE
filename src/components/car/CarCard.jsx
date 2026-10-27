@@ -6,19 +6,21 @@ import { BODY_TYPE_LABEL, FUEL_TYPE_LABEL, TRANSMISSION_LABEL, labelOf } from '.
 import styles from './CarCard.module.css'
 
 export default function CarCard({ car }) {
-  const cover = getCoverImage(car)
-  const title = getCarTitle(car)
-  const bodyType = car.model?.body_type
+  // Hỗ trợ cả MongoDB (_id) và mock data (id)
+  const carId = car._id || car.id
+  const image = car.images?.[0]
 
   return (
-    <Link to={`/xe/${encodeURIComponent(car.stock_code)}`} className={styles.card}>
+    <Link to={`/xe/${carId}`} className={styles.card}>
       <div className={styles.imgWrap}>
-        {cover && <img src={cover.image_url} alt={cover.caption || title} className={styles.img} />}
-        {bodyType && <span className={styles.badge}>{labelOf(BODY_TYPE_LABEL, bodyType)}</span>}
+        {image && <img src={image} alt={`${car.brand || car.make} ${car.model}`} className={styles.img} />}
+        <span className={styles.badge}>{car.bodyType}</span>
       </div>
       <div className={styles.body}>
-        <h3 className={styles.title}>{title}</h3>
-        <div className={styles.price}>{formatPrice(car.listed_price)}</div>
+        <h3 className={styles.title}>
+          {car.brand || car.make} {car.model}
+        </h3>
+        <div className={styles.price}>{formatPrice(car.price || car.listedPrice)}</div>
         <div className={styles.meta}>
           <span><CalendarOutlined /> {car.manufacturing_year}</span>
           <span><DashboardOutlined /> {formatMileage(car.mileage_km)}</span>
