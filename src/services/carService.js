@@ -133,21 +133,12 @@ export async function getSimilarCars(stockCode, limit = 4) {
   }
 }
 
-<<<<<<< HEAD
-// --- CẦN BACKEND XÁC NHẬN ---
-// GET /cars?is_featured=true&limit= -> { items: Car[] }
-export async function getFeaturedCars(limit = 8) {
-  try {
-    const { data } = await api.get('/cars', { params: { is_featured: true, page_size: limit } })
-    return data
-=======
 // GET /public/cars/featured?limit= -> { success: true, data: Car[] }
 export async function getFeaturedCars(limit = 8) {
   try {
     const { data } = await api.get('/public/cars/featured', { params: { limit } })
     // Backend trả về { success: true, data: [...] }
     return data?.data ?? data
->>>>>>> develop
   } catch (error) {
     if (!USE_MOCK_FALLBACK) throw error
     warnFallback('getFeaturedCars', error)
