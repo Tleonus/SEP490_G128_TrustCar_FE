@@ -31,7 +31,8 @@
   height: 44px;
   width: auto;
   border-radius: 6px;
-  object-fit: contain;   /* contain thay vì cover để logo không bị crop */
+  object-fit: contain;
+  /* contain thay vì cover để logo không bị crop */
   background: transparent;
 }
 

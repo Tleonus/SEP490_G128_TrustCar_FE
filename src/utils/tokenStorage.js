@@ -12,13 +12,13 @@ export function getToken() {
 export function saveToken(token) {
   try {
     localStorage.setItem(TOKEN_KEY, token)
-  } catch {}
+  } catch { }
 }
 
 export function clearToken() {
   try {
     localStorage.removeItem(TOKEN_KEY)
-  } catch {}
+  } catch { }
 }
 
 export function getUser() {
@@ -34,11 +34,11 @@ export function saveUser(user) {
   try {
     if (user) localStorage.setItem(USER_KEY, JSON.stringify(user))
     else localStorage.removeItem(USER_KEY)
-  } catch {}
+  } catch { }
 }
 
 export function clearUser() {
   try {
     localStorage.removeItem(USER_KEY)
-  } catch {}
+  } catch { }
 }

@@ -45,11 +45,7 @@ export default function FeaturedSection() {
           <>
             <div className={styles.grid}>
               {cars.map((car) => (
-<<<<<<< HEAD
-                <CarCard key={car.stock_code} car={car} />
-=======
-                <CarCard key={car._id || car.id} car={car} />
->>>>>>> develop
+                <CarCard key={car.stock_code || car._id || car.id} car={car} />
               ))}
             </div>
             <div className={styles.actions}>
