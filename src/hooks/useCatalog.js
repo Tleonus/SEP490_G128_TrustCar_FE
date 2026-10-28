@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getBrands, getCarModels } from '../services/brandService'
+import { getBrands } from '../services/brandService'
 
 export function useBrands() {
   const [brands, setBrands] = useState([])
@@ -15,21 +15,4 @@ export function useBrands() {
   }, [])
 
   return brands
-}
-
-export function useCarModels(brandId) {
-  const [models, setModels] = useState([])
-
-  useEffect(() => {
-    let active = true
-    if (!brandId) return undefined
-    getCarModels(brandId).then((data) => {
-      if (active) setModels(data)
-    })
-    return () => {
-      active = false
-    }
-  }, [brandId])
-
-  return brandId ? models : []
 }

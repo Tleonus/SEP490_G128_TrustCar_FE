@@ -18,17 +18,17 @@ export default function BrandsSection() {
         </div>
         <ul className={styles.grid}>
           {brands.map((brand) => (
-            <li key={brand.brand_id} className={styles.item}>
+            <li key={brand.value} className={styles.item}>
               <button
                 type="button"
                 className={styles.brandCard}
-                onClick={() => navigate(`/xe?brand_id=${encodeURIComponent(brand.brand_id)}`)}
-                aria-label={`Xem xe ${brand.brand_name}`}
+                onClick={() => navigate(`/xe?make=${encodeURIComponent(brand.value)}`)}
+                aria-label={`Xem xe ${brand.label}`}
               >
                 <span className={styles.logoBox}>
-                  <img src={brand.logo} alt="" className={styles.brandLogo} />
+                  {brand.logo && <img src={brand.logo} alt="" className={styles.brandLogo} />}
                 </span>
-                <span className={styles.brandName}>{brand.brand_name}</span>
+                <span className={styles.brandName}>{brand.label}</span>
               </button>
             </li>
           ))}

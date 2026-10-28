@@ -39,7 +39,7 @@ export const useAuthStore = create((set) => ({
 
       // Cập nhật Zustand store
       set({ token, user, isAuthenticated: true, loading: false, error: null })
-      console.log('[AuthStore] ✅ Đăng nhập thành công, isAuthenticated = true, role =', user.role)
+      console.log('[AuthStore] ✅ Đăng nhập thành công, isAuthenticated = true, roleName =', user.roleName)
       return true
 
     } catch (err) {

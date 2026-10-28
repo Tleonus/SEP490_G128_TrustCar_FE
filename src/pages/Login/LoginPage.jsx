@@ -20,10 +20,10 @@ export default function LoginPage() {
     if (ok) {
       // Sau khi login thành công, đọc user từ store (đã được set bởi login action)
       const user = useAuthStore.getState().user
-      console.log('[LoginPage] ✅ Đăng nhập OK, user.role =', user?.role)
+      console.log('[LoginPage] ✅ Đăng nhập OK, user.roleName =', user?.roleName)
 
-      // Điều hướng theo role
-      if (user?.role === 'ADMIN' || user?.role === 'STAFF') {
+      // Điều hướng theo role (user.roleName là chuỗi thật từ backend; user.role là object Role đã populate)
+      if (user?.roleName === 'ADMIN' || user?.roleName === 'SALES_STAFF') {
         navigate('/admin', { replace: true })
       } else {
         // Quay về trang trước (nếu bị redirect từ route bảo vệ) hoặc về trang chủ

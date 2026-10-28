@@ -17,11 +17,11 @@ export function useCarDetail(stockCode) {
       .then((data) => {
         if (!active) return
         setCar(data)
-        return getSimilarCars(stockCode)
+        return getSimilarCars(data?.make, data?._id || data?.vehicleCode)
       })
       .then((similar) => {
         if (!active || !similar) return
-        setSimilarCars(similar.items || similar)
+        setSimilarCars(similar.items || [])
       })
       .catch((err) => {
         if (!active) return

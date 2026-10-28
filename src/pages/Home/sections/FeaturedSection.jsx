@@ -16,7 +16,7 @@ export default function FeaturedSection() {
   useEffect(() => {
     getFeaturedCars(8)
       .then((result) => {
-        setCars(result.items || result)
+        setCars(result.items)
         setError(null)
       })
       .catch(() => {
@@ -45,7 +45,7 @@ export default function FeaturedSection() {
           <>
             <div className={styles.grid}>
               {cars.map((car) => (
-                <CarCard key={car.stock_code || car._id || car.id} car={car} />
+                <CarCard key={car.vehicleCode || car._id} car={car} />
               ))}
             </div>
             <div className={styles.actions}>
