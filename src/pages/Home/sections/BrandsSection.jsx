@@ -11,7 +11,7 @@ export default function BrandsSection() {
       <div className="container">
         <div className="section-head">
           <div className="section-eyebrow">Thương hiệu nổi bật</div>
-          <h2 className="section-title">7 thương hiệu được quan tâm nhiều nhất</h2>
+          <h2 className="section-title">{brands.length > 0 ? `${brands.length} thương hiệu` : 'Các thương hiệu'} được quan tâm nhiều nhất</h2>
           <p className="section-desc">
             Khám phá hàng trăm chiếc xe từ các thương hiệu hàng đầu, đã qua kiểm định chặt chẽ.
           </p>

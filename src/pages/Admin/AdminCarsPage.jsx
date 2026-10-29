@@ -7,7 +7,7 @@ import { useDebounce } from '../../hooks/useDebounce'
 import { useBrands } from '../../hooks/useCatalog'
 import { LoadingState, ErrorState, EmptyState } from '../../components/common/StateBlock'
 import { formatPrice, formatMileage, formatDate } from '../../utils/format'
-import { getCarTitle, getCoverImage } from '../../utils/car'
+import { getCarTitle, getCoverImage, computeAging } from '../../utils/car'
 import {
   CAR_STATUS_LABEL,
   CAR_STATUS_COLOR,
@@ -137,6 +137,10 @@ export default function AdminCarsPage() {
                 {items.map((car) => {
                   const cover = getCoverImage(car)
                   const image = typeof cover === 'string' ? cover : cover?.url
+                  // daysInStock/agingCategory lưu trong DB có thể bị lệch (job cập nhật hàng ngày phía
+                  // backend không được wire chạy) nên tính lại tại đây từ listedDate theo đúng công thức
+                  // nghiệp vụ 0-30/31-60/60+ ngày.
+                  const { daysInStock, agingCategory } = computeAging(car.listedDate)
                   return (
                   <tr key={car.vehicleCode || car._id}>
                     <td>
@@ -159,13 +163,9 @@ export default function AdminCarsPage() {
                       <Tag color={CAR_STATUS_COLOR[car.status]}>{labelOf(CAR_STATUS_LABEL, car.status)}</Tag>
                     </td>
                     <td>{formatDate(car.listedDate)}</td>
-                    <td>{car.daysInStock != null ? `${car.daysInStock} ngày` : '—'}</td>
+                    <td>{daysInStock} ngày</td>
                     <td>
-                      {car.agingCategory ? (
-                        <Tag color={AGING_COLOR[car.agingCategory]}>{labelOf(AGING_LABEL, car.agingCategory)}</Tag>
-                      ) : (
-                        '—'
-                      )}
+                      <Tag color={AGING_COLOR[agingCategory]}>{labelOf(AGING_LABEL, agingCategory)}</Tag>
                     </td>
                   </tr>
                   )

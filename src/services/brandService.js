@@ -6,6 +6,7 @@ import peugeot from '../assets/brands/peugeot.svg'
 import vinfast from '../assets/brands/vinfast.svg'
 import mercedes from '../assets/brands/mercedes.svg'
 import kia from '../assets/brands/kia.svg'
+import mazda from '../assets/brands/mazda.svg'
 
 // Logo chỉ là asset hiển thị, không phải dữ liệu mẫu để test.
 // Backend chỉ trả về tên hãng (make, dạng chuỗi), không có logo -> map tại FE theo tên.
@@ -18,6 +19,7 @@ const BRAND_LOGOS = {
   'MERCEDES-BENZ': mercedes,
   MERCEDES: mercedes,
   KIA: kia,
+  MAZDA: mazda,
 }
 
 function toTitleCase(make) {
