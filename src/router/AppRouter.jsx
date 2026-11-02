@@ -20,6 +20,7 @@ import { LoadingState } from '../components/common/StateBlock'
 import PrivateRoute from './PrivateRoute'
 
 const VehicleIntakeApp = lazy(() => import('../VehicleIntakeApp.jsx'))
+const ComparePage = lazy(() => import('../features/vehicle-compare/pages/ComparePage.jsx'))
 
 export default function AppRouter() {
   return (
@@ -38,6 +39,16 @@ export default function AppRouter() {
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/doi-mat-khau" element={<PrivateRoute><ChangePasswordPage /></PrivateRoute>} />
         <Route path="/hoan-tat-ho-so" element={<PrivateRoute><CompleteProfilePage /></PrivateRoute>} />
+        <Route
+          path="/so-sanh"
+          element={
+            <PrivateRoute>
+              <Suspense fallback={<LoadingState />}>
+                <ComparePage />
+              </Suspense>
+            </PrivateRoute>
+          }
+        />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
       <Route

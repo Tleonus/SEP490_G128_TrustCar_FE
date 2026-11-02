@@ -16,6 +16,7 @@ import { BODY_TYPE_LABEL, FUEL_TYPE_LABEL, TRANSMISSION_LABEL, labelOf } from '.
 import { sendContactRequest } from '../../services/carService'
 import CarCard from '../../components/car/CarCard'
 import { LoadingState, ErrorState } from '../../components/common/StateBlock'
+import CompareToggle from '../../features/vehicle-compare/components/CompareToggle'
 import styles from './CarDetailPage.module.css'
 
 export default function CarDetailPage() {
@@ -123,6 +124,7 @@ export default function CarDetailPage() {
               <Button size="large" icon={<MessageOutlined />} onClick={() => setContactOpen(true)} block>
                 Yêu cầu tư vấn
               </Button>
+              <CompareToggle car={car} variant="detail" />
             </div>
           </div>
         </div>
