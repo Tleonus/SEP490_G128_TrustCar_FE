@@ -3,6 +3,7 @@ import { Form, Input, Button, Checkbox, App } from 'antd'
 import { UserOutlined, MailOutlined, PhoneOutlined, LockOutlined } from '@ant-design/icons'
 import { Link, useNavigate } from 'react-router-dom'
 import AuthLayout from '../../components/auth/AuthLayout'
+import { register } from '../../services/authService'
 import styles from './RegisterPage.module.css'
 
 // Field theo quy ước cột bảng người dùng (full_name, phone_number, email, password).
@@ -12,13 +13,17 @@ export default function RegisterPage() {
   const { message } = App.useApp()
   const [submitting, setSubmitting] = useState(false)
 
-  function handleSubmit() {
+  async function handleSubmit(values) {
     setSubmitting(true)
-    setTimeout(() => {
+    try {
+      await register(values)
       setSubmitting(false)
       message.success('Đăng ký thành công. Vui lòng đăng nhập để tiếp tục.')
       navigate('/dang-nhap')
-    }, 600)
+    } catch (error) {
+      setSubmitting(false)
+      message.error(error.response?.data?.message || 'Đăng ký thất bại. Vui lòng thử lại.')
+    }
   }
 
   return (
@@ -33,7 +38,7 @@ export default function RegisterPage() {
     >
       <Form layout="vertical" onFinish={handleSubmit} requiredMark={false}>
         <Form.Item
-          name="full_name"
+          name="fullName"
           label="Họ và tên"
           rules={[{ required: true, whitespace: true, message: 'Vui lòng nhập họ và tên' }]}
         >
@@ -42,7 +47,7 @@ export default function RegisterPage() {
 
         <div className={styles.grid}>
           <Form.Item
-            name="phone_number"
+            name="phone"
             label="Số điện thoại"
             rules={[
               { required: true, message: 'Vui lòng nhập số điện thoại' },
@@ -72,13 +77,14 @@ export default function RegisterPage() {
             rules={[
               { required: true, message: 'Vui lòng nhập mật khẩu' },
               { min: 8, message: 'Mật khẩu tối thiểu 8 ký tự' },
+              { pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d!@#$%^&*\-_=+]{8,128}$/, message: 'Mật khẩu phải có chữ hoa, chữ thường và chữ số' },
             ]}
           >
             <Input.Password prefix={<LockOutlined />} placeholder="Tối thiểu 8 ký tự" size="large" autoComplete="new-password" />
           </Form.Item>
 
           <Form.Item
-            name="confirm_password"
+            name="confirmPassword"
             label="Xác nhận mật khẩu"
             dependencies={['password']}
             hasFeedback

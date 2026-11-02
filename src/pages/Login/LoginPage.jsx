@@ -1,14 +1,16 @@
 import { Form, Input, Button, Alert, Checkbox } from 'antd'
-import { MailOutlined, LockOutlined } from '@ant-design/icons'
+import { MailOutlined, LockOutlined, GoogleOutlined } from '@ant-design/icons'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import AuthLayout from '../../components/auth/AuthLayout'
 import { useAuthStore } from '../../store/useAuthStore'
 import styles from './LoginPage.module.css'
+import { signInWithGoogle } from '../../config/firebase'
 
 export default function LoginPage() {
   const navigate = useNavigate()
   const location = useLocation()
   const login = useAuthStore((state) => state.login)
+  const googleLogin = useAuthStore((state) => state.googleLogin)
   const loading = useAuthStore((state) => state.loading)
   const error = useAuthStore((state) => state.error)
 
@@ -32,6 +34,21 @@ export default function LoginPage() {
       }
     } else {
       console.warn('[LoginPage] ❌ Đăng nhập thất bại')
+    }
+  }
+
+  async function handleGoogleLogin() {
+    try {
+      const idToken = await signInWithGoogle()
+      const user = await googleLogin(idToken)
+      if (!user) return
+      if (user.profileCompleted === false || user.missingFields?.length > 0) {
+        navigate('/hoan-tat-ho-so', { replace: true })
+        return
+      }
+      navigate('/', { replace: true })
+    } catch (googleError) {
+      useAuthStore.setState({ error: googleError.message || 'Đăng nhập Google thất bại.' })
     }
   }
 
@@ -76,13 +93,16 @@ export default function LoginPage() {
           <Form.Item name="remember" valuePropName="checked" noStyle>
             <Checkbox>Ghi nhớ đăng nhập</Checkbox>
           </Form.Item>
-          <a href="#" className={styles.forgot} onClick={(e) => e.preventDefault()}>
+          <Link to="/quen-mat-khau" className={styles.forgot}>
             Quên mật khẩu?
-          </a>
+          </Link>
         </div>
 
         <Button type="primary" htmlType="submit" size="large" block loading={loading} className={styles.submitBtn}>
           Đăng nhập
+        </Button>
+        <Button icon={<GoogleOutlined />} size="large" block onClick={handleGoogleLogin} disabled={loading} className={styles.googleBtn}>
+          Tiếp tục với Google
         </Button>
       </Form>
     </AuthLayout>
