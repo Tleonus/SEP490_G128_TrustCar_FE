@@ -1,6 +1,8 @@
 import { lazy, Suspense } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import MainLayout from '../layouts/MainLayout'
+import AdminLayout from '../layouts/AdminLayout'
+import AdminRoute from './AdminRoute'
 import HomePage from '../pages/Home/HomePage'
 import CarsPage from '../pages/Cars/CarsPage'
 import CarDetailPage from '../pages/CarDetail/CarDetailPage'
@@ -9,6 +11,7 @@ import RegisterPage from '../pages/Register/RegisterPage'
 import AboutPage from '../pages/About/AboutPage'
 import ContactPage from '../pages/Contact/ContactPage'
 import NotFoundPage from '../pages/NotFound/NotFoundPage'
+import AdminCarsPage from '../pages/Admin/AdminCarsPage'
 import { LoadingState } from '../components/common/StateBlock'
 
 const VehicleIntakeApp = lazy(() => import('../VehicleIntakeApp.jsx'))
@@ -34,6 +37,17 @@ export default function AppRouter() {
           </Suspense>
         }
       />
+      <Route
+        path="/admin"
+        element={
+          <AdminRoute>
+            <AdminLayout />
+          </AdminRoute>
+        }
+      >
+        <Route index element={<Navigate to="/admin/kho-xe" replace />} />
+        <Route path="kho-xe" element={<AdminCarsPage />} />
+      </Route>
     </Routes>
   )
 }

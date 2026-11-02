@@ -4,7 +4,7 @@ import { Input, Select, Pagination, Button } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
 import { useCars } from '../../hooks/useCars'
 import { useDebounce } from '../../hooks/useDebounce'
-import { useBrands, useCarModels } from '../../hooks/useCatalog'
+import { useBrands } from '../../hooks/useCatalog'
 import {
   BODY_TYPE_LABEL,
   FUEL_TYPE_LABEL,
@@ -14,6 +14,7 @@ import {
   YEAR_OPTIONS,
   SORT_OPTIONS,
   PAGE_SIZE,
+  parseSortOption,
   toOptions,
 } from '../../utils/constants'
 import CarCard from '../../components/car/CarCard'
@@ -21,8 +22,8 @@ import { LoadingState, ErrorState, EmptyState } from '../../components/common/St
 import styles from './CarsPage.module.css'
 
 const FILTER_KEYS = [
-  'brand_id', 'model_id', 'body_type', 'fuel_type', 'transmission',
-  'year_from', 'year_to', 'price_min', 'price_max', 'mileage_max', 'sort',
+  'make', 'bodyType', 'fuelType', 'transmission',
+  'yearMin', 'yearMax', 'priceMin', 'priceMax', 'mileageMax',
 ]
 
 const YEAR_SELECT_OPTIONS = YEAR_OPTIONS.map((y) => ({ value: String(y), label: String(y) }))
@@ -36,19 +37,22 @@ function priceRangeIndex(min, max) {
 
 export default function CarsPage() {
   const [searchParams, setSearchParams] = useSearchParams()
-  const [keyword, setKeyword] = useState(searchParams.get('keyword') || '')
+  const [keyword, setKeyword] = useState(searchParams.get('search') || '')
   const debouncedKeyword = useDebounce(keyword, 400)
 
   const brands = useBrands()
-  const brandId = searchParams.get('brand_id') || ''
-  const models = useCarModels(brandId)
   const page = Number(searchParams.get('page')) || 1
 
   const filters = useMemo(() => {
-    const result = { keyword: debouncedKeyword || undefined, page, page_size: PAGE_SIZE }
+    const result = { search: debouncedKeyword || undefined, page, limit: PAGE_SIZE }
     FILTER_KEYS.forEach((key) => {
       result[key] = searchParams.get(key) || undefined
     })
+    const { sortBy, sortDir } = parseSortOption(searchParams.get('sort'))
+    if (sortBy) {
+      result.sortBy = sortBy
+      result.sortDir = sortDir
+    }
     return result
   }, [debouncedKeyword, page, searchParams])
 
@@ -67,8 +71,8 @@ export default function CarsPage() {
   function handlePriceChange(idx) {
     const range = PRICE_RANGES[idx]
     updateParams({
-      price_min: range && range.min ? String(range.min) : '',
-      price_max: range && range.max ? String(range.max) : '',
+      priceMin: range && range.min ? String(range.min) : '',
+      priceMax: range && range.max ? String(range.max) : '',
     })
   }
 
@@ -114,29 +118,19 @@ export default function CarsPage() {
             <div className={styles.filterGroup}>
               <span className={styles.filterLabel}>Hãng xe</span>
               <Select
-                {...selectProps('brand_id', 'Tất cả hãng')}
-                onChange={(val) => updateParams({ brand_id: val, model_id: '' })}
-                options={brands.map((b) => ({ value: b.brand_id, label: b.brand_name }))}
-              />
-            </div>
-
-            <div className={styles.filterGroup}>
-              <span className={styles.filterLabel}>Dòng xe</span>
-              <Select
-                {...selectProps('model_id', brandId ? 'Tất cả dòng xe' : 'Chọn hãng trước')}
-                disabled={!brandId}
-                options={models.map((m) => ({ value: m.model_id, label: m.model_name }))}
+                {...selectProps('make', 'Tất cả hãng')}
+                options={brands.map((b) => ({ value: b.value, label: b.label }))}
               />
             </div>
 
             <div className={styles.filterGroup}>
               <span className={styles.filterLabel}>Kiểu dáng</span>
-              <Select {...selectProps('body_type', 'Tất cả kiểu dáng')} options={toOptions(BODY_TYPE_LABEL)} />
+              <Select {...selectProps('bodyType', 'Tất cả kiểu dáng')} options={toOptions(BODY_TYPE_LABEL)} />
             </div>
 
             <div className={styles.filterGroup}>
               <span className={styles.filterLabel}>Nhiên liệu</span>
-              <Select {...selectProps('fuel_type', 'Tất cả nhiên liệu')} options={toOptions(FUEL_TYPE_LABEL)} />
+              <Select {...selectProps('fuelType', 'Tất cả nhiên liệu')} options={toOptions(FUEL_TYPE_LABEL)} />
             </div>
 
             <div className={styles.filterGroup}>
@@ -147,8 +141,8 @@ export default function CarsPage() {
             <div className={styles.filterGroup}>
               <span className={styles.filterLabel}>Năm sản xuất</span>
               <div className={styles.rangeRow}>
-                <Select {...selectProps('year_from', 'Từ')} options={YEAR_SELECT_OPTIONS} />
-                <Select {...selectProps('year_to', 'Đến')} options={YEAR_SELECT_OPTIONS} />
+                <Select {...selectProps('yearMin', 'Từ')} options={YEAR_SELECT_OPTIONS} />
+                <Select {...selectProps('yearMax', 'Đến')} options={YEAR_SELECT_OPTIONS} />
               </div>
             </div>
 
@@ -156,7 +150,7 @@ export default function CarsPage() {
               <span className={styles.filterLabel}>Khoảng giá</span>
               <Select
                 placeholder="Tất cả mức giá"
-                value={priceRangeIndex(searchParams.get('price_min'), searchParams.get('price_max'))}
+                value={priceRangeIndex(searchParams.get('priceMin'), searchParams.get('priceMax'))}
                 onChange={handlePriceChange}
                 options={PRICE_RANGES.map((r, idx) => ({ value: String(idx), label: r.label }))}
                 allowClear
@@ -166,7 +160,7 @@ export default function CarsPage() {
             <div className={styles.filterGroup}>
               <span className={styles.filterLabel}>Số km đã đi</span>
               <Select
-                {...selectProps('mileage_max', 'Không giới hạn')}
+                {...selectProps('mileageMax', 'Không giới hạn')}
                 options={MILEAGE_OPTIONS.map((o) => ({ value: String(o.value), label: o.label }))}
               />
             </div>
@@ -199,7 +193,7 @@ export default function CarsPage() {
               <>
                 <div className={styles.grid}>
                   {items.map((car) => (
-                    <CarCard key={car.stock_code || car._id || car.id} car={car} />
+                    <CarCard key={car.vehicleCode || car._id} car={car} />
                   ))}
                 </div>
                 <div className={styles.pagination}>

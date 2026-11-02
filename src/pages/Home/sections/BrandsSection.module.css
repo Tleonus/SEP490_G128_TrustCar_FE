@@ -6,8 +6,8 @@
 /* Lưới dùng trọn chiều rộng .container để thẳng mép với các section khác;
    hàng cuối (khi xuống dòng) được căn giữa thay vì dồn trái */
 .grid {
-  --cols: 7;
-  --gap: 20px;
+  --cols: 8;
+  --gap: 16px;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -22,7 +22,7 @@
   min-width: 0;
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1180px) {
   .grid {
     --cols: 4;
   }
@@ -30,12 +30,11 @@
 
 @media (max-width: 700px) {
   .grid {
-    --cols: 3;
     --gap: 14px;
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 560px) {
   .grid {
     --cols: 2;
     --gap: 12px;
@@ -50,7 +49,7 @@
   align-items: center;
   justify-content: center;
   gap: 14px;
-  padding: 20px 14px;
+  padding: 20px 8px;
   font: inherit;
   color: inherit;
   background: var(--color-surface-alt);
@@ -111,7 +110,11 @@
 @media (max-width: 700px) {
   .brandCard {
     height: 124px;
-    padding: 16px 10px;
+    padding: 16px 6px;
+  }
+
+  .brandName {
+    font-size: 13px;
   }
 
   .logoBox {

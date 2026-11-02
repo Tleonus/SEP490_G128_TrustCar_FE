@@ -17,17 +17,17 @@ export default function HeroSection() {
   const navigate = useNavigate()
   const brands = useBrands()
   const [keyword, setKeyword] = useState('')
-  const [brandId, setBrandId] = useState()
+  const [make, setMake] = useState()
   const [priceRange, setPriceRange] = useState()
 
   function handleSearch(event) {
     event?.preventDefault()
     const params = new URLSearchParams()
-    if (keyword.trim()) params.set('keyword', keyword.trim())
-    if (brandId) params.set('brand_id', brandId)
+    if (keyword.trim()) params.set('search', keyword.trim())
+    if (make) params.set('make', make)
     const range = PRICE_RANGES[priceRange]
-    if (range?.min) params.set('price_min', range.min)
-    if (range?.max) params.set('price_max', range.max)
+    if (range?.min) params.set('priceMin', range.min)
+    if (range?.max) params.set('priceMax', range.max)
     navigate(`/xe?${params.toString()}`)
   }
 
@@ -82,9 +82,9 @@ export default function HeroSection() {
               <Select
                 {...DROPDOWN_PROPS}
                 placeholder="Thương hiệu"
-                value={brandId}
-                onChange={setBrandId}
-                options={brands.map((b) => ({ value: b.brand_id, label: b.brand_name }))}
+                value={make}
+                onChange={setMake}
+                options={brands.map((b) => ({ value: b.value, label: b.label }))}
                 size="large"
                 aria-label="Thương hiệu"
                 allowClear

@@ -34,27 +34,28 @@ export default function CarDetailPage() {
   const title = getCarTitle(car)
   const images = sortCarImages(car.images)
   const current = images[activeImage]
+  const specs = car.specifications || {}
 
-  const specs = [
-    { icon: <CalendarOutlined />, label: 'Năm sản xuất', value: car.manufacturing_year },
-    { icon: <DashboardOutlined />, label: 'Số km đã đi', value: formatMileage(car.mileage_km) },
+  const specItems = [
+    { icon: <CalendarOutlined />, label: 'Năm sản xuất', value: car.year },
+    { icon: <DashboardOutlined />, label: 'Số km đã đi', value: formatMileage(car.mileage) },
     { icon: <CarOutlined />, label: 'Hộp số', value: labelOf(TRANSMISSION_LABEL, car.transmission) },
-    { icon: <ThunderboltOutlined />, label: 'Nhiên liệu', value: labelOf(FUEL_TYPE_LABEL, car.fuel_type) },
-    { label: 'Kiểu dáng', value: labelOf(BODY_TYPE_LABEL, car.model?.body_type) },
-    { label: 'Số chỗ ngồi', value: car.seats },
-    { label: 'Dẫn động', value: car.drive_type },
-    { label: 'Dung tích động cơ', value: car.engine_capacity },
-    { label: 'Mức tiêu hao nhiên liệu', value: car.fuel_consumption },
-    { label: 'Màu ngoại thất', value: car.exterior_colour },
-    { label: 'Màu nội thất', value: car.interior_colour },
-    { label: 'Xuất xứ', value: car.origin },
-    { label: 'Mã xe', value: car.stock_code },
+    { icon: <ThunderboltOutlined />, label: 'Nhiên liệu', value: labelOf(FUEL_TYPE_LABEL, car.fuelType) },
+    { label: 'Kiểu dáng', value: labelOf(BODY_TYPE_LABEL, car.bodyType) },
+    { label: 'Số chỗ ngồi', value: specs.numberOfSeats },
+    { label: 'Dẫn động', value: car.driveType },
+    { label: 'Dung tích động cơ (cc)', value: specs.engineDisplacementCC },
+    { label: 'Mức tiêu hao nhiên liệu', value: specs.fuelConsumption },
+    { label: 'Màu ngoại thất', value: specs.color },
+    { label: 'Màu nội thất', value: specs.interiorColor },
+    { label: 'Xuất xứ', value: specs.originCountry },
+    { label: 'Mã xe', value: car.vehicleCode },
   ].filter((s) => s.value != null && s.value !== '')
 
   async function handleSendContact(values) {
     setSending(true)
     try {
-      await sendContactRequest({ stock_code: car.stock_code, ...values })
+      await sendContactRequest({ vehicleCode: car.vehicleCode, ...values })
       message.success('Đã gửi yêu cầu tư vấn. TrustCar sẽ liên hệ với bạn sớm nhất.')
       setContactOpen(false)
       form.resetFields()
@@ -77,13 +78,11 @@ export default function CarDetailPage() {
           ]}
         />
 
-        {car.isMockData && <div className={styles.mockBadge}>Dữ liệu mẫu (demo UI)</div>}
-
         <div className={styles.layout}>
           <div className={styles.gallery}>
             <div className={styles.mainImgWrap}>
               {current && (
-                <img src={current.image_url} alt={current.caption || title} className={styles.mainImg} />
+                <img src={current.url} alt={current.caption || title} className={styles.mainImg} />
               )}
             </div>
             {images.length > 1 && (
@@ -91,13 +90,13 @@ export default function CarDetailPage() {
                 {images.map((img, idx) => (
                   <button
                     type="button"
-                    key={img.image_id}
+                    key={img._id || img.publicId}
                     className={`${styles.thumb} ${idx === activeImage ? styles.thumbActive : ''}`}
                     onClick={() => setActiveImage(idx)}
                     aria-label={`Xem ảnh ${idx + 1}`}
                     aria-pressed={idx === activeImage}
                   >
-                    <img src={img.image_url} alt="" className={styles.thumbImg} />
+                    <img src={img.url} alt="" className={styles.thumbImg} />
                   </button>
                 ))}
               </div>
@@ -106,10 +105,10 @@ export default function CarDetailPage() {
 
           <div className={styles.info}>
             <h1 className={styles.title}>{title}</h1>
-            <div className={styles.price}>{formatPrice(car.listed_price)}</div>
+            <div className={styles.price}>{formatPrice(car.price)}</div>
 
             <div className={styles.specsGrid}>
-              {specs.map((s) => (
+              {specItems.map((s) => (
                 <div className={styles.specItem} key={s.label}>
                   <span className={styles.specLabel}>{s.icon} {s.label}</span>
                   <span className={styles.specValue}>{s.value}</span>
@@ -128,21 +127,21 @@ export default function CarDetailPage() {
           </div>
         </div>
 
-        {Array.isArray(car.key_equipment) && car.key_equipment.length > 0 && (
+        {Array.isArray(specs.features) && specs.features.length > 0 && (
           <div className={styles.description}>
             <h2 className={styles.descTitle}>Trang bị nổi bật</h2>
             <ul className={styles.descText}>
-              {car.key_equipment.map((item) => (
+              {specs.features.map((item) => (
                 <li key={item}>{item}</li>
               ))}
             </ul>
           </div>
         )}
 
-        {car.condition_description && (
+        {car.description && (
           <div className={styles.description}>
             <h2 className={styles.descTitle}>Tình trạng xe</h2>
-            <p className={styles.descText}>{car.condition_description}</p>
+            <p className={styles.descText}>{car.description}</p>
           </div>
         )}
 
@@ -154,7 +153,7 @@ export default function CarDetailPage() {
             </div>
             <div className={styles.similarGrid}>
               {similarCars.map((similarCar) => (
-                <CarCard key={similarCar._id || similarCar.id} car={similarCar} />
+                <CarCard key={similarCar.vehicleCode || similarCar._id} car={similarCar} />
               ))}
             </div>
           </div>
