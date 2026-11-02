@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { Alert, App, Button, Form, Input } from 'antd'
 import { LockOutlined } from '@ant-design/icons'
-import { Link, useSearchParams, useNavigate } from 'react-router-dom'
+import { useSearchParams, useNavigate } from 'react-router-dom'
 import AuthLayout from '../../components/auth/AuthLayout'
+import AuthBackLink from '../../components/auth/AuthBackLink'
 import { resetPassword } from '../../services/authService'
 import styles from '../../components/auth/AuthForm.module.css'
 
@@ -29,7 +30,7 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <AuthLayout title="Đặt lại mật khẩu" subtitle="Tạo mật khẩu mới cho tài khoản TrustCar." footer={<><Link to="/dang-nhap">Quay lại đăng nhập</Link></>}>
+    <AuthLayout title="Đặt lại mật khẩu" subtitle="Tạo mật khẩu mới cho tài khoản TrustCar." footer={<AuthBackLink />}>
       {!token && <Alert type="warning" showIcon message="Liên kết đặt lại mật khẩu bị thiếu token." className={styles.alert} />}
       <Form layout="vertical" onFinish={handleSubmit} className={styles.form} requiredMark={false}>
         <Form.Item name="newPassword" label="Mật khẩu mới" rules={[{ required: true, message: 'Vui lòng nhập mật khẩu mới' }, { min: 8, message: 'Mật khẩu tối thiểu 8 ký tự' }, passwordRule]}>

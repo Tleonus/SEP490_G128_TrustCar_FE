@@ -31,6 +31,8 @@ export default function AppRouter() {
         <Route path="/dang-ky" element={<RegisterPage />} />
         <Route path="/quen-mat-khau" element={<ForgotPasswordPage />} />
         <Route path="/dat-lai-mat-khau" element={<ResetPasswordPage />} />
+        {/* Link trong email đặt lại mật khẩu của BE dùng /reset-password */}
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/doi-mat-khau" element={<PrivateRoute><ChangePasswordPage /></PrivateRoute>} />
         <Route path="/hoan-tat-ho-so" element={<PrivateRoute><CompleteProfilePage /></PrivateRoute>} />
         <Route path="*" element={<NotFoundPage />} />

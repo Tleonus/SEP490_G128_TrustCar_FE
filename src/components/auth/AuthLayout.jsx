@@ -6,6 +6,7 @@ import {
 } from '@ant-design/icons'
 import heroImg from '../../assets/hero_slides/hero1.jpg'
 import logo from '../../assets/logo.jpg'
+import { useAuthStore } from '../../store/useAuthStore'
 import styles from './AuthLayout.module.css'
 
 const HIGHLIGHTS = [
@@ -22,6 +23,9 @@ const STATS = [
 
 // Khung chung cho trang đăng nhập / đăng ký: bên trái ảnh thương hiệu, bên phải form
 export default function AuthLayout({ title, subtitle, children, footer }) {
+  // Người đã đăng nhập (vd: vào trang quên mật khẩu) không cần chuyển sang đăng nhập/đăng ký
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+
   return (
     <div className={styles.page}>
       <div className={styles.shell}>
@@ -59,6 +63,7 @@ export default function AuthLayout({ title, subtitle, children, footer }) {
             <img src={logo} alt="TrustCar" />
           </Link>
 
+          {!isAuthenticated && (
           <nav className={styles.switcher} aria-label="Chuyển giữa đăng nhập và đăng ký">
             <NavLink
               to="/dang-nhap"
@@ -77,6 +82,7 @@ export default function AuthLayout({ title, subtitle, children, footer }) {
               Đăng ký
             </NavLink>
           </nav>
+          )}
 
           <h1 className={styles.title}>{title}</h1>
           <p className={styles.subtitle}>{subtitle}</p>

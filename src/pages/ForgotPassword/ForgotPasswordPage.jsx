@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Alert, App, Button, Form, Input } from 'antd'
 import { MailOutlined } from '@ant-design/icons'
-import { Link } from 'react-router-dom'
 import AuthLayout from '../../components/auth/AuthLayout'
+import AuthBackLink from '../../components/auth/AuthBackLink'
 import { forgotPassword } from '../../services/authService'
 import styles from '../../components/auth/AuthForm.module.css'
 
@@ -25,7 +25,7 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <AuthLayout title="Quên mật khẩu?" subtitle="Nhập email đã đăng ký, chúng tôi sẽ gửi liên kết để bạn đặt lại mật khẩu." footer={<><Link to="/dang-nhap">Quay lại đăng nhập</Link></>}>
+    <AuthLayout title="Quên mật khẩu?" subtitle="Nhập email đã đăng ký, chúng tôi sẽ gửi liên kết để bạn đặt lại mật khẩu." footer={<AuthBackLink />}>
       {submitted && <Alert type="success" showIcon message="Hãy kiểm tra hộp thư và làm theo hướng dẫn trong email." className={styles.alert} />}
       <Form layout="vertical" onFinish={handleSubmit} className={styles.form} requiredMark={false}>
         <Form.Item name="email" label="Email" rules={[{ required: true, message: 'Vui lòng nhập email' }, { type: 'email', message: 'Email không hợp lệ' }]}>
