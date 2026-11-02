@@ -1,7 +1,17 @@
 import api from './api'
 
 // Re-export tất cả helper từ tokenStorage để các module khác import một chỗ
-export { getToken, saveToken, clearToken, saveUser, getUser, clearUser } from '../utils/tokenStorage'
+export {
+  getToken,
+  saveToken,
+  clearToken,
+  getRefreshToken,
+  saveRefreshToken,
+  clearRefreshToken,
+  saveUser,
+  getUser,
+  clearUser,
+} from '../utils/tokenStorage'
 
 /**
  * POST /api/v1/auth/login
@@ -12,16 +22,46 @@ export { getToken, saveToken, clearToken, saveUser, getUser, clearUser } from '.
  * → Store sẽ đọc data.data.accessToken và data.data.user
  */
 export async function login(credentials) {
-  console.log('[authService] 📡 Gọi POST /auth/login với email:', credentials.email)
   const res = await api.post('/auth/login', credentials)
-  console.log('[authService] 📥 HTTP status:', res.status)
-  console.log('[authService] 📥 res.data (full envelope):', res.data)
-  // Trả về toàn bộ res.data để store quyết định cách parse
   return res.data
 }
 
-export function logout() {
-  // Gọi API revoke token nếu backend có endpoint; hiện tại chỉ xóa local
-  // await api.post('/auth/logout').catch(() => {})
-  console.log('[authService] 🚪 logout() được gọi')
+export async function register(payload) {
+  const res = await api.post('/auth/register', payload)
+  return res.data
+}
+
+export async function googleSignIn(idToken) {
+  const res = await api.post('/auth/google', { idToken })
+  return res.data
+}
+
+export async function completeProfile(payload) {
+  const res = await api.patch('/auth/complete-profile', payload)
+  return res.data
+}
+
+export async function forgotPassword(email) {
+  const res = await api.post('/auth/forgot-password', { email })
+  return res.data
+}
+
+export async function resetPassword(payload) {
+  const res = await api.post('/auth/reset-password', payload)
+  return res.data
+}
+
+export async function changePassword(payload) {
+  const res = await api.patch('/auth/change-password', payload)
+  return res.data
+}
+
+export async function refreshToken(refreshTokenValue) {
+  const res = await api.post('/auth/refresh', { refreshToken: refreshTokenValue })
+  return res.data
+}
+
+export async function logout() {
+  const res = await api.post('/auth/logout')
+  return res.data
 }

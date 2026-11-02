@@ -37,6 +37,10 @@ export default function Header() {
       key: 'profile',
       label: <Link to="/profile">Thông tin cá nhân</Link>,
     },
+    {
+      key: 'change-password',
+      label: <Link to="/doi-mat-khau">Đổi mật khẩu</Link>,
+    },
     // Chỉ hiện "Quản trị" nếu user có role ADMIN hoặc STAFF
     ...(user?.role === 'ADMIN' || user?.role === 'STAFF'
       ? [{ key: 'admin', label: <Link to="/admin">Trang quản trị</Link> }]

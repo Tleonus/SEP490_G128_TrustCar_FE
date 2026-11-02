@@ -6,10 +6,15 @@ import CarsPage from '../pages/Cars/CarsPage'
 import CarDetailPage from '../pages/CarDetail/CarDetailPage'
 import LoginPage from '../pages/Login/LoginPage'
 import RegisterPage from '../pages/Register/RegisterPage'
+import ForgotPasswordPage from '../pages/ForgotPassword/ForgotPasswordPage'
+import ResetPasswordPage from '../pages/ResetPassword/ResetPasswordPage'
+import ChangePasswordPage from '../pages/ChangePassword/ChangePasswordPage'
+import CompleteProfilePage from '../pages/CompleteProfile/CompleteProfilePage'
 import AboutPage from '../pages/About/AboutPage'
 import ContactPage from '../pages/Contact/ContactPage'
 import NotFoundPage from '../pages/NotFound/NotFoundPage'
 import { LoadingState } from '../components/common/StateBlock'
+import PrivateRoute from './PrivateRoute'
 
 const VehicleIntakeApp = lazy(() => import('../VehicleIntakeApp.jsx'))
 
@@ -24,6 +29,10 @@ export default function AppRouter() {
         <Route path="/lien-he" element={<ContactPage />} />
         <Route path="/dang-nhap" element={<LoginPage />} />
         <Route path="/dang-ky" element={<RegisterPage />} />
+        <Route path="/quen-mat-khau" element={<ForgotPasswordPage />} />
+        <Route path="/dat-lai-mat-khau" element={<ResetPasswordPage />} />
+        <Route path="/doi-mat-khau" element={<PrivateRoute><ChangePasswordPage /></PrivateRoute>} />
+        <Route path="/hoan-tat-ho-so" element={<PrivateRoute><CompleteProfilePage /></PrivateRoute>} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
       <Route
