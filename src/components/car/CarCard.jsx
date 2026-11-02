@@ -4,6 +4,7 @@ import { formatPrice, formatMileage } from '../../utils/format'
 import { getCarTitle, getCoverImage } from '../../utils/car'
 import { BODY_TYPE_LABEL, FUEL_TYPE_LABEL, TRANSMISSION_LABEL, labelOf } from '../../utils/constants'
 import styles from './CarCard.module.css'
+import CompareCardFrame from '../../features/vehicle-compare/components/CompareCardFrame'
 
 export default function CarCard({ car }) {
   const carId = car.vehicleCode || car._id
@@ -12,6 +13,7 @@ export default function CarCard({ car }) {
   const title = getCarTitle(car)
 
   return (
+    <CompareCardFrame car={car}>
     <Link to={`/xe/${carId}`} className={styles.card}>
       <div className={styles.imgWrap}>
         {image && <img src={image} alt={title} className={styles.img} />}
@@ -31,5 +33,6 @@ export default function CarCard({ car }) {
         </div>
       </div>
     </Link>
+    </CompareCardFrame>
   )
 }
