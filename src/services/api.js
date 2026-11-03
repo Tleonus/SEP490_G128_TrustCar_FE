@@ -21,7 +21,8 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       const originalRequest = error.config
       const refreshToken = getRefreshToken()
-      const isAuthRequest = originalRequest?.url?.includes('/auth/login') || originalRequest?.url?.includes('/auth/refresh')
+      // Đăng xuất bị 401 thì không refresh rồi gọi lại: phiên local đã xoá, chỉ làm chậm.
+      const isAuthRequest = ['/auth/login', '/auth/refresh', '/auth/logout'].some((path) => originalRequest?.url?.includes(path))
 
       if (refreshToken && !originalRequest?._retry && !isAuthRequest) {
         originalRequest._retry = true

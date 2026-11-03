@@ -25,7 +25,7 @@ export default function AdminLayout() {
     { type: 'divider' },
     {
       key: 'logout',
-      label: <span onClick={handleLogout}>Đăng xuất</span>,
+      label: 'Đăng xuất',
       icon: <LogoutOutlined />,
     },
   ]
@@ -56,7 +56,10 @@ export default function AdminLayout() {
       <div className={styles.main}>
         <header className={styles.topbar}>
           <div />
-          <Dropdown menu={{ items: dropdownItems }} trigger={['click']}>
+          <Dropdown
+            menu={{ items: dropdownItems, onClick: ({ key }) => key === 'logout' && handleLogout() }}
+            trigger={['click']}
+          >
             <span className={styles.userInfo}>
               <Avatar style={{ backgroundColor: '#52c41a' }} icon={!user?.fullName ? <UserOutlined /> : undefined}>
                 {user?.fullName?.[0]?.toUpperCase()}
