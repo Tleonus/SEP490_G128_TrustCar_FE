@@ -1,11 +1,14 @@
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { Avatar, Dropdown } from 'antd'
-import { CarOutlined, HomeOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons'
+import { CarOutlined, HomeOutlined, LogoutOutlined, SafetyCertificateOutlined, UserOutlined } from '@ant-design/icons'
 import logo from '../assets/logo.jpg'
 import { useAuthStore } from '../store/useAuthStore'
 import styles from './AdminLayout.module.css'
 
-const NAV_ITEMS = [{ to: '/admin/kho-xe', label: 'Kho xe', icon: <CarOutlined /> }]
+const NAV_ITEMS = [
+  { to: '/admin/kho-xe', label: 'Kho xe', icon: <CarOutlined /> },
+  { to: '/admin/chung-nhan', label: 'Chứng nhận CPO', icon: <SafetyCertificateOutlined /> },
+]
 
 export default function AdminLayout() {
   const user = useAuthStore((state) => state.user)
