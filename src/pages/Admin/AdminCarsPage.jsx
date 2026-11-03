@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useMemo } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import { Input, Select, Pagination, Tag, Tooltip } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
 import { useAdminCars } from '../../hooks/useAdminCars'
@@ -19,15 +19,18 @@ import {
   labelOf,
   parseSortOption,
 } from '../../utils/constants'
+import Icon from '../../features/vehicle-intake/components/VehicleIntakeIcon'
+import { ADMIN_PATHS } from '../../router/paths'
 import styles from './AdminCarsPage.module.css'
 
 export default function AdminCarsPage() {
   const [searchParams, setSearchParams] = useSearchParams()
-  const [keyword, setKeyword] = useState(searchParams.get('search') || '')
+  const keyword = searchParams.get('search') || ''
   const debouncedKeyword = useDebounce(keyword, 400)
   const brands = useBrands()
 
-  const page = Number(searchParams.get('page')) || 1
+  const requestedPage = Number(searchParams.get('page'))
+  const page = Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1
 
   const filters = useMemo(() => {
     const result = {
@@ -54,12 +57,13 @@ export default function AdminCarsPage() {
       else next.delete(key)
     })
     if (!('page' in changes)) next.delete('page')
-    setSearchParams(next)
+    setSearchParams(next, { replace: 'search' in changes })
   }
 
   function selectProps(key, placeholder) {
     return {
       placeholder,
+      'aria-label': placeholder,
       value: searchParams.get(key) || undefined,
       onChange: (val) => updateParams({ [key]: val }),
       allowClear: true,
@@ -69,14 +73,20 @@ export default function AdminCarsPage() {
   return (
     <div className={styles.page}>
       <div className={styles.header}>
-        <h1 className={styles.title}>Quản lý kho xe</h1>
-        <p className={styles.desc}>Theo dõi toàn bộ xe trong kho và tình trạng tồn kho.</p>
+        <div>
+          <span className={styles.eyebrow}>QUẢN LÝ SHOWROOM</span>
+          <h1 className={styles.title}>Quản lý kho xe</h1>
+          <p className={styles.desc}>Theo dõi toàn bộ xe trong kho và tình trạng tồn kho.</p>
+        </div>
+        <Link to={ADMIN_PATHS.vehicleIntake} className={styles.primaryAction}>
+          <Icon name="plus" size={18} />Nhập xe & Thẩm định
+        </Link>
       </div>
 
       <div className={styles.statRow}>
         <div className={styles.statCard}>
           <span className={styles.statLabel}>Tổng số xe khớp bộ lọc</span>
-          <span className={styles.statValue}>{loading ? '—' : total}</span>
+          <span className={styles.statValue}>{loading || error ? '—' : total}</span>
         </div>
       </div>
 
@@ -85,10 +95,8 @@ export default function AdminCarsPage() {
           placeholder="Mã xe, VIN, biển số, hãng, dòng xe..."
           prefix={<SearchOutlined />}
           value={keyword}
-          onChange={(e) => {
-            setKeyword(e.target.value)
-            if (searchParams.get('page')) updateParams({})
-          }}
+          onChange={(e) => updateParams({ search: e.target.value })}
+          aria-label="Tìm kiếm xe trong kho"
           allowClear
           className={styles.search}
         />
@@ -103,6 +111,7 @@ export default function AdminCarsPage() {
           style={{ minWidth: 150 }}
         />
         <Select
+          aria-label="Sắp xếp kho xe"
           value={searchParams.get('sort') || ''}
           onChange={(val) => updateParams({ sort: val })}
           options={ADMIN_SORT_OPTIONS}
@@ -118,10 +127,10 @@ export default function AdminCarsPage() {
       {!loading && !error && items.length > 0 && (
         <>
           <div className={styles.tableWrap}>
-            <table className={styles.table}>
+            <table className={styles.table} aria-label="Danh sách xe trong kho">
               <thead>
                 <tr>
-                  <th></th>
+                  <th aria-label="Ảnh xe"></th>
                   <th>Mã xe</th>
                   <th>Xe</th>
                   <th>Năm</th>

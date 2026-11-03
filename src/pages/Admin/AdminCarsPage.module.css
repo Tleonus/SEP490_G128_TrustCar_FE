@@ -1,14 +1,25 @@
 .page {
-  max-width: 1240px;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 32px;
+  min-width: 0;
 }
 
 .header {
-  margin-bottom: 20px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
 }
+
+.eyebrow { color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: 1.3px; }
+.primaryAction { display: inline-flex; align-items: center; justify-content: center; gap: 8px; flex-shrink: 0; min-height: 44px; padding: 10px 16px; border-radius: 8px; background: var(--blue); color: #fff !important; font-size: 14px; font-weight: 600; }
+.primaryAction:hover { background: #1e40af; }
 
 .title {
   font-size: 24px;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .desc {
@@ -31,6 +42,7 @@
   flex-direction: column;
   gap: 4px;
   min-width: 200px;
+  border-top: 3px solid var(--blue);
   box-shadow: var(--shadow-card);
 }
 
@@ -114,4 +126,17 @@
   height: 40px;
   border-radius: 6px;
   background: var(--color-surface-alt);
+}
+
+@media (max-width: 900px) {
+  .header { flex-wrap: wrap; }
+  .page { padding: 24px; }
+}
+@media (max-width: 760px) {
+  .page { padding: 20px 16px; }
+  .header { align-items: flex-start; gap: 16px; }
+  .search { min-width: 0; flex-basis: 100%; }
+  .toolbar > :global(.ant-select) { width: 100%; min-width: 0 !important; }
+  .statCard { min-width: 0; width: 100%; }
+  .primaryAction { width: 100%; }
 }
