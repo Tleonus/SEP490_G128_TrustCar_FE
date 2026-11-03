@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { VehicleIntakePage, saveVehicleIntake } from './features/vehicle-intake/index.js';
 import Icon from './features/vehicle-intake/components/VehicleIntakeIcon.jsx';
 import styles from './VehicleIntakeApp.module.css';
 
 const saveVehicle = (payload) => saveVehicleIntake(payload, {
-  endpoint: 'http://localhost:3001/api/cpo/vehicles',
+  endpoint: import.meta.env.VITE_VEHICLE_INTAKE_API_URL || 'http://localhost:3001/api/cpo/vehicles',
 });
 
 export default function VehicleIntakeApp() {

@@ -1,4 +1,3 @@
-import React from 'react';
 
 export default function VehicleIntakeIcon({ name, size = 20, stroke = 2 }) {
   const paths = {

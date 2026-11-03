@@ -1,10 +1,17 @@
 export function getCarTitle(car) {
   if (!car) return ''
-  return [car.make, car.model, car.variant].filter(Boolean).join(' ')
+  const brand = typeof car.brand === 'string' ? car.brand : car.brand?.brand_name
+  const model = typeof car.model === 'string' ? car.model : car.model?.model_name
+  return [car.make || brand, model, car.variant].filter(Boolean).join(' ')
 }
 
 export function sortCarImages(images = []) {
-  return [...images].sort((a, b) => (b.isPrimary ? 1 : 0) - (a.isPrimary ? 1 : 0))
+  return [...(images ?? [])].sort((a, b) => {
+    const aCover = a?.isPrimary ?? a?.is_cover ?? false
+    const bCover = b?.isPrimary ?? b?.is_cover ?? false
+    if (aCover !== bCover) return aCover ? -1 : 1
+    return (a?.display_order ?? 0) - (b?.display_order ?? 0)
+  })
 }
 
 export function getCoverImage(car) {

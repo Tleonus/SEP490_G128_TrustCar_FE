@@ -7,32 +7,34 @@ import styles from './CarCard.module.css'
 import CompareCardFrame from '../../features/vehicle-compare/components/CompareCardFrame'
 
 export default function CarCard({ car }) {
-  const carId = car.vehicleCode || car._id
-  const cover = getCoverImage(car)
-  const image = typeof cover === 'string' ? cover : cover?.url
+  const carId = car.vehicleCode || car.stock_code || car._id || car.id
   const title = getCarTitle(car)
+  const image = getCoverImage(car)
+  const imageUrl = typeof image === 'string' ? image : image?.image_url || image?.url
+  const bodyType = car.bodyType ?? car.model?.body_type
+  const fuelType = car.fuelType ?? car.fuel_type
 
   return (
     <CompareCardFrame car={car}>
-    <Link to={`/xe/${carId}`} className={styles.card}>
-      <div className={styles.imgWrap}>
-        {image && <img src={image} alt={title} className={styles.img} />}
-        {car.bodyType && <span className={styles.badge}>{labelOf(BODY_TYPE_LABEL, car.bodyType)}</span>}
-      </div>
-      <div className={styles.body}>
-        <h3 className={styles.title}>{title}</h3>
-        <div className={styles.price}>{formatPrice(car.price)}</div>
-        <div className={styles.meta}>
-          <span><CalendarOutlined /> {car.year}</span>
-          <span><DashboardOutlined /> {formatMileage(car.mileage)}</span>
-          <span><ThunderboltOutlined /> {labelOf(FUEL_TYPE_LABEL, car.fuelType)}</span>
+      <Link to={`/xe/${encodeURIComponent(carId)}`} className={styles.card}>
+        <div className={styles.imgWrap}>
+          {imageUrl && <img src={imageUrl} alt={title} className={styles.img} />}
+          {bodyType && <span className={styles.badge}>{labelOf(BODY_TYPE_LABEL, bodyType.toUpperCase())}</span>}
         </div>
-        <div className={styles.footer}>
-          <span>{labelOf(TRANSMISSION_LABEL, car.transmission)}</span>
-          <span>{car.vehicleCode}</span>
+        <div className={styles.body}>
+          <h3 className={styles.title}>{title}</h3>
+          <div className={styles.price}>{formatPrice(car.price ?? car.listed_price ?? car.listedPrice)}</div>
+          <div className={styles.meta}>
+            <span><CalendarOutlined /> {car.year ?? car.manufacturing_year}</span>
+            <span><DashboardOutlined /> {formatMileage(car.mileage ?? car.mileage_km)}</span>
+            <span><ThunderboltOutlined /> {labelOf(FUEL_TYPE_LABEL, fuelType?.toUpperCase())}</span>
+          </div>
+          <div className={styles.footer}>
+            <span>{labelOf(TRANSMISSION_LABEL, car.transmission?.toUpperCase())}</span>
+            <span>{car.vehicleCode || car.stock_code}</span>
+          </div>
         </div>
-      </div>
-    </Link>
+      </Link>
     </CompareCardFrame>
   )
 }
