@@ -18,8 +18,11 @@ import NotFoundPage from '../pages/NotFound/NotFoundPage'
 import AdminCarsPage from '../pages/Admin/AdminCarsPage'
 import { LoadingState } from '../components/common/StateBlock'
 import PrivateRoute from './PrivateRoute'
+import LegacyRedirect from './LegacyRedirect'
+import { ADMIN_PATHS } from './paths'
 
-const VehicleIntakeApp = lazy(() => import('../VehicleIntakeApp.jsx'))
+const AdminVehicleIntakePage = lazy(() => import('../pages/Admin/AdminVehicleIntakePage.jsx'))
+const AdminOverviewPage = lazy(() => import('../pages/Admin/AdminOverviewPage.jsx'))
 const ComparePage = lazy(() => import('../features/vehicle-compare/pages/ComparePage.jsx'))
 const CpoCertificatesPage = lazy(() => import('../features/cpo-certificates/pages/CpoCertificatesPage.jsx'))
 const CpoCertificateDetailPage = lazy(() => import('../features/cpo-certificates/pages/CpoCertificateDetailPage.jsx'))
@@ -53,14 +56,7 @@ export default function AppRouter() {
         />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
-      <Route
-        path="/quan-ly/nhap-xe"
-        element={
-          <Suspense fallback={<LoadingState />}>
-            <VehicleIntakeApp />
-          </Suspense>
-        }
-      />
+      <Route path="/quan-ly/nhap-xe" element={<LegacyRedirect to={ADMIN_PATHS.vehicleIntake} />} />
       <Route
         path="/admin"
         element={
@@ -69,8 +65,11 @@ export default function AppRouter() {
           </AdminRoute>
         }
       >
-        <Route index element={<Navigate to="/admin/kho-xe" replace />} />
-        <Route path="kho-xe" element={<AdminCarsPage />} />
+        <Route index element={<Navigate to={ADMIN_PATHS.overview} replace />} />
+        <Route path="overview" element={<Suspense fallback={<LoadingState />}><AdminOverviewPage /></Suspense>} />
+        <Route path="inventory" element={<AdminCarsPage />} />
+        <Route path="vehicle-intake" element={<Suspense fallback={<LoadingState />}><AdminVehicleIntakePage /></Suspense>} />
+        <Route path="kho-xe" element={<LegacyRedirect to={ADMIN_PATHS.inventory} />} />
         {/* Chứng nhận CPO: AdminRoute chỉ cho ADMIN, SALES_STAFF; BE vẫn kiểm quyền cuối cùng */}
         <Route
           path="chung-nhan"

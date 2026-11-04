@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from '../styles/VehicleIntake.module.css';
 
 export default function VehicleIntakeField({ label, name, value, onChange, error, required = false, type = 'text', placeholder, suffix, children, inputMode }) {

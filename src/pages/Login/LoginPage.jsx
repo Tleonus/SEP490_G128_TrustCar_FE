@@ -5,6 +5,7 @@ import AuthLayout from '../../components/auth/AuthLayout'
 import { useAuthStore } from '../../store/useAuthStore'
 import styles from './LoginPage.module.css'
 import { signInWithGoogle } from '../../config/firebase'
+import { ADMIN_PATHS } from '../../router/paths'
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -26,7 +27,11 @@ export default function LoginPage() {
 
       // Điều hướng theo role (user.roleName là chuỗi thật từ backend; user.role là object Role đã populate)
       if (user?.roleName === 'ADMIN' || user?.roleName === 'SALES_STAFF') {
-        navigate('/admin', { replace: true })
+        const from = location.state?.from
+        const destination = from?.pathname?.startsWith('/admin/')
+          ? `${from.pathname}${from.search || ''}${from.hash || ''}`
+          : ADMIN_PATHS.overview
+        navigate(destination, { replace: true })
       } else {
         // Quay về trang trước (nếu bị redirect từ route bảo vệ) hoặc về trang chủ
         const redirectTo = location.state?.from?.pathname || '/'

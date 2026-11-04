@@ -101,3 +101,18 @@ npm run dev
 Tên nhánh gợi ý: `feat/vehicle-intake`. Commit gợi ý: `feat(vehicle-intake): add vehicle intake and TrustCar inspection form`.
 
 Không đưa `node_modules/` hoặc `dist/` vào Git. Khi tích hợp vào ứng dụng nhóm, chỉ cần đưa module nghiệp vụ vào route dành cho admin/staff.
+
+## Management workspace integration — November 3, 2026
+
+This note supersedes the standalone-shell and routing instructions above for this repository's current application. The reusable feature remains in `src/features/vehicle-intake/`; its business rules are unchanged.
+
+- `AdminLayout` in `src/layouts/AdminLayout.jsx` now provides the shared shell, based on the original intake shell, with styles in `src/layouts/AdminLayout.module.css`. The root `src/VehicleIntakeApp.jsx` and `src/VehicleIntakeApp.module.css` files have been removed.
+- `src/pages/Admin/AdminVehicleIntakePage.jsx` supplies the feature's `onSave` callback. Intake lives at `/admin/vehicle-intake`, alongside `/admin/overview` and `/admin/inventory`; `/admin` redirects to overview. All three pages are nested behind `AdminRoute` for authenticated `ADMIN` and `SALES_STAFF` users.
+- `/quan-ly/nhap-xe` redirects to `/admin/vehicle-intake`; `/admin/kho-xe` redirects to `/admin/inventory`. Both use `LegacyRedirect` to preserve query strings and hashes while replacing the history entry.
+- Sidebar navigation uses real `NavLink` routes, and the profile reflects the authenticated account. The former local role selector, fabricated count, and notification indicator are no longer rendered. Source names remain English, canonical management URLs use English, and the UI remains Vietnamese. Public URLs are unchanged.
+- Inventory retains its existing filters, pagination, and `/manage/cars` API; search now follows the URL. Overview reads totals from `/manage/cars` response `meta.total`, including per-status totals, and requests up to five vehicles sorted by `listedDate` descending. Request errors display error states rather than zero totals.
+- Intake saving remains unchanged: the page adapter selects `VITE_VEHICLE_INTAKE_API_URL` or falls back to `http://localhost:3001/api/cpo/vehicles`. The reusable fetch adapter's own default remains `/api/cpo/vehicles`. It does not automatically use the inventory API client's authentication handling. This workspace integration does not connect intake saving to `/manage/cars` or promise backend persistence or inventory synchronization.
+
+See the [current verification results](../../../docs/features/management-workspace.md#verification-status-and-related-documentation) for completed checks and flows that remain source-reviewed only. Live backend validation, including persistence and inventory synchronization, remains pending.
+
+See [Management workspace](../../../docs/features/management-workspace.md) for route behavior, ownership, API boundaries, and pending checks.

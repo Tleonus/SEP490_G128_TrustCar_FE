@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from '../styles/VehicleIntake.module.css';
 import { vehicleInspectionCriteria } from '../constants/vehicleIntakeConstants.js';
 import Icon from './VehicleIntakeIcon.jsx';

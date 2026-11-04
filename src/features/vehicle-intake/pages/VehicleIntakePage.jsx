@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import VehicleDetailsForm from '../components/VehicleDetailsForm.jsx';
 import TrustCarInspectionChecklist from '../components/TrustCarInspectionChecklist.jsx';
 import VehicleIntakeSummary from '../components/VehicleIntakeSummary.jsx';

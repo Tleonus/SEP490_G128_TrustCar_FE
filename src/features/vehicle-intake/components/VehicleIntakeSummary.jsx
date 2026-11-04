@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from '../styles/VehicleIntake.module.css';
 import Icon from './VehicleIntakeIcon.jsx';
 
