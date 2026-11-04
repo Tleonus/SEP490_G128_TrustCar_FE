@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { Breadcrumb, Button, Modal, Form, Input, message } from 'antd'
 import {
@@ -8,6 +8,8 @@ import {
   ThunderboltOutlined,
   PhoneOutlined,
   MessageOutlined,
+  LeftOutlined,
+  RightOutlined,
 } from '@ant-design/icons'
 import { useCarDetail } from '../../hooks/useCarDetail'
 import { formatPrice, formatMileage } from '../../utils/format'
@@ -24,6 +26,7 @@ export default function CarDetailPage() {
   const navigate = useNavigate()
   const { car, similarCars, loading, error } = useCarDetail(stockCode)
   const [activeImage, setActiveImage] = useState(0)
+  const thumbsRef = useRef(null)
   const [contactOpen, setContactOpen] = useState(false)
   const [sending, setSending] = useState(false)
   const [form] = Form.useForm()
@@ -35,6 +38,22 @@ export default function CarDetailPage() {
   const title = getCarTitle(car)
   const images = sortCarImages(car.images)
   const current = images[activeImage]
+  const hasManyImages = images.length > 1
+
+  function selectImage(idx) {
+    setActiveImage(idx)
+    // Keep the chosen thumbnail visible inside the horizontally scrollable strip.
+    const strip = thumbsRef.current
+    const thumb = strip?.children[idx]
+    if (strip && thumb) {
+      strip.scrollTo({
+        left: thumb.offsetLeft - (strip.clientWidth - thumb.clientWidth) / 2,
+        behavior: 'smooth',
+      })
+    }
+  }
+  const goPrev = () => selectImage((activeImage - 1 + images.length) % images.length)
+  const goNext = () => selectImage((activeImage + 1) % images.length)
   const specs = car.specifications || {}
 
   const specItems = [
@@ -85,15 +104,38 @@ export default function CarDetailPage() {
               {current && (
                 <img src={current.url} alt={current.caption || title} className={styles.mainImg} />
               )}
+              {hasManyImages && (
+                <>
+                  <button
+                    type="button"
+                    className={`${styles.navBtn} ${styles.navPrev}`}
+                    onClick={goPrev}
+                    aria-label="Ảnh trước"
+                  >
+                    <LeftOutlined />
+                  </button>
+                  <button
+                    type="button"
+                    className={`${styles.navBtn} ${styles.navNext}`}
+                    onClick={goNext}
+                    aria-label="Ảnh tiếp theo"
+                  >
+                    <RightOutlined />
+                  </button>
+                  <span className={styles.counter} aria-live="polite">
+                    {activeImage + 1} / {images.length}
+                  </span>
+                </>
+              )}
             </div>
-            {images.length > 1 && (
-              <div className={styles.thumbs}>
+            {hasManyImages && (
+              <div className={styles.thumbs} ref={thumbsRef}>
                 {images.map((img, idx) => (
                   <button
                     type="button"
                     key={img._id || img.publicId}
                     className={`${styles.thumb} ${idx === activeImage ? styles.thumbActive : ''}`}
-                    onClick={() => setActiveImage(idx)}
+                    onClick={() => selectImage(idx)}
                     aria-label={`Xem ảnh ${idx + 1}`}
                     aria-pressed={idx === activeImage}
                   >
