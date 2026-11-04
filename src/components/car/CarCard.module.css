@@ -48,6 +48,22 @@
   border-radius: 999px;
 }
 
+/* Huy hiệu CPO: hiện khi xe có cpoCertificateId; góc dưới trái để không đè nhãn loại xe và nút so sánh. */
+.cpoBadge {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #0f1e3a;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
 .body {
   padding: 16px;
   display: flex;

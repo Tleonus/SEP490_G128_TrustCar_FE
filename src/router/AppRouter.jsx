@@ -24,6 +24,8 @@ import { ADMIN_PATHS } from './paths'
 const AdminVehicleIntakePage = lazy(() => import('../pages/Admin/AdminVehicleIntakePage.jsx'))
 const AdminOverviewPage = lazy(() => import('../pages/Admin/AdminOverviewPage.jsx'))
 const ComparePage = lazy(() => import('../features/vehicle-compare/pages/ComparePage.jsx'))
+const CpoCertificatesPage = lazy(() => import('../features/cpo-certificates/pages/CpoCertificatesPage.jsx'))
+const CpoCertificateDetailPage = lazy(() => import('../features/cpo-certificates/pages/CpoCertificateDetailPage.jsx'))
 
 export default function AppRouter() {
   return (
@@ -68,6 +70,15 @@ export default function AppRouter() {
         <Route path="inventory" element={<AdminCarsPage />} />
         <Route path="vehicle-intake" element={<Suspense fallback={<LoadingState />}><AdminVehicleIntakePage /></Suspense>} />
         <Route path="kho-xe" element={<LegacyRedirect to={ADMIN_PATHS.inventory} />} />
+        {/* Chứng nhận CPO: AdminRoute chỉ cho ADMIN, SALES_STAFF; BE vẫn kiểm quyền cuối cùng */}
+        <Route
+          path="chung-nhan"
+          element={<Suspense fallback={<LoadingState />}><CpoCertificatesPage /></Suspense>}
+        />
+        <Route
+          path="chung-nhan/:carId"
+          element={<Suspense fallback={<LoadingState />}><CpoCertificateDetailPage /></Suspense>}
+        />
       </Route>
     </Routes>
   )

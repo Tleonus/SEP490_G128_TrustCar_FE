@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { CalendarOutlined, DashboardOutlined, ThunderboltOutlined } from '@ant-design/icons'
+import { CalendarOutlined, DashboardOutlined, SafetyCertificateFilled, ThunderboltOutlined } from '@ant-design/icons'
 import { formatPrice, formatMileage } from '../../utils/format'
 import { getCarTitle, getCoverImage } from '../../utils/car'
 import { BODY_TYPE_LABEL, FUEL_TYPE_LABEL, TRANSMISSION_LABEL, labelOf } from '../../utils/constants'
@@ -20,6 +20,11 @@ export default function CarCard({ car }) {
         <div className={styles.imgWrap}>
           {imageUrl && <img src={imageUrl} alt={title} className={styles.img} />}
           {bodyType && <span className={styles.badge}>{labelOf(BODY_TYPE_LABEL, bodyType.toUpperCase())}</span>}
+          {car.cpoCertificateId && (
+            <span className={styles.cpoBadge} title={`Chứng nhận ${car.cpoCertificateId}`}>
+              <SafetyCertificateFilled /> CPO
+            </span>
+          )}
         </div>
         <div className={styles.body}>
           <h3 className={styles.title}>{title}</h3>
