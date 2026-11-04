@@ -94,14 +94,17 @@ export const useAuthStore = create((set) => ({
   },
 
   logout: async () => {
-    try {
-      await logoutApi()
-    } catch {
-      // Luôn xoá phiên local kể cả khi server không còn nhận token.
-    }
+    // Xoá phiên local ngay để giao diện đăng xuất tức thì, không phải chờ server.
+    const token = getToken()
     clearToken()
     clearRefreshToken()
     clearUser()
     set({ token: null, refreshToken: null, user: null, isAuthenticated: false })
+    if (!token) return
+    try {
+      await logoutApi(token) // thu hồi phiên phía server
+    } catch {
+      // Server lỗi hoặc token đã hết hạn: phiên local đã xoá, bỏ qua.
+    }
   },
 }))
