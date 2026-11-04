@@ -79,6 +79,11 @@ export default function AppRouter() {
           path="chung-nhan/:carId"
           element={<Suspense fallback={<LoadingState />}><CpoCertificateDetailPage /></Suspense>}
         />
+        {/* Route admin không tồn tại: hiện 404 trong AdminLayout thay vì vùng nội dung trống */}
+        <Route
+          path="*"
+          element={<NotFoundPage homePath={ADMIN_PATHS.overview} homeLabel="Về trang tổng quan" suggestions={[]} />}
+        />
       </Route>
     </Routes>
   )
