@@ -17,6 +17,7 @@ import { sendContactRequest } from '../../services/carService'
 import CarCard from '../../components/car/CarCard'
 import { LoadingState, ErrorState } from '../../components/common/StateBlock'
 import CompareToggle from '../../features/vehicle-compare/components/CompareToggle'
+import PublicCertificateSection from '../../features/cpo-certificates/components/PublicCertificateSection'
 import styles from './CarDetailPage.module.css'
 
 export default function CarDetailPage() {
@@ -107,6 +108,13 @@ export default function CarDetailPage() {
           <div className={styles.info}>
             <h1 className={styles.title}>{title}</h1>
             <div className={styles.price}>{formatPrice(car.price)}</div>
+
+            {/* SCR-M05: chứng nhận CPO (trang đích của mã QR); hiện khi xe có cpoCertificateId */}
+            <PublicCertificateSection
+              carKey={car.vehicleCode || car._id}
+              vehicleCode={car.vehicleCode}
+              cpoCertificateId={car.cpoCertificateId ?? null}
+            />
 
             <div className={styles.specsGrid}>
               {specItems.map((s) => (

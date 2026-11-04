@@ -49,11 +49,7 @@ export default function Header() {
     { type: 'divider' },
     {
       key: 'logout',
-      label: (
-        <span onClick={handleLogout} style={{ color: '#ff4d4f' }}>
-          Đăng xuất
-        </span>
-      ),
+      label: <span style={{ color: '#ff4d4f' }}>Đăng xuất</span>,
     },
   ]
 
@@ -94,7 +90,10 @@ export default function Header() {
           {/* ✅ Kiểm tra CẢ HAI: isAuthenticated VÀ user phải không null
               Tránh hiện Avatar "U" khi token còn nhưng user đã bị clear */}
           {isAuthenticated && user ? (
-            <Dropdown menu={{ items: dropdownItems }} trigger={['click']}>
+            <Dropdown
+              menu={{ items: dropdownItems, onClick: ({ key }) => key === 'logout' && handleLogout() }}
+              trigger={['click']}
+            >
               <span
                 className={styles.userInfo}
                 style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}

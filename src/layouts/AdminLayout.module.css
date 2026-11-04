@@ -101,3 +101,40 @@
   flex: 1;
   padding: 28px 28px 48px;
 }
+
+/* Máy tính bảng dọc và điện thoại: sidebar chuyển thành thanh ngang trên cùng, menu cuộn ngang. */
+@media (max-width: 767px) {
+  .shell {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: static;
+  }
+
+  .logoLink {
+    padding: 12px 16px;
+  }
+
+  .nav {
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 8px 12px;
+  }
+
+  .navLink {
+    flex-shrink: 0;
+    min-height: 44px;
+  }
+
+  .topbar {
+    height: 56px;
+    padding: 0 16px;
+  }
+
+  .content {
+    padding: 16px 16px 40px;
+  }
+}

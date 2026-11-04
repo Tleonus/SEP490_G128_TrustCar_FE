@@ -1,0 +1,252 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  align-self: flex-start;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #0f1e3a;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.code {
+  margin: 0;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 26px;
+  font-weight: 700;
+  word-break: break-all;
+}
+
+.headerMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.vehicleTitle {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 16px;
+  align-items: start;
+}
+
+.mainCol,
+.sideCol {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.sideCol {
+  position: sticky;
+  top: 16px;
+}
+
+.qrSkeleton {
+  width: 220px !important;
+  height: 220px !important;
+}
+
+.touch {
+  min-height: 44px;
+}
+
+.minimalNote {
+  margin-bottom: 12px;
+}
+
+.groupList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.group {
+  padding-bottom: 14px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.group:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.groupHead {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.groupTitle {
+  font-weight: 600;
+}
+
+.passIcon {
+  margin-top: 3px;
+  font-size: 18px;
+  color: #16a34a;
+}
+
+.failIcon {
+  margin-top: 3px;
+  font-size: 18px;
+  color: #dc2626;
+}
+
+.itemList {
+  margin: 8px 0 0 28px;
+  padding-left: 16px;
+  color: #475569;
+  font-size: 14px;
+}
+
+.defects {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 10px 0 0 28px;
+}
+
+.defect {
+  display: flex;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #fffbeb;
+  color: #92400e;
+  font-size: 14px;
+}
+
+.subText {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.photoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.photoRoot {
+  width: 100%;
+}
+
+.photo {
+  width: 100% !important;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.photoFailed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  aspect-ratio: 4 / 3;
+  padding: 6px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  color: #64748b;
+  font-size: 12px;
+  text-align: center;
+}
+
+.overviewGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.overviewItem {
+  margin: 0;
+}
+
+.overviewItem .photoGrid {
+  grid-template-columns: 1fr;
+  margin-top: 0;
+}
+
+.overviewItem figcaption {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #64748b;
+  text-align: center;
+}
+
+.scope {
+  margin: 0;
+  padding: 10px 12px;
+  border-left: 3px solid #94a3b8;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 13px;
+}
+
+/* Máy tính bảng dọc và điện thoại: một cột, QR đưa lên trên nội dung dài. */
+@media (max-width: 991px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sideCol {
+    position: static;
+    order: -1;
+  }
+
+  .overviewGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 575px) {
+  .code {
+    font-size: 20px;
+  }
+
+  .itemList,
+  .defects {
+    margin-left: 0;
+  }
+}
+
+.reportBody {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

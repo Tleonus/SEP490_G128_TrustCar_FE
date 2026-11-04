@@ -1,0 +1,176 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.desc {
+  margin: 4px 0 0;
+  color: #64748b;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.search {
+  flex: 1 1 260px;
+}
+
+.select {
+  flex: 0 1 220px;
+  min-width: 180px;
+}
+
+.dateField {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 0 1 170px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.count {
+  margin: 0;
+  color: #64748b;
+}
+
+.tableWrap {
+  overflow-x: auto;
+  background: #fff;
+  border-radius: 12px;
+}
+
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background: #fff;
+  border-radius: 12px;
+}
+
+.empty {
+  padding: 48px 0;
+  background: #fff;
+  border-radius: 12px;
+}
+
+.cpoCode {
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.carName {
+  font-weight: 600;
+}
+
+.subText {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.rowActions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Vùng bấm tối thiểu 44px. */
+.touch {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0;
+}
+
+/* Thẻ cho điện thoại. */
+.cardList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+
+.cardHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.cardMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.card .rowActions > * {
+  flex: 1;
+}
+
+@media (max-width: 767px) {
+  .title {
+    font-size: 20px;
+  }
+
+  .select,
+  .dateField {
+    flex: 1 1 calc(50% - 5px);
+    min-width: 0;
+  }
+
+  .search {
+    flex-basis: 100%;
+  }
+}
+
+/* Nút phân trang và nút xoá tìm kiếm của antd mặc định 32px/12px: nới vùng bấm lên 44px. */
+.pagination :global(.ant-pagination-item),
+.pagination :global(.ant-pagination-prev),
+.pagination :global(.ant-pagination-next),
+.pagination :global(.ant-pagination-item-link) {
+  min-width: 44px;
+  height: 44px;
+  line-height: 42px;
+}
+
+.search :global(.ant-input-clear-icon) {
+  box-sizing: content-box;
+  padding: 16px;
+  margin: -16px;
+}
+
+/* Trong bảng: 2 nút thao tác nằm một hàng để dòng không cao gấp đôi. */
+.tableWrap .rowActions {
+  flex-wrap: nowrap;
+}

@@ -61,7 +61,9 @@ export async function refreshToken(refreshTokenValue) {
   return res.data
 }
 
-export async function logout() {
-  const res = await api.post('/auth/logout')
+// Nhận token truyền vào vì phiên local có thể đã bị xoá trước khi request được gửi.
+export async function logout(token) {
+  const headers = token ? { Authorization: `Bearer ${token}` } : undefined
+  const res = await api.post('/auth/logout', null, { headers, timeout: 5000 })
   return res.data
 }

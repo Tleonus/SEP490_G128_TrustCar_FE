@@ -1,0 +1,127 @@
+/* Stylesheet in riêng cho chứng nhận CPO: tem QR (A6) và bản chứng nhận đầy đủ (A4).
+   Global vì phải ẩn được #root khi in. */
+
+/* Trên màn hình: tem không hiển thị, chỉ dùng để in. */
+.cpo-print-root {
+  position: fixed;
+  left: -10000px;
+  top: 0;
+}
+
+@media print {
+  /* Mặc định (bản chứng nhận): A4. Tem dùng trang tên "label" khổ A6. */
+  @page {
+    size: A4 portrait;
+    margin: 12mm;
+  }
+
+  @page label {
+    size: A6 portrait;
+    margin: 8mm;
+  }
+
+  /* Khi đang in tem: ẩn mọi thứ trừ tem (antd modal/message cũng gắn vào body). */
+  body.cpo-printing > *:not(.cpo-print-root) {
+    display: none !important;
+  }
+
+  body.cpo-printing {
+    background: #fff !important;
+  }
+
+  .cpo-print-root {
+    position: static;
+    display: flex;
+    justify-content: center;
+  }
+
+  .cpo-print-label {
+    page: label;
+    width: 70mm;
+    padding: 5mm;
+    border: 0.4mm solid #0f1e3a;
+    border-radius: 3mm;
+    text-align: center;
+    color: #0f1e3a;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    break-inside: avoid;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .cpo-print-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.5mm;
+    padding: 1mm 3mm;
+    border-radius: 10mm;
+    background: #0f1e3a;
+    color: #fff;
+    font-size: 9pt;
+    font-weight: 700;
+    letter-spacing: 0.2mm;
+  }
+
+  /* QR tối thiểu 40mm để điện thoại quét được ở khoảng cách 20–30cm. */
+  .cpo-print-qr {
+    display: block;
+    width: 48mm;
+    height: 48mm;
+    margin: 3mm auto 2mm;
+    image-rendering: pixelated;
+  }
+
+  .cpo-print-code {
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 12pt;
+    font-weight: 700;
+    letter-spacing: 0.3mm;
+  }
+
+  .cpo-print-vehicle {
+    margin-top: 1mm;
+    font-size: 9pt;
+  }
+
+  .cpo-print-hint {
+    margin-top: 1.5mm;
+    font-size: 7.5pt;
+  }
+
+  .cpo-print-scope {
+    margin-top: 2mm;
+    padding-top: 1.5mm;
+    border-top: 0.2mm solid #94a3b8;
+    font-size: 6.5pt;
+    line-height: 1.35;
+    color: #334155;
+  }
+
+  /* Bản chứng nhận đầy đủ in từ SCR-M05. */
+  .cpo-print-root:has(.cpo-print-report) {
+    display: block;
+  }
+
+  .cpo-print-report {
+    width: 100%;
+    color: #0f172a;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .cpo-print-report .ant-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 0.3mm solid #cbd5e1;
+  }
+
+  .cpo-print-report li,
+  .cpo-print-report figure {
+    break-inside: avoid;
+  }
+
+  .cpo-print-report img {
+    max-height: 45mm;
+  }
+}

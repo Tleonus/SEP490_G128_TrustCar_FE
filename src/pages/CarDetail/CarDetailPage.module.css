@@ -9,14 +9,15 @@
 
 .layout {
   display: grid;
-  grid-template-columns: 1.4fr 1fr;
+  /* minmax(0, …): cột được co nhỏ hơn nội dung, tránh tràn ngang trên điện thoại */
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
   gap: 32px;
   align-items: flex-start;
 }
 
 @media (max-width: 960px) {
   .layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -117,8 +118,22 @@
 
 .ctaRow {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   margin-top: 20px;
+}
+
+/* Các nút chia đều hàng, hết chỗ thì xuống dòng thay vì tràn khỏi cột thông tin. */
+.ctaRow > * {
+  flex: 1 1 180px;
+  min-width: 0;
+}
+
+/* Điện thoại: 3 nút liên hệ xếp dọc, không đẩy tràn ngang trang. */
+@media (max-width: 560px) {
+  .ctaRow {
+    flex-direction: column;
+  }
 }
 
 .description {

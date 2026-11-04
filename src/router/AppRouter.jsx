@@ -21,6 +21,8 @@ import PrivateRoute from './PrivateRoute'
 
 const VehicleIntakeApp = lazy(() => import('../VehicleIntakeApp.jsx'))
 const ComparePage = lazy(() => import('../features/vehicle-compare/pages/ComparePage.jsx'))
+const CpoCertificatesPage = lazy(() => import('../features/cpo-certificates/pages/CpoCertificatesPage.jsx'))
+const CpoCertificateDetailPage = lazy(() => import('../features/cpo-certificates/pages/CpoCertificateDetailPage.jsx'))
 
 export default function AppRouter() {
   return (
@@ -69,6 +71,15 @@ export default function AppRouter() {
       >
         <Route index element={<Navigate to="/admin/kho-xe" replace />} />
         <Route path="kho-xe" element={<AdminCarsPage />} />
+        {/* Chứng nhận CPO: AdminRoute chỉ cho ADMIN, SALES_STAFF; BE vẫn kiểm quyền cuối cùng */}
+        <Route
+          path="chung-nhan"
+          element={<Suspense fallback={<LoadingState />}><CpoCertificatesPage /></Suspense>}
+        />
+        <Route
+          path="chung-nhan/:carId"
+          element={<Suspense fallback={<LoadingState />}><CpoCertificateDetailPage /></Suspense>}
+        />
       </Route>
     </Routes>
   )
