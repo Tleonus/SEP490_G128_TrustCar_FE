@@ -33,8 +33,10 @@
 }
 
 .brandLogo {
-  height: 40px;
-  border-radius: 6px;
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  object-position: center;
 }
 
 .brandName {
@@ -84,6 +86,15 @@
   font-size: 14px;
   margin-bottom: 12px;
   line-height: 1.6;
+}
+
+.contactItem a {
+  color: inherit;
+  transition: color 0.2s ease;
+}
+
+.contactItem a:hover {
+  color: var(--color-accent);
 }
 
 .contactItem .anticon {

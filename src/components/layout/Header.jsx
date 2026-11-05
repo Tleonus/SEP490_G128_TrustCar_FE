@@ -1,11 +1,12 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { Avatar, Button, Drawer, Dropdown } from 'antd'
-import { SunOutlined, MoonOutlined, MenuOutlined, UserOutlined } from '@ant-design/icons'
-import logo from '../../assets/logo.jpg'
+import { SunOutlined, MoonOutlined, MenuOutlined, UserOutlined, PhoneFilled } from '@ant-design/icons'
+import logo from '../../assets/logo-transparent.png'
 import { useThemeStore } from '../../store/useThemeStore'
 import { useAuthStore } from '../../store/useAuthStore'
 import styles from './Header.module.css'
+import { CONTACT_INFO } from '../../config/contactInfo'
 
 const NAV_ITEMS = [
   { to: '/', label: 'Trang chủ' },
@@ -77,6 +78,13 @@ export default function Header() {
         </nav>
 
         <div className={styles.actions}>
+          <a href={CONTACT_INFO.phoneHref} className={styles.hotline} aria-label={`Gọi ${CONTACT_INFO.phoneDisplay}`}>
+            <span className={styles.hotlineIcon}><PhoneFilled /></span>
+            <span className={styles.hotlineCopy}>
+              <small>Hotline tư vấn</small>
+              <strong>{CONTACT_INFO.phoneDisplay}</strong>
+            </span>
+          </a>
           <button
             type="button"
             className={styles.themeBtn}
@@ -130,7 +138,7 @@ export default function Header() {
       </div>
 
       <Drawer
-        title={<img src={logo} alt="TrustCar" style={{ height: 36, borderRadius: 6 }} />}
+        title={<img src={logo} alt="TrustCar" className={styles.drawerLogo} />}
         placement="right"
         onClose={() => setDrawerOpen(false)}
         open={drawerOpen}

@@ -1,6 +1,7 @@
 import { Button } from 'antd'
 import { PhoneOutlined, MessageOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
+import { CONTACT_INFO } from '../../../config/contactInfo'
 import styles from './ContactCtaSection.module.css'
 
 export default function ContactCtaSection() {
@@ -18,14 +19,10 @@ export default function ContactCtaSection() {
             </p>
           </div>
           <div className={styles.actions}>
-            <Button type="primary" size="large" icon={<PhoneOutlined />}>
-              1900 1234
+            <Button type="primary" size="large" icon={<PhoneOutlined />} href={CONTACT_INFO.phoneHref}>
+              {CONTACT_INFO.phoneDisplay}
             </Button>
-            <Button
-              size="large"
-              icon={<MessageOutlined />}
-              onClick={() => navigate('/lien-he')}
-            >
+            <Button size="large" icon={<MessageOutlined />} onClick={() => navigate('/lien-he')}>
               Gửi yêu cầu tư vấn
             </Button>
           </div>
