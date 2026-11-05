@@ -21,6 +21,7 @@ import { LoadingState, ErrorState } from '../../components/common/StateBlock'
 import CompareToggle from '../../features/vehicle-compare/components/CompareToggle'
 import PublicCertificateSection from '../../features/cpo-certificates/components/PublicCertificateSection'
 import styles from './CarDetailPage.module.css'
+import { CONTACT_INFO } from '../../config/contactInfo'
 
 export default function CarDetailPage() {
   const { stockCode } = useParams()
@@ -168,8 +169,8 @@ export default function CarDetailPage() {
             </div>
 
             <div className={styles.ctaRow}>
-              <Button type="primary" size="large" icon={<PhoneOutlined />} href="tel:19001234" block>
-                Gọi tư vấn: 1900 1234
+              <Button type="primary" size="large" icon={<PhoneOutlined />} href={CONTACT_INFO.phoneHref} block>
+                Gọi tư vấn: {CONTACT_INFO.phoneDisplay}
               </Button>
               <Button size="large" icon={<MessageOutlined />} onClick={() => setContactOpen(true)} block>
                 Yêu cầu tư vấn

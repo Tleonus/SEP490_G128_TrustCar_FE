@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { CloseOutlined, SendOutlined } from '@ant-design/icons'
 import RobotMascot from './RobotMascot'
 import styles from './ChatWidget.module.css'
+import { CONTACT_INFO } from '../../config/contactInfo'
 
 const SUGGESTIONS = [
   'Tư vấn xe theo ngân sách',
@@ -73,7 +74,7 @@ export default function ChatWidget() {
         {
           id: `b-${Date.now()}`,
           from: 'bot',
-          text: 'Cảm ơn bạn đã nhắn tin. Trợ lý AI của TrustCar đang trong giai đoạn hoàn thiện nên chưa thể trả lời tự động. Bạn có thể xem danh sách xe hoặc gọi hotline 1900 1234 để được tư vấn ngay.',
+          text: `Cảm ơn bạn đã nhắn tin. Trợ lý AI của TrustCar đang trong giai đoạn hoàn thiện nên chưa thể trả lời tự động. Bạn có thể xem danh sách xe hoặc gọi hotline ${CONTACT_INFO.phoneDisplay} để được tư vấn ngay.`,
           actions: [
             { label: 'Xem danh sách xe', to: '/xe' },
             { label: 'Gửi yêu cầu tư vấn', to: '/lien-he' },

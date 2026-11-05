@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { PhoneOutlined, MailOutlined, EnvironmentOutlined } from '@ant-design/icons'
-import logo from '../../assets/logo.jpg'
+import logo from '../../assets/logo-transparent.png'
+import { CONTACT_INFO } from '../../config/contactInfo'
 import styles from './Footer.module.css'
 
 export default function Footer() {
@@ -43,15 +44,15 @@ export default function Footer() {
           <div className={styles.colTitle}>Liên hệ</div>
           <div className={styles.contactItem}>
             <EnvironmentOutlined />
-            <span>Showroom TrustCar, Quận 1, TP. Hồ Chí Minh</span>
+            <a href={CONTACT_INFO.mapUrl} target="_blank" rel="noreferrer">{CONTACT_INFO.showroomDisplay}</a>
           </div>
           <div className={styles.contactItem}>
             <PhoneOutlined />
-            <span>1900 1234</span>
+            <a href={CONTACT_INFO.phoneHref}>{CONTACT_INFO.phoneDisplay}</a>
           </div>
           <div className={styles.contactItem}>
             <MailOutlined />
-            <span>support@trustcar.vn</span>
+            <a href={`mailto:${CONTACT_INFO.email}`}>{CONTACT_INFO.email}</a>
           </div>
         </div>
       </div>

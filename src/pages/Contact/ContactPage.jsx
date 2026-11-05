@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Form, Input, Button, message } from 'antd'
-import { PhoneOutlined, MailOutlined, EnvironmentOutlined } from '@ant-design/icons'
+import { PhoneOutlined, MailOutlined, EnvironmentOutlined, LinkOutlined } from '@ant-design/icons'
 import { sendContactRequest } from '../../services/carService'
+import { CONTACT_INFO } from '../../config/contactInfo'
 import styles from './ContactPage.module.css'
 
 export default function ContactPage() {
@@ -38,21 +39,36 @@ export default function ContactPage() {
               <div className={styles.infoIcon}><EnvironmentOutlined /></div>
               <div>
                 <div className={styles.infoTitle}>Showroom</div>
-                <p className={styles.infoDesc}>123 Đường ABC, Quận 1, TP. Hồ Chí Minh</p>
+                <p className={styles.infoDesc}>{CONTACT_INFO.showroomDisplay}</p>
+                <a href={CONTACT_INFO.mapUrl} target="_blank" rel="noreferrer" className={styles.infoLink}>
+                  <LinkOutlined /> Xem vị trí trên Google Maps
+                </a>
+                <p className={styles.infoMeta}>{CONTACT_INFO.showroomHours}</p>
               </div>
             </div>
             <div className={styles.infoItem}>
               <div className={styles.infoIcon}><PhoneOutlined /></div>
               <div>
-                <div className={styles.infoTitle}>Hotline</div>
-                <p className={styles.infoDesc}>1900 1234 (8:00 - 20:00 hàng ngày)</p>
+                <div className={styles.infoTitle}>Hotline tư vấn</div>
+                <a href={CONTACT_INFO.phoneHref} className={styles.infoLink}>{CONTACT_INFO.phoneDisplay}</a>
+                <p className={styles.infoMeta}>{CONTACT_INFO.showroomHours}</p>
               </div>
             </div>
             <div className={styles.infoItem}>
               <div className={styles.infoIcon}><MailOutlined /></div>
               <div>
                 <div className={styles.infoTitle}>Email</div>
-                <p className={styles.infoDesc}>support@trustcar.vn</p>
+                <a href={`mailto:${CONTACT_INFO.email}`} className={styles.infoLink}>{CONTACT_INFO.email}</a>
+              </div>
+            </div>
+
+            <div className={styles.socialBlock}>
+              <div className={styles.infoTitle}>Kênh liên hệ nhanh</div>
+              <div className={styles.socialLinks}>
+                <a href={CONTACT_INFO.zaloUrl} target="_blank" rel="noreferrer">Zalo</a>
+                <a href={CONTACT_INFO.messengerUrl} target="_blank" rel="noreferrer">Messenger</a>
+                <a href={CONTACT_INFO.facebookUrl} target="_blank" rel="noreferrer">Facebook</a>
+                <a href={CONTACT_INFO.tiktokUrl} target="_blank" rel="noreferrer">TikTok</a>
               </div>
             </div>
           </div>

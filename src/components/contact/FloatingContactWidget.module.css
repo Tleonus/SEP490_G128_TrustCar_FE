@@ -1,0 +1,193 @@
+﻿.root {
+  position: fixed;
+  left: 18px;
+  bottom: 124px;
+  z-index: 910;
+  pointer-events: none;
+}
+
+.root > *,
+.list {
+  pointer-events: auto;
+}
+
+.list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 8px 0;
+}
+
+.list::before {
+  content: '';
+  position: absolute;
+  left: 23px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, rgba(201, 162, 39, 0.62) 16%, rgba(201, 162, 39, 0.62) 84%, transparent);
+  pointer-events: none;
+}
+
+.channel {
+  pointer-events: auto;
+  position: relative;
+  z-index: 1;
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: #fff;
+  background: var(--color-primary);
+  border: 3px solid var(--color-surface);
+  border-radius: 50%;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  cursor: pointer;
+  font-family: inherit;
+  text-decoration: none;
+  transition: transform 0.24s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.24s ease, filter 0.24s ease;
+}
+
+.channel::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0.82);
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.channel:hover {
+  z-index: 3;
+  color: #fff;
+  filter: brightness(1.08);
+  transform: translateX(5px) scale(1.2);
+  box-shadow: 0 13px 25px rgba(15, 23, 42, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.channel:hover::before,
+.channel:focus-visible::before {
+  opacity: 0.46;
+  transform: scale(1.08);
+}
+
+.channel:hover .channelIcon,
+.channel:focus-visible .channelIcon {
+  animation: channelIconBounce 0.46s ease both;
+}
+
+.channel:active {
+  transform: translateX(4px) scale(1.08);
+}
+
+@keyframes channelIconBounce {
+  0% { transform: scale(1) rotate(0); }
+  45% { transform: scale(1.12) rotate(-8deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+.channel:focus-visible,
+.previewAction:focus-visible,
+.previewClose:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.channelIcon {
+  width: 100%;
+  height: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 20px;
+}
+
+.channelLabel {
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 50%;
+  min-width: max-content;
+  padding: 7px 10px;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-left: 2px solid var(--color-accent);
+  border-radius: 8px;
+  box-shadow: var(--shadow-card);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-6px, -50%);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.channel:hover .channelLabel,
+.channel:focus-visible .channelLabel {
+  opacity: 1;
+  transform: translate(0, -50%);
+}
+
+.zaloChannel {
+  background: #0a79ff;
+}
+
+.zaloWordmark {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.messengerChannel {
+  background: linear-gradient(135deg, #087eff, #a033ff);
+}
+
+.facebookChannel {
+  background: #1877f2;
+}
+
+.tiktokChannel {
+  background: #111;
+}
+
+.phoneChannel {
+  background: var(--color-accent-hover);
+}
+
+@media (max-width: 640px) {
+  .root {
+    left: 10px;
+    bottom: 112px;
+  }
+
+  .channel {
+    width: 44px;
+    height: 44px;
+  }
+
+  .list::before {
+    left: 21px;
+  }
+
+  .channelLabel {
+    font-size: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .channel,
+  .channelIcon,
+  .channelLabel {
+    animation: none;
+    transition: none;
+  }
+}

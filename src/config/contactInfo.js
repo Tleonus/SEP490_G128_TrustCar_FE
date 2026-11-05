@@ -1,0 +1,16 @@
+﻿export const CONTACT_INFO = {
+  phone: '0856098686',
+  phoneDisplay: '0856 098 686',
+  phoneHref: 'tel:0856098686',
+  email: 'support@trustcar.vn',
+  showroomName: 'Showroom TrustCar',
+  showroomAddress: 'Quận 1, TP. Hồ Chí Minh',
+  showroomDisplay: 'Showroom TrustCar, Quận 1, TP. Hồ Chí Minh',
+  showroomHours: '8:00 - 20:00 hàng ngày',
+  mapUrl: 'https://www.google.com/maps/search/?api=1&query=Showroom+TrustCar%2C+Qu%E1%BA%ADn+1%2C+TP.+H%E1%BB%93+Ch%C3%AD+Minh',
+  zaloUrl: 'https://zalo.me/0856098686',
+  facebookUrl: 'https://www.facebook.com/tronghieu.7297',
+  messengerUrl: 'https://m.me/tronghieu.7297',
+  tiktokUrl: 'https://www.tiktok.com/@hieu_xeluot?is_from_webapp=1&sender_device=pc',
+  tiktokHandle: '@hieu_xeluot',
+}
