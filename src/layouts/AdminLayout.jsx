@@ -1,4 +1,4 @@
-import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
+﻿import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { ConfigProvider, Dropdown, theme } from 'antd'
 import { HomeOutlined, LogoutOutlined, SafetyCertificateOutlined } from '@ant-design/icons'
 import Icon from '../features/vehicle-intake/components/VehicleIntakeIcon'
@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { to: ADMIN_PATHS.overview, label: 'Tổng quan', icon: 'grid' },
   { to: ADMIN_PATHS.inventory, label: 'Kho xe', icon: 'car' },
   { to: ADMIN_PATHS.vehicleIntake, label: 'Nhập xe & Thẩm định', icon: 'clipboard' },
+  { to: ADMIN_PATHS.baseSettings, label: 'Cấu hình showroom', icon: 'settings' },
   { to: '/admin/chung-nhan', label: 'Chứng nhận CPO', iconNode: <SafetyCertificateOutlined /> },
 ]
 
@@ -76,8 +77,7 @@ export default function AdminLayout() {
         <div className={styles['main-content']}>
           <header className={styles.topbar}>
             <div className={styles.breadcrumbs}>
-              <span>Quản lý xe</span><Icon name="chevron" size={14} />
-              <strong>{currentPage?.label || 'Quản lý showroom'}</strong>
+              <strong>{currentPage?.label || 'Trang quản trị'}</strong>
             </div>
             <div className={styles['topbar-actions']}>
               <span className={styles['role-label']}>{roleLabel}</span>
