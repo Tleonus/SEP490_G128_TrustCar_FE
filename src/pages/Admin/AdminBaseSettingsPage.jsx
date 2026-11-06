@@ -1,5 +1,21 @@
 import { useEffect, useMemo, useState } from 'react'
-import { CheckCircleOutlined, ClockCircleOutlined, EnvironmentOutlined, LinkOutlined, MailOutlined, PhoneOutlined, SaveOutlined, ShopOutlined, ThunderboltOutlined } from '@ant-design/icons'
+import {
+  CheckCircleOutlined,
+  ClockCircleOutlined,
+  CompassOutlined,
+  EnvironmentOutlined,
+  GlobalOutlined,
+  LinkOutlined,
+  MailOutlined,
+  MessageOutlined,
+  PhoneOutlined,
+  SaveOutlined,
+  ShopOutlined,
+  TeamOutlined,
+  ThunderboltOutlined,
+  UserOutlined,
+  VideoCameraOutlined,
+} from '@ant-design/icons'
 import Icon from '../../features/vehicle-intake/components/VehicleIntakeIcon'
 import styles from './AdminBaseSettingsPage.module.css'
 import { getBaseSettings, saveBaseSettings } from '../../config/contactInfo'
@@ -13,13 +29,14 @@ const DAYS = [
   { key: 'saturday', label: 'Th\u{1ee9} 7' },
   { key: 'sunday', label: 'Ch\u{1ee7} nh\u{1ead}t' },
 ]
+
 function timeToMinutes(value) {
   const [hours, minutes] = value.split(':').map(Number)
   return (hours * 60) + minutes
 }
 
 function isValidTime(value) {
-  return /^([01]\\d|2[0-3]):[0-5]\\d$/.test(value)
+  return /^([01]\d|2[0-3]):[0-5]\d$/.test(value)
 }
 
 function Field({ label, htmlFor, hint, children }) {
@@ -156,7 +173,10 @@ export default function AdminBaseSettingsPage() {
             />
             <div className={styles.formGrid}>
               <Field label="T&ecirc;n showroom" htmlFor="showroom-name" hint="T&ecirc;n hi&#7875;n th&#7883; c&ocirc;ng khai tr&ecirc;n website.">
-                <input id="showroom-name" className={styles.input} value={settings.showroomName} onChange={(event) => updateField('showroomName', event.target.value)} required />
+                <div className={styles.inputWithIcon}>
+                  <ShopOutlined aria-hidden="true" />
+                  <input id="showroom-name" className={styles.input} value={settings.showroomName} onChange={(event) => updateField('showroomName', event.target.value)} required />
+                </div>
               </Field>
               <Field label="&#272;&#7883;a ch&#7881; showroom" htmlFor="showroom-address">
                 <div className={styles.inputWithIcon}>
@@ -176,7 +196,8 @@ export default function AdminBaseSettingsPage() {
                   <input id="showroom-email" className={styles.input} type="email" value={settings.email} onChange={(event) => updateField('email', event.target.value)} required />
                 </div>
               </Field>
-            </div>          </section>
+            </div>
+          </section>
 
           <section className={styles.card} aria-labelledby="hours-heading">
             <SectionHeading
@@ -188,11 +209,17 @@ export default function AdminBaseSettingsPage() {
             />
             <div className={styles.timeGrid}>
               <Field label="M&#7903; c&#7917;a" htmlFor="opening-time">
-                <input id="opening-time" className={styles.input} type="text" inputMode="numeric" maxLength="5" pattern="([01]\\d|2[0-3]):[0-5]\\d" placeholder="08:00" value={settings.openingTime} onChange={(event) => updateField('openingTime', event.target.value)} required />
+                <div className={styles.inputWithIcon}>
+                  <ClockCircleOutlined aria-hidden="true" />
+                  <input id="opening-time" className={styles.input} type="text" inputMode="numeric" maxLength="5" pattern="([01]\d|2[0-3]):[0-5]\d" placeholder="08:00" value={settings.openingTime} onChange={(event) => updateField('openingTime', event.target.value)} required />
+                </div>
               </Field>
               <span className={styles.timeSeparator} aria-hidden="true">&#273;&#7871;n</span>
               <Field label="&#272;&#243;ng c&#7917;a" htmlFor="closing-time">
-                <input id="closing-time" className={styles.input} type="text" inputMode="numeric" maxLength="5" pattern="([01]\\d|2[0-3]):[0-5]\\d" placeholder="20:00" value={settings.closingTime} onChange={(event) => updateField('closingTime', event.target.value)} required />
+                <div className={styles.inputWithIcon}>
+                  <ClockCircleOutlined aria-hidden="true" />
+                  <input id="closing-time" className={styles.input} type="text" inputMode="numeric" maxLength="5" pattern="([01]\d|2[0-3]):[0-5]\d" placeholder="20:00" value={settings.closingTime} onChange={(event) => updateField('closingTime', event.target.value)} required />
+                </div>
               </Field>
             </div>
             <div className={styles.daysBlock}>
@@ -221,25 +248,44 @@ export default function AdminBaseSettingsPage() {
             />
             <div className={styles.linksGrid}>
               <Field label="Google Maps" htmlFor="map-url">
-                <input id="map-url" className={styles.input} type="url" value={settings.mapUrl} onChange={(event) => updateField('mapUrl', event.target.value)} placeholder="https://maps.google.com/..." />
+                <div className={styles.inputWithIcon}>
+                  <CompassOutlined aria-hidden="true" />
+                  <input id="map-url" className={styles.input} type="url" value={settings.mapUrl} onChange={(event) => updateField('mapUrl', event.target.value)} placeholder="https://maps.google.com/..." />
+                </div>
               </Field>
               <Field label="Zalo" htmlFor="zalo-url">
-                <input id="zalo-url" className={styles.input} type="url" value={settings.zaloUrl} onChange={(event) => updateField('zaloUrl', event.target.value)} placeholder="https://zalo.me/..." />
+                <div className={styles.inputWithIcon}>
+                  <MessageOutlined aria-hidden="true" />
+                  <input id="zalo-url" className={styles.input} type="url" value={settings.zaloUrl} onChange={(event) => updateField('zaloUrl', event.target.value)} placeholder="https://zalo.me/..." />
+                </div>
               </Field>
               <Field label="Facebook" htmlFor="facebook-url">
-                <input id="facebook-url" className={styles.input} type="url" value={settings.facebookUrl} onChange={(event) => updateField('facebookUrl', event.target.value)} placeholder="https://facebook.com/..." />
+                <div className={styles.inputWithIcon}>
+                  <GlobalOutlined aria-hidden="true" />
+                  <input id="facebook-url" className={styles.input} type="url" value={settings.facebookUrl} onChange={(event) => updateField('facebookUrl', event.target.value)} placeholder="https://facebook.com/..." />
+                </div>
               </Field>
               <Field label="Messenger" htmlFor="messenger-url">
-                <input id="messenger-url" className={styles.input} type="url" value={settings.messengerUrl} onChange={(event) => updateField('messengerUrl', event.target.value)} placeholder="https://m.me/..." />
+                <div className={styles.inputWithIcon}>
+                  <MessageOutlined aria-hidden="true" />
+                  <input id="messenger-url" className={styles.input} type="url" value={settings.messengerUrl} onChange={(event) => updateField('messengerUrl', event.target.value)} placeholder="https://m.me/..." />
+                </div>
               </Field>
               <Field label="TikTok" htmlFor="tiktok-url">
-                <input id="tiktok-url" className={styles.input} type="url" value={settings.tiktokUrl} onChange={(event) => updateField('tiktokUrl', event.target.value)} placeholder="https://tiktok.com/@..." />
+                <div className={styles.inputWithIcon}>
+                  <VideoCameraOutlined aria-hidden="true" />
+                  <input id="tiktok-url" className={styles.input} type="url" value={settings.tiktokUrl} onChange={(event) => updateField('tiktokUrl', event.target.value)} placeholder="https://tiktok.com/@..." />
+                </div>
               </Field>
               <Field label="T&ecirc;n hi&#7875;n th&#7883; TikTok" htmlFor="tiktok-handle" hint="V&iacute; d&#7909;: @trustcar.vn">
-                <input id="tiktok-handle" className={styles.input} value={settings.tiktokHandle} onChange={(event) => updateField('tiktokHandle', event.target.value)} placeholder="@trustcar.vn" />
+                <div className={styles.inputWithIcon}>
+                  <UserOutlined aria-hidden="true" />
+                  <input id="tiktok-handle" className={styles.input} value={settings.tiktokHandle} onChange={(event) => updateField('tiktokHandle', event.target.value)} placeholder="@trustcar.vn" />
+                </div>
               </Field>
             </div>
           </section>
+
           <section className={`${styles.card} ${styles.testDriveCard}`} aria-labelledby="test-drive-heading">
             <div className={styles.testDriveHeader}>
               <SectionHeading
@@ -254,15 +300,17 @@ export default function AdminBaseSettingsPage() {
             <div className={styles.testDriveGrid}>
               <div className={styles.testDriveFields}>
                 <Field label="&#272;&#7897; d&agrave;i m&#7895;i ca" htmlFor="slot-duration" hint="Th&#7901;i l&#432;&#7907;ng m&#7897;t l&#7883;ch l&aacute;i th&#7917;.">
-                  <div className={styles.inputWithSuffix}>
+                  <div className={`${styles.inputWithIcon} ${styles.inputWithSuffix}`}>
+                    <ClockCircleOutlined aria-hidden="true" />
                     <input id="slot-duration" className={styles.input} type="number" min="15" max="480" step="15" value={settings.slotDuration} onChange={(event) => updateField('slotDuration', event.target.value)} required />
-                    <span>ph&uacute;t</span>
+                    <span className={styles.inputSuffix}>ph&uacute;t</span>
                   </div>
                 </Field>
                 <Field label="T&#7889;i &#273;a m&#7895;i khung gi&#7901;" htmlFor="max-customers" hint="S&#7889; kh&aacute;ch t&#7889;i &#273;a c&oacute; th&#7875; nh&#7853;n trong c&ugrave;ng m&#7897;t ca.">
-                  <div className={styles.inputWithSuffix}>
+                  <div className={`${styles.inputWithIcon} ${styles.inputWithSuffix}`}>
+                    <TeamOutlined aria-hidden="true" />
                     <input id="max-customers" className={styles.input} type="number" min="1" max="100" value={settings.maxCustomersPerSlot} onChange={(event) => updateField('maxCustomersPerSlot', event.target.value)} required />
-                    <span>kh&aacute;ch</span>
+                    <span className={styles.inputSuffix}>kh&aacute;ch</span>
                   </div>
                 </Field>
               </div>
