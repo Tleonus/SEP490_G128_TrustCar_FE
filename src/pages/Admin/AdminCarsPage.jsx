@@ -1,7 +1,7 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import { Input, Select, Pagination, Tag, Tooltip } from 'antd'
-import { SearchOutlined } from '@ant-design/icons'
+import { App, Button, Input, Select, Pagination, Tag, Tooltip } from 'antd'
+import { SearchOutlined, ShoppingCartOutlined } from '@ant-design/icons'
 import { useAdminCars } from '../../hooks/useAdminCars'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useBrands } from '../../hooks/useCatalog'
@@ -20,11 +20,15 @@ import {
   parseSortOption,
 } from '../../utils/constants'
 import Icon from '../../features/vehicle-intake/components/VehicleIntakeIcon'
+import OrderCheckoutModal from '../../features/sales-crm/components/OrderCheckoutModal'
+import { isSellableStatus, toCarVM } from '../../features/sales-crm/data/salesCrmMappers'
 import { ADMIN_PATHS } from '../../router/paths'
 import styles from './AdminCarsPage.module.css'
 
 export default function AdminCarsPage() {
+  const { notification } = App.useApp()
   const [searchParams, setSearchParams] = useSearchParams()
+  const [checkoutCar, setCheckoutCar] = useState(null)
   const keyword = searchParams.get('search') || ''
   const debouncedKeyword = useDebounce(keyword, 400)
   const brands = useBrands()
@@ -48,7 +52,18 @@ export default function AdminCarsPage() {
     return result
   }, [debouncedKeyword, page, searchParams])
 
-  const { items = [], total = 0, loading, error } = useAdminCars(filters)
+  const { items = [], total = 0, loading, error, reload } = useAdminCars(filters)
+
+  // Sau khi chốt đơn: xe chuyển SOLD, tải lại bảng để cập nhật trạng thái (trang công khai chỉ hiện xe AVAILABLE).
+  function handleCheckoutSuccess(result) {
+    setCheckoutCar(null)
+    notification.success({
+      title: `Đã chốt đơn ${result.vehicleCode || ''}`.trim(),
+      description: 'Xe đã chuyển sang trạng thái "Đã bán" và được gỡ khỏi danh sách mở bán công khai.',
+      placement: 'topRight',
+    })
+    reload()
+  }
 
   function updateParams(changes) {
     const next = new URLSearchParams(searchParams)
@@ -140,6 +155,7 @@ export default function AdminCarsPage() {
                   <th>Ngày nhập kho</th>
                   <th>Số ngày tồn</th>
                   <th>Tình trạng tồn</th>
+                  <th className={styles.actionCol}>Thao tác</th>
                 </tr>
               </thead>
               <tbody>
@@ -176,6 +192,20 @@ export default function AdminCarsPage() {
                     <td>
                       <Tag color={AGING_COLOR[agingCategory]}>{labelOf(AGING_LABEL, agingCategory)}</Tag>
                     </td>
+                    <td className={styles.actionCol}>
+                      {isSellableStatus(car.status) && (
+                        <Button
+                          size="small"
+                          type="primary"
+                          ghost
+                          icon={<ShoppingCartOutlined />}
+                          onClick={() => setCheckoutCar(toCarVM(car))}
+                          aria-label={`Chốt đơn xe ${car.vehicleCode || getCarTitle(car)}`}
+                        >
+                          Chốt đơn
+                        </Button>
+                      )}
+                    </td>
                   </tr>
                   )
                 })}
@@ -193,6 +223,13 @@ export default function AdminCarsPage() {
           </div>
         </>
       )}
+
+      <OrderCheckoutModal
+        open={checkoutCar !== null}
+        context={checkoutCar ? { car: checkoutCar } : null}
+        onClose={() => setCheckoutCar(null)}
+        onSuccess={handleCheckoutSuccess}
+      />
     </div>
   )
 }

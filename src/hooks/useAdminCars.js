@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { getAdminCars } from '../services/adminCarService'
 
 export function useAdminCars(filters) {
   const [data, setData] = useState({ items: [], total: 0 })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  // Tăng để tải lại cùng bộ lọc (ví dụ sau khi chốt đơn một xe).
+  const [reloadKey, setReloadKey] = useState(0)
 
   useEffect(() => {
     let active = true
@@ -35,7 +37,9 @@ export function useAdminCars(filters) {
       active = false
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(filters)])
+  }, [JSON.stringify(filters), reloadKey])
 
-  return { ...data, loading, error }
+  const reload = useCallback(() => setReloadKey((key) => key + 1), [])
+
+  return { ...data, loading, error, reload }
 }

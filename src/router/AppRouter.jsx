@@ -24,6 +24,7 @@ import { ADMIN_PATHS } from './paths'
 const AdminVehicleIntakePage = lazy(() => import('../pages/Admin/AdminVehicleIntakePage.jsx'))
 const AdminOverviewPage = lazy(() => import('../pages/Admin/AdminOverviewPage.jsx'))
 const AdminBaseSettingsPage = lazy(() => import('../pages/Admin/AdminBaseSettingsPage.jsx'))
+const SalesCrmPage = lazy(() => import('../features/sales-crm/pages/SalesCrmPage.jsx'))
 const ComparePage = lazy(() => import('../features/vehicle-compare/pages/ComparePage.jsx'))
 const CpoCertificatesPage = lazy(() => import('../features/cpo-certificates/pages/CpoCertificatesPage.jsx'))
 const CpoCertificateDetailPage = lazy(() => import('../features/cpo-certificates/pages/CpoCertificateDetailPage.jsx'))
@@ -69,6 +70,8 @@ export default function AppRouter() {
         <Route index element={<Navigate to={ADMIN_PATHS.overview} replace />} />
         <Route path="overview" element={<Suspense fallback={<LoadingState />}><AdminOverviewPage /></Suspense>} />
         <Route path="inventory" element={<AdminCarsPage />} />
+        {/* Quản lý bán hàng & chốt đơn (KAN-18): ADMIN, SALES_STAFF */}
+        <Route path="sales" element={<Suspense fallback={<LoadingState />}><SalesCrmPage /></Suspense>} />
         <Route path="vehicle-intake" element={<Suspense fallback={<LoadingState />}><AdminVehicleIntakePage /></Suspense>} />
         <Route path="base-settings" element={<Suspense fallback={<LoadingState />}><AdminBaseSettingsPage /></Suspense>} />
         <Route path="kho-xe" element={<LegacyRedirect to={ADMIN_PATHS.inventory} />} />

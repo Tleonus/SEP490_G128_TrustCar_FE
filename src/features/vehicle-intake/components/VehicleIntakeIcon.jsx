@@ -21,6 +21,7 @@ export default function VehicleIntakeIcon({ name, size = 20, stroke = 2 }) {
     info: <><circle cx="12" cy="12" r="9" /><path d="M12 11v5M12 8h.01" /></>,
     plus: <><path d="M12 5v14M5 12h14" /></>,
     save: <><path d="M5 4h12l2 2v14H5V4Z" /><path d="M8 4v6h8V4M8 20v-6h8v6" /></>,
+    sales: <><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Z" /><path d="M9 8h6M9 12h6" /><path d="m9.5 15.5 1.5 1.5 3.5-3.5" /></>,
   };
   return <svg aria-hidden="true" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={stroke} strokeLinecap="round" strokeLinejoin="round">{paths[name]}</svg>;
 }

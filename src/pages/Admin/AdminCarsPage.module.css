@@ -107,6 +107,19 @@
   background: var(--color-surface-alt);
 }
 
+/* Cột thao tác dính bên phải khi bảng cuộn ngang. */
+.table .actionCol {
+  position: sticky;
+  right: 0;
+  background: var(--color-surface);
+  text-align: right;
+  box-shadow: -8px 0 12px -10px rgb(16 43 70 / 30%);
+}
+
+.table tbody tr:hover .actionCol {
+  background: var(--color-surface-alt);
+}
+
 .pagination {
   display: flex;
   justify-content: center;

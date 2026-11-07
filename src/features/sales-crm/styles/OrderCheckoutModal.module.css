@@ -1,0 +1,430 @@
+/* Modal render qua portal ra ngoài .app-shell nên tự khai báo lại token màu của khu quản trị. */
+.modalRoot {
+  --navy: #102b46;
+  --blue: #1d4ed8;
+  --ink: #172b43;
+  --muted: #475569;
+  --line: #c6d2df;
+  --soft: #f3f6fa;
+  --primary-soft: #edf3ff;
+  --success: #15803d;
+  --danger: #b91c1c;
+  --danger-soft: #fff1f0;
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+  color: var(--ink);
+}
+
+.modalRoot :global(.ant-modal-container) {
+  padding: 0;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+.modalRoot :global(.ant-modal-header) {
+  margin: 0;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+
+.modalRoot :global(.ant-modal-close) {
+  top: 18px;
+  inset-inline-end: 18px;
+}
+
+.modalRoot :global(.ant-modal-body) {
+  padding: 0;
+}
+
+.modalTitle {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.eyebrow {
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.25px;
+}
+
+.titleText {
+  color: var(--navy);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100dvh - 180px);
+}
+
+.topAlert {
+  margin: 16px 24px 0;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 20px;
+  padding: 20px 24px;
+  overflow-y: auto;
+  background: var(--soft);
+}
+
+.formColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.section {
+  padding: 18px 20px 4px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 16px rgb(16 43 70 / 6%);
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.sectionTitle h3 {
+  margin: 0;
+  color: var(--navy);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.sectionTitle p {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.step {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--primary-soft);
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 16px;
+}
+
+.field {
+  margin-bottom: 16px;
+}
+
+.field :global(.ant-form-item-label > label) {
+  color: var(--ink);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.field :global(.ant-form-item-extra) {
+  font-size: 12.5px;
+}
+
+.moneyInput {
+  width: 100%;
+}
+
+.carCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--soft);
+}
+
+.carCardBlocked {
+  border-color: #fca5a5;
+  background: var(--danger-soft);
+}
+
+.carThumb,
+.carThumbPlaceholder {
+  flex-shrink: 0;
+  width: 112px;
+  height: 80px;
+  border-radius: 8px;
+}
+
+.carThumb {
+  display: block;
+  object-fit: cover;
+}
+
+.carThumbPlaceholder {
+  display: grid;
+  place-items: center;
+  background: #e2e8f0;
+  color: #64748b;
+  font-size: 28px;
+}
+
+.carInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.carHeading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.carHeading strong {
+  color: var(--navy);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.carHeading :global(.ant-tag) {
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.carFacts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px 16px;
+  margin: 0;
+}
+
+.carFacts dt {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.carFacts dd {
+  margin: 2px 0 0;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.carFacts .price {
+  color: var(--blue);
+}
+
+.mutedNote {
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.inlineAlert {
+  margin-bottom: 16px;
+}
+
+.summaryColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-self: start;
+  position: sticky;
+  top: 0;
+}
+
+.summaryCard {
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--blue);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 16px rgb(16 43 70 / 6%);
+}
+
+.summaryCard h3 {
+  margin: 0 0 12px;
+  color: var(--navy);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.summaryList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+}
+
+.summaryList > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13.5px;
+}
+
+.summaryList dt {
+  color: var(--muted);
+}
+
+.summaryList dd {
+  margin: 0;
+  color: var(--ink);
+  font-weight: 600;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.summaryStrong dd {
+  color: var(--navy);
+  font-weight: 700;
+}
+
+.summaryTotal {
+  flex-direction: column;
+  gap: 4px !important;
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--line);
+}
+
+.summaryTotal dt {
+  color: var(--ink) !important;
+  font-weight: 700;
+}
+
+.summaryTotal dd {
+  color: var(--success) !important;
+  font-size: 20px;
+  font-weight: 800 !important;
+}
+
+.effectNote {
+  display: flex;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid #bfdbfe;
+  border-radius: 10px;
+  background: var(--primary-soft);
+  color: #1e3a8a;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.effectNote p {
+  margin: 0;
+  color: inherit;
+}
+
+.effectNote :global(.anticon) {
+  margin-top: 3px;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 24px;
+  border-top: 1px solid var(--line);
+  background: #fff;
+}
+
+.footerMessage {
+  flex: 1;
+  min-width: 0;
+}
+
+.footerActions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.footerActions :global(.ant-btn) {
+  min-height: 42px;
+  padding-inline: 18px;
+  font-weight: 600;
+}
+
+.submitButton {
+  background: var(--blue);
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .summaryColumn {
+    position: static;
+  }
+}
+
+@media (max-width: 600px) {
+  .modalRoot :global(.ant-modal-header) {
+    padding: 16px;
+  }
+
+  .layout {
+    padding: 16px;
+  }
+
+  .section {
+    padding: 16px 14px 2px;
+  }
+
+  .grid2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .carCard {
+    flex-direction: column;
+  }
+
+  .carFacts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .carThumb,
+  .carThumbPlaceholder {
+    width: 100%;
+    height: 140px;
+  }
+
+  .footer {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px 16px;
+  }
+
+  .footerActions :global(.ant-btn) {
+    flex: 1;
+  }
+
+  .form {
+    max-height: calc(100dvh - 120px);
+  }
+}
