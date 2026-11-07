@@ -19,6 +19,7 @@ import { sendContactRequest } from '../../services/carService'
 import CarCard from '../../components/car/CarCard'
 import { LoadingState, ErrorState } from '../../components/common/StateBlock'
 import CompareToggle from '../../features/vehicle-compare/components/CompareToggle'
+import SaveCarButton from '../../features/saved-cars/components/SaveCarButton'
 import PublicCertificateSection from '../../features/cpo-certificates/components/PublicCertificateSection'
 import styles from './CarDetailPage.module.css'
 import { CONTACT_INFO } from '../../config/contactInfo'
@@ -175,6 +176,7 @@ export default function CarDetailPage() {
               <Button size="large" icon={<MessageOutlined />} onClick={() => setContactOpen(true)} block>
                 Yêu cầu tư vấn
               </Button>
+              <SaveCarButton car={car} variant="detail" />
               <CompareToggle car={car} variant="detail" />
             </div>
           </div>

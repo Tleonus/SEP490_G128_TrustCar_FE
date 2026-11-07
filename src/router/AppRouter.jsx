@@ -25,6 +25,7 @@ const AdminVehicleIntakePage = lazy(() => import('../pages/Admin/AdminVehicleInt
 const AdminOverviewPage = lazy(() => import('../pages/Admin/AdminOverviewPage.jsx'))
 const AdminBaseSettingsPage = lazy(() => import('../pages/Admin/AdminBaseSettingsPage.jsx'))
 const ComparePage = lazy(() => import('../features/vehicle-compare/pages/ComparePage.jsx'))
+const SavedCarsPage = lazy(() => import('../features/saved-cars/pages/SavedCarsPage.jsx'))
 const CpoCertificatesPage = lazy(() => import('../features/cpo-certificates/pages/CpoCertificatesPage.jsx'))
 const CpoCertificateDetailPage = lazy(() => import('../features/cpo-certificates/pages/CpoCertificateDetailPage.jsx'))
 
@@ -35,6 +36,14 @@ export default function AppRouter() {
         <Route path="/" element={<HomePage />} />
         <Route path="/xe" element={<CarsPage />} />
         <Route path="/xe/:stockCode" element={<CarDetailPage />} />
+        <Route
+          path="/xe-da-luu"
+          element={
+            <Suspense fallback={<LoadingState />}>
+              <SavedCarsPage />
+            </Suspense>
+          }
+        />
         <Route path="/ve-chung-toi" element={<AboutPage />} />
         <Route path="/lien-he" element={<ContactPage />} />
         <Route path="/dang-nhap" element={<LoginPage />} />

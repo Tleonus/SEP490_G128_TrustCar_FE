@@ -1,10 +1,12 @@
-﻿import { useState } from 'react'
+import { useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { Avatar, Button, Drawer, Dropdown } from 'antd'
-import { SunOutlined, MoonOutlined, MenuOutlined, UserOutlined, PhoneFilled } from '@ant-design/icons'
+import { SunOutlined, MoonOutlined, MenuOutlined, UserOutlined, PhoneFilled, HeartFilled, HeartOutlined } from '@ant-design/icons'
 import logo from '../../assets/logo-transparent.png'
 import { useThemeStore } from '../../store/useThemeStore'
 import { useAuthStore } from '../../store/useAuthStore'
+import { useSavedCarsStore } from '../../features/saved-cars/store/useSavedCarsStore'
+import { hasUnseenAlert } from '../../features/saved-cars/utils/savedCars'
 import styles from './Header.module.css'
 import { CONTACT_INFO } from '../../config/contactInfo'
 
@@ -26,6 +28,8 @@ export default function Header() {
   const user            = useAuthStore((state) => state.user)
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
   const logout          = useAuthStore((state) => state.logout)
+  const savedCount      = useSavedCarsStore((state) => state.items.length)
+  const unseenDrops     = useSavedCarsStore((state) => state.items.filter(hasUnseenAlert).length)
 
   const handleLogout = () => {
     logout()
@@ -85,6 +89,16 @@ export default function Header() {
               <strong>{CONTACT_INFO.phoneDisplay}</strong>
             </span>
           </a>
+          <Link
+            to="/xe-da-luu"
+            className={`${styles.wishlistBtn} ${savedCount > 0 ? styles.wishlistActive : ''}`}
+            aria-label={`Xe đã lưu (${savedCount})`}
+            title={unseenDrops > 0 ? `${unseenDrops} xe đã lưu vừa giảm giá` : `Xe đã lưu (${savedCount})`}
+          >
+            {savedCount > 0 ? <HeartFilled /> : <HeartOutlined />}
+            {savedCount > 0 && <span className={styles.wishlistCount}>{savedCount}</span>}
+            {unseenDrops > 0 && <span className={styles.wishlistAlertDot} aria-hidden="true" />}
+          </Link>
           <button
             type="button"
             className={styles.themeBtn}
