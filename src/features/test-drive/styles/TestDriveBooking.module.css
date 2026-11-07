@@ -1,0 +1,37 @@
+/* Luồng của khách dùng token của website công khai nên tự theo giao diện sáng/tối. */
+.page { padding: 32px 0 56px; max-width: 760px; margin: 0 auto; }
+.title { margin-bottom: 20px; font-size: 28px; }
+
+.body { display: flex; flex-direction: column; gap: 16px; padding-top: 4px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.label { font-weight: 600; }
+.hint { margin: 0; color: var(--color-text-secondary); font-size: 14px; }
+.dateInput {
+  min-height: 44px; padding: 8px 10px; border: 1px solid var(--color-border); border-radius: 8px;
+  background: var(--color-surface); color: var(--color-text); font: inherit; font-size: 16px;
+}
+
+.slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; }
+.slot {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 48px; padding: 8px;
+  border: 1px solid var(--color-border); border-radius: 8px; background: var(--color-surface); color: var(--color-text);
+  font: inherit; font-weight: 600; font-variant-numeric: tabular-nums; cursor: pointer;
+}
+.slot:hover:not(:disabled) { border-color: #1d4ed8; }
+.slot:focus-visible { outline: 3px solid #1d4ed8; outline-offset: 2px; }
+.slot:disabled { background: var(--color-surface-alt); color: var(--color-text-secondary); cursor: not-allowed; }
+.slotActive, .slotActive:hover:not(:disabled) { background: #1d4ed8; border-color: #1d4ed8; color: #fff; }
+.slotNote { font-size: 12px; font-weight: 400; }
+
+.list { display: flex; flex-direction: column; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.card {
+  display: flex; flex-direction: column; gap: 6px; padding: 16px 18px;
+  background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 12px; box-shadow: var(--shadow-card);
+}
+.cardHead { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.code { font-variant-numeric: tabular-nums; }
+.carName { font-size: 16px; font-weight: 600; }
+.reason { margin-top: 2px; padding: 8px 10px; border-radius: 8px; background: var(--color-surface-alt); font-size: 14px; }
+.cardActions { display: flex; justify-content: flex-end; margin-top: 6px; }
+.pagination { display: flex; justify-content: center; margin-top: 24px; }
+.centerAction { display: flex; justify-content: center; }

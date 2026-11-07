@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   CheckCircleOutlined,
   ClockCircleOutlined,
@@ -11,14 +11,13 @@ import {
   PhoneOutlined,
   SaveOutlined,
   ShopOutlined,
-  TeamOutlined,
-  ThunderboltOutlined,
   UserOutlined,
   VideoCameraOutlined,
 } from '@ant-design/icons'
-import Icon from '../../features/vehicle-intake/components/VehicleIntakeIcon'
 import styles from './AdminBaseSettingsPage.module.css'
 import { getBaseSettings, saveBaseSettings } from '../../config/contactInfo'
+import { Field, SectionHeading } from './AdminSettingsFields'
+import AdminTestDriveSettingsSection from './AdminTestDriveSettingsSection'
 
 const DAYS = [
   { key: 'monday', label: 'Th\u{1ee9} 2' },
@@ -39,51 +38,12 @@ function isValidTime(value) {
   return /^([01]\d|2[0-3]):[0-5]\d$/.test(value)
 }
 
-function Field({ label, htmlFor, hint, children }) {
-  return (
-    <label className={styles.field} htmlFor={htmlFor}>
-      <span className={styles.fieldLabel}>{label}</span>
-      {children}
-      {hint && <span className={styles.fieldHint}>{hint}</span>}
-    </label>
-  )
-}
-
-function SectionHeading({ icon, eyebrow, title, description, headingId }) {
-  return (
-    <div className={styles.sectionHeading}>
-      <div className={styles.sectionIcon} aria-hidden="true">{icon}</div>
-      <div>
-        <span className={styles.sectionEyebrow}>{eyebrow}</span>
-        <h2 id={headingId}>{title}</h2>
-        <p>{description}</p>
-      </div>
-    </div>
-  )
-}
-
 export default function AdminBaseSettingsPage() {
   const [settings, setSettings] = useState(getBaseSettings)
   const [savedSettings, setSavedSettings] = useState(getBaseSettings)
   const [saveState, setSaveState] = useState('idle')
 
   const isDirty = JSON.stringify(settings) !== JSON.stringify(savedSettings)
-
-  const schedule = useMemo(() => {
-    const opening = timeToMinutes(settings.openingTime)
-    const closing = timeToMinutes(settings.closingTime)
-    const duration = Number(settings.slotDuration)
-    const totalMinutes = closing - opening
-    const slotCount = totalMinutes > 0 && duration > 0 ? Math.floor(totalMinutes / duration) : 0
-    const workingDays = DAYS.length - settings.daysOff.length
-    return {
-      totalMinutes,
-      duration,
-      slotCount,
-      workingDays,
-      weeklyCapacity: slotCount * Number(settings.maxCustomersPerSlot) * workingDays,
-    }
-  }, [settings])
 
   useEffect(() => {
     if (saveState !== 'success') return undefined
@@ -113,7 +73,7 @@ export default function AdminBaseSettingsPage() {
 
   function handleSave(event) {
     event.preventDefault()
-    if (!isValidTime(settings.openingTime) || !isValidTime(settings.closingTime) || schedule.totalMinutes <= 0 || schedule.duration <= 0 || Number(settings.maxCustomersPerSlot) <= 0) {
+    if (!isValidTime(settings.openingTime) || !isValidTime(settings.closingTime) || timeToMinutes(settings.closingTime) <= timeToMinutes(settings.openingTime)) {
       setSaveState('error')
       return
     }
@@ -121,15 +81,6 @@ export default function AdminBaseSettingsPage() {
     setSavedSettings(settings)
     setSaveState('success')
   }
-
-  const previewSlots = schedule.slotCount > 0
-    ? Array.from({ length: Math.min(schedule.slotCount, 5) }, (_, index) => {
-      const start = timeToMinutes(settings.openingTime) + (index * schedule.duration)
-      const end = start + schedule.duration
-      const toTime = (minutes) => `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`
-      return `${toTime(start)} \u2013 ${toTime(end)}`
-    })
-    : []
 
   return (
     <div className={styles.page}>
@@ -205,7 +156,7 @@ export default function AdminBaseSettingsPage() {
               icon={<ClockCircleOutlined />}
               eyebrow="02 &middot; L&#7882;CH HO&#7840;T &#272;&#7896;NG"
               title="Gi&#7901; m&#7903; c&#7917;a"
-              description="D&ugrave;ng l&agrave;m kho&#7843;ng th&#7901;i gian h&#7907;p l&#7879; &#273;&#7875; h&#7879; th&#7889;ng t&#7841;o c&aacute;c ca l&aacute;i th&#7917;."
+              description="Hi&#7875;n th&#7883; tr&ecirc;n trang Li&ecirc;n h&#7879; v&agrave; footer c&#7911;a website."
             />
             <div className={styles.timeGrid}>
               <Field label="M&#7903; c&#7917;a" htmlFor="opening-time">
@@ -285,60 +236,9 @@ export default function AdminBaseSettingsPage() {
               </Field>
             </div>
           </section>
-
-          <section className={`${styles.card} ${styles.testDriveCard}`} aria-labelledby="test-drive-heading">
-            <div className={styles.testDriveHeader}>
-              <SectionHeading
-                headingId="test-drive-heading"
-                icon={<ThunderboltOutlined />}
-                eyebrow="04 &middot; QUY T&#7854;C L&Aacute;I TH&#7916;"
-                title="C&#7845;u h&igrave;nh l&aacute;i th&#7917;"
-                description="&#272;&acirc;y l&agrave; c&#417; s&#7903; &#273;&#7875; KAN-16 t&iacute;nh c&aacute;c khung gi&#7901; c&ograve;n tr&#7889;ng khi kh&aacute;ch &#273;&#7863;t l&#7883;ch."
-              />
-              <span className={styles.priorityBadge}>Thi&#7871;t l&#7853;p quan tr&#7885;ng</span>
-            </div>
-            <div className={styles.testDriveGrid}>
-              <div className={styles.testDriveFields}>
-                <Field label="&#272;&#7897; d&agrave;i m&#7895;i ca" htmlFor="slot-duration" hint="Th&#7901;i l&#432;&#7907;ng m&#7897;t l&#7883;ch l&aacute;i th&#7917;.">
-                  <div className={`${styles.inputWithIcon} ${styles.inputWithSuffix}`}>
-                    <ClockCircleOutlined aria-hidden="true" />
-                    <input id="slot-duration" className={styles.input} type="number" min="15" max="480" step="15" value={settings.slotDuration} onChange={(event) => updateField('slotDuration', event.target.value)} required />
-                    <span className={styles.inputSuffix}>ph&uacute;t</span>
-                  </div>
-                </Field>
-                <Field label="T&#7889;i &#273;a m&#7895;i khung gi&#7901;" htmlFor="max-customers" hint="S&#7889; kh&aacute;ch t&#7889;i &#273;a c&oacute; th&#7875; nh&#7853;n trong c&ugrave;ng m&#7897;t ca.">
-                  <div className={`${styles.inputWithIcon} ${styles.inputWithSuffix}`}>
-                    <TeamOutlined aria-hidden="true" />
-                    <input id="max-customers" className={styles.input} type="number" min="1" max="100" value={settings.maxCustomersPerSlot} onChange={(event) => updateField('maxCustomersPerSlot', event.target.value)} required />
-                    <span className={styles.inputSuffix}>kh&aacute;ch</span>
-                  </div>
-                </Field>
-              </div>
-              <aside className={styles.preview} aria-label="Xem tr&#432;&#7899;c l&#7883;ch l&aacute;i th&#7917;">
-                <div className={styles.previewTopline}><span>Xem tr&#432;&#7899;c m&#7897;t ng&agrave;y l&agrave;m vi&#7879;c</span><Icon name="gauge" size={18} /></div>
-                <strong>{settings.openingTime} &ndash; {settings.closingTime}</strong>
-                <div className={styles.previewStats}>
-                  <div><span>Th&#7901;i l&#432;&#7907;ng ca</span><b>{settings.slotDuration} ph&uacute;t</b></div>
-                  <div><span>S&#7889; khung gi&#7901;</span><b>{schedule.slotCount} ca</b></div>
-                  <div><span>C&ocirc;ng su&#7845;t/ng&agrave;y</span><b>{schedule.slotCount * Number(settings.maxCustomersPerSlot)} kh&aacute;ch</b></div>
-                </div>
-                {previewSlots.length > 0 ? (
-                  <div className={styles.slotList}>
-                    {previewSlots.map((slot) => <span key={slot}>{slot}</span>)}
-                    {schedule.slotCount > previewSlots.length && <span className={styles.moreSlots}>+ {schedule.slotCount - previewSlots.length} ca ti&#7871;p theo</span>}
-                  </div>
-                ) : (
-                  <p className={styles.previewError}>Ch&#432;a th&#7875; t&#7841;o khung gi&#7901; t&#7915; thi&#7871;t l&#7853;p hi&#7879;n t&#7841;i.</p>
-                )}
-              </aside>
-            </div>
-            <div className={styles.infoBanner}>
-              <Icon name="info" size={17} />
-              <span>V&#7899;i thi&#7871;t l&#7853;p hi&#7879;n t&#7841;i, showroom c&oacute; th&#7875; ph&#7909;c v&#7909; kho&#7843;ng <strong>{schedule.weeklyCapacity} l&#432;&#7907;t/tu&#7847;n</strong> n&#7871;u ho&#7841;t &#273;&#7897;ng &#273;&#7911; {schedule.workingDays} ng&agrave;y.</span>
-            </div>
-          </section>
         </div>
       </form>
+      <AdminTestDriveSettingsSection />
     </div>
   )
 }

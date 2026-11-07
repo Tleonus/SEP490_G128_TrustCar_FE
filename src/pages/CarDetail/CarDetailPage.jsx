@@ -20,6 +20,7 @@ import CarCard from '../../components/car/CarCard'
 import { LoadingState, ErrorState } from '../../components/common/StateBlock'
 import CompareToggle from '../../features/vehicle-compare/components/CompareToggle'
 import PublicCertificateSection from '../../features/cpo-certificates/components/PublicCertificateSection'
+import TestDriveBookingButton from '../../features/test-drive/components/TestDriveBookingButton'
 import styles from './CarDetailPage.module.css'
 import { CONTACT_INFO } from '../../config/contactInfo'
 
@@ -172,6 +173,7 @@ export default function CarDetailPage() {
               <Button type="primary" size="large" icon={<PhoneOutlined />} href={CONTACT_INFO.phoneHref} block>
                 Gọi tư vấn: {CONTACT_INFO.phoneDisplay}
               </Button>
+              <TestDriveBookingButton car={car} />
               <Button size="large" icon={<MessageOutlined />} onClick={() => setContactOpen(true)} block>
                 Yêu cầu tư vấn
               </Button>

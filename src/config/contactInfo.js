@@ -8,8 +8,6 @@ export const DEFAULT_BASE_SETTINGS = {
   openingTime: '08:00',
   closingTime: '20:00',
   daysOff: ['sunday'],
-  slotDuration: '90',
-  maxCustomersPerSlot: '4',
   mapUrl: 'https://www.google.com/maps/search/?api=1&query=Showroom+TrustCar%2C+Qu%E1%BA%ADn+1%2C+TP.+H%E1%BB%93+Ch%C3%AD+Minh',
   zaloUrl: 'https://zalo.me/0856098686',
   facebookUrl: 'https://www.facebook.com/tronghieu.7297',

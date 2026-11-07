@@ -19,7 +19,7 @@ import AdminCarsPage from '../pages/Admin/AdminCarsPage'
 import { LoadingState } from '../components/common/StateBlock'
 import PrivateRoute from './PrivateRoute'
 import LegacyRedirect from './LegacyRedirect'
-import { ADMIN_PATHS } from './paths'
+import { ADMIN_PATHS, CUSTOMER_PATHS } from './paths'
 
 const AdminVehicleIntakePage = lazy(() => import('../pages/Admin/AdminVehicleIntakePage.jsx'))
 const AdminOverviewPage = lazy(() => import('../pages/Admin/AdminOverviewPage.jsx'))
@@ -27,6 +27,8 @@ const AdminBaseSettingsPage = lazy(() => import('../pages/Admin/AdminBaseSetting
 const ComparePage = lazy(() => import('../features/vehicle-compare/pages/ComparePage.jsx'))
 const CpoCertificatesPage = lazy(() => import('../features/cpo-certificates/pages/CpoCertificatesPage.jsx'))
 const CpoCertificateDetailPage = lazy(() => import('../features/cpo-certificates/pages/CpoCertificateDetailPage.jsx'))
+const TestDriveManagementPage = lazy(() => import('../features/test-drive/pages/TestDriveManagementPage.jsx'))
+const MyTestDrivesPage = lazy(() => import('../features/test-drive/pages/MyTestDrivesPage.jsx'))
 
 export default function AppRouter() {
   return (
@@ -55,6 +57,10 @@ export default function AppRouter() {
             </PrivateRoute>
           }
         />
+        <Route
+          path={CUSTOMER_PATHS.testDrives}
+          element={<PrivateRoute><Suspense fallback={<LoadingState />}><MyTestDrivesPage /></Suspense></PrivateRoute>}
+        />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
       <Route path="/quan-ly/nhap-xe" element={<LegacyRedirect to={ADMIN_PATHS.vehicleIntake} />} />
@@ -71,6 +77,7 @@ export default function AppRouter() {
         <Route path="inventory" element={<AdminCarsPage />} />
         <Route path="vehicle-intake" element={<Suspense fallback={<LoadingState />}><AdminVehicleIntakePage /></Suspense>} />
         <Route path="base-settings" element={<Suspense fallback={<LoadingState />}><AdminBaseSettingsPage /></Suspense>} />
+        <Route path="test-drives" element={<Suspense fallback={<LoadingState />}><TestDriveManagementPage /></Suspense>} />
         <Route path="kho-xe" element={<LegacyRedirect to={ADMIN_PATHS.inventory} />} />
         {/* Chứng nhận CPO: AdminRoute chỉ cho ADMIN, SALES_STAFF; BE vẫn kiểm quyền cuối cùng */}
         <Route

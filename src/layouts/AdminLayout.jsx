@@ -1,6 +1,6 @@
 ﻿import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { ConfigProvider, Dropdown, theme } from 'antd'
-import { HomeOutlined, LogoutOutlined, SafetyCertificateOutlined } from '@ant-design/icons'
+import { CalendarOutlined, HomeOutlined, LogoutOutlined, SafetyCertificateOutlined } from '@ant-design/icons'
 import Icon from '../features/vehicle-intake/components/VehicleIntakeIcon'
 import { useAuthStore } from '../store/useAuthStore'
 import { ADMIN_PATHS } from '../router/paths'
@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { to: ADMIN_PATHS.overview, label: 'Tổng quan', icon: 'grid' },
   { to: ADMIN_PATHS.inventory, label: 'Kho xe', icon: 'car' },
   { to: ADMIN_PATHS.vehicleIntake, label: 'Nhập xe & Thẩm định', icon: 'clipboard' },
+  { to: ADMIN_PATHS.testDrives, label: 'Lịch lái thử', iconNode: <CalendarOutlined /> },
   { to: ADMIN_PATHS.baseSettings, label: 'Cấu hình showroom', icon: 'settings' },
   { to: '/admin/chung-nhan', label: 'Chứng nhận CPO', iconNode: <SafetyCertificateOutlined /> },
 ]
