@@ -24,7 +24,9 @@ import { ADMIN_PATHS, CUSTOMER_PATHS } from './paths'
 const AdminVehicleIntakePage = lazy(() => import('../pages/Admin/AdminVehicleIntakePage.jsx'))
 const AdminOverviewPage = lazy(() => import('../pages/Admin/AdminOverviewPage.jsx'))
 const AdminBaseSettingsPage = lazy(() => import('../pages/Admin/AdminBaseSettingsPage.jsx'))
+const SalesCrmPage = lazy(() => import('../features/sales-crm/pages/SalesCrmPage.jsx'))
 const ComparePage = lazy(() => import('../features/vehicle-compare/pages/ComparePage.jsx'))
+const SavedCarsPage = lazy(() => import('../features/saved-cars/pages/SavedCarsPage.jsx'))
 const CpoCertificatesPage = lazy(() => import('../features/cpo-certificates/pages/CpoCertificatesPage.jsx'))
 const CpoCertificateDetailPage = lazy(() => import('../features/cpo-certificates/pages/CpoCertificateDetailPage.jsx'))
 const TestDriveManagementPage = lazy(() => import('../features/test-drive/pages/TestDriveManagementPage.jsx'))
@@ -37,6 +39,14 @@ export default function AppRouter() {
         <Route path="/" element={<HomePage />} />
         <Route path="/xe" element={<CarsPage />} />
         <Route path="/xe/:stockCode" element={<CarDetailPage />} />
+        <Route
+          path="/xe-da-luu"
+          element={
+            <Suspense fallback={<LoadingState />}>
+              <SavedCarsPage />
+            </Suspense>
+          }
+        />
         <Route path="/ve-chung-toi" element={<AboutPage />} />
         <Route path="/lien-he" element={<ContactPage />} />
         <Route path="/dang-nhap" element={<LoginPage />} />
@@ -75,6 +85,8 @@ export default function AppRouter() {
         <Route index element={<Navigate to={ADMIN_PATHS.overview} replace />} />
         <Route path="overview" element={<Suspense fallback={<LoadingState />}><AdminOverviewPage /></Suspense>} />
         <Route path="inventory" element={<AdminCarsPage />} />
+        {/* Quản lý bán hàng & chốt đơn (KAN-18): ADMIN, SALES_STAFF */}
+        <Route path="sales" element={<Suspense fallback={<LoadingState />}><SalesCrmPage /></Suspense>} />
         <Route path="vehicle-intake" element={<Suspense fallback={<LoadingState />}><AdminVehicleIntakePage /></Suspense>} />
         <Route path="base-settings" element={<Suspense fallback={<LoadingState />}><AdminBaseSettingsPage /></Suspense>} />
         <Route path="test-drives" element={<Suspense fallback={<LoadingState />}><TestDriveManagementPage /></Suspense>} />
