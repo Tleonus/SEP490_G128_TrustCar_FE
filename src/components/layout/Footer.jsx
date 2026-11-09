@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom'
 import { PhoneOutlined, MailOutlined, EnvironmentOutlined } from '@ant-design/icons'
 import logo from '../../assets/logo-transparent.png'
-import { CONTACT_INFO } from '../../config/contactInfo'
+import { useContactInfo } from '../../config/contactInfo'
 import styles from './Footer.module.css'
 
 export default function Footer() {
   const year = new Date().getFullYear()
+  const CONTACT_INFO = useContactInfo()
 
   return (
     <footer className={styles.footer}>

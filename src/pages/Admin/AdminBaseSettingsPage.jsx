@@ -9,6 +9,7 @@ import {
   MailOutlined,
   MessageOutlined,
   PhoneOutlined,
+  PictureOutlined,
   SaveOutlined,
   ShopOutlined,
   TeamOutlined,
@@ -196,6 +197,14 @@ export default function AdminBaseSettingsPage() {
                   <input id="showroom-email" className={styles.input} type="email" value={settings.email} onChange={(event) => updateField('email', event.target.value)} required />
                 </div>
               </Field>
+              <div style={{ gridColumn: '1 / -1' }}>
+                <Field label="H&igrave;nh &#7843;nh Showroom (URL)" htmlFor="showroom-image-url" hint="D&aacute;n &#273;&#432;&#7901;ng d&#7851;n &#7843;nh th&#7921;c t&#7871; Showroom &#273;&#7875; hi&#7875;n th&#7883; trong khung 3D &#7903; Trang ch&#7911; v&agrave; Trang Li&ecirc;n h&#7879; (&#273;&#7875; tr&#7889;ng s&#7869; hi&#7875;n th&#7883; khung &#273;&oacute;ng s&#7861;n ch&#7901; g&#7855;n &#7843;nh).">
+                  <div className={styles.inputWithIcon}>
+                    <PictureOutlined aria-hidden="true" />
+                    <input id="showroom-image-url" className={styles.input} type="url" value={settings.showroomImageUrl || ''} onChange={(event) => updateField('showroomImageUrl', event.target.value)} placeholder="https://example.com/showroom-trustcar.jpg" />
+                  </div>
+                </Field>
+              </div>
             </div>
           </section>
 
