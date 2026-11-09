@@ -4,7 +4,7 @@ import {
   PhoneFilled,
   TikTokOutlined,
 } from '@ant-design/icons'
-import { CONTACT_INFO } from '../../config/contactInfo'
+import { useContactInfo } from '../../config/contactInfo'
 import styles from './FloatingContactWidget.module.css'
 
 function ExternalBubble({ href, label, className, children }) {
@@ -23,11 +23,11 @@ function ExternalBubble({ href, label, className, children }) {
   )
 }
 
-function PhoneBubble() {
-  const label = `Gọi ${CONTACT_INFO.phoneDisplay}`
+function PhoneBubble({ phoneDisplay, phoneHref }) {
+  const label = `Gọi ${phoneDisplay}`
 
   return (
-    <a href={CONTACT_INFO.phoneHref} className={`${styles.channel} ${styles.phoneChannel}`} aria-label={label} title={label}>
+    <a href={phoneHref} className={`${styles.channel} ${styles.phoneChannel}`} aria-label={label} title={label}>
       <span className={styles.channelIcon}>
         <PhoneFilled />
       </span>
@@ -37,6 +37,8 @@ function PhoneBubble() {
 }
 
 export default function FloatingContactWidget() {
+  const CONTACT_INFO = useContactInfo()
+
   return (
     <aside className={styles.root} aria-label="Kênh liên hệ nhanh của TrustCar">
       <div className={styles.list}>
@@ -56,7 +58,7 @@ export default function FloatingContactWidget() {
         <ExternalBubble href={CONTACT_INFO.tiktokUrl} label="Xem TikTok TrustCar" className={styles.tiktokChannel}>
           <TikTokOutlined />
         </ExternalBubble>
-        <PhoneBubble />
+        <PhoneBubble phoneDisplay={CONTACT_INFO.phoneDisplay} phoneHref={CONTACT_INFO.phoneHref} />
       </div>
     </aside>
   )
