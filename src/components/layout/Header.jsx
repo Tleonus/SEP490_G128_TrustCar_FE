@@ -42,6 +42,10 @@ export default function Header() {
       key: 'change-password',
       label: <Link to="/doi-mat-khau">Đổi mật khẩu</Link>,
     },
+    // Lịch lái thử của khách (nhân viên xem ở khu quản trị).
+    ...(user?.roleName === 'CUSTOMER'
+      ? [{ key: 'my-visits', label: <Link to="/lich-hen">Lịch hẹn của tôi</Link> }]
+      : []),
     // Chỉ hiện "Quản trị" nếu user có role ADMIN hoặc SALES_STAFF.
     // Dùng user.roleName (chuỗi thật từ backend) - user.role là object Role đã populate, không phải chuỗi.
     ...(user?.roleName === 'ADMIN' || user?.roleName === 'SALES_STAFF'

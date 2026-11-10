@@ -26,6 +26,8 @@ const AdminOverviewPage = lazy(() => import('../pages/Admin/AdminOverviewPage.js
 const ComparePage = lazy(() => import('../features/vehicle-compare/pages/ComparePage.jsx'))
 const CpoCertificatesPage = lazy(() => import('../features/cpo-certificates/pages/CpoCertificatesPage.jsx'))
 const CpoCertificateDetailPage = lazy(() => import('../features/cpo-certificates/pages/CpoCertificateDetailPage.jsx'))
+const MyVisitsPage = lazy(() => import('../features/test-drive-booking/pages/MyVisitsPage.jsx'))
+const StaffVisitsPage = lazy(() => import('../features/test-drive-booking/pages/StaffVisitsPage.jsx'))
 
 export default function AppRouter() {
   return (
@@ -54,6 +56,16 @@ export default function AppRouter() {
             </PrivateRoute>
           }
         />
+        <Route
+          path="/lich-hen"
+          element={
+            <PrivateRoute>
+              <Suspense fallback={<LoadingState />}>
+                <MyVisitsPage />
+              </Suspense>
+            </PrivateRoute>
+          }
+        />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
       <Route path="/quan-ly/nhap-xe" element={<LegacyRedirect to={ADMIN_PATHS.vehicleIntake} />} />
@@ -78,6 +90,11 @@ export default function AppRouter() {
         <Route
           path="chung-nhan/:carId"
           element={<Suspense fallback={<LoadingState />}><CpoCertificateDetailPage /></Suspense>}
+        />
+        {/* Lịch lái thử: AdminRoute chỉ cho ADMIN, SALES_STAFF; BE kiểm quyền appointment:* */}
+        <Route
+          path="lich-lai-thu"
+          element={<Suspense fallback={<LoadingState />}><StaffVisitsPage /></Suspense>}
         />
         {/* Route admin không tồn tại: hiện 404 trong AdminLayout thay vì vùng nội dung trống */}
         <Route

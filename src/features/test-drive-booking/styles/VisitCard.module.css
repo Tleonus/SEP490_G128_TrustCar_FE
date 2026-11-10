@@ -1,0 +1,114 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.code {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.when {
+  margin-left: auto;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.meta {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.cars {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.car {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.thumb {
+  flex: 0 0 auto;
+  width: 72px;
+  height: 52px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: var(--color-surface-alt);
+}
+
+.carText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.carName {
+  color: var(--color-text);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.carName:hover {
+  color: var(--color-accent-hover);
+}
+
+.struck {
+  text-decoration: line-through;
+  color: var(--color-text-secondary);
+}
+
+.carNote {
+  font-size: 12px;
+  color: var(--color-danger);
+}
+
+.reason {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.hint {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--color-surface-alt);
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
