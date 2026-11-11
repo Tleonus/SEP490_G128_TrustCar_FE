@@ -45,49 +45,34 @@ Gắn component vào route tạo xe trong layout và cơ chế phân quyền adm
 
 CSS đã được import từ component và giới hạn trong CSS Modules. Font, biến màu, reset và selector thẻ HTML đều nằm trong phần tử gốc của tính năng, tránh áp dụng sang màn hình khác.
 
-## Nối API
+## Nối API Backend thật
 
-Ưu tiên truyền `onSave` để dùng chung API client, token và cách xử lý lỗi của dự án nhóm. Module không hardcode localhost.
+Module sử dụng trực tiếp Axios instance có xác thực (`src/services/api.js`) để lưu hồ sơ nhập xe và biên bản thẩm định 5 tiêu chí lên Backend thật:
 
-Nếu dùng adapter fetch đi kèm:
+1. `POST /api/v1/manage/cars`: tạo hồ sơ xe mới trong kho (hoặc `PUT /api/v1/manage/cars/:id` khi cập nhật lại cùng xe trong phiên hiện tại).
+2. `POST /api/v1/inspections/cars/:id/inspect`: ghi nhận biên bản thẩm định nhanh 5 tiêu chí CPO kèm số ODO và ghi chú.
 
 ```jsx
-import { VehicleIntakePage, saveVehicleIntake } from './features/vehicle-intake/index.js';
+import { VehicleIntakePage, saveVehicleIntake } from '../../features/vehicle-intake';
 
-const saveVehicle = (payload) => saveVehicleIntake(payload, {
-  endpoint: '/api/vehicles', // Thay bằng endpoint thực tế của nhóm.
-});
-
-export default function VehicleCreateRoute() {
-  return <VehicleIntakePage onSave={saveVehicle} />;
+export default function AdminVehicleIntakePage() {
+  return <VehicleIntakePage onSave={saveVehicleIntake} />;
 }
 ```
 
-Adapter mặc định giữ endpoint `/api/cpo/vehicles` để tương thích khung chạy cục bộ hiện tại. Khi merge, cấu hình endpoint hoặc truyền API của nhóm qua `onSave`.
-
-Payload gồm:
+Payload từ form gồm:
 
 - Thông tin xe: `licensePlate`, `vin`, `brand`, `model`, `year`, `mileage`, `transmission`, `fuel`, `ownership`, `listedPrice`, `floorPrice`.
 - `checklist`: 5 boolean `chassis`, `engine`, `flood`, `odometer`, `safety`.
 - `notes`: ghi chú chung, có thể rỗng.
 
-Giá trị từ ô nhập số hiện là chuỗi. Chuyển sang số trong hàm `onSave` nếu API của nhóm yêu cầu. Checklist không quyết định giá hoặc tự gán trạng thái từ chối/mở bán.
+Adapter `saveVehicleIntake` tự động chuẩn hoá kiểu dữ liệu số, enum chữ HOA (`make`, `transmission`, `fuelType`, `inventoryType`, `ownerType`, `price`, `listedPrice`, `floorPrice`) và ánh xạ 5 tiêu chí sang `criteria` (`noMajorAccident`, `noWaterDamage`, `engineGearboxIntact`, `verifiedOdo`, `electricalSystemPassed`).
 
-## Khung chạy độc lập để kiểm tra tính năng
+## Chạy ứng dụng
 
-Các tệp sau nằm ngoài module tích hợp:
-
-- `src/VehicleIntakeApp.jsx`: sidebar, topbar và bộ chọn vai trò cho khung chạy độc lập.
-- `src/VehicleIntakeApp.module.css`: giao diện khung ứng dụng.
-- `server/vehicle-intake-api.mjs`: API Node.js cục bộ, lưu trong bộ nhớ.
-- `src/main.jsx`, `index.html`, `package.json`, `package-lock.json`: điểm chạy và dependency của khung ứng dụng.
-
-Khi đưa tính năng vào ứng dụng nhóm, giữ entry point, layout, manifest và backend đang có của nhóm. Phần đính kèm tệp hiện là giao diện, chưa nối API upload.
-
-Chạy khung ứng dụng tại thư mục gốc bằng hai terminal:
+Chạy frontend kết nối với Backend thật (`VITE_API_BASE_URL`, mặc định `http://localhost:5000/api/v1`):
 
 ```sh
-npm run server
 npm run dev
 ```
 
@@ -111,7 +96,7 @@ This note supersedes the standalone-shell and routing instructions above for thi
 - `/quan-ly/nhap-xe` redirects to `/admin/vehicle-intake`; `/admin/kho-xe` redirects to `/admin/inventory`. Both use `LegacyRedirect` to preserve query strings and hashes while replacing the history entry.
 - Sidebar navigation uses real `NavLink` routes, and the profile reflects the authenticated account. The former local role selector, fabricated count, and notification indicator are no longer rendered. Source names remain English, canonical management URLs use English, and the UI remains Vietnamese. Public URLs are unchanged.
 - Inventory retains its existing filters, pagination, and `/manage/cars` API; search now follows the URL. Overview reads totals from `/manage/cars` response `meta.total`, including per-status totals, and requests up to five vehicles sorted by `listedDate` descending. Request errors display error states rather than zero totals.
-- Intake saving remains unchanged: the page adapter selects `VITE_VEHICLE_INTAKE_API_URL` or falls back to `http://localhost:3001/api/cpo/vehicles`. The reusable fetch adapter's own default remains `/api/cpo/vehicles`. It does not automatically use the inventory API client's authentication handling. This workspace integration does not connect intake saving to `/manage/cars` or promise backend persistence or inventory synchronization.
+- Intake saving connects directly to the real Backend via the shared authenticated Axios client (`src/services/api.js`): it calls `POST /manage/cars` (or `PUT /manage/cars/:id` when updating the same vehicle in the current session) followed by `POST /inspections/cars/:id/inspect`. The standalone mock server on port 3001 (`server/vehicle-intake-api.mjs`) has been removed.
 
 See the [current verification results](../../../docs/features/management-workspace.md#verification-status-and-related-documentation) for completed checks and flows that remain source-reviewed only. Live backend validation, including persistence and inventory synchronization, remains pending.
 

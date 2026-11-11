@@ -54,10 +54,19 @@ export default function VehicleIntakePage({ onSave = saveVehicleIntake }) {
     const payload = { ...car, checklist: { ...checks }, notes: notes.trim() };
     setIsSaving(true);
     try {
-      await onSave(payload);
-      setNotice({ type: 'success', text: 'Đã lưu hồ sơ xe, checklist và ghi chú thẩm định TrustCar.' });
-    } catch {
-      setNotice({ type: 'error', text: 'Chưa lưu được hồ sơ. Vui lòng kiểm tra kết nối và thử lại.' });
+      const result = await onSave(payload);
+      const vehicleCode = result?.car?.vehicleCode;
+      setNotice({
+        type: 'success',
+        text: vehicleCode
+          ? `Đã lưu hồ sơ xe (${vehicleCode}), checklist và ghi chú thẩm định TrustCar.`
+          : 'Đã lưu hồ sơ xe, checklist và ghi chú thẩm định TrustCar.',
+      });
+    } catch (error) {
+      setNotice({
+        type: 'error',
+        text: error?.userMessage || 'Chưa lưu được hồ sơ. Vui lòng kiểm tra kết nối và thử lại.',
+      });
     } finally {
       setIsSaving(false);
     }

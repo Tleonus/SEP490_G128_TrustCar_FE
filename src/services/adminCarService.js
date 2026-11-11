@@ -28,3 +28,19 @@ export async function getAdminCars(params = {}) {
   const { data } = await api.get('/manage/cars', { params })
   return unwrapList(data)
 }
+
+export async function createAdminCar(payload) {
+  const { data } = await api.post('/manage/cars', payload)
+  return data?.data
+}
+
+export async function updateAdminCar(carId, payload) {
+  const { data } = await api.put(`/manage/cars/${encodeURIComponent(carId)}`, payload)
+  return data?.data
+}
+
+export async function quickInspectAdminCar(carId, payload) {
+  const { data } = await api.post(`/inspections/cars/${encodeURIComponent(carId)}/inspect`, payload)
+  return data?.data
+}
+
