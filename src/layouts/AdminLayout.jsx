@@ -11,6 +11,8 @@ const NAV_ITEMS = [
   { to: ADMIN_PATHS.overview, label: 'Tổng quan', icon: 'grid' },
   { to: ADMIN_PATHS.inventory, label: 'Kho xe', icon: 'car' },
   { to: ADMIN_PATHS.vehicleIntake, label: 'Nhập xe & Thẩm định', icon: 'clipboard' },
+  // KAN-55: màn lập biên bản kiểm định cho Sale (ADMIN và SALES_STAFF đều vào được)
+  { to: ADMIN_PATHS.inspection, label: 'Kiểm định xe', icon: 'shield' },
   { to: ADMIN_PATHS.sales, label: 'Quản lý bán hàng', icon: 'sales' },
   { to: ADMIN_PATHS.baseSettings, label: 'Cấu hình showroom', icon: 'settings' },
   { to: '/admin/chung-nhan', label: 'Chứng nhận CPO', iconNode: <SafetyCertificateOutlined /> },
