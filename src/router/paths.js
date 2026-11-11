@@ -8,5 +8,10 @@ export const ADMIN_PATHS = {
   approval: '/admin/approval',
   sales: '/admin/sales',
   baseSettings: '/admin/base-settings',
+  testDrives: '/admin/test-drives',
   cpoCertificates: '/admin/chung-nhan',
+}
+
+export const CUSTOMER_PATHS = {
+  testDrives: '/lich-lai-thu',
 }

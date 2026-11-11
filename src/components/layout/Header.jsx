@@ -9,6 +9,7 @@ import { useSavedCarsStore } from '../../features/saved-cars/store/useSavedCarsS
 import { hasUnseenAlert } from '../../features/saved-cars/utils/savedCars'
 import styles from './Header.module.css'
 import { useContactInfo } from '../../config/contactInfo'
+import { CUSTOMER_PATHS } from '../../router/paths'
 
 const NAV_ITEMS = [
   { to: '/', label: 'Trang chủ' },
@@ -47,6 +48,9 @@ export default function Header() {
       key: 'change-password',
       label: <Link to="/doi-mat-khau">Đổi mật khẩu</Link>,
     },
+    ...(user?.roleName === 'CUSTOMER'
+      ? [{ key: 'test-drives', label: <Link to={CUSTOMER_PATHS.testDrives}>Lịch lái thử của tôi</Link> }]
+      : []),
     // Chỉ hiện "Quản trị" nếu user có role ADMIN hoặc SALES_STAFF.
     // Dùng user.roleName (chuỗi thật từ backend) - user.role là object Role đã populate, không phải chuỗi.
     ...(user?.roleName === 'ADMIN' || user?.roleName === 'SALES_STAFF'

@@ -21,8 +21,6 @@ export const DEFAULT_BASE_SETTINGS = {
   openingTime: '08:00',
   closingTime: '20:00',
   daysOff: ['sunday'],
-  slotDuration: '90',
-  maxCustomersPerSlot: '4',
   mapUrl: 'https://www.google.com/maps/search/?api=1&query=Showroom+TrustCar%2C+S%E1%BB%91+18+Ho%C3%A0ng+Qu%C3%A1n+Chi%2C+C%E1%BA%A7u+Gi%E1%BA%A5y%2C+H%C3%A0+N%E1%BB%99i%2C+Hanoi%2C+Vietnam',
   showroomImageUrl: '',
   zaloUrl: 'https://zalo.me/0856098686',

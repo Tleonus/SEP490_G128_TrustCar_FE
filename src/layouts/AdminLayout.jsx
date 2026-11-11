@@ -1,6 +1,6 @@
 ﻿import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { ConfigProvider, Dropdown, theme } from 'antd'
-import { AuditOutlined, HomeOutlined, LogoutOutlined, SafetyCertificateOutlined } from '@ant-design/icons'
+import { AuditOutlined, CalendarOutlined, HomeOutlined, LogoutOutlined, SafetyCertificateOutlined } from '@ant-design/icons'
 import Icon from '../features/vehicle-intake/components/VehicleIntakeIcon'
 import { useAuthStore } from '../store/useAuthStore'
 import { ADMIN_PATHS } from '../router/paths'
@@ -17,6 +17,7 @@ const NAV_ITEMS = [
   // KAN-56: duyệt kiểm định & mở bán — chỉ ADMIN thấy (SALES_STAFF bị ẩn)
   { to: ADMIN_PATHS.approval, label: 'Duyệt kiểm định', iconNode: <AuditOutlined />, adminOnly: true },
   { to: ADMIN_PATHS.sales, label: 'Quản lý bán hàng', icon: 'sales' },
+  { to: ADMIN_PATHS.testDrives, label: 'Lịch lái thử', iconNode: <CalendarOutlined /> },
   { to: ADMIN_PATHS.baseSettings, label: 'Cấu hình showroom', icon: 'settings' },
   { to: '/admin/chung-nhan', label: 'Chứng nhận CPO', iconNode: <SafetyCertificateOutlined /> },
 ]
