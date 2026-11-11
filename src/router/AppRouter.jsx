@@ -33,6 +33,8 @@ const CpoCertificateDetailPage = lazy(() => import('../features/cpo-certificates
 // KAN-55: kiểm định xe cho Sale
 const InspectionQueuePage = lazy(() => import('../features/inspection/pages/InspectionQueuePage.jsx'))
 const InspectionDetailPage = lazy(() => import('../features/inspection/pages/InspectionDetailPage.jsx'))
+// KAN-34: tổng quan kiểm định, dẫn sang các màn KAN-55/KAN-56
+const InspectionDashboardPage = lazy(() => import('../features/inspection-dashboard/pages/InspectionDashboardPage.jsx'))
 // KAN-56: bảng điều khiển duyệt cho Admin
 const ApprovalPage = lazy(() => import('../features/cpo-approval/pages/ApprovalPage.jsx'))
 // KAN-66: chọn ảnh chia sẻ mạng xã hội trong kho xe
@@ -96,6 +98,7 @@ export default function AppRouter() {
         <Route path="sales" element={<Suspense fallback={<LoadingState />}><SalesCrmPage /></Suspense>} />
         <Route path="vehicle-intake" element={<Suspense fallback={<LoadingState />}><AdminVehicleIntakePage /></Suspense>} />
         <Route path="base-settings" element={<Suspense fallback={<LoadingState />}><AdminBaseSettingsPage /></Suspense>} />
+        <Route path="inspection-dashboard" element={<Suspense fallback={<LoadingState />}><InspectionDashboardPage /></Suspense>} />
         {/* Kiểm định xe (KAN-55): ADMIN, SALES_STAFF. Backend vẫn kiểm quyền cuối cùng. */}
         <Route
           path="inspection"
