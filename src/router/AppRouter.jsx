@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import MainLayout from '../layouts/MainLayout'
 import AdminLayout from '../layouts/AdminLayout'
 import AdminRoute from './AdminRoute'
+import AdminOnlyRoute from './AdminOnlyRoute'
 import HomePage from '../pages/Home/HomePage'
 import CarsPage from '../pages/Cars/CarsPage'
 import CarDetailPage from '../pages/CarDetail/CarDetailPage'
@@ -32,6 +33,10 @@ const CpoCertificateDetailPage = lazy(() => import('../features/cpo-certificates
 // KAN-55: kiểm định xe cho Sale
 const InspectionQueuePage = lazy(() => import('../features/inspection/pages/InspectionQueuePage.jsx'))
 const InspectionDetailPage = lazy(() => import('../features/inspection/pages/InspectionDetailPage.jsx'))
+// KAN-56: bảng điều khiển duyệt cho Admin
+const ApprovalPage = lazy(() => import('../features/cpo-approval/pages/ApprovalPage.jsx'))
+// KAN-66: chọn ảnh chia sẻ mạng xã hội trong kho xe
+const SocialImagePage = lazy(() => import('../features/social-share-image/pages/SocialImagePage.jsx'))
 
 export default function AppRouter() {
   return (
@@ -82,6 +87,11 @@ export default function AppRouter() {
         <Route index element={<Navigate to={ADMIN_PATHS.overview} replace />} />
         <Route path="overview" element={<Suspense fallback={<LoadingState />}><AdminOverviewPage /></Suspense>} />
         <Route path="inventory" element={<AdminCarsPage />} />
+        {/* Ảnh chia sẻ mạng xã hội (KAN-66): ADMIN, SALES_STAFF */}
+        <Route
+          path="inventory/:id"
+          element={<Suspense fallback={<LoadingState />}><SocialImagePage /></Suspense>}
+        />
         {/* Quản lý bán hàng & chốt đơn (KAN-18): ADMIN, SALES_STAFF */}
         <Route path="sales" element={<Suspense fallback={<LoadingState />}><SalesCrmPage /></Suspense>} />
         <Route path="vehicle-intake" element={<Suspense fallback={<LoadingState />}><AdminVehicleIntakePage /></Suspense>} />
@@ -94,6 +104,15 @@ export default function AppRouter() {
         <Route
           path="inspection/:carId"
           element={<Suspense fallback={<LoadingState />}><InspectionDetailPage /></Suspense>}
+        />
+        {/* Duyệt kiểm định & mở bán (KAN-56): chỉ ADMIN. Backend vẫn kiểm quyền cuối cùng. */}
+        <Route
+          path="approval"
+          element={
+            <AdminOnlyRoute>
+              <Suspense fallback={<LoadingState />}><ApprovalPage /></Suspense>
+            </AdminOnlyRoute>
+          }
         />
         <Route path="kho-xe" element={<LegacyRedirect to={ADMIN_PATHS.inventory} />} />
         {/* Chứng nhận CPO: AdminRoute chỉ cho ADMIN, SALES_STAFF; BE vẫn kiểm quyền cuối cùng */}
