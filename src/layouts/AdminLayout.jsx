@@ -12,6 +12,7 @@ const NAV_ITEMS = [
   { to: ADMIN_PATHS.inventory, label: 'Kho xe', icon: 'car' },
   { to: ADMIN_PATHS.vehicleIntake, label: 'Nhập xe & Thẩm định', icon: 'clipboard' },
   // KAN-55: màn lập biên bản kiểm định cho Sale (ADMIN và SALES_STAFF đều vào được)
+  { to: ADMIN_PATHS.inspectionDashboard, label: 'Tổng quan kiểm định', icon: 'chart' },
   { to: ADMIN_PATHS.inspection, label: 'Kiểm định xe', icon: 'shield' },
   // KAN-56: duyệt kiểm định & mở bán — chỉ ADMIN thấy (SALES_STAFF bị ẩn)
   { to: ADMIN_PATHS.approval, label: 'Duyệt kiểm định', iconNode: <AuditOutlined />, adminOnly: true },

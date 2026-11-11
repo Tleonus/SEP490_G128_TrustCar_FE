@@ -43,8 +43,9 @@ export async function listInspectionQueueCars({
   search = '',
   page = 1,
   limit = QUEUE_PAGE_SIZE,
+  sortDir = 'desc',
 } = {}) {
-  const { data } = await api.get(`/manage/cars?${buildCarsQuery({ statuses, search, page, limit })}`)
+  const { data } = await api.get(`/manage/cars?${buildCarsQuery({ statuses, search, page, limit, sortDir })}`)
   return { items: data?.data ?? [], meta: data?.meta ?? null }
 }
 
