@@ -1,10 +1,16 @@
 import { useId } from 'react'
 
-export default function RobotMascot({ size = 84, className }) {
+/**
+ * Avatar riêng của Trợ lý AI TrustCar (Executive Navy + Champagne Gold + Cyber HUD).
+ * Hỗ trợ trạng thái `active` (đang trả lời / phân tích) với hiệu ứng quét HUD nhanh.
+ */
+export default function RobotMascot({ size = 84, className, active = false }) {
   const uid = useId().replace(/:/g, '')
-  const shell = `shell-${uid}`
-  const visor = `visor-${uid}`
-  const glow = `glow-${uid}`
+  const helmetGrad = `tc-helmet-${uid}`
+  const navyArmor = `tc-navy-${uid}`
+  const goldTrim = `tc-gold-${uid}`
+  const visorGrad = `tc-visor-${uid}`
+  const hudGlow = `tc-hud-${uid}`
 
   return (
     <svg
@@ -16,50 +22,252 @@ export default function RobotMascot({ size = 84, className }) {
       aria-label="Trợ lý AI TrustCar"
     >
       <defs>
-        <linearGradient id={shell} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#ffffff" />
-          <stop offset="1" stopColor="#e4dbf8" />
+        <linearGradient id={helmetGrad} x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#ffffff" />
+          <stop offset="55%" stopColor="#eef2f8" />
+          <stop offset="100%" stopColor="#cbd5e1" />
         </linearGradient>
-        <linearGradient id={visor} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#3a2656" />
-          <stop offset="1" stopColor="#140b24" />
+
+        <linearGradient id={navyArmor} x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#1e3a66" />
+          <stop offset="55%" stopColor="#0f2342" />
+          <stop offset="100%" stopColor="#071224" />
         </linearGradient>
-        <radialGradient id={glow} cx="0.5" cy="0.5" r="0.5">
-          <stop offset="0" stopColor="#c58bff" stopOpacity="0.55" />
-          <stop offset="1" stopColor="#c58bff" stopOpacity="0" />
+
+        <linearGradient id={goldTrim} x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#fae08c" />
+          <stop offset="50%" stopColor="#c9a227" />
+          <stop offset="100%" stopColor="#967210" />
+        </linearGradient>
+
+        <linearGradient id={visorGrad} x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#0f294a" />
+          <stop offset="100%" stopColor="#050d1a" />
+        </linearGradient>
+
+        <radialGradient id={hudGlow} cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.65" />
+          <stop offset="100%" stopColor="#38bdf8" stopOpacity="0" />
         </radialGradient>
       </defs>
 
-      <ellipse cx="60" cy="112" rx="26" ry="4" fill="#000" opacity="0.14" />
+      {/* Đổ bóng 3D bên dưới */}
+      <ellipse cx="60" cy="113" rx="28" ry="4.5" fill="#06101f" opacity="0.24" />
 
-      <ellipse cx="22" cy="86" rx="8" ry="11" fill={`url(#${shell})`} stroke="#d3c7f0" strokeWidth="1.5" transform="rotate(22 22 86)" />
-      <ellipse cx="98" cy="86" rx="8" ry="11" fill={`url(#${shell})`} stroke="#d3c7f0" strokeWidth="1.5" transform="rotate(-22 98 86)" />
-      <circle cx="17" cy="95" r="4" fill="#9b5de5" />
-      <circle cx="103" cy="95" r="4" fill="#9b5de5" />
+      {/* Tay trái & phải tạo dáng chuyên viên tư vấn */}
+      <ellipse
+        cx="19"
+        cy="84"
+        rx="7.5"
+        ry="11"
+        fill={`url(#${helmetGrad})`}
+        stroke={`url(#${goldTrim})`}
+        strokeWidth="1.8"
+        transform="rotate(20 19 84)"
+      />
+      <ellipse
+        cx="101"
+        cy="84"
+        rx="7.5"
+        ry="11"
+        fill={`url(#${helmetGrad})`}
+        stroke={`url(#${goldTrim})`}
+        strokeWidth="1.8"
+        transform="rotate(-20 101 84)"
+      />
 
-      <ellipse cx="60" cy="98" rx="24" ry="15" fill={`url(#${shell})`} stroke="#d3c7f0" strokeWidth="1.5" />
-      <rect x="48" y="96" width="24" height="5" rx="2.5" fill="#9b5de5" />
+      {/* Thân giáp Navy + Huy hiệu Khiên Vàng TrustCar */}
+      <path
+        d="M35 88 C35 78, 85 78, 85 88 L81 105 C81 109, 39 109, 39 105 Z"
+        fill={`url(#${navyArmor})`}
+        stroke={`url(#${goldTrim})`}
+        strokeWidth="2"
+      />
+      {/* Huy hiệu khiên CPO trên ngực */}
+      <polygon
+        points="60,88 68,92 66,101 60,105 54,101 52,92"
+        fill={`url(#${goldTrim})`}
+      />
+      <path
+        d="M57 96 L59.5 98.5 L64 93.5"
+        stroke="#081527"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
 
-      <line x1="60" y1="8" x2="60" y2="18" stroke="#b9a6e6" strokeWidth="3" strokeLinecap="round" />
-      <circle cx="60" cy="7" r="4.5" fill="#9b5de5" />
+      {/* Ăng-ten tín hiệu AI đỉnh đầu */}
+      <line
+        x1="60"
+        y1="8"
+        x2="60"
+        y2="18"
+        stroke={`url(#${goldTrim})`}
+        strokeWidth="3.5"
+        strokeLinecap="round"
+      />
+      <circle cx="60" cy="7" r="5" fill={`url(#${goldTrim})`} />
+      <circle cx="60" cy="7" r="2.5" fill={active ? '#38bdf8' : '#fff8dc'} />
 
-      <circle cx="12" cy="54" r="8" fill="#9b5de5" />
-      <circle cx="108" cy="54" r="8" fill="#9b5de5" />
-      <circle cx="12" cy="54" r="3" fill="#d9c2ff" />
-      <circle cx="108" cy="54" r="3" fill="#d9c2ff" />
+      {/* Tai nghe / Cảm biến âm thanh hai bên */}
+      <rect
+        x="7"
+        y="42"
+        width="10"
+        height="24"
+        rx="5"
+        fill={`url(#${navyArmor})`}
+        stroke={`url(#${goldTrim})`}
+        strokeWidth="2"
+      />
+      <rect
+        x="103"
+        y="42"
+        width="10"
+        height="24"
+        rx="5"
+        fill={`url(#${navyArmor})`}
+        stroke={`url(#${goldTrim})`}
+        strokeWidth="2"
+      />
 
-      <rect x="14" y="17" width="92" height="76" rx="36" fill={`url(#${shell})`} stroke="#d3c7f0" strokeWidth="1.5" />
-      <path d="M30 28 q14 -8 32 -6" stroke="#fff" strokeWidth="4" strokeLinecap="round" fill="none" opacity="0.9" />
+      {/* Khung đầu 3D chính */}
+      <rect
+        x="15"
+        y="17"
+        width="90"
+        height="72"
+        rx="34"
+        fill={`url(#${helmetGrad})`}
+        stroke={`url(#${goldTrim})`}
+        strokeWidth="2.2"
+      />
 
-      <rect x="25" y="31" width="70" height="46" rx="23" fill={`url(#${visor})`} />
-      <ellipse cx="42" cy="54" rx="14" ry="12" fill={`url(#${glow})`} />
-      <ellipse cx="78" cy="54" rx="14" ry="12" fill={`url(#${glow})`} />
+      {/* Viền vương miện / Crest vàng trên trán */}
+      <path
+        d="M44 18 L60 25 L76 18"
+        fill={`url(#${goldTrim})`}
+        opacity="0.92"
+      />
+      <path
+        d="M29 27 Q44 20 62 22"
+        stroke="#ffffff"
+        strokeWidth="3.5"
+        strokeLinecap="round"
+        fill="none"
+        opacity="0.95"
+      />
 
-      <path d="M35 56 q7 -11 14 0" stroke="#e1b8ff" strokeWidth="5" strokeLinecap="round" fill="none" />
-      <path d="M71 56 q7 -11 14 0" stroke="#e1b8ff" strokeWidth="5" strokeLinecap="round" fill="none" />
-      <path d="M53 63 q7 7 14 0" stroke="#ff9ccf" strokeWidth="3.5" strokeLinecap="round" fill="none" />
-      <circle cx="33" cy="64" r="3.2" fill="#ff7eb6" opacity="0.55" />
-      <circle cx="87" cy="64" r="3.2" fill="#ff7eb6" opacity="0.55" />
+      {/* Kính Visor HUD trung tâm */}
+      <rect
+        x="24"
+        y="30"
+        width="72"
+        height="46"
+        rx="22"
+        fill={`url(#${visorGrad})`}
+        stroke="#254878"
+        strokeWidth="1.6"
+      />
+
+      {/* Hào quang mắt HUD */}
+      <ellipse cx="43" cy="52" rx="14" ry="11" fill={`url(#${hudGlow})`} />
+      <ellipse cx="77" cy="52" rx="14" ry="11" fill={`url(#${hudGlow})`} />
+
+      {/* Mắt LED AI sắc nét */}
+      {active ? (
+        <>
+          <circle cx="43" cy="52" r="6.5" fill="#38bdf8" />
+          <circle cx="43" cy="52" r="3" fill="#ffffff" />
+          <circle cx="77" cy="52" r="6.5" fill="#38bdf8" />
+          <circle cx="77" cy="52" r="3" fill="#ffffff" />
+        </>
+      ) : (
+        <>
+          <path
+            d="M35 54 Q43 43 51 54"
+            stroke="#38bdf8"
+            strokeWidth="4.8"
+            strokeLinecap="round"
+            fill="none"
+          />
+          <path
+            d="M69 54 Q77 43 85 54"
+            stroke="#38bdf8"
+            strokeWidth="4.8"
+            strokeLinecap="round"
+            fill="none"
+          />
+        </>
+      )}
+
+      {/* Nụ cười thân thiện ánh vàng Champagne */}
+      <path
+        d="M52 63 Q60 69 68 63"
+        stroke="#f5d97e"
+        strokeWidth="3.2"
+        strokeLinecap="round"
+        fill="none"
+      />
+
+      {/* Điểm sáng má HUD */}
+      <circle cx="33" cy="61" r="2.6" fill="#f5d97e" opacity="0.75" />
+      <circle cx="87" cy="61" r="2.6" fill="#f5d97e" opacity="0.75" />
+    </svg>
+  )
+}
+
+/**
+ * Avatar riêng dành cho Khách hàng (User) trong khung hội thoại.
+ * Hiển thị chữ cái đầu tên user nếu đã đăng nhập, hoặc biểu tượng Khách hàng VIP có vô-lăng.
+ */
+export function UserChatAvatar({ size = 32, name = '' }) {
+  const uid = useId().replace(/:/g, '')
+  const bgGrad = `tc-user-bg-${uid}`
+  const ringGrad = `tc-user-ring-${uid}`
+  const initial = String(name || '').trim().charAt(0).toUpperCase()
+
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 48 48"
+      role="img"
+      aria-label={name ? `Khách hàng ${name}` : 'Khách hàng'}
+    >
+      <defs>
+        <linearGradient id={bgGrad} x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#1b3a68" />
+          <stop offset="100%" stopColor="#0b1f3a" />
+        </linearGradient>
+        <linearGradient id={ringGrad} x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#fae08c" />
+          <stop offset="55%" stopColor="#c9a227" />
+          <stop offset="100%" stopColor="#967210" />
+        </linearGradient>
+      </defs>
+
+      <circle cx="24" cy="24" r="22.5" fill={`url(#${bgGrad})`} stroke={`url(#${ringGrad})`} strokeWidth="2.5" />
+
+      {initial ? (
+        <text
+          x="24"
+          y="29.5"
+          textAnchor="middle"
+          fill="#f8e396"
+          fontSize="18"
+          fontWeight="800"
+          fontFamily="Inter, Segoe UI, sans-serif"
+        >
+          {initial}
+        </text>
+      ) : (
+        <g fill="none" stroke="#f5d97e" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="24" cy="17.5" r="5.5" fill="rgba(245, 217, 126, 0.2)" />
+          <path d="M13.5 34.5 C14.8 28.5, 33.2 28.5, 34.5 34.5" />
+        </g>
+      )}
     </svg>
   )
 }
