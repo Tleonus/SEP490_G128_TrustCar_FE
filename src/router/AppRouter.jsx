@@ -29,6 +29,9 @@ const ComparePage = lazy(() => import('../features/vehicle-compare/pages/Compare
 const SavedCarsPage = lazy(() => import('../features/saved-cars/pages/SavedCarsPage.jsx'))
 const CpoCertificatesPage = lazy(() => import('../features/cpo-certificates/pages/CpoCertificatesPage.jsx'))
 const CpoCertificateDetailPage = lazy(() => import('../features/cpo-certificates/pages/CpoCertificateDetailPage.jsx'))
+// KAN-55: kiểm định xe cho Sale
+const InspectionQueuePage = lazy(() => import('../features/inspection/pages/InspectionQueuePage.jsx'))
+const InspectionDetailPage = lazy(() => import('../features/inspection/pages/InspectionDetailPage.jsx'))
 
 export default function AppRouter() {
   return (
@@ -83,6 +86,15 @@ export default function AppRouter() {
         <Route path="sales" element={<Suspense fallback={<LoadingState />}><SalesCrmPage /></Suspense>} />
         <Route path="vehicle-intake" element={<Suspense fallback={<LoadingState />}><AdminVehicleIntakePage /></Suspense>} />
         <Route path="base-settings" element={<Suspense fallback={<LoadingState />}><AdminBaseSettingsPage /></Suspense>} />
+        {/* Kiểm định xe (KAN-55): ADMIN, SALES_STAFF. Backend vẫn kiểm quyền cuối cùng. */}
+        <Route
+          path="inspection"
+          element={<Suspense fallback={<LoadingState />}><InspectionQueuePage /></Suspense>}
+        />
+        <Route
+          path="inspection/:carId"
+          element={<Suspense fallback={<LoadingState />}><InspectionDetailPage /></Suspense>}
+        />
         <Route path="kho-xe" element={<LegacyRedirect to={ADMIN_PATHS.inventory} />} />
         {/* Chứng nhận CPO: AdminRoute chỉ cho ADMIN, SALES_STAFF; BE vẫn kiểm quyền cuối cùng */}
         <Route
