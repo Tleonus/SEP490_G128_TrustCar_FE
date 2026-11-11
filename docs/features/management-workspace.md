@@ -65,16 +65,14 @@ Search is now synchronized with the URL, alongside the existing filters and pagi
 
 The intake form, validation, five-checkbox inspection checklist, notes, and save payload remain owned by `src/features/vehicle-intake/`. Checklist selections record inspection information; they do not automatically assign a vehicle status or price. See the [intake specification](./vehicle-intake-spec.md) and [feature README](../../src/features/vehicle-intake/README.md).
 
-The save endpoint selection is unchanged:
+The save flow connects directly to the real Backend using the shared authenticated Axios client (`src/services/api.js`):
 
-| Context | Endpoint |
+| Step | Endpoint |
 | --- | --- |
-| Management page adapter | `VITE_VEHICLE_INTAKE_API_URL` when set; otherwise `http://localhost:3001/api/cpo/vehicles`. |
-| Feature's fetch adapter without an endpoint override | `/api/cpo/vehicles`. |
+| 1. Create / update vehicle | `POST /api/v1/manage/cars` (or `PUT /api/v1/manage/cars/:id` when re-saving the same vehicle in the current session). |
+| 2. Record 5-criteria inspection | `POST /api/v1/inspections/cars/:id/inspect`. |
 
-The [intake fetch adapter](../../src/features/vehicle-intake/api/vehicleIntakeApi.js) sends a JSON `POST` to its selected endpoint. It remains separate from the authenticated Axios client used by inventory and does not automatically attach that client's bearer token or refresh handling. Frontend route protection does not establish backend authorization or persistence.
-
-This change integrates management navigation and presentation. It does not connect intake saving to `/manage/cars`, change either API contract, or establish that a saved intake record will appear in inventory, overview totals, or public vehicle details. Backend integration remains separate work.
+The [intake API adapter](../../src/features/vehicle-intake/api/vehicleIntakeApi.js) maps the intake form fields (`brand -> make`, uppercase enums, numeric prices/mileage/year, ownership) and the 5-boolean checklist into the real Backend DTOs, automatically attaching the user's Bearer token and refresh handling via `src/services/api.js`. The standalone mock server on port 3001 (`server/vehicle-intake-api.mjs`) has been removed.
 
 ## Verification status and related documentation
 

@@ -1,49 +1,182 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { CloseOutlined, SendOutlined } from '@ant-design/icons'
-import RobotMascot from './RobotMascot'
+import {
+  CloseOutlined,
+  SendOutlined,
+  ReloadOutlined,
+  ExpandAltOutlined,
+  ShrinkOutlined,
+  ThunderboltFilled,
+  CarOutlined,
+  SafetyCertificateFilled,
+  EnvironmentOutlined,
+  CompassOutlined,
+  ArrowRightOutlined,
+  ExportOutlined,
+  QuestionCircleOutlined,
+} from '@ant-design/icons'
+import RobotMascot, { UserChatAvatar } from './RobotMascot'
+import { sendChatMessage } from '../../services/chatService'
+import { useContactInfo } from '../../config/contactInfo'
+import { useAuthStore } from '../../store/useAuthStore'
 import styles from './ChatWidget.module.css'
-import { CONTACT_INFO } from '../../config/contactInfo'
 
-const SUGGESTIONS = [
-  'Tư vấn xe theo ngân sách',
-  'Xe gầm cao cho gia đình',
-  'Thủ tục mua xe cũ',
-  'Đặt lịch xem xe',
+const QUESTION_CATEGORIES = [
+  {
+    key: 'popular',
+    label: 'Phổ biến',
+    questions: [
+      'Tư vấn xe theo ngân sách',
+      'Xe SUV gầm cao cho gia đình',
+      'Quy trình kiểm định CPO 150+ hạng mục',
+      'Đặt lịch xem xe & lái thử',
+    ],
+  },
+  {
+    key: 'budget',
+    label: 'Theo ngân sách',
+    questions: [
+      'Tìm xe dưới 500 triệu',
+      'Tìm xe từ 500 đến 800 triệu',
+      'Tìm xe từ 800 triệu đến 1.2 tỷ',
+      'Tìm xe trên 1.2 tỷ',
+    ],
+  },
+  {
+    key: 'body',
+    label: 'Dòng xe & Hãng',
+    questions: [
+      'Xe SUV gầm cao 7 chỗ',
+      'Xe Sedan đi phố tiết kiệm',
+      'Tìm xe Toyota đang có sẵn',
+      'Tìm xe Mazda đang có sẵn',
+    ],
+  },
+  {
+    key: 'service',
+    label: 'Trả góp & Showroom',
+    questions: [
+      'Thủ tục mua xe trả góp ngân hàng',
+      'Địa chỉ Showroom ở đâu?',
+      'Chính sách bảo hành & kiểm định CPO',
+      'Đặt lịch xem xe thực tế',
+    ],
+  },
 ]
 
-const WELCOME = {
-  id: 'welcome',
-  from: 'bot',
-  text: 'Xin chào, mình là trợ lý AI của TrustCar. Mình có thể giúp bạn chọn xe, tìm hiểu quy trình kiểm định và đặt lịch xem xe. Bạn đang quan tâm điều gì?',
+function formatTimeNow() {
+  const now = new Date()
+  return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
 }
 
-const HINT_DELAY_MS = 2500
-const REPLY_DELAY_MS = 1200
+function createWelcomeMessage(showroomAddress) {
+  return {
+    id: 'welcome',
+    from: 'bot',
+    time: formatTimeNow(),
+    streamed: true,
+    text: `Xin chào! Mình là **Trợ lý AI TrustCar** — kết nối trực tiếp với dữ liệu kho xe thực tế tại **${showroomAddress}**.\n\nBạn có thể chọn nhanh **bong bóng câu hỏi** bên dưới hoặc nhập mẫu xe, tầm giá để mình lọc xe ngay lập tức!`,
+    actions: [
+      { label: 'Khám phá kho xe', to: '/xe', type: 'navigate' },
+      { label: 'Vị trí Showroom 3D', to: '/lien-he', type: 'navigate' },
+    ],
+    followUps: [
+      'Tư vấn xe theo ngân sách',
+      'Xe SUV gầm cao cho gia đình',
+      'Tìm xe từ 500 đến 800 triệu',
+      'Địa chỉ Showroom ở đâu?',
+    ],
+  }
+}
+
+/**
+ * Hiển thị nội dung tin nhắn có hỗ trợ in đậm **text** và xuống dòng.
+ */
+function FormattedBubbleText({ text }) {
+  const lines = String(text || '').split('\n')
+  return (
+    <div className={styles.formattedText}>
+      {lines.map((line, lineIdx) => {
+        if (!line.trim()) {
+          return <div key={lineIdx} className={styles.lineSpacer} />
+        }
+        const parts = line.split(/(\*\*[^*]+\*\*)/g)
+        return (
+          <p key={lineIdx} className={styles.lineParagraph}>
+            {parts.map((part, partIdx) => {
+              if (part.startsWith('**') && part.endsWith('**')) {
+                return <strong key={partIdx}>{part.slice(2, -2)}</strong>
+              }
+              return <span key={partIdx}>{part}</span>
+            })}
+          </p>
+        )
+      })}
+    </div>
+  )
+}
+
+/**
+ * Hiệu ứng gõ chữ siêu tốc (Fast Streaming Bubble) cho tin nhắn mới của Bot.
+ */
+function StreamingBotText({ text, alreadyStreamed, onDone }) {
+  const [visibleLength, setVisibleLength] = useState(alreadyStreamed ? text.length : 0)
+
+  useEffect(() => {
+    if (alreadyStreamed || visibleLength >= text.length) {
+      if (!alreadyStreamed) onDone?.()
+      return undefined
+    }
+    const step = Math.max(5, Math.ceil(text.length / 26))
+    const timer = window.setTimeout(() => {
+      setVisibleLength((prev) => Math.min(text.length, prev + step))
+    }, 14)
+    return () => window.clearTimeout(timer)
+  }, [alreadyStreamed, visibleLength, text, onDone])
+
+  const shown = alreadyStreamed ? text : text.slice(0, visibleLength)
+  return (
+    <div onClick={() => setVisibleLength(text.length)}>
+      <FormattedBubbleText text={shown} />
+    </div>
+  )
+}
 
 export default function ChatWidget() {
   const navigate = useNavigate()
+  const contactInfo = useContactInfo()
+  const user = useAuthStore((state) => state.user)
+
   const [open, setOpen] = useState(false)
+  const [expanded, setExpanded] = useState(false)
   const [showHint, setShowHint] = useState(false)
-  const [messages, setMessages] = useState([WELCOME])
+  const [activeCategory, setActiveCategory] = useState('popular')
+  const [messages, setMessages] = useState(() => [createWelcomeMessage(contactInfo.showroomAddress)])
   const [draft, setDraft] = useState('')
-  const [typing, setTyping] = useState(false)
+  const [loading, setLoading] = useState(false)
+
+  const rawUid = useId().replace(/:/g, '')
+  const sessionId = `tc-session-${rawUid}`
+  const seqRef = useRef(1)
   const listRef = useRef(null)
   const inputRef = useRef(null)
-  const replyTimer = useRef(null)
+  const abortRef = useRef(null)
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowHint(true), HINT_DELAY_MS)
-    return () => clearTimeout(timer)
+    const timer = window.setTimeout(() => setShowHint(true), 1400)
+    return () => window.clearTimeout(timer)
   }, [])
 
-  useEffect(() => () => clearTimeout(replyTimer.current), [])
+  useEffect(() => () => abortRef.current?.abort(), [])
 
   useEffect(() => {
     if (open && listRef.current) {
-      listRef.current.scrollTop = listRef.current.scrollHeight
+      listRef.current.scrollTo({
+        top: listRef.current.scrollHeight,
+        behavior: 'smooth',
+      })
     }
-  }, [open, messages, typing])
+  }, [open, messages, loading])
 
   useEffect(() => {
     if (!open) return undefined
@@ -60,128 +193,336 @@ export default function ChatWidget() {
     setShowHint(false)
   }
 
-  function sendMessage(text) {
-    const content = text.trim()
-    if (!content || typing) return
+  function handleResetChat() {
+    abortRef.current?.abort()
+    setLoading(false)
+    setMessages([createWelcomeMessage(contactInfo.showroomAddress)])
+    setActiveCategory('popular')
+  }
 
-    setMessages((prev) => [...prev, { id: `u-${Date.now()}`, from: 'user', text: content }])
+  function markMessageStreamed(id) {
+    setMessages((prev) =>
+      prev.map((m) => (m.id === id && !m.streamed ? { ...m, streamed: true } : m))
+    )
+  }
+
+  async function handleSendQuestion(rawText) {
+    const content = String(rawText || '').trim()
+    if (!content || loading) return
+
+    seqRef.current += 1
+    const userMsg = {
+      id: `u-${seqRef.current}`,
+      from: 'user',
+      time: formatTimeNow(),
+      text: content,
+    }
+
+    const updatedHistory = [...messages, userMsg]
+    setMessages(updatedHistory)
     setDraft('')
-    setTyping(true)
+    setLoading(true)
 
-    replyTimer.current = setTimeout(() => {
+    abortRef.current?.abort()
+    const controller = new AbortController()
+    abortRef.current = controller
+
+    try {
+      const reply = await sendChatMessage({
+        message: content,
+        history: updatedHistory,
+        sessionId,
+        signal: controller.signal,
+      })
+
+      seqRef.current += 1
       setMessages((prev) => [
         ...prev,
         {
-          id: `b-${Date.now()}`,
+          id: `b-${seqRef.current}`,
           from: 'bot',
-          text: `Cảm ơn bạn đã nhắn tin. Trợ lý AI của TrustCar đang trong giai đoạn hoàn thiện nên chưa thể trả lời tự động. Bạn có thể xem danh sách xe hoặc gọi hotline ${CONTACT_INFO.phoneDisplay} để được tư vấn ngay.`,
-          actions: [
-            { label: 'Xem danh sách xe', to: '/xe' },
-            { label: 'Gửi yêu cầu tư vấn', to: '/lien-he' },
-          ],
+          time: formatTimeNow(),
+          streamed: false,
+          text: reply.text,
+          cars: reply.cars || [],
+          actions: reply.actions || [],
+          followUps: reply.followUps || [],
         },
       ])
-      setTyping(false)
-    }, REPLY_DELAY_MS)
+    } catch {
+      seqRef.current += 1
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `b-${seqRef.current}`,
+          from: 'bot',
+          time: formatTimeNow(),
+          streamed: false,
+          text: `Hiện hệ thống đang bận trong giây lát. Bạn có thể gọi trực tiếp Hotline **${contactInfo.phoneDisplay}** hoặc xem danh sách xe bên dưới nhé!`,
+          actions: [
+            { label: 'Xem danh sách xe', to: '/xe', type: 'navigate' },
+            { label: 'Liên hệ Showroom', to: '/lien-he', type: 'navigate' },
+          ],
+          followUps: ['Tư vấn xe theo ngân sách', 'Địa chỉ Showroom ở đâu?'],
+        },
+      ])
+    } finally {
+      setLoading(false)
+    }
   }
 
   function handleSubmit(event) {
     event.preventDefault()
-    sendMessage(draft)
+    handleSendQuestion(draft)
   }
 
-  function handleAction(to) {
-    setOpen(false)
-    navigate(to)
+  function handleNavigateAction(action) {
+    if (action.href) {
+      window.open(action.href, action.href.startsWith('tel:') ? '_self' : '_blank', 'noopener,noreferrer')
+      return
+    }
+    if (action.to) {
+      navigate(action.to)
+    }
   }
 
-  const onlyWelcome = messages.length === 1
+  const currentCategoryObj =
+    QUESTION_CATEGORIES.find((c) => c.key === activeCategory) || QUESTION_CATEGORIES[0]
+
+  const latestBotMsg = [...messages].reverse().find((m) => m.from === 'bot')
+  const dynamicFollowUps = latestBotMsg?.followUps?.length
+    ? latestBotMsg.followUps
+    : currentCategoryObj.questions
 
   return (
     <div className={styles.root}>
       {open && (
-        <section className={styles.panel} role="dialog" aria-label="Trò chuyện với trợ lý AI TrustCar">
+        <section
+          className={`${styles.panel} ${expanded ? styles.panelExpanded : ''}`}
+          role="dialog"
+          aria-label="Trợ lý AI TrustCar"
+        >
+          {/* HEADER CHUYÊN NGHIỆP VỚI AVATAR RIÊNG & TRẠNG THÁI LIVE API */}
           <header className={styles.panelHead}>
-            <div className={styles.headAvatar}>
-              <RobotMascot size={36} />
+            <div className={styles.headAvatarWrap}>
+              <RobotMascot size={42} active={loading} />
+              <span className={styles.onlineDot} title="Đã kết nối API kho xe trực tuyến" />
             </div>
+
             <div className={styles.headText}>
-              <div className={styles.headTitle}>Trợ lý AI TrustCar</div>
-              <div className={styles.headSub}>Tư vấn chọn xe và đặt lịch xem xe</div>
+              <div className={styles.headTitleRow}>
+                <span className={styles.headTitle}>Trợ lý AI TrustCar</span>
+                <span className={styles.liveApiBadge}>
+                  <ThunderboltFilled /> Live API
+                </span>
+              </div>
+              <div className={styles.headSub}>
+                Tư vấn kho xe thực tế &middot; Định vị Showroom 24/7
+              </div>
             </div>
-            <button
-              type="button"
-              className={styles.headBtn}
-              onClick={() => setOpen(false)}
-              aria-label="Đóng cửa sổ chat"
-            >
-              <CloseOutlined />
-            </button>
+
+            <div className={styles.headControls}>
+              <button
+                type="button"
+                className={styles.headBtn}
+                onClick={handleResetChat}
+                title="Làm mới cuộc trò chuyện"
+                aria-label="Làm mới cuộc trò chuyện"
+              >
+                <ReloadOutlined />
+              </button>
+              <button
+                type="button"
+                className={`${styles.headBtn} ${styles.expandBtn}`}
+                onClick={() => setExpanded((prev) => !prev)}
+                title={expanded ? 'Thu gọn khung chat' : 'Mở rộng khung chat'}
+                aria-label={expanded ? 'Thu gọn khung chat' : 'Mở rộng khung chat'}
+              >
+                {expanded ? <ShrinkOutlined /> : <ExpandAltOutlined />}
+              </button>
+              <button
+                type="button"
+                className={styles.headBtn}
+                onClick={() => setOpen(false)}
+                title="Đóng cửa sổ chat"
+                aria-label="Đóng cửa sổ chat"
+              >
+                <CloseOutlined />
+              </button>
+            </div>
           </header>
 
+          {/* THANH ĐIỀU HƯỚNG CHỦ ĐỀ CÂU HỎI NHANH */}
+          <div className={styles.categoryNav} role="tablist" aria-label="Chủ đề câu hỏi gợi ý">
+            {QUESTION_CATEGORIES.map((cat) => (
+              <button
+                key={cat.key}
+                type="button"
+                role="tab"
+                aria-selected={activeCategory === cat.key}
+                className={`${styles.categoryTab} ${
+                  activeCategory === cat.key ? styles.categoryTabActive : ''
+                }`}
+                onClick={() => setActiveCategory(cat.key)}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+
+          {/* KHU VỰC BONG BÓNG HỘI THOẠI */}
           <div className={styles.messages} ref={listRef} aria-live="polite">
-            {messages.map((msg) => (
-              <div key={msg.id}>
-                <div className={`${styles.row} ${msg.from === 'user' ? styles.rowUser : ''}`}>
-                  {msg.from === 'bot' && (
-                    <div className={styles.botAvatar}>
-                      <RobotMascot size={26} />
+            {messages.map((msg, msgIndex) => {
+              const isUser = msg.from === 'user'
+              const isLastBot = !isUser && msgIndex === messages.length - 1
+
+              return (
+                <div key={msg.id} className={styles.messageGroup}>
+                  <div className={`${styles.row} ${isUser ? styles.rowUser : styles.rowBot}`}>
+                    {!isUser && (
+                      <div className={styles.botAvatarBadge}>
+                        <RobotMascot size={30} active={loading && isLastBot} />
+                      </div>
+                    )}
+
+                    <div className={styles.bubbleColumn}>
+                      <div className={`${styles.senderMeta} ${isUser ? styles.senderMetaUser : ''}`}>
+                        <span>{isUser ? user?.fullName || 'Khách hàng' : 'TrustCar AI Concierge'}</span>
+                        <time>{msg.time}</time>
+                      </div>
+
+                      <div
+                        className={`${styles.bubble} ${
+                          isUser ? styles.bubbleUser : styles.bubbleBot
+                        }`}
+                      >
+                        {isUser ? (
+                          <FormattedBubbleText text={msg.text} />
+                        ) : (
+                          <StreamingBotText
+                            text={msg.text}
+                            alreadyStreamed={Boolean(msg.streamed)}
+                            onDone={() => markMessageStreamed(msg.id)}
+                          />
+                        )}
+
+                        {/* THẺ XE TRỰC TIẾP TỪ API /public/cars TRONG BONG BÓNG TRẢ LỜI */}
+                        {Array.isArray(msg.cars) && msg.cars.length > 0 && (
+                          <div className={styles.carCardsList}>
+                            {msg.cars.map((car) => (
+                              <button
+                                key={car.id}
+                                type="button"
+                                className={styles.chatCarCard}
+                                onClick={() => navigate(car.to)}
+                              >
+                                <div className={styles.chatCarThumb}>
+                                  {car.imageUrl ? (
+                                    <img src={car.imageUrl} alt={car.title} loading="lazy" />
+                                  ) : (
+                                    <CarOutlined className={styles.chatCarFallbackIcon} />
+                                  )}
+                                  {car.cpo && (
+                                    <span className={styles.chatCarCpo}>
+                                      <SafetyCertificateFilled /> CPO
+                                    </span>
+                                  )}
+                                </div>
+                                <div className={styles.chatCarInfo}>
+                                  <div className={styles.chatCarTitle}>{car.title}</div>
+                                  <div className={styles.chatCarPrice}>{car.priceText}</div>
+                                  <div className={styles.chatCarSpecs}>
+                                    <span>{car.year}</span>
+                                    <span>&bull;</span>
+                                    <span>{car.mileageText}</span>
+                                    {car.bodyTypeLabel && (
+                                      <>
+                                        <span>&bull;</span>
+                                        <span>{car.bodyTypeLabel}</span>
+                                      </>
+                                    )}
+                                  </div>
+                                </div>
+                                <ArrowRightOutlined className={styles.chatCarArrow} />
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* BONG BÓNG ĐIỀU HƯỚNG TRANG / HÀNH ĐỘNG NHANH */}
+                      {Array.isArray(msg.actions) && msg.actions.length > 0 && (
+                        <div className={styles.actionBubbles}>
+                          {msg.actions.map((action, idx) => (
+                            <button
+                              key={`${msg.id}-act-${idx}`}
+                              type="button"
+                              className={styles.actionBubbleBtn}
+                              onClick={() => handleNavigateAction(action)}
+                            >
+                              {action.href ? <ExportOutlined /> : <CompassOutlined />}
+                              <span>{action.label}</span>
+                              <ArrowRightOutlined className={styles.actionArrow} />
+                            </button>
+                          ))}
+                        </div>
+                      )}
                     </div>
-                  )}
-                  <div
-                    className={`${styles.bubble} ${
-                      msg.from === 'user' ? styles.bubbleUser : styles.bubbleBot
-                    }`}
-                  >
-                    {msg.text}
+
+                    {isUser && (
+                      <div className={styles.userAvatarBadge}>
+                        <UserChatAvatar size={30} name={user?.fullName} />
+                      </div>
+                    )}
                   </div>
                 </div>
-                {msg.actions && (
-                  <div className={styles.actions} style={{ marginTop: 8 }}>
-                    {msg.actions.map((action) => (
-                      <button
-                        key={action.to}
-                        type="button"
-                        className={styles.chip}
-                        onClick={() => handleAction(action.to)}
-                      >
-                        {action.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
+              )
+            })}
 
-            {onlyWelcome && (
-              <div className={styles.chips}>
-                {SUGGESTIONS.map((item) => (
-                  <button
-                    key={item}
-                    type="button"
-                    className={styles.chip}
-                    onClick={() => sendMessage(item)}
-                  >
-                    {item}
-                  </button>
-                ))}
+            {/* TRẠNG THÁI ĐANG TRUY VẤN API NHANH */}
+            {loading && (
+              <div className={`${styles.row} ${styles.rowBot}`}>
+                <div className={styles.botAvatarBadge}>
+                  <RobotMascot size={30} active />
+                </div>
+                <div className={`${styles.bubble} ${styles.bubbleBot} ${styles.typingBubble}`}>
+                  <div className={styles.typingDots} aria-label="Đang tra cứu dữ liệu kho xe">
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+                  <span className={styles.typingLabel}>Đang tra cứu kho xe TrustCar...</span>
+                </div>
               </div>
             )}
 
-            {typing && (
-              <div className={styles.row}>
-                <div className={styles.botAvatar}>
-                  <RobotMascot size={26} />
+            {/* BONG BÓNG CÂU HỎI GỢI Ý / ĐIỀU HƯỚNG HỘI THOẠI */}
+            {!loading && (
+              <div className={styles.questionDeck}>
+                <div className={styles.questionDeckHeader}>
+                  <QuestionCircleOutlined />
+                  <span>Chọn nhanh bong bóng câu hỏi ({currentCategoryObj.label}):</span>
                 </div>
-                <div className={`${styles.bubble} ${styles.bubbleBot} ${styles.typing}`} aria-label="Trợ lý đang soạn tin">
-                  <span></span>
-                  <span></span>
-                  <span></span>
+                <div className={styles.questionBubblesGrid}>
+                  {(activeCategory === 'popular' ? dynamicFollowUps : currentCategoryObj.questions).map(
+                    (question) => (
+                      <button
+                        key={question}
+                        type="button"
+                        className={styles.questionBubble}
+                        onClick={() => handleSendQuestion(question)}
+                      >
+                        <span className={styles.questionBubbleText}>{question}</span>
+                        <SendOutlined className={styles.questionBubbleIcon} />
+                      </button>
+                    )
+                  )}
                 </div>
               </div>
             )}
           </div>
 
+          {/* FORM NHẬP TIN NHẮN & THANH TRẠNG THÁI */}
           <form className={styles.form} onSubmit={handleSubmit}>
             <input
               ref={inputRef}
@@ -189,56 +530,68 @@ export default function ChatWidget() {
               type="text"
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
-              placeholder="Nhập câu hỏi của bạn..."
+              placeholder="Nhập tên xe, tầm giá (VD: SUV dưới 700 triệu) hoặc SĐT..."
               aria-label="Nội dung tin nhắn"
               maxLength={500}
             />
             <button
               type="submit"
               className={styles.send}
-              disabled={!draft.trim() || typing}
+              disabled={!draft.trim() || loading}
               aria-label="Gửi tin nhắn"
             >
               <SendOutlined />
             </button>
           </form>
-          <div className={styles.note}>Giao diện demo, chưa kết nối AI thật.</div>
+
+          <footer className={styles.panelFooter}>
+            <span>
+              <EnvironmentOutlined /> {contactInfo.showroomAddress}
+            </span>
+            <a href={contactInfo.phoneHref} className={styles.footerHotline}>
+              Hotline: {contactInfo.phoneDisplay}
+            </a>
+          </footer>
         </section>
       )}
 
+      {/* NÚT LAUNCHER AVATAR 3D NỔI */}
       {!open && (
-        <button
-          type="button"
-          className={styles.launcher}
-          onClick={openChat}
-          aria-label="Mở trò chuyện với trợ lý AI"
-        >
+        <div className={styles.launcherWrap}>
           {showHint && (
-            <span className={styles.hint}>
-              Bạn cần hỗ trợ gì?
-              <span
-                role="button"
-                tabIndex={0}
+            <div className={styles.hintBubble}>
+              <button
+                type="button"
+                className={styles.hintContentBtn}
+                onClick={openChat}
+              >
+                <span className={styles.hintDot} />
+                <span>Cần tìm xe theo tầm giá? Hỏi AI ngay!</span>
+              </button>
+              <button
+                type="button"
                 className={styles.hintClose}
                 aria-label="Ẩn lời chào"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setShowHint(false)
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault()
-                    e.stopPropagation()
-                    setShowHint(false)
-                  }
-                }}
+                onClick={() => setShowHint(false)}
               >
                 <CloseOutlined />
-              </span>
-            </span>
+              </button>
+            </div>
           )}
-          <RobotMascot size={84} className={styles.mascot} />
-        </button>
+
+          <button
+            type="button"
+            className={styles.launcher}
+            onClick={openChat}
+            aria-label="Mở Trợ lý AI TrustCar"
+          >
+            <span className={styles.launcherPulse} aria-hidden="true" />
+            <div className={styles.launcherAvatarFrame}>
+              <RobotMascot size={66} className={styles.mascot} />
+            </div>
+            <span className={styles.launcherBadge}>AI Tư Vấn</span>
+          </button>
+        </div>
       )}
     </div>
   )

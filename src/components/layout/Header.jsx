@@ -8,7 +8,7 @@ import { useAuthStore } from '../../store/useAuthStore'
 import { useSavedCarsStore } from '../../features/saved-cars/store/useSavedCarsStore'
 import { hasUnseenAlert } from '../../features/saved-cars/utils/savedCars'
 import styles from './Header.module.css'
-import { CONTACT_INFO } from '../../config/contactInfo'
+import { useContactInfo } from '../../config/contactInfo'
 import { CUSTOMER_PATHS } from '../../router/paths'
 
 const NAV_ITEMS = [
@@ -19,6 +19,7 @@ const NAV_ITEMS = [
 ]
 
 export default function Header() {
+  const CONTACT_INFO = useContactInfo()
   const mode = useThemeStore((state) => state.mode)
   const toggleMode = useThemeStore((state) => state.toggleMode)
   const [drawerOpen, setDrawerOpen] = useState(false)

@@ -35,7 +35,11 @@ export function labelOf(map, value) {
 // Trạng thái xe (CarStatus) khớp backend thật (TrustCar-BE-Develop/src/constants/appConstants.js).
 // Dùng cho khu vực quản trị (/admin) - nơi hiển thị TẤT CẢ trạng thái, không chỉ AVAILABLE.
 export const CAR_STATUS_LABEL = {
+  DRAFT: 'Bản nháp',
   INCOMING: 'Mới nhập',
+  UNDER_INSPECTION: 'Đang thẩm định',
+  APPROVED_CPO: 'Đạt CPO, chờ đăng bán',
+  REJECTED: 'Không đạt CPO',
   MAINTENANCE: 'Đang bảo dưỡng',
   AVAILABLE: 'Đang bán',
   RESERVED: 'Đã đặt cọc',
@@ -44,7 +48,11 @@ export const CAR_STATUS_LABEL = {
 }
 
 export const CAR_STATUS_COLOR = {
+  DRAFT: 'default',
   INCOMING: 'blue',
+  UNDER_INSPECTION: 'processing',
+  APPROVED_CPO: 'cyan',
+  REJECTED: 'volcano',
   MAINTENANCE: 'orange',
   AVAILABLE: 'green',
   RESERVED: 'gold',

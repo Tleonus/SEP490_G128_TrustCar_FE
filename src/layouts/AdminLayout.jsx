@@ -1,6 +1,6 @@
 ﻿import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { ConfigProvider, Dropdown, theme } from 'antd'
-import { CalendarOutlined, HomeOutlined, LogoutOutlined, SafetyCertificateOutlined } from '@ant-design/icons'
+import { AuditOutlined, CalendarOutlined, HomeOutlined, LogoutOutlined, SafetyCertificateOutlined } from '@ant-design/icons'
 import Icon from '../features/vehicle-intake/components/VehicleIntakeIcon'
 import { useAuthStore } from '../store/useAuthStore'
 import { ADMIN_PATHS } from '../router/paths'
@@ -11,6 +11,11 @@ const NAV_ITEMS = [
   { to: ADMIN_PATHS.overview, label: 'Tổng quan', icon: 'grid' },
   { to: ADMIN_PATHS.inventory, label: 'Kho xe', icon: 'car' },
   { to: ADMIN_PATHS.vehicleIntake, label: 'Nhập xe & Thẩm định', icon: 'clipboard' },
+  // KAN-55: màn lập biên bản kiểm định cho Sale (ADMIN và SALES_STAFF đều vào được)
+  { to: ADMIN_PATHS.inspectionDashboard, label: 'Tổng quan kiểm định', icon: 'chart' },
+  { to: ADMIN_PATHS.inspection, label: 'Kiểm định xe', icon: 'shield' },
+  // KAN-56: duyệt kiểm định & mở bán — chỉ ADMIN thấy (SALES_STAFF bị ẩn)
+  { to: ADMIN_PATHS.approval, label: 'Duyệt kiểm định', iconNode: <AuditOutlined />, adminOnly: true },
   { to: ADMIN_PATHS.sales, label: 'Quản lý bán hàng', icon: 'sales' },
   { to: ADMIN_PATHS.testDrives, label: 'Lịch lái thử', iconNode: <CalendarOutlined /> },
   { to: ADMIN_PATHS.baseSettings, label: 'Cấu hình showroom', icon: 'settings' },
@@ -51,7 +56,7 @@ export default function AdminLayout() {
           </Link>
           <div className={styles['workspace-label']}>KHÔNG GIAN QUẢN LÝ</div>
           <nav className={styles['main-nav']} aria-label="Điều hướng quản lý">
-            {NAV_ITEMS.map((item) => (
+            {NAV_ITEMS.filter((item) => !item.adminOnly || user?.roleName === 'ADMIN').map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}

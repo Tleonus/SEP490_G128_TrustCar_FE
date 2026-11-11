@@ -1,0 +1,400 @@
+/* KAN-22 – Car Deposit & Online Hold. Dùng token màu chung của TrustCar (src/index.css). */
+
+/* ---------- Panel trên trang chi tiết xe ---------- */
+.panel {
+  margin-top: 20px;
+  padding: 18px;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.panelHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.panelTitle {
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--color-text);
+}
+
+.panelText {
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.panelAlert,
+.modalAlert {
+  margin-bottom: 14px;
+}
+
+.muted {
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}
+
+/* ---------- Nút đặt cọc (nổi bật, màu vàng thương hiệu) ---------- */
+.depositBtn,
+.depositBtn:not(:disabled) {
+  border-color: var(--color-accent) !important;
+  background: linear-gradient(135deg, var(--color-accent) 0%, #e0b93a 100%) !important;
+  color: #1a1405 !important;
+  font-weight: 700;
+  box-shadow: 0 6px 18px rgb(201 162 39 / 35%);
+}
+
+.depositBtn:not(:disabled):hover {
+  background: var(--color-accent-hover) !important;
+  border-color: var(--color-accent-hover) !important;
+}
+
+.depositBtnDisabled {
+  font-weight: 600;
+}
+
+/* ---------- Khối "Bạn đang giữ xe" ---------- */
+.mine {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mineHead {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.successIcon {
+  font-size: 22px;
+  color: var(--color-success);
+  margin-top: 2px;
+}
+
+.badgeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.detailGrid {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 6px 16px;
+  margin: 0 0 16px;
+  font-size: 14px;
+}
+
+.detailGrid dt {
+  color: var(--color-text-secondary);
+}
+
+.detailGrid dd {
+  margin: 0;
+  color: var(--color-text);
+  word-break: break-word;
+}
+
+.mineActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.mineActions > * {
+  flex: 1 1 160px;
+}
+
+.soldResult {
+  padding: 8px 0 0;
+}
+
+/* ---------- Đồng hồ đếm ngược ---------- */
+.countdown {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--color-primary) 0%, #153664 100%);
+  color: #fff;
+}
+
+.countdownLabel {
+  font-size: 13px;
+  color: rgb(255 255 255 / 80%);
+}
+
+.countdownDigits {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.digitBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 58px;
+  padding: 6px 8px;
+  border-radius: 10px;
+  background: rgb(255 255 255 / 10%);
+}
+
+.digitBox strong {
+  font-size: 26px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+  color: #fff;
+}
+
+.digitBox small {
+  font-size: 11px;
+  color: rgb(255 255 255 / 70%);
+}
+
+.digitSep {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.countdownDone {
+  font-weight: 600;
+}
+
+.urgent .digitBox strong,
+.countdownCompact.urgent {
+  color: #ffb4a8;
+}
+
+.countdownCompact {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+/* ---------- Modal ---------- */
+.modalCar {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 12px;
+  margin-bottom: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface-alt);
+}
+
+.modalCarImg {
+  width: 132px;
+  height: 88px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+  background: var(--color-border);
+}
+
+.modalCarInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.modalCarTitle {
+  font-size: 16px;
+  color: var(--color-text);
+}
+
+.modalCarPrice {
+  font-weight: 700;
+  color: var(--color-danger);
+}
+
+.modalField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.modalLabel {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.modalPolicy {
+  margin-bottom: 14px;
+}
+
+.policyList {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* ---------- Thanh toán ---------- */
+.payBox {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border: 1px dashed var(--color-accent);
+  border-radius: 12px;
+  background: rgb(201 162 39 / 6%);
+}
+
+.payTitle {
+  color: var(--color-text);
+}
+
+.payList {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 6px 14px;
+  margin: 0;
+  font-size: 14px;
+}
+
+.payList dt {
+  color: var(--color-text-secondary);
+}
+
+.payList dd {
+  margin: 0;
+  color: var(--color-text);
+  word-break: break-word;
+}
+
+/* ---------- Trang đặt cọc / lịch sử ---------- */
+.page {
+  padding: 24px 0 64px;
+}
+
+.pageHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 12px 0 20px;
+}
+
+.pageTitle {
+  font-size: 24px;
+}
+
+.depositLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.carCard {
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+.carCardImg {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  display: block;
+  background: var(--color-surface-alt);
+}
+
+.carCardBody {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.carCardTitle {
+  font-size: 20px;
+}
+
+.carCardPrice {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-danger);
+}
+
+.historyList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.historyItem {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+}
+
+.historyMain {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.historyActions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+@media (max-width: 860px) {
+  .depositLayout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .modalCar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .modalCarImg {
+    width: 100%;
+    height: 160px;
+  }
+
+  .digitBox {
+    min-width: 48px;
+  }
+
+  .digitBox strong {
+    font-size: 22px;
+  }
+
+  .historyItem {
+    grid-template-columns: 1fr;
+  }
+
+  .historyActions {
+    align-items: stretch;
+  }
+}

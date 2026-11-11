@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { App, Button, Input, Select, Pagination, Tag, Tooltip } from 'antd'
-import { SearchOutlined, ShoppingCartOutlined } from '@ant-design/icons'
+import { SearchOutlined, ShareAltOutlined, ShoppingCartOutlined } from '@ant-design/icons'
 import { useAdminCars } from '../../hooks/useAdminCars'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useBrands } from '../../hooks/useCatalog'
@@ -193,6 +193,16 @@ export default function AdminCarsPage() {
                       <Tag color={AGING_COLOR[agingCategory]}>{labelOf(AGING_LABEL, agingCategory)}</Tag>
                     </td>
                     <td className={styles.actionCol}>
+                      {/* KAN-66: mở màn chọn ảnh chia sẻ mạng xã hội của xe này */}
+                      <Link to={`${ADMIN_PATHS.inventory}/${car._id}`}>
+                        <Button
+                          size="small"
+                          icon={<ShareAltOutlined />}
+                          aria-label={`Ảnh chia sẻ của xe ${car.vehicleCode || getCarTitle(car)}`}
+                        >
+                          Ảnh chia sẻ
+                        </Button>
+                      </Link>
                       {isSellableStatus(car.status) && (
                         <Button
                           size="small"

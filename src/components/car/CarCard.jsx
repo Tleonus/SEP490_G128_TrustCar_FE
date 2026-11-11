@@ -5,6 +5,7 @@ import { getCarTitle, getCoverImage } from '../../utils/car'
 import { BODY_TYPE_LABEL, FUEL_TYPE_LABEL, TRANSMISSION_LABEL, labelOf } from '../../utils/constants'
 import styles from './CarCard.module.css'
 import CompareCardFrame from '../../features/vehicle-compare/components/CompareCardFrame'
+import SaveCarButton from '../../features/saved-cars/components/SaveCarButton'
 
 export default function CarCard({ car }) {
   const carId = car.vehicleCode || car.stock_code || car._id || car.id
@@ -28,7 +29,10 @@ export default function CarCard({ car }) {
         </div>
         <div className={styles.body}>
           <h3 className={styles.title}>{title}</h3>
-          <div className={styles.price}>{formatPrice(car.price ?? car.listed_price ?? car.listedPrice)}</div>
+          <div className={styles.priceRow}>
+            <div className={styles.price}>{formatPrice(car.price ?? car.listed_price ?? car.listedPrice)}</div>
+            <SaveCarButton car={car} variant="card" />
+          </div>
           <div className={styles.meta}>
             <span><CalendarOutlined /> {car.year ?? car.manufacturing_year}</span>
             <span><DashboardOutlined /> {formatMileage(car.mileage ?? car.mileage_km)}</span>

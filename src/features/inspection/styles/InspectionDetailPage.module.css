@@ -1,0 +1,685 @@
+/* KAN-55 – Màn lập biên bản kiểm định. Dùng token của src/index.css, bố cục theo cột,
+   thanh hành động dính đáy để Sale luôn thấy trạng thái lưu/gửi khi cuộn trang dài. */
+
+.page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 32px 32px 120px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.inlineAlert {
+  border-radius: 10px;
+}
+
+.inlineTag {
+  margin: 0 4px;
+}
+
+/* ── Thông tin xe ─────────────────────────────────────────────────────── */
+
+.summary {
+  display: flex;
+  gap: 20px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: var(--shadow-card);
+  flex-wrap: wrap;
+}
+
+.summaryMedia {
+  flex: 0 0 220px;
+}
+
+.summaryImage {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-alt);
+}
+
+.summaryImagePlaceholder {
+  width: 100%;
+  height: 150px;
+  border-radius: 10px;
+  border: 1px dashed var(--color-border);
+  background: var(--color-surface-alt);
+}
+
+.summaryBody {
+  flex: 1 1 320px;
+  min-width: 0;
+}
+
+.summaryHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.eyebrow {
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.3px;
+}
+
+.summaryTitle {
+  font-size: 22px;
+  margin: 6px 0 4px;
+}
+
+.summaryCode {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.statusTag {
+  font-size: 13px;
+  padding: 2px 10px;
+}
+
+.summaryFacts {
+  margin-top: 12px;
+}
+
+/* ── Banner biên bản bị trả lại ───────────────────────────────────────── */
+
+.rejectedBanner {
+  border-radius: 10px;
+}
+
+.rejectedBody {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rejectedReason {
+  margin: 0;
+  font-weight: 600;
+}
+
+.rejectedCriteria {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.rejectedLabel {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.rejectedNotes {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+}
+
+.rejectedSource {
+  margin: 0;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.rejectedAction {
+  align-self: flex-start;
+  border: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.rejectedAction:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* ── Thẻ nội dung ─────────────────────────────────────────────────────── */
+
+.card,
+.startCard {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cardHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.cardTitle {
+  font-size: 17px;
+  margin: 0;
+}
+
+.cardDesc {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  max-width: 78ch;
+}
+
+.badgeOk,
+.badgeWarn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.badgeOk {
+  color: var(--color-success);
+  background: color-mix(in srgb, var(--color-success) 12%, transparent);
+}
+
+.badgeWarn {
+  color: var(--color-danger);
+  background: color-mix(in srgb, var(--color-danger) 12%, transparent);
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.metaItem strong {
+  color: var(--color-text);
+}
+
+.noteScope {
+  margin: -8px 0 0;
+  font-size: 12.5px;
+  color: var(--color-text-secondary);
+}
+
+/* ── Form ─────────────────────────────────────────────────────────────── */
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.fieldLabel {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.fieldControl {
+  width: 100%;
+}
+
+.fieldHint {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.fieldError,
+.fieldErrorInline {
+  font-size: 12.5px;
+  color: var(--color-danger);
+  margin: 0;
+}
+
+.requiredInline {
+  color: var(--color-danger);
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+.muted {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+/* ── Ảnh tổng thể ─────────────────────────────────────────────────────── */
+
+.overviewGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+}
+
+.overviewSlot {
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 12px;
+  background: var(--color-surface-alt);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.slotTitle {
+  font-size: 13px;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+/* ── Panel tiêu chí ───────────────────────────────────────────────────── */
+
+.collapseLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  flex-wrap: wrap;
+}
+
+.collapseTag {
+  margin: 0;
+}
+
+.groupPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.groupHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.groupTitle {
+  font-size: 15px;
+  margin: 0;
+}
+
+.groupMeta {
+  margin: 4px 0 0;
+  font-size: 12.5px;
+  color: var(--color-text-secondary);
+}
+
+.groupBadges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.groupQuickAction {
+  align-self: flex-start;
+}
+
+.itemList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.item {
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--color-surface);
+}
+
+.itemRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.itemLabel {
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.itemResultTag {
+  margin: 0;
+}
+
+/* ── Upload ảnh ───────────────────────────────────────────────────────── */
+
+.uploader {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.photoGrid,
+.photoGridCompact {
+  display: grid;
+  gap: 10px;
+}
+
+.photoGrid {
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+}
+
+.photoGridCompact {
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+}
+
+.photoCard {
+  position: relative;
+  margin: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--color-surface-alt);
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.photoImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photoBroken {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.photoRemove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  border: none;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  background: rgba(15, 23, 42, 0.72);
+  color: #fff;
+  cursor: pointer;
+}
+
+.photoRemove:hover {
+  background: var(--color-danger);
+}
+
+.photoPending {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+  width: 100%;
+}
+
+.photoPendingName {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.photoAdd {
+  border: 1px dashed var(--color-border);
+  border-radius: 10px;
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 12.5px;
+  min-height: 92px;
+  padding: 10px;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.photoAdd:hover {
+  border-color: var(--color-accent);
+  color: var(--color-text);
+}
+
+.fileInput {
+  display: none;
+}
+
+.uploaderMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+/* ── Lỗi nhỏ ──────────────────────────────────────────────────────────── */
+
+.defects {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.defectCard {
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--color-surface-alt);
+}
+
+.defectHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.defectIndex {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.4px;
+}
+
+.defectFields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.defectEmpty {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.addDefect {
+  align-self: flex-start;
+}
+
+/* ── Kiểm tra trước khi gửi ───────────────────────────────────────────── */
+
+.criteriaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.criteriaChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-alt);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12.5px;
+  cursor: pointer;
+  color: var(--color-text);
+}
+
+.criteriaChip:hover {
+  border-color: var(--color-accent);
+}
+
+.criteriaChipLabel {
+  max-width: 34ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chipTag {
+  margin: 0;
+}
+
+.dotOk,
+.dotBad {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dotOk { background: var(--color-success); }
+.dotBad { background: var(--color-danger); }
+
+.violationList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.violationItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border-left: 3px solid var(--color-danger);
+  background: var(--color-surface-alt);
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+
+.violationMessage {
+  font-size: 13px;
+}
+
+/* ── Thanh hành động ──────────────────────────────────────────────────── */
+
+.actionBar {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 12px 16px;
+  box-shadow: var(--shadow-card-hover);
+}
+
+.actionNote {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.actionButtons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .page { padding: 16px 16px 130px; }
+  .summaryMedia { flex: 1 1 100%; }
+  .itemRow { align-items: flex-start; }
+  .actionBar { flex-direction: column; align-items: stretch; }
+  .actionButtons { justify-content: stretch; }
+  .actionButtons > * { flex: 1 1 auto; }
+}
