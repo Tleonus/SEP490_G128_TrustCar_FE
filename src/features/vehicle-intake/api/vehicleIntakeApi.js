@@ -105,7 +105,7 @@ export async function saveVehicleIntake(payload, { apiClient = api, existingCarI
   const inspectDto = mapIntakeToQuickInspectDto(payload);
   const identityKey = `${carDto.vin}:${carDto.licensePlate}`;
   let carId = existingCarId || savedCarIdsByIdentity.get(identityKey) || null;
-  let carRecord = null;
+  let carRecord;
 
   try {
     if (!carId) {
