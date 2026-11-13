@@ -41,6 +41,8 @@ const InspectionDashboardPage = lazy(() => import('../features/inspection-dashbo
 const ApprovalPage = lazy(() => import('../features/cpo-approval/pages/ApprovalPage.jsx'))
 // KAN-66: chọn ảnh chia sẻ mạng xã hội trong kho xe
 const SocialImagePage = lazy(() => import('../features/social-share-image/pages/SocialImagePage.jsx'))
+const MyVisitsPage = lazy(() => import('../features/test-drive-booking/pages/MyVisitsPage.jsx'))
+const StaffVisitsPage = lazy(() => import('../features/test-drive-booking/pages/StaffVisitsPage.jsx'))
 
 export default function AppRouter() {
   return (
@@ -80,6 +82,16 @@ export default function AppRouter() {
         <Route
           path={CUSTOMER_PATHS.testDrives}
           element={<PrivateRoute><Suspense fallback={<LoadingState />}><MyTestDrivesPage /></Suspense></PrivateRoute>}
+        />
+        <Route
+          path="/lich-hen"
+          element={
+            <PrivateRoute>
+              <Suspense fallback={<LoadingState />}>
+                <MyVisitsPage />
+              </Suspense>
+            </PrivateRoute>
+          }
         />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
@@ -133,6 +145,11 @@ export default function AppRouter() {
         <Route
           path="chung-nhan/:carId"
           element={<Suspense fallback={<LoadingState />}><CpoCertificateDetailPage /></Suspense>}
+        />
+        {/* Lịch lái thử: AdminRoute chỉ cho ADMIN, SALES_STAFF; BE kiểm quyền appointment:* */}
+        <Route
+          path="lich-lai-thu"
+          element={<Suspense fallback={<LoadingState />}><StaffVisitsPage /></Suspense>}
         />
         {/* Route admin không tồn tại: hiện 404 trong AdminLayout thay vì vùng nội dung trống */}
         <Route

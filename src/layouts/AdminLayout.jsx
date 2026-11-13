@@ -20,6 +20,7 @@ const NAV_ITEMS = [
   { to: ADMIN_PATHS.testDrives, label: 'Lịch lái thử', iconNode: <CalendarOutlined /> },
   { to: ADMIN_PATHS.baseSettings, label: 'Cấu hình showroom', icon: 'settings' },
   { to: '/admin/chung-nhan', label: 'Chứng nhận CPO', iconNode: <SafetyCertificateOutlined /> },
+  { to: '/admin/lich-lai-thu', label: 'Lượt lái thử (KAN-16)', iconNode: <CalendarOutlined /> },
 ]
 
 export default function AdminLayout() {

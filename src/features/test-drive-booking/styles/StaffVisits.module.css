@@ -1,0 +1,181 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.page > * {
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: 24px;
+  color: var(--color-text);
+}
+
+.desc {
+  margin: 4px 0 0;
+  color: var(--color-text-secondary);
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px 16px;
+  padding: 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+}
+
+.quick {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.field {
+  display: flex;
+  flex: 1 1 130px;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  max-width: 220px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.date {
+  width: 100%;
+  min-width: 0;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+}
+
+.warn {
+  font-size: 12px;
+  color: var(--color-danger);
+}
+
+.tableWrap {
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+}
+
+.stacked {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.strong {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.sub {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.carLine {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.struck {
+  text-decoration: line-through;
+  color: var(--color-text-secondary);
+}
+
+.alertRow > td {
+  background: rgba(192, 57, 43, 0.07) !important;
+}
+
+/* Cần chốt kết quả: cam nhạt. Cần gọi nhắc: vàng nhạt. Chữ giữ màu thường nên vẫn đủ tương phản;
+   ý nghĩa luôn có nhãn chữ trong ô mã, không chỉ dựa vào màu. */
+.outcomeRow > td {
+  background: rgba(230, 126, 34, 0.12) !important;
+}
+
+.newRow > td {
+  background: rgba(41, 128, 185, 0.10) !important;
+}
+
+.reminderRow > td {
+  background: rgba(241, 196, 15, 0.16) !important;
+}
+
+.cancelFields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.reasons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.reasons :global(.ant-radio-wrapper) {
+  margin: 0;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.pageHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.pageHead > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.pageHead :global(.ant-btn) {
+  height: auto;
+  min-height: 32px;
+  white-space: normal;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+}
+
+.viewNote {
+  margin: -4px 0 0;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
