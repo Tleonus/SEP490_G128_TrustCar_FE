@@ -1,0 +1,74 @@
+/* KAN-67 – Nút chia sẻ trên trang chi tiết xe. Token màu lấy từ src/index.css;
+   màu thương hiệu Facebook/Zalo chỉ dùng cho biểu tượng. */
+
+.share {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 12px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+}
+
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.btn {
+  border-radius: 999px;
+}
+
+.facebookIcon {
+  color: #1877f2;
+  font-size: 16px;
+}
+
+.zaloMark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background: #0a79ff;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.btn:disabled .facebookIcon,
+.btn:disabled .zaloMark {
+  filter: grayscale(1);
+  opacity: 0.5;
+}
+
+.hint {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+/* Điện thoại: các nút giãn cho kín hàng; màn hẹp thì xuống dòng thay vì tràn chữ. */
+@media (max-width: 560px) {
+  .buttons {
+    width: 100%;
+  }
+
+  .btn {
+    flex: 1 1 auto;
+  }
+}
