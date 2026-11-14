@@ -7,9 +7,44 @@ import { getCarTitle, getCoverImage } from '../utils/car'
 import { BODY_TYPE_LABEL, FUEL_TYPE_LABEL, TRANSMISSION_LABEL, labelOf } from '../utils/constants'
 
 const CHAT_ENDPOINT = import.meta.env.VITE_CHAT_API_URL || '/public/chat'
+export const CHAT_SESSION_STORAGE_KEY = 'trustcar_chat_session_id'
+export const CHAT_MESSAGES_STORAGE_KEY = 'trustcar_chat_messages_v1'
 
 // Lưu trạng thái nếu BE chưa mount route /public/chat để không tốn vòng chờ 404 ở các câu tiếp theo
 let backendChatRouteAvailable = null
+
+export function resetBackendChatRouteAvailability() {
+  backendChatRouteAvailable = null
+}
+
+function generateSessionId() {
+  return `tc-session-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+}
+
+export function getOrCreateChatSessionId() {
+  try {
+    const existing = globalThis.sessionStorage?.getItem(CHAT_SESSION_STORAGE_KEY)
+    if (existing && existing.trim().length >= 8) {
+      return existing.trim()
+    }
+    const created = generateSessionId()
+    globalThis.sessionStorage?.setItem(CHAT_SESSION_STORAGE_KEY, created)
+    return created
+  } catch {
+    return generateSessionId()
+  }
+}
+
+export function resetChatSessionId() {
+  const nextId = generateSessionId()
+  try {
+    globalThis.sessionStorage?.setItem(CHAT_SESSION_STORAGE_KEY, nextId)
+    globalThis.sessionStorage?.removeItem(CHAT_MESSAGES_STORAGE_KEY)
+  } catch {
+    // Ignore storage quota / private mode errors
+  }
+  return nextId
+}
 
 function isRouteNotFound(error) {
   const status = error?.response?.status
@@ -151,7 +186,14 @@ function buildFilterUrl(params = {}) {
  * 2. Kết hợp truy vấn dữ liệu thật từ GET /public/cars, /public/cars/featured, /public/cars/filters
  *    và POST /leads để trả lời chính xác theo kho xe thực tế trên DB.
  */
-export async function sendChatMessage({ message, history = [], sessionId, signal }) {
+export async function sendChatMessage({
+  message,
+  history = [],
+  sessionId,
+  customerName,
+  customerPhone,
+  signal,
+}) {
   const text = String(message || '').trim()
   const contactInfo = buildContactInfo(getBaseSettings())
 
@@ -163,12 +205,14 @@ export async function sendChatMessage({ message, history = [], sessionId, signal
         {
           message: text,
           sessionId,
+          customerName: customerName || undefined,
+          customerPhone: customerPhone || undefined,
           history: history.slice(-8).map((m) => ({
             role: m.from === 'user' ? 'user' : 'assistant',
             content: m.text,
           })),
         },
-        { signal, timeout: 8000 }
+        { signal, timeout: 15000 }
       )
       backendChatRouteAvailable = true
       const payload = data?.data ?? data
@@ -186,7 +230,9 @@ export async function sendChatMessage({ message, history = [], sessionId, signal
             'Xe dưới 600 triệu',
             'Thủ tục mua xe trả góp',
           ],
-          source: 'backend-ai',
+          conversationCode: payload.conversationCode || sessionId,
+          leadCaptured: payload.leadCaptured || null,
+          source: payload.source || 'backend-ai',
         }
       }
     } catch (err) {
