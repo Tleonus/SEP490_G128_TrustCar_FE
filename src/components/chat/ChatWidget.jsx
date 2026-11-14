@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   CloseOutlined,
@@ -16,7 +16,12 @@ import {
   QuestionCircleOutlined,
 } from '@ant-design/icons'
 import RobotMascot, { UserChatAvatar } from './RobotMascot'
-import { sendChatMessage } from '../../services/chatService'
+import {
+  sendChatMessage,
+  getOrCreateChatSessionId,
+  resetChatSessionId,
+  CHAT_MESSAGES_STORAGE_KEY,
+} from '../../services/chatService'
 import { useContactInfo } from '../../config/contactInfo'
 import { useAuthStore } from '../../store/useAuthStore'
 import styles from './ChatWidget.module.css'
@@ -151,16 +156,37 @@ export default function ChatWidget() {
   const [expanded, setExpanded] = useState(false)
   const [showHint, setShowHint] = useState(false)
   const [activeCategory, setActiveCategory] = useState('popular')
-  const [messages, setMessages] = useState(() => [createWelcomeMessage(contactInfo.showroomAddress)])
+  const [sessionId, setSessionId] = useState(() => getOrCreateChatSessionId())
+  const [messages, setMessages] = useState(() => {
+    try {
+      const raw = globalThis.sessionStorage?.getItem(CHAT_MESSAGES_STORAGE_KEY)
+      if (raw) {
+        const parsed = JSON.parse(raw)
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed.map((m) => ({ ...m, streamed: true }))
+        }
+      }
+    } catch {
+      // Ignore invalid sessionStorage data
+    }
+    return [createWelcomeMessage(contactInfo.showroomAddress)]
+  })
   const [draft, setDraft] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const rawUid = useId().replace(/:/g, '')
-  const sessionId = `tc-session-${rawUid}`
-  const seqRef = useRef(1)
+  const seqRef = useRef(messages.length)
   const listRef = useRef(null)
   const inputRef = useRef(null)
   const abortRef = useRef(null)
+
+  useEffect(() => {
+    try {
+      const toStore = messages.slice(-20).map((m) => ({ ...m, streamed: true }))
+      globalThis.sessionStorage?.setItem(CHAT_MESSAGES_STORAGE_KEY, JSON.stringify(toStore))
+    } catch {
+      // Ignore storage quota errors
+    }
+  }, [messages])
 
   useEffect(() => {
     const timer = window.setTimeout(() => setShowHint(true), 1400)
@@ -196,6 +222,7 @@ export default function ChatWidget() {
   function handleResetChat() {
     abortRef.current?.abort()
     setLoading(false)
+    setSessionId(resetChatSessionId())
     setMessages([createWelcomeMessage(contactInfo.showroomAddress)])
     setActiveCategory('popular')
   }
@@ -232,6 +259,8 @@ export default function ChatWidget() {
         message: content,
         history: updatedHistory,
         sessionId,
+        customerName: user?.fullName,
+        customerPhone: user?.phone,
         signal: controller.signal,
       })
 
