@@ -14,6 +14,7 @@ export default function PriceAlertModal({ item, open, onClose, onSave }) {
 
   useEffect(() => {
     if (!open || !item) return
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setEnabled(item.alert.enabled || item.alert.targetPrice == null)
     setTarget(item.alert.targetPrice ?? (item.currentPrice ? Math.round((item.currentPrice * 0.95) / 1e6) * 1e6 : null))
   }, [open, item])

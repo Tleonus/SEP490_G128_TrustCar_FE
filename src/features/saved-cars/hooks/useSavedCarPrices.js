@@ -39,6 +39,7 @@ export function useSavedCarPrices() {
   }, [syncPrice, markUnavailable])
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     refresh()
   }, [refresh])
 
