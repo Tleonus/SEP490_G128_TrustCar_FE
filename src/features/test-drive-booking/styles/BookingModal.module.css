@@ -1,0 +1,64 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.success {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+.code {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.summary {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+  font-size: 14px;
+}
+
+.summary dt {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.summary dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.carList {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.notice {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+}

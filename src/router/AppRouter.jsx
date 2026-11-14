@@ -20,7 +20,7 @@ import AdminCarsPage from '../pages/Admin/AdminCarsPage'
 import { LoadingState } from '../components/common/StateBlock'
 import PrivateRoute from './PrivateRoute'
 import LegacyRedirect from './LegacyRedirect'
-import { ADMIN_PATHS, CUSTOMER_PATHS } from './paths'
+import { ADMIN_PATHS } from './paths'
 
 const AdminVehicleIntakePage = lazy(() => import('../pages/Admin/AdminVehicleIntakePage.jsx'))
 const AdminOverviewPage = lazy(() => import('../pages/Admin/AdminOverviewPage.jsx'))
@@ -30,8 +30,6 @@ const ComparePage = lazy(() => import('../features/vehicle-compare/pages/Compare
 const SavedCarsPage = lazy(() => import('../features/saved-cars/pages/SavedCarsPage.jsx'))
 const CpoCertificatesPage = lazy(() => import('../features/cpo-certificates/pages/CpoCertificatesPage.jsx'))
 const CpoCertificateDetailPage = lazy(() => import('../features/cpo-certificates/pages/CpoCertificateDetailPage.jsx'))
-const TestDriveManagementPage = lazy(() => import('../features/test-drive/pages/TestDriveManagementPage.jsx'))
-const MyTestDrivesPage = lazy(() => import('../features/test-drive/pages/MyTestDrivesPage.jsx'))
 // KAN-55: kiểm định xe cho Sale
 const InspectionQueuePage = lazy(() => import('../features/inspection/pages/InspectionQueuePage.jsx'))
 const InspectionDetailPage = lazy(() => import('../features/inspection/pages/InspectionDetailPage.jsx'))
@@ -41,6 +39,8 @@ const InspectionDashboardPage = lazy(() => import('../features/inspection-dashbo
 const ApprovalPage = lazy(() => import('../features/cpo-approval/pages/ApprovalPage.jsx'))
 // KAN-66: chọn ảnh chia sẻ mạng xã hội trong kho xe
 const SocialImagePage = lazy(() => import('../features/social-share-image/pages/SocialImagePage.jsx'))
+const MyVisitsPage = lazy(() => import('../features/test-drive-booking/pages/MyVisitsPage.jsx'))
+const StaffVisitsPage = lazy(() => import('../features/test-drive-booking/pages/StaffVisitsPage.jsx'))
 
 export default function AppRouter() {
   return (
@@ -78,8 +78,14 @@ export default function AppRouter() {
           }
         />
         <Route
-          path={CUSTOMER_PATHS.testDrives}
-          element={<PrivateRoute><Suspense fallback={<LoadingState />}><MyTestDrivesPage /></Suspense></PrivateRoute>}
+          path="/lich-hen"
+          element={
+            <PrivateRoute>
+              <Suspense fallback={<LoadingState />}>
+                <MyVisitsPage />
+              </Suspense>
+            </PrivateRoute>
+          }
         />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
@@ -104,7 +110,6 @@ export default function AppRouter() {
         <Route path="sales" element={<Suspense fallback={<LoadingState />}><SalesCrmPage /></Suspense>} />
         <Route path="vehicle-intake" element={<Suspense fallback={<LoadingState />}><AdminVehicleIntakePage /></Suspense>} />
         <Route path="base-settings" element={<Suspense fallback={<LoadingState />}><AdminBaseSettingsPage /></Suspense>} />
-        <Route path="test-drives" element={<Suspense fallback={<LoadingState />}><TestDriveManagementPage /></Suspense>} />
         <Route path="inspection-dashboard" element={<Suspense fallback={<LoadingState />}><InspectionDashboardPage /></Suspense>} />
         {/* Kiểm định xe (KAN-55): ADMIN, SALES_STAFF. Backend vẫn kiểm quyền cuối cùng. */}
         <Route
@@ -133,6 +138,11 @@ export default function AppRouter() {
         <Route
           path="chung-nhan/:carId"
           element={<Suspense fallback={<LoadingState />}><CpoCertificateDetailPage /></Suspense>}
+        />
+        {/* Lịch lái thử: AdminRoute chỉ cho ADMIN, SALES_STAFF; BE kiểm quyền appointment:* */}
+        <Route
+          path="lich-lai-thu"
+          element={<Suspense fallback={<LoadingState />}><StaffVisitsPage /></Suspense>}
         />
         {/* Route admin không tồn tại: hiện 404 trong AdminLayout thay vì vùng nội dung trống */}
         <Route

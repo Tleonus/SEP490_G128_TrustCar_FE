@@ -17,9 +17,9 @@ const NAV_ITEMS = [
   // KAN-56: duyệt kiểm định & mở bán — chỉ ADMIN thấy (SALES_STAFF bị ẩn)
   { to: ADMIN_PATHS.approval, label: 'Duyệt kiểm định', iconNode: <AuditOutlined />, adminOnly: true },
   { to: ADMIN_PATHS.sales, label: 'Quản lý bán hàng', icon: 'sales' },
-  { to: ADMIN_PATHS.testDrives, label: 'Lịch lái thử', iconNode: <CalendarOutlined /> },
   { to: ADMIN_PATHS.baseSettings, label: 'Cấu hình showroom', icon: 'settings' },
   { to: '/admin/chung-nhan', label: 'Chứng nhận CPO', iconNode: <SafetyCertificateOutlined /> },
+  { to: '/admin/lich-lai-thu', label: 'Lịch lái thử', iconNode: <CalendarOutlined /> },
 ]
 
 export default function AdminLayout() {
