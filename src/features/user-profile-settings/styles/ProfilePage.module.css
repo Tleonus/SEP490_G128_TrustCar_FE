@@ -1,0 +1,112 @@
+/* Trang hồ sơ: một cột, rộng tối đa 720px, dùng được ở 390px (REQ-F17). */
+
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 16px 64px;
+}
+
+.title {
+  margin: 0 0 4px;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.subtitle {
+  margin: 0 0 24px;
+  color: #667085;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e4e7ec;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.sectionTitle {
+  margin: 24px 0 12px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.sectionTitleFirst {
+  margin-top: 0;
+}
+
+.hint {
+  display: block;
+  margin-top: 4px;
+  font-size: 13px;
+  color: #667085;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 16px;
+}
+
+.fullWidth {
+  grid-column: 1 / -1;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+/* Nút đủ lớn để bấm trên điện thoại (≥ 40px). */
+.actions :global(.ant-btn) {
+  min-height: 44px;
+}
+
+.banner {
+  margin-bottom: 16px;
+}
+
+.settingRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f2f4f7;
+}
+
+.settingText {
+  min-width: 0;
+}
+
+.settingTitle {
+  margin: 0;
+  font-weight: 600;
+}
+
+.notice {
+  padding: 24px 0;
+}
+
+@media (max-width: 600px) {
+  .page {
+    padding: 16px 12px 48px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .settingRow {
+    flex-wrap: wrap;
+  }
+
+  .actions :global(.ant-btn) {
+    flex: 1 1 100%;
+  }
+}

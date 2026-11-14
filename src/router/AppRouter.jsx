@@ -41,6 +41,8 @@ const ApprovalPage = lazy(() => import('../features/cpo-approval/pages/ApprovalP
 const SocialImagePage = lazy(() => import('../features/social-share-image/pages/SocialImagePage.jsx'))
 const MyVisitsPage = lazy(() => import('../features/test-drive-booking/pages/MyVisitsPage.jsx'))
 const StaffVisitsPage = lazy(() => import('../features/test-drive-booking/pages/StaffVisitsPage.jsx'))
+// KAN-25: hồ sơ cá nhân và cài đặt
+const ProfilePage = lazy(() => import('../features/user-profile-settings/pages/ProfilePage.jsx'))
 
 export default function AppRouter() {
   return (
@@ -86,6 +88,10 @@ export default function AppRouter() {
               </Suspense>
             </PrivateRoute>
           }
+        />
+        <Route
+          path="/profile"
+          element={<PrivateRoute><Suspense fallback={<LoadingState />}><ProfilePage /></Suspense></PrivateRoute>}
         />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
