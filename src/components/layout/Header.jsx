@@ -9,7 +9,6 @@ import { useSavedCarsStore } from '../../features/saved-cars/store/useSavedCarsS
 import { hasUnseenAlert } from '../../features/saved-cars/utils/savedCars'
 import styles from './Header.module.css'
 import { useContactInfo } from '../../config/contactInfo'
-import { CUSTOMER_PATHS } from '../../router/paths'
 
 const NAV_ITEMS = [
   { to: '/', label: 'Trang chủ' },
@@ -50,7 +49,6 @@ export default function Header() {
     },
     ...(user?.roleName === 'CUSTOMER'
       ? [
-          { key: 'test-drives', label: <Link to={CUSTOMER_PATHS.testDrives}>Lịch lái thử của tôi</Link> },
           // KAN-16: lượt lái thử (đặt tối đa 3 xe).
           { key: 'my-visits', label: <Link to="/lich-hen">Lịch hẹn của tôi</Link> },
         ]

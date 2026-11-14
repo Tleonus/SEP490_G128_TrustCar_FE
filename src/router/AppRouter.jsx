@@ -20,7 +20,7 @@ import AdminCarsPage from '../pages/Admin/AdminCarsPage'
 import { LoadingState } from '../components/common/StateBlock'
 import PrivateRoute from './PrivateRoute'
 import LegacyRedirect from './LegacyRedirect'
-import { ADMIN_PATHS, CUSTOMER_PATHS } from './paths'
+import { ADMIN_PATHS } from './paths'
 
 const AdminVehicleIntakePage = lazy(() => import('../pages/Admin/AdminVehicleIntakePage.jsx'))
 const AdminOverviewPage = lazy(() => import('../pages/Admin/AdminOverviewPage.jsx'))
@@ -30,8 +30,6 @@ const ComparePage = lazy(() => import('../features/vehicle-compare/pages/Compare
 const SavedCarsPage = lazy(() => import('../features/saved-cars/pages/SavedCarsPage.jsx'))
 const CpoCertificatesPage = lazy(() => import('../features/cpo-certificates/pages/CpoCertificatesPage.jsx'))
 const CpoCertificateDetailPage = lazy(() => import('../features/cpo-certificates/pages/CpoCertificateDetailPage.jsx'))
-const TestDriveManagementPage = lazy(() => import('../features/test-drive/pages/TestDriveManagementPage.jsx'))
-const MyTestDrivesPage = lazy(() => import('../features/test-drive/pages/MyTestDrivesPage.jsx'))
 // KAN-55: kiểm định xe cho Sale
 const InspectionQueuePage = lazy(() => import('../features/inspection/pages/InspectionQueuePage.jsx'))
 const InspectionDetailPage = lazy(() => import('../features/inspection/pages/InspectionDetailPage.jsx'))
@@ -80,10 +78,6 @@ export default function AppRouter() {
           }
         />
         <Route
-          path={CUSTOMER_PATHS.testDrives}
-          element={<PrivateRoute><Suspense fallback={<LoadingState />}><MyTestDrivesPage /></Suspense></PrivateRoute>}
-        />
-        <Route
           path="/lich-hen"
           element={
             <PrivateRoute>
@@ -116,7 +110,6 @@ export default function AppRouter() {
         <Route path="sales" element={<Suspense fallback={<LoadingState />}><SalesCrmPage /></Suspense>} />
         <Route path="vehicle-intake" element={<Suspense fallback={<LoadingState />}><AdminVehicleIntakePage /></Suspense>} />
         <Route path="base-settings" element={<Suspense fallback={<LoadingState />}><AdminBaseSettingsPage /></Suspense>} />
-        <Route path="test-drives" element={<Suspense fallback={<LoadingState />}><TestDriveManagementPage /></Suspense>} />
         <Route path="inspection-dashboard" element={<Suspense fallback={<LoadingState />}><InspectionDashboardPage /></Suspense>} />
         {/* Kiểm định xe (KAN-55): ADMIN, SALES_STAFF. Backend vẫn kiểm quyền cuối cùng. */}
         <Route
