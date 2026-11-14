@@ -21,6 +21,7 @@ import { LoadingState, ErrorState } from '../../components/common/StateBlock'
 import CompareToggle from '../../features/vehicle-compare/components/CompareToggle'
 import SaveCarButton from '../../features/saved-cars/components/SaveCarButton'
 import PublicCertificateSection from '../../features/cpo-certificates/components/PublicCertificateSection'
+import ShareButtons from '../../features/car-share/components/ShareButtons'
 import styles from './CarDetailPage.module.css'
 import { CONTACT_INFO } from '../../config/contactInfo'
 
@@ -179,6 +180,9 @@ export default function CarDetailPage() {
               <SaveCarButton car={car} variant="detail" />
               <CompareToggle car={car} variant="detail" />
             </div>
+
+            {/* KAN-67: chia sẻ Facebook / Zalo / Copy link, dùng link Backend /share/car/:code */}
+            <ShareButtons car={car} />
           </div>
         </div>
 
