@@ -1,0 +1,149 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 16px 0;
+  padding: 16px;
+  border: 1px solid #bfdbfe;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #eff6ff 0%, #ffffff 70%);
+}
+
+.cardHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #0f1e3a;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.passCount {
+  color: #15803d;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: #0f1e3a;
+}
+
+.facts {
+  display: grid;
+  /* Cột mã CPO rộng hơn để mã 17 ký tự không bị ngắt dòng. */
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+  margin: 0;
+}
+
+.facts dt {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.facts dd {
+  margin: 2px 0 0;
+  font-weight: 600;
+  word-break: break-all;
+}
+
+.code {
+  font-family: 'Consolas', 'Courier New', monospace;
+  white-space: nowrap;
+  word-break: normal !important;
+}
+
+.checks {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+}
+
+.checks li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.pass {
+  margin-top: 3px;
+  color: #16a34a;
+}
+
+.fail {
+  margin-top: 3px;
+  color: #cbd5e1;
+}
+
+.touch {
+  min-height: 44px;
+}
+
+.failed {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.modalHeading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding-right: 32px;
+}
+
+.modalCode {
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.modalIssued {
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+@media (max-width: 575px) {
+  .facts {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .facts > :first-child {
+    grid-column: 1 / -1;
+  }
+
+  .modalFooter > * {
+    flex: 1;
+  }
+}

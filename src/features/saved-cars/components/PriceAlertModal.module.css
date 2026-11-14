@@ -1,0 +1,141 @@
+.title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.carRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+  padding: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface-alt);
+}
+
+.carRow strong,
+.carRow span {
+  display: block;
+}
+
+.carRow strong {
+  color: var(--color-text);
+  font-size: 15px;
+}
+
+.carRow span {
+  margin-top: 2px;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}
+
+.thumb {
+  flex-shrink: 0;
+  width: 72px;
+  height: 52px;
+  border-radius: 8px;
+  background: var(--color-border);
+  object-fit: cover;
+}
+
+.switchRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 18px;
+  cursor: pointer;
+}
+
+.switchRow strong,
+.switchRow span {
+  display: block;
+}
+
+.switchRow strong {
+  color: var(--color-text);
+  font-size: 14px;
+}
+
+.switchRow span {
+  margin-top: 2px;
+  color: var(--color-text-secondary);
+  font-size: 12.5px;
+}
+
+.targetBlock {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--color-border);
+  transition: opacity 0.2s ease;
+}
+
+.disabled {
+  opacity: 0.5;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--color-text);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.input {
+  width: 100%;
+}
+
+.error {
+  display: block;
+  margin-top: 6px;
+  color: var(--color-danger);
+  font-size: 12.5px;
+}
+
+.presets {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.preset {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 4px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.preset b {
+  color: #059669;
+  font-size: 14px;
+}
+
+.preset span {
+  color: var(--color-text-secondary);
+  font-size: 11.5px;
+}
+
+.preset:hover:not(:disabled) {
+  border-color: #10b981;
+}
+
+.preset:disabled {
+  cursor: not-allowed;
+}
+
+.presetActive {
+  border-color: #10b981;
+  background: rgb(16 185 129 / 10%);
+}
+

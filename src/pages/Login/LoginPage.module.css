@@ -1,0 +1,32 @@
+.alert {
+  margin-bottom: 16px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: -4px 0 20px;
+  font-size: 14px;
+}
+
+.forgot {
+  color: var(--color-accent);
+  font-weight: 500;
+}
+
+.forgot:hover {
+  color: var(--color-accent-hover);
+}
+
+.submitBtn {
+  height: 46px;
+  font-weight: 600;
+}
+
+.googleBtn {
+  height: 46px;
+  margin-top: 12px;
+  font-weight: 600;
+}

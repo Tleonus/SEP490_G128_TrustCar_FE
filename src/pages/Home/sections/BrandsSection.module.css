@@ -1,0 +1,123 @@
+.brands {
+  background: var(--color-surface);
+  padding: 72px 0;
+}
+
+/* Lưới dùng trọn chiều rộng .container để thẳng mép với các section khác;
+   hàng cuối (khi xuống dòng) được căn giữa thay vì dồn trái */
+.grid {
+  --cols: 8;
+  --gap: 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--gap);
+}
+
+.item {
+  flex: 0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols));
+  min-width: 0;
+}
+
+@media (max-width: 1180px) {
+  .grid {
+    --cols: 4;
+  }
+}
+
+@media (max-width: 700px) {
+  .grid {
+    --gap: 14px;
+  }
+}
+
+@media (max-width: 560px) {
+  .grid {
+    --cols: 2;
+    --gap: 12px;
+  }
+}
+
+.brandCard {
+  width: 100%;
+  height: 148px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 20px 8px;
+  font: inherit;
+  color: inherit;
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.brandCard:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.brandCard:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* Khung logo cố định để logo vuông (Toyota...) và logo dạng chữ (VinFast) cân nhau */
+.logoBox {
+  width: 100%;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brandLogo {
+  max-width: min(100%, 112px);
+  max-height: 100%;
+  object-fit: contain;
+  opacity: 0.75;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+:root[data-theme='dark'] .brandLogo {
+  filter: brightness(0) invert(1);
+}
+
+.brandCard:hover .brandLogo {
+  opacity: 1;
+  transform: scale(1.06);
+}
+
+.brandName {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--color-text);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+@media (max-width: 700px) {
+  .brandCard {
+    height: 124px;
+    padding: 16px 6px;
+  }
+
+  .brandName {
+    font-size: 13px;
+  }
+
+  .logoBox {
+    height: 42px;
+  }
+}

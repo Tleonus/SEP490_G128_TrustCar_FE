@@ -1,0 +1,274 @@
+.page {
+  min-height: calc(100vh - var(--header-height));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 20px;
+  background:
+    radial-gradient(60% 50% at 100% 0%, rgba(201, 162, 39, 0.12) 0%, transparent 60%),
+    radial-gradient(50% 50% at 0% 100%, rgba(19, 40, 74, 0.12) 0%, transparent 60%),
+    var(--color-bg);
+}
+
+.shell {
+  width: 100%;
+  max-width: 1080px;
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card-hover);
+  animation: fadeUp 0.5s ease both;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Cột ảnh thương hiệu (đồng bộ tông với Hero trang chủ) ===== */
+.visual {
+  position: relative;
+  min-height: 620px;
+  padding: 44px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: radial-gradient(120% 90% at 0% 0%, #13284a 0%, #0b1220 60%);
+  color: #fff;
+  overflow: hidden;
+}
+
+.visualImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 70%;
+}
+
+.visualOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(8, 15, 28, 0.92) 0%,
+    rgba(8, 15, 28, 0.55) 45%,
+    rgba(8, 15, 28, 0.9) 100%
+  );
+}
+
+.visualTop,
+.stats {
+  position: relative;
+  z-index: 1;
+}
+
+.eyebrow {
+  display: inline-block;
+  color: #d9b84a;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+.visualTitle {
+  color: #fff;
+  font-size: 34px;
+  line-height: 1.25;
+  max-width: 400px;
+}
+
+.accent {
+  color: #d9b84a;
+}
+
+.highlights {
+  list-style: none;
+  padding: 0;
+  margin: 28px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.highlights li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #dfe3ec;
+  font-size: 15px;
+}
+
+.highlightIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: rgba(217, 184, 74, 0.16);
+  border: 1px solid rgba(217, 184, 74, 0.35);
+  color: #d9b84a;
+  font-size: 16px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.stat strong {
+  font-size: 22px;
+  color: #fff;
+}
+
+.stat span {
+  font-size: 12.5px;
+  color: #c9cfdb;
+  margin-top: 2px;
+}
+/* ===== Cột form ===== */
+.formPanel {
+  padding: 44px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.mobileLogo {
+  display: none;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.mobileLogo img {
+  height: 48px;
+  border-radius: 8px;
+}
+
+.switcher {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 4px;
+  margin-bottom: 28px;
+  border-radius: 12px;
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+}
+
+.switchItem {
+  text-align: center;
+  padding: 9px 0;
+  border-radius: 9px;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.switchItem:hover {
+  color: var(--color-text);
+}
+
+.switchActive {
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.1);
+}
+
+.title {
+  font-size: 26px;
+  margin-bottom: 6px;
+}
+
+.subtitle {
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.formBody :global(.ant-form-item) {
+  margin-bottom: 16px;
+}
+
+.formBody :global(.ant-form-item-label > label) {
+  font-weight: 500;
+}
+
+.footer {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.footer a {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.footer a:hover {
+  color: var(--color-accent-hover);
+}
+
+@media (max-width: 900px) {
+  .shell {
+    grid-template-columns: 1fr;
+    max-width: 520px;
+  }
+
+  .visual {
+    display: none;
+  }
+
+  .mobileLogo {
+    display: flex;
+  }
+}
+
+@media (max-width: 560px) {
+  .page {
+    padding: 24px 16px;
+  }
+
+  .formPanel {
+    padding: 28px 20px;
+  }
+
+  .title {
+    font-size: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shell {
+    animation: none;
+  }
+}

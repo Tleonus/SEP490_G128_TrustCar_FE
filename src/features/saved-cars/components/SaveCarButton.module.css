@@ -1,0 +1,98 @@
+.cardBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background: var(--color-surface-alt);
+  color: var(--color-text-secondary);
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgb(15 23 42 / 8%);
+  transition: transform 0.2s ease, color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.cardBtn:hover {
+  transform: scale(1.08);
+  border-color: rgb(225 29 72 / 45%);
+  background: rgb(225 29 72 / 8%);
+  color: #e11d48;
+}
+
+.cardBtn:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.saved {
+  border-color: #e11d48;
+  background: #e11d48;
+  color: #fff;
+  animation: pop 0.32s ease;
+}
+
+.saved:hover {
+  color: #fff;
+}
+
+.detailBtn {
+  font-weight: 600;
+}
+
+.detailSaved,
+.detailSaved:not(:disabled):hover {
+  border-color: #e11d48 !important;
+  color: #e11d48 !important;
+  background: rgb(225 29 72 / 6%) !important;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.8); }
+  60% { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cardBtn, .saved { animation: none; transition: none; }
+}
+
+.loginPrompt {
+  padding: 8px 0 4px;
+  text-align: center;
+}
+
+.loginPromptIcon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  background: #fff1f2;
+  color: #e11d48;
+  font-size: 25px;
+}
+
+.loginPrompt h3 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 18px;
+}
+
+.loginPrompt p {
+  margin: 10px auto 20px;
+  max-width: 460px;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.loginPromptActions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
