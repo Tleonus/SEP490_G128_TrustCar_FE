@@ -23,7 +23,6 @@ import LegacyRedirect from './LegacyRedirect'
 import { ADMIN_PATHS } from './paths'
 
 const AdminVehicleIntakePage = lazy(() => import('../pages/Admin/AdminVehicleIntakePage.jsx'))
-const AdminOverviewPage = lazy(() => import('../pages/Admin/AdminOverviewPage.jsx'))
 const AdminBaseSettingsPage = lazy(() => import('../pages/Admin/AdminBaseSettingsPage.jsx'))
 const SalesCrmPage = lazy(() => import('../features/sales-crm/pages/SalesCrmPage.jsx'))
 const ComparePage = lazy(() => import('../features/vehicle-compare/pages/ComparePage.jsx'))
@@ -37,6 +36,8 @@ const InspectionDetailPage = lazy(() => import('../features/inspection/pages/Ins
 const InspectionDashboardPage = lazy(() => import('../features/inspection-dashboard/pages/InspectionDashboardPage.jsx'))
 // KAN-56: bảng điều khiển duyệt cho Admin
 const ApprovalPage = lazy(() => import('../features/cpo-approval/pages/ApprovalPage.jsx'))
+// KAN-35: tổng quan điều hành (KPI, doanh thu, hoạt động gần đây)
+const AdminDashboardPage = lazy(() => import('../features/admin-dashboard/pages/AdminDashboardPage.jsx'))
 // KAN-66: chọn ảnh chia sẻ mạng xã hội trong kho xe
 const SocialImagePage = lazy(() => import('../features/social-share-image/pages/SocialImagePage.jsx'))
 const MyVisitsPage = lazy(() => import('../features/test-drive-booking/pages/MyVisitsPage.jsx'))
@@ -107,7 +108,14 @@ export default function AppRouter() {
         }
       >
         <Route index element={<Navigate to={ADMIN_PATHS.overview} replace />} />
-        <Route path="overview" element={<Suspense fallback={<LoadingState />}><AdminOverviewPage /></Suspense>} />
+        {/* KAN-35: trang tổng quan hợp nhất (tồn kho + KPI + biểu đồ + hoạt động).
+            AdminRoute bên ngoài giới hạn ADMIN + SALES_STAFF; cả hai vai trò đọc được
+            /manage/cars và /leads nên trang mở cho cả hai. Không bọc AdminOnlyRoute ở đây:
+            LoginPage và AdminOnlyRoute đều chuyển hướng về /admin/overview, bọc ADMIN-only
+            sẽ thành vòng lặp với SALES_STAFF. Link sang /admin/approval mới là ADMIN-only. */}
+        <Route path="overview" element={<Suspense fallback={<LoadingState />}><AdminDashboardPage /></Suspense>} />
+        {/* Đường dẫn cũ của KAN-35: giữ để link đã chia sẻ không chết. */}
+        <Route path="dashboard" element={<LegacyRedirect to={ADMIN_PATHS.overview} />} />
         <Route path="inventory" element={<AdminCarsPage />} />
         {/* Ảnh chia sẻ mạng xã hội (KAN-66): ADMIN, SALES_STAFF */}
         <Route

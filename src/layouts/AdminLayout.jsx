@@ -8,7 +8,9 @@ import logo from '../assets/logo-transparent.png'
 import styles from './AdminLayout.module.css'
 
 const NAV_ITEMS = [
-  { to: ADMIN_PATHS.overview, label: 'Tổng quan', icon: 'grid' },
+  // KAN-35: tổng quan điều hành (tồn kho, doanh thu, biểu đồ, hoạt động).
+  // Hiện cho cả ADMIN và SALES_STAFF vì route mở cho cả hai (xem AppRouter).
+  { to: ADMIN_PATHS.overview, label: 'Tổng quan', icon: 'chart' },
   { to: ADMIN_PATHS.inventory, label: 'Kho xe', icon: 'car' },
   { to: ADMIN_PATHS.vehicleIntake, label: 'Nhập xe & Thẩm định', icon: 'clipboard' },
   // KAN-55: màn lập biên bản kiểm định cho Sale (ADMIN và SALES_STAFF đều vào được)

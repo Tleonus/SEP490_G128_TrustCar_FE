@@ -1,4 +1,5 @@
 export const ADMIN_PATHS = {
+  // KAN-35: trang tổng quan hợp nhất. /admin/dashboard cũ chuyển hướng về đây.
   overview: '/admin/overview',
   inventory: '/admin/inventory',
   vehicleIntake: '/admin/vehicle-intake',
