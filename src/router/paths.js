@@ -9,5 +9,7 @@ export const ADMIN_PATHS = {
   sales: '/admin/sales',
   baseSettings: '/admin/base-settings',
   cpoCertificates: '/admin/chung-nhan',
+  // KAN-40: nhật ký hoạt động hệ thống (chỉ ADMIN)
+  auditLogs: '/admin/nhat-ky',
 }
 

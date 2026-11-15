@@ -43,6 +43,8 @@ const MyVisitsPage = lazy(() => import('../features/test-drive-booking/pages/MyV
 const StaffVisitsPage = lazy(() => import('../features/test-drive-booking/pages/StaffVisitsPage.jsx'))
 // KAN-25: hồ sơ cá nhân và cài đặt
 const ProfilePage = lazy(() => import('../features/user-profile-settings/pages/ProfilePage.jsx'))
+// KAN-40: nhật ký hoạt động hệ thống (chỉ ADMIN)
+const AuditLogsPage = lazy(() => import('../features/audit-logs/pages/AuditLogsPage.jsx'))
 
 export default function AppRouter() {
   return (
@@ -132,6 +134,15 @@ export default function AppRouter() {
           element={
             <AdminOnlyRoute>
               <Suspense fallback={<LoadingState />}><ApprovalPage /></Suspense>
+            </AdminOnlyRoute>
+          }
+        />
+        {/* Nhật ký hoạt động (KAN-40): chỉ ADMIN. Backend vẫn kiểm quyền cuối cùng. */}
+        <Route
+          path="nhat-ky"
+          element={
+            <AdminOnlyRoute>
+              <Suspense fallback={<LoadingState />}><AuditLogsPage /></Suspense>
             </AdminOnlyRoute>
           }
         />

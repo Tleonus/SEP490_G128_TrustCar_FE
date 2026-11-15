@@ -1,0 +1,137 @@
+/* Trang "Nhật ký hoạt động". Màu lấy từ biến của khu admin (--color-*, --line…) kèm giá trị dự phòng. */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.page > * { min-width: 0; }
+
+.title { margin: 0; font-size: 24px; color: var(--color-text, #172b43); }
+.desc { margin: 4px 0 0; color: var(--color-text-secondary, #475569); }
+
+/* ---- bộ lọc ---- */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px 16px;
+  padding: 14px;
+  border: 1px solid var(--color-border, #c6d2df);
+  border-radius: 12px;
+  background: var(--color-surface, #fff);
+}
+
+.field {
+  display: flex;
+  flex: 1 1 180px;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  max-width: 280px;
+  font-size: 13px;
+  color: var(--color-text-secondary, #475569);
+}
+
+.date {
+  width: 100%;
+  min-width: 0;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid var(--color-border, #c6d2df);
+  border-radius: 6px;
+  background: var(--color-surface, #fff);
+  color: var(--color-text, #172b43);
+  font: inherit;
+}
+
+.date[aria-invalid='true'] { border-color: var(--color-danger, #b91c1c); }
+
+.rangeError {
+  flex: 1 1 100%;
+  margin: 0;
+  color: var(--color-danger, #b91c1c);
+  font-size: 13px;
+}
+
+.buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.summary { margin: 0; color: var(--color-text-secondary, #475569); font-size: 13px; }
+
+/* ---- bảng ---- */
+.tableWrap { overflow-x: auto; }
+
+.timeButton {
+  min-height: 28px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-primary, #1d4ed8);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  text-align: left;
+  text-decoration: underline;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.timeButton:focus-visible,
+.more:focus-visible { outline: 3px solid var(--blue, #1d4ed8); outline-offset: 2px; }
+
+.stack { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.code { color: var(--color-text-secondary, #475569); font-size: 12px; }
+.muted { color: var(--color-text-secondary, #475569); font-style: italic; }
+.wrap { overflow-wrap: anywhere; word-break: break-word; }
+
+/* ---- chi tiết ---- */
+.detailBlock { display: flex; flex-direction: column; gap: 12px; }
+.sectionTitle { margin: 16px 0 8px; font-size: 14px; font-weight: 700; color: var(--color-text, #172b43); }
+
+.changes { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
+.changes th,
+.changes td {
+  padding: 6px 8px;
+  border: 1px solid var(--color-border, #c6d2df);
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+.changes th { background: var(--color-surface-alt, #f3f6fa); font-weight: 700; }
+.changedRow { background: color-mix(in srgb, #d48806 12%, var(--color-surface, #fff)); }
+.value { white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.more {
+  display: inline-block;
+  margin-top: 4px;
+  min-height: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-primary, #1d4ed8);
+  font: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.json {
+  max-height: 260px;
+  margin: 0;
+  padding: 10px;
+  overflow: auto;
+  border: 1px solid var(--color-border, #c6d2df);
+  border-radius: 8px;
+  background: var(--color-surface-alt, #f3f6fa);
+  font-size: 12px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 640px) {
+  .field { flex: 1 1 100%; max-width: none; }
+  .date { height: 40px; }
+  .buttons :global(.ant-btn) { min-height: 40px; }
+  .timeButton,
+  .more { min-height: 40px; }
+}
