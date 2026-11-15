@@ -3,6 +3,7 @@ import { Button, Tabs } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import StaffVisitsList from './StaffVisitsList'
 import StaffAvailabilityTab from '../components/StaffAvailabilityTab'
+import StaffCalendarTab from '../../staff-test-drive-calendar/pages/StaffCalendarTab'
 import styles from '../styles/StaffVisits.module.css'
 
 /**
@@ -25,6 +26,7 @@ export default function StaffVisitsPage() {
       children: <StaffVisitsList active={tab === 'list'} bookingOpen={booking} onBookingClose={() => setBooking(false)} />,
     },
     { key: 'availability', label: 'Lịch trống', children: <StaffAvailabilityTab /> },
+    { key: 'calendar', label: 'Lịch', children: <StaffCalendarTab active={tab === 'calendar'} bookingOpen={booking} /> },
   ]
 
   return (

@@ -1,0 +1,150 @@
+/* Lưới tháng và lưới tuần của lịch lái thử. Màu lấy từ biến của index.css; trạng thái luôn kèm chữ. */
+
+/* màu theo trạng thái lượt (chấm màu của ô ngày trên màn hình hẹp; luôn có số lượt bằng chữ đi kèm) */
+.s_PENDING { --tone: #d48806; }
+.s_CONFIRMED { --tone: var(--color-success, #1f8a4c); }
+.s_COMPLETED { --tone: #1677ff; }
+.s_NO_SHOW { --tone: var(--color-danger, #c0392b); }
+.s_CANCELLED { --tone: #8c8c8c; }
+
+/* ---- lưới tháng ---- */
+/* Khung quá hẹp (ví dụ khu /admin trên điện thoại còn rất ít chỗ): lưới tự cuộn NGANG BÊN TRONG, trang không cuộn. */
+.monthScroll { overflow-x: auto; }
+.monthInner { min-width: 0; }
+
+.weekdays,
+.month {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.weekday {
+  padding: 6px 4px;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.month {
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-border);
+}
+
+.day {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  min-height: 132px;
+  padding: 6px;
+  background: var(--color-surface);
+}
+
+.dayOut { opacity: 0.55; }
+.dayToday { box-shadow: inset 0 0 0 2px var(--color-accent); }
+
+.dayHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  min-height: 28px;
+  padding: 0 2px;
+  border: 0;
+  background: none;
+  color: var(--color-text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.todayTag {
+  padding: 0 6px;
+  border-radius: 10px;
+  background: var(--color-accent);
+  color: #1b1b1b;
+  font-size: 11px;
+}
+
+.more {
+  min-height: 28px;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: var(--color-primary, #0b1f3a);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dayHead:focus-visible,
+.more:focus-visible,
+.cell:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+/* ---- lưới tuần ---- */
+.weekWrap { overflow-x: auto; }
+
+.week {
+  display: grid;
+  grid-template-columns: 64px repeat(7, minmax(120px, 1fr));
+  gap: 1px;
+  min-width: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-border);
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  min-height: 56px;
+  padding: 4px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 12px;
+}
+
+.cellHead { align-items: center; justify-content: center; font-weight: 600; }
+.timeCell { color: var(--color-text-secondary); font-weight: 600; justify-content: center; }
+.cellToday { box-shadow: inset 0 0 0 2px var(--color-accent); }
+
+/* tuần trên màn hình hẹp: danh sách dọc, mỗi ngày một khối */
+.dayBlock { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.dayTitle { margin: 0; color: var(--color-text); font-size: 15px; }
+
+@media (max-width: 640px) {
+  .monthInner { min-width: 280px; } /* 7 ô × 40px: vẫn đủ cỡ bấm; hẹp hơn nữa thì lưới tự cuộn bên trong */
+
+  /* tháng trên màn hình hẹp: mỗi ô là MỘT nút, chỉ có số ngày, số lượt và chấm màu */
+  .day { min-height: 56px; padding: 0; }
+  .cellButton {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    width: 100%;
+    min-height: 56px;
+    padding: 4px 0;
+    border: 0;
+    background: none;
+    color: var(--color-text);
+    font: inherit;
+    cursor: pointer;
+  }
+  .cellButton:focus-visible { outline: 2px solid var(--color-accent); outline-offset: -2px; }
+  .dots { display: flex; gap: 2px; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--tone, #8c8c8c); }
+  .count { font-size: 11px; color: var(--color-text-secondary); }
+}
