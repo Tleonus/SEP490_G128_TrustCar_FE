@@ -6,6 +6,7 @@ import { rescheduledText } from '../utils/rescheduleRules'
 import {
   CAR_STATUS_LABEL, LATE_CANCEL_LABEL, OUTCOME_LABEL, PIN_LABEL, REMINDER_LABEL, STAFF_ACTION_LABEL, STAFF_CANCELLATION_TEXT,
 } from '../constants/testDriveConstants'
+import FeedbackSummary from '../../test-drive-feedback/components/FeedbackSummary'
 import styles from '../styles/StaffVisits.module.css'
 
 const carTitle = (car) => [car.make, car.model, car.variant].filter(Boolean).join(' ') || car.vehicleCode || 'Xe'
@@ -76,7 +77,7 @@ function NoteCell({ visit }) {
       {visit.status === 'CANCELLED' && visit.cancellationNote && (
         <span className={styles.sub}>Ghi chú nội bộ: {visit.cancellationNote}</span>
       )}
-      {visit.outcome && <span className={styles.sub}>Kết quả: {visit.outcome}</span>}
+      {visit.outcome && <FeedbackSummary outcome={visit.outcome} />}
     </div>
   )
 }

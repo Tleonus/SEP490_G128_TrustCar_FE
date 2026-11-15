@@ -8,6 +8,9 @@ import { buildCancelBody, isCancelReady } from '../utils/staffCancel'
 import { hasUnavailableCar } from '../utils/visitRules'
 import { formatVnDateTime } from '../utils/vnTime'
 import { OUTCOME_MAX, STAFF_ACTION_LABEL } from '../constants/testDriveConstants'
+import FeedbackFields from '../../test-drive-feedback/components/FeedbackFields'
+import { EMPTY_FEEDBACK } from '../../test-drive-feedback/constants/feedbackConstants'
+import { serializeFeedback } from '../../test-drive-feedback/utils/feedbackFormat'
 
 const PROMPT = {
   CONFIRMED: 'Xác nhận lượt này sau khi đã gọi điện cho khách?',
@@ -31,6 +34,7 @@ const PROMPT = {
  */
 export default function StaffActionModal({ action, onClose, onDone, onStale }) {
   const [outcome, setOutcome] = useState('')
+  const [feedback, setFeedback] = useState(EMPTY_FEEDBACK)
   const [cancel, setCancel] = useState({ code: '', note: '' })
   const [problem, setProblem] = useState(null)
   const { busy, run } = useRunOnce()
@@ -44,6 +48,12 @@ export default function StaffActionModal({ action, onClose, onDone, onStale }) {
     setProblem(null)
     try {
       const body = cancelling ? buildCancelBody(cancel) : { status, outcome }
+      if (status === 'COMPLETED') {
+        // Phản hồi có cấu trúc → chuỗi `outcome` theo khuôn; biểu mẫu trống thì không gửi `outcome`.
+        const { text } = serializeFeedback(feedback)
+        delete body.outcome
+        if (text) body.outcome = text
+      }
       onDone(await changeVisitStatus(visit.visitId, body))
     } catch (error) {
       const failure = classifyAppointmentError(error, {}, { audience: 'staff' })
@@ -70,7 +80,8 @@ export default function StaffActionModal({ action, onClose, onDone, onStale }) {
         <Alert type="warning" showIcon style={{ marginBottom: 12 }} message="Có xe trong lượt không còn bán; hệ thống sẽ từ chối xác nhận." />
       )}
       {cancelling && <CancelReasonFields value={cancel} disabled={busy} onChange={(patch) => setCancel((prev) => ({ ...prev, ...patch }))} />}
-      {(status === 'COMPLETED' || status === 'NO_SHOW') && (
+      {status === 'COMPLETED' && <FeedbackFields value={feedback} disabled={busy} onChange={setFeedback} />}
+      {status === 'NO_SHOW' && (
         <Input.TextArea
           rows={3}
           maxLength={OUTCOME_MAX}
