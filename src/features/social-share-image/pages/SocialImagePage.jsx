@@ -9,12 +9,14 @@
  * hiển thị lỗi Backend trả về, không giả lập lưu thành công.
  */
 
+import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Alert, App, Button } from 'antd'
-import { ArrowLeftOutlined, SaveOutlined } from '@ant-design/icons'
+import { ArrowLeftOutlined, FacebookFilled, SaveOutlined } from '@ant-design/icons'
 import { useSocialImage } from '../hooks/useSocialImage'
 import SocialImagePicker from '../components/SocialImagePicker'
 import SharePreviewCard from '../components/SharePreviewCard'
+import CaptionComposerModal from '../../marketing-caption/components/CaptionComposerModal'
 import { LoadingState, ErrorState } from '../../../components/common/StateBlock'
 import { getCarTitle } from '../../../utils/car'
 import { ADMIN_PATHS } from '../../../router/paths'
@@ -28,6 +30,9 @@ export default function SocialImagePage() {
     car, images, loading, loadError, selectedUrl, isDirty, canUploadMore,
     uploading, saving, actionError, selectImage, uploadImage, save,
   } = useSocialImage(carId)
+
+  // KAN-69: modal gợi ý caption Facebook. Mở thủ công để không tốn lượt gọi API.
+  const [captionOpen, setCaptionOpen] = useState(false)
 
   async function handleSave() {
     const result = await save()
@@ -64,6 +69,12 @@ export default function SocialImagePage() {
             Mã xe <strong>{car?.vehicleCode || '—'}</strong>
             {statusMeta ? <> · {statusMeta.label}</> : null}
           </p>
+        </div>
+        {/* KAN-69: mở modal tạo caption để đăng bài Facebook */}
+        <div className={styles.actions}>
+          <Button icon={<FacebookFilled />} onClick={() => setCaptionOpen(true)}>
+            Tạo bài đăng Facebook
+          </Button>
         </div>
       </header>
 
@@ -109,6 +120,12 @@ export default function SocialImagePage() {
           {selectedUrl && !isDirty && <span className={styles.actionHint}>Ảnh đang chọn đã là ảnh chia sẻ hiện tại.</span>}
         </div>
       </section>
+
+      <CaptionComposerModal
+        open={captionOpen}
+        car={car}
+        onClose={() => setCaptionOpen(false)}
+      />
     </div>
   )
 }
