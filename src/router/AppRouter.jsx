@@ -46,6 +46,8 @@ const StaffVisitsPage = lazy(() => import('../features/test-drive-booking/pages/
 const ProfilePage = lazy(() => import('../features/user-profile-settings/pages/ProfilePage.jsx'))
 // KAN-40: nhật ký hoạt động hệ thống (chỉ ADMIN)
 const AuditLogsPage = lazy(() => import('../features/audit-logs/pages/AuditLogsPage.jsx'))
+// KAN-61: trang tính trả góp (công khai)
+const InstallmentPage = lazy(() => import('../features/installment-calculator/pages/InstallmentPage.jsx'))
 
 export default function AppRouter() {
   return (
@@ -62,6 +64,7 @@ export default function AppRouter() {
             </Suspense>
           }
         />
+        <Route path="/installment" element={<Suspense fallback={<LoadingState />}><InstallmentPage /></Suspense>} />
         <Route path="/ve-chung-toi" element={<AboutPage />} />
         <Route path="/lien-he" element={<ContactPage />} />
         <Route path="/dang-nhap" element={<LoginPage />} />
