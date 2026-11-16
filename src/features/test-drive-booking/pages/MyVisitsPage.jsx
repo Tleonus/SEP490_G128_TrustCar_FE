@@ -6,6 +6,8 @@ import CancelVisitModal from '../components/CancelVisitModal'
 import RescheduleModal from '../components/RescheduleModal'
 import LoadError from '../components/LoadError'
 import { useMyVisits } from '../hooks/useVisits'
+import { useAutoRefresh } from '../hooks/useAutoRefresh'
+import { useFocusRefresh } from '../hooks/useFocusRefresh'
 import { VISIT_STATUS } from '../constants/testDriveConstants'
 import styles from '../styles/MyVisitsPage.module.css'
 
@@ -24,6 +26,7 @@ const FILTERS = [
  * @ears .sdd/features/test-drive-booking/SPEC.md#REQ-F25
  * @ears .sdd/features/test-drive-booking/SPEC.md#REQ-F28
  * @ears .sdd/features/test-drive-booking/SPEC.md#REQ-F29
+ * @ears .sdd/features/test-drive-booking/SPEC.md#REQ-F46
  */
 export default function MyVisitsPage() {
   const { message } = App.useApp()
@@ -32,6 +35,11 @@ export default function MyVisitsPage() {
   const [cancelling, setCancelling] = useState(null)
   const [rescheduling, setRescheduling] = useState(null)
   const list = useMyVisits({ status: status === 'ALL' ? undefined : status, page, limit: PAGE_SIZE })
+
+  // REQ-F46: tự tải ngầm mỗi 60 giây và khi quay lại tab; không tải khi đang mở hộp hủy / đổi lịch.
+  const idle = !cancelling && !rescheduling
+  useFocusRefresh(list.loadedAt, list.reloadSilently, idle)
+  useAutoRefresh({ enabled: idle, settledAt: list.settledAt, silentStatus: list.silentStatus, reloadSilently: list.reloadSilently })
 
   // Đổi lịch tạo lượt MỚI (visitId mới) ở trạng thái "Chờ xác nhận": thay lượt cũ tại chỗ nếu còn khớp bộ lọc, không thì tải lại.
   const handleRescheduled = ({ visit }) => {

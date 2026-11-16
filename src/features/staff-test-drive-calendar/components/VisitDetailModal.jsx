@@ -6,6 +6,7 @@ import {
 import { rescheduledText } from '../../test-drive-booking/utils/rescheduleRules'
 import { isCarCancelled, isOpenVisit, staffActions } from '../../test-drive-booking/utils/visitRules'
 import { formatVnDateTime } from '../../test-drive-booking/utils/vnTime'
+import FeedbackSummary from '../../test-drive-feedback/components/FeedbackSummary'
 import { badgesOf } from '../utils/groupVisits'
 import styles from '../styles/StaffCalendar.module.css'
 
@@ -60,7 +61,7 @@ function buildItems(visit) {
   if (visit.notes) items.push({ key: 'notes', label: 'Ghi chú', children: visit.notes })
   if (cancelled) items.push({ key: 'cancel', label: 'Hủy', children: `${cancelled}${visit.cancellationReason ? `: ${visit.cancellationReason}` : ''}` })
   if (visit.status === 'CANCELLED' && visit.cancellationNote) items.push({ key: 'cnote', label: 'Ghi chú nội bộ', children: visit.cancellationNote })
-  if (visit.outcome) items.push({ key: 'outcome', label: 'Kết quả', children: visit.outcome })
+  if (visit.outcome) items.push({ key: 'outcome', label: 'Phản hồi / kết quả', children: <FeedbackSummary outcome={visit.outcome} /> })
   if (moved) items.push({ key: 'moved', label: 'Đổi lịch', children: moved })
   if (visit.confirmedBy) items.push({ key: 'by', label: 'Xác nhận bởi', children: visit.confirmedBy.fullName })
   return items
