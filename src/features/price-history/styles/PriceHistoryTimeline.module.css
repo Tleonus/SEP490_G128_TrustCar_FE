@@ -1,0 +1,236 @@
+/* KAN-45 – Block "Lịch sử giá" trong trang chi tiết xe của Admin.
+   Token màu lấy từ src/index.css để đồng bộ với khu quản trị (KAN-35/55/56/66). */
+
+.block {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.blockHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.blockHead h2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  margin: 0 0 4px;
+  color: var(--color-text);
+}
+
+.blockHead p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+/* ── Tóm tắt đầu block ────────────────────────────────────── */
+.summary {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.summaryItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.summaryLabel {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.summaryItem strong {
+  font-size: 15px;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Một mốc ──────────────────────────────────────────────── */
+.entry {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  padding-bottom: 2px;
+}
+
+.entryHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.time {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.trendTag {
+  margin-inline-end: 0;
+}
+
+.prices {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.oldPrice {
+  font-size: 13.5px;
+  color: var(--color-text-secondary);
+  text-decoration: line-through;
+}
+
+.arrow {
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}
+
+.newPrice {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.changeUp,
+.changeDown,
+.changeNeutral {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.changeUp { color: var(--color-success); }
+.changeDown { color: var(--color-danger); }
+.changeNeutral { color: var(--color-text-secondary); }
+
+.pct {
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+/* ── Lý do + người thực hiện ──────────────────────────────── */
+.meta {
+  margin: 2px 0 0;
+  display: grid;
+  gap: 3px;
+}
+
+.metaRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 12.5px;
+}
+
+.metaRow dt {
+  color: var(--color-text-secondary);
+  flex: 0 0 auto;
+  min-width: 96px;
+}
+
+.metaRow dd {
+  margin: 0;
+  color: var(--color-text);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.user {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* ── Cảnh báo lệch giá ────────────────────────────────────── */
+.warning {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  color: #7a4a00;
+  background: color-mix(in srgb, #f59e0b 18%, transparent);
+  border: 1px solid color-mix(in srgb, #f59e0b 40%, transparent);
+}
+
+/* ── Timeline ─────────────────────────────────────────────── */
+.timeline {
+  margin-top: 4px;
+  padding-left: 2px;
+}
+
+/* Đường dọc và chấm của antd dùng token riêng; chỉnh để khớp bo góc của block. */
+.timeline :global(.ant-timeline-item-tail) {
+  border-inline-start-color: var(--color-border);
+}
+
+/* ── Skeleton ─────────────────────────────────────────────── */
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.skeletonRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.skeletonRow :global(.ant-skeleton) {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* ── Màn hẹp ──────────────────────────────────────────────── */
+@media (max-width: 560px) {
+  .block {
+    padding: 16px;
+  }
+
+  .summary {
+    gap: 14px;
+  }
+
+  .metaRow {
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .metaRow dt {
+    min-width: 0;
+  }
+
+  .newPrice {
+    font-size: 16px;
+  }
+}
