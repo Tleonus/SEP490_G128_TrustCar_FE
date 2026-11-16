@@ -1,0 +1,217 @@
+/* Trang "Tính trả góp" (/installment). Màu lấy từ token --color-* của index.css (sáng và tối). */
+
+.page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 28px 16px 64px;
+  color: var(--color-text);
+}
+
+.title {
+  margin: 0 0 6px;
+  font-size: 28px;
+  line-height: 1.25;
+  color: var(--color-text);
+}
+
+.desc {
+  margin: 0 0 24px;
+  max-width: 720px;
+  color: var(--color-text-secondary);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+.card {
+  min-width: 0;
+  padding: 20px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.cardTitle {
+  margin: 0 0 16px;
+  font-size: 18px;
+  color: var(--color-text);
+}
+
+.field {
+  margin-bottom: 18px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.hint {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.error {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: var(--color-danger);
+}
+
+/* Vùng chạm của thanh trượt ≥ 40 px. */
+.sliderWrap {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 6px;
+}
+
+.sliderWrap :global(.ant-slider) {
+  flex: 1;
+  margin: 0;
+}
+
+/* Mở rộng vùng chạm quanh thanh trượt lên 40 px (thanh trượt của antd chỉ cao 12 px). */
+.sliderWrap :global(.ant-slider)::before {
+  content: '';
+  position: absolute;
+  inset: -14px 0;
+}
+
+/* Nút chọn cách tính: cao ≥ 40 px, chữ được xuống dòng thay vì bị cắt ở màn hình hẹp. */
+.field :global(.ant-segmented .ant-segmented-item-label) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 4px 6px;
+  line-height: 1.3;
+  text-align: center;
+  white-space: normal;
+}
+
+.results {
+  margin: 0 0 16px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.row dt {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+.row dd {
+  margin: 0;
+  text-align: right;
+  font-weight: 600;
+  color: var(--color-text);
+  overflow-wrap: anywhere;
+}
+
+.rowStrong dt {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.rowStrong dd {
+  font-size: 22px;
+  color: var(--color-primary);
+}
+
+:global([data-theme='dark']) .rowStrong dd {
+  color: var(--color-accent);
+}
+
+.empty {
+  margin: 0 0 16px;
+  padding: 14px;
+  border-radius: 8px;
+  background: var(--color-surface-alt);
+  color: var(--color-text-secondary);
+}
+
+.notes {
+  margin: 0 0 16px;
+  padding-left: 18px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.notes li + li {
+  margin-top: 4px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.cta:hover {
+  border-color: var(--color-accent);
+}
+
+.ctaPrimary {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
+:global([data-theme='dark']) .ctaPrimary {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: #15192b;
+}
+
+.table :global(.ant-pagination-item),
+.table :global(.ant-pagination-prev),
+.table :global(.ant-pagination-next) {
+  min-width: 40px;
+  height: 40px;
+  line-height: 38px;
+}
+
+.table :global(.ant-pagination-prev .ant-pagination-item-link),
+.table :global(.ant-pagination-next .ant-pagination-item-link) {
+  min-width: 40px;
+  height: 40px;
+}

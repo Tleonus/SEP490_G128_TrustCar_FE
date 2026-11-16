@@ -13,6 +13,7 @@ import { useContactInfo } from '../../config/contactInfo'
 const NAV_ITEMS = [
   { to: '/', label: 'Trang chủ' },
   { to: '/xe', label: 'Danh sách xe' },
+  { to: '/installment', label: 'Tính trả góp' },
   { to: '/ve-chung-toi', label: 'Về chúng tôi' },
   { to: '/lien-he', label: 'Liên hệ' },
 ]
