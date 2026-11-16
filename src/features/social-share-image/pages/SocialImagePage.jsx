@@ -17,6 +17,7 @@ import { useSocialImage } from '../hooks/useSocialImage'
 import SocialImagePicker from '../components/SocialImagePicker'
 import SharePreviewCard from '../components/SharePreviewCard'
 import CaptionComposerModal from '../../marketing-caption/components/CaptionComposerModal'
+import PriceHistoryTimeline from '../../price-history/components/PriceHistoryTimeline'
 import { LoadingState, ErrorState } from '../../../components/common/StateBlock'
 import { getCarTitle } from '../../../utils/car'
 import { ADMIN_PATHS } from '../../../router/paths'
@@ -120,6 +121,13 @@ export default function SocialImagePage() {
           {selectedUrl && !isDirty && <span className={styles.actionHint}>Ảnh đang chọn đã là ảnh chia sẻ hiện tại.</span>}
         </div>
       </section>
+
+      {/* KAN-45: lịch sử điều chỉnh giá. Dữ liệu lấy từ car.priceHistory của lần tải xe ở trên. */}
+      <PriceHistoryTimeline
+        priceHistory={car?.priceHistory}
+        currentPrice={car?.price}
+        loading={loading}
+      />
 
       <CaptionComposerModal
         open={captionOpen}
