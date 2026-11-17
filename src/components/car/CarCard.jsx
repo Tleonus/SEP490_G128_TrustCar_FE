@@ -8,6 +8,7 @@ import CompareCardFrame from '../../features/vehicle-compare/components/CompareC
 import SaveCarButton from '../../features/saved-cars/components/SaveCarButton'
 
 export default function CarCard({ car }) {
+<<<<<<< Updated upstream
   const carId = car.vehicleCode || car.stock_code || car._id || car.id
   const title = getCarTitle(car)
   const image = getCoverImage(car)
@@ -42,6 +43,32 @@ export default function CarCard({ car }) {
             <span>{labelOf(TRANSMISSION_LABEL, car.transmission?.toUpperCase())}</span>
             <span>{car.vehicleCode || car.stock_code}</span>
           </div>
+=======
+  const carId = car.stock_code || car.vehicleCode || car._id || car.id
+  const title = getCarTitle(car)
+  const image = getCoverImage(car)
+  const imageUrl = typeof image === 'string' ? image : image?.image_url || image?.url
+  const bodyType = car.model?.body_type ?? car.bodyType
+  const fuelType = car.fuel_type ?? car.fuelType
+
+  return (
+    <Link to={`/xe/${encodeURIComponent(carId)}`} className={styles.card}>
+      <div className={styles.imgWrap}>
+        {imageUrl && <img src={imageUrl} alt={title} className={styles.img} />}
+        <span className={styles.badge}>{labelOf(BODY_TYPE_LABEL, bodyType?.toLowerCase())}</span>
+      </div>
+      <div className={styles.body}>
+        <h3 className={styles.title}>{title}</h3>
+        <div className={styles.price}>{formatPrice(car.listed_price ?? car.price ?? car.listedPrice)}</div>
+        <div className={styles.meta}>
+          <span><CalendarOutlined /> {car.manufacturing_year ?? car.year}</span>
+          <span><DashboardOutlined /> {formatMileage(car.mileage_km ?? car.mileage)}</span>
+          <span><ThunderboltOutlined /> {labelOf(FUEL_TYPE_LABEL, fuelType?.toLowerCase())}</span>
+        </div>
+        <div className={styles.footer}>
+          <span>{labelOf(TRANSMISSION_LABEL, car.transmission?.toLowerCase())}</span>
+          <span>{car.stock_code || car.vehicleCode}</span>
+>>>>>>> Stashed changes
         </div>
       </Link>
     </CompareCardFrame>

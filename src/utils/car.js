@@ -1,14 +1,25 @@
 export function getCarTitle(car) {
+<<<<<<< Updated upstream
   if (!car) return ''
   const brand = typeof car.brand === 'string' ? car.brand : car.brand?.brand_name
   const model = typeof car.model === 'string' ? car.model : car.model?.model_name
   return [car.make || brand, model, car.variant].filter(Boolean).join(' ')
+=======
+  const brand = typeof car.brand === 'string' ? car.brand : car.brand?.brand_name
+  const model = typeof car.model === 'string' ? car.model : car.model?.model_name
+  return [brand || car.make, model, car.variant].filter(Boolean).join(' ')
+>>>>>>> Stashed changes
 }
 
 export function sortCarImages(images = []) {
   return [...(images ?? [])].sort((a, b) => {
+<<<<<<< Updated upstream
     const aCover = a?.isPrimary ?? a?.is_cover ?? false
     const bCover = b?.isPrimary ?? b?.is_cover ?? false
+=======
+    const aCover = a?.is_cover ?? a?.isPrimary ?? false
+    const bCover = b?.is_cover ?? b?.isPrimary ?? false
+>>>>>>> Stashed changes
     if (aCover !== bCover) return aCover ? -1 : 1
     return (a?.display_order ?? 0) - (b?.display_order ?? 0)
   })
