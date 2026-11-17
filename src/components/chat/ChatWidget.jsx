@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   CloseOutlined,
@@ -14,6 +14,8 @@ import {
   ArrowRightOutlined,
   ExportOutlined,
   QuestionCircleOutlined,
+  UpOutlined,
+  DownOutlined,
 } from '@ant-design/icons'
 import RobotMascot, { UserChatAvatar } from './RobotMascot'
 import {
@@ -74,13 +76,13 @@ function formatTimeNow() {
   return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
 }
 
-function createWelcomeMessage(showroomAddress) {
+function createWelcomeMessage(showroomAddress, streamed = false) {
   return {
     id: 'welcome',
     from: 'bot',
     time: formatTimeNow(),
-    streamed: true,
-    text: `Xin chào! Mình là **Trợ lý AI TrustCar** — kết nối trực tiếp với dữ liệu kho xe thực tế tại **${showroomAddress}**.\n\nBạn có thể chọn nhanh **bong bóng câu hỏi** bên dưới hoặc nhập mẫu xe, tầm giá để mình lọc xe ngay lập tức!`,
+    streamed,
+    text: `Xin chào! Mình là **Trợ lý AI TrustCar** — kết nối trực tiếp với dữ liệu kho xe thực tế tại **${showroomAddress}**.\n\nBạn có thể chọn nhanh **câu hỏi gợi ý** bên dưới hoặc nhập mẫu xe, tầm giá để mình lọc xe ngay lập tức!`,
     actions: [
       { label: 'Khám phá kho xe', to: '/xe', type: 'navigate' },
       { label: 'Vị trí Showroom 3D', to: '/lien-he', type: 'navigate' },
@@ -95,25 +97,30 @@ function createWelcomeMessage(showroomAddress) {
 }
 
 /**
- * Hiển thị nội dung tin nhắn có hỗ trợ in đậm **text** và xuống dòng.
+ * Hiển thị nội dung tin nhắn có hỗ trợ in đậm **text** (kể cả khi đang gõ dở) và xuống dòng.
  */
-function FormattedBubbleText({ text }) {
+function FormattedBubbleText({ text, isStreaming = false }) {
   const lines = String(text || '').split('\n')
   return (
     <div className={styles.formattedText}>
       {lines.map((line, lineIdx) => {
+        const isLastLine = lineIdx === lines.length - 1
         if (!line.trim()) {
           return <div key={lineIdx} className={styles.lineSpacer} />
         }
-        const parts = line.split(/(\*\*[^*]+\*\*)/g)
+        const parts = line.split(/(\*\*[^*]+\*\*|\*\*[^*]+$)/g)
         return (
           <p key={lineIdx} className={styles.lineParagraph}>
             {parts.map((part, partIdx) => {
-              if (part.startsWith('**') && part.endsWith('**')) {
-                return <strong key={partIdx}>{part.slice(2, -2)}</strong>
+              if (part.startsWith('**')) {
+                const clean = part.endsWith('**') ? part.slice(2, -2) : part.slice(2)
+                return <strong key={partIdx}>{clean}</strong>
               }
               return <span key={partIdx}>{part}</span>
             })}
+            {isStreaming && isLastLine && (
+              <span className={styles.streamingCursor} aria-hidden="true" />
+            )}
           </p>
         )
       })}
@@ -121,28 +128,84 @@ function FormattedBubbleText({ text }) {
   )
 }
 
+function getNextStreamIndex(text, currentIndex) {
+  if (currentIndex >= text.length) return text.length
+  const remaining = text.slice(currentIndex)
+  const wordMatch = remaining.match(/^(\s*\S{1,6})/)
+  let nextIdx = wordMatch
+    ? currentIndex + wordMatch[1].length
+    : Math.min(text.length, currentIndex + 3)
+
+  if (text.slice(nextIdx - 1, nextIdx + 1) === '**') {
+    nextIdx += 1
+  }
+  return Math.min(text.length, nextIdx)
+}
+
+function getStreamDelayMs(text, prevIndex, nextIndex) {
+  const chunk = text.slice(prevIndex, nextIndex)
+  if (chunk.includes('\n')) return 95
+  if (/[.!?…]/.test(chunk)) return 75
+  if (/[,;:]/.test(chunk)) return 46
+  return 30
+}
+
 /**
- * Hiệu ứng gõ chữ siêu tốc (Fast Streaming Bubble) cho tin nhắn mới của Bot.
+ * Hiệu ứng gõ chữ từng từ tự nhiên như người thật nhắn tin cho tin nhắn của Bot.
  */
-function StreamingBotText({ text, alreadyStreamed, onDone }) {
-  const [visibleLength, setVisibleLength] = useState(alreadyStreamed ? text.length : 0)
+function StreamingBotText({ text, alreadyStreamed, onProgress, onDone }) {
+  const fullText = String(text || '')
+  const [visibleLength, setVisibleLength] = useState(
+    alreadyStreamed ? fullText.length : 0
+  )
+  const onProgressRef = useRef(onProgress)
+  const onDoneRef = useRef(onDone)
+  const doneCalledRef = useRef(Boolean(alreadyStreamed))
 
   useEffect(() => {
-    if (alreadyStreamed || visibleLength >= text.length) {
-      if (!alreadyStreamed) onDone?.()
+    onProgressRef.current = onProgress
+    onDoneRef.current = onDone
+  }, [onProgress, onDone])
+
+  useEffect(() => {
+    if (alreadyStreamed) {
+      setVisibleLength(fullText.length)
+      doneCalledRef.current = true
       return undefined
     }
-    const step = Math.max(5, Math.ceil(text.length / 26))
-    const timer = window.setTimeout(() => {
-      setVisibleLength((prev) => Math.min(text.length, prev + step))
-    }, 14)
-    return () => window.clearTimeout(timer)
-  }, [alreadyStreamed, visibleLength, text, onDone])
+    if (visibleLength >= fullText.length) {
+      if (!doneCalledRef.current) {
+        doneCalledRef.current = true
+        onDoneRef.current?.()
+      }
+      return undefined
+    }
 
-  const shown = alreadyStreamed ? text : text.slice(0, visibleLength)
+    const nextIdx = getNextStreamIndex(fullText, visibleLength)
+    const delay = getStreamDelayMs(fullText, visibleLength, nextIdx)
+    const timer = window.setTimeout(() => {
+      setVisibleLength(nextIdx)
+      onProgressRef.current?.()
+    }, delay)
+
+    return () => window.clearTimeout(timer)
+  }, [alreadyStreamed, visibleLength, fullText])
+
+  const isStreaming = !alreadyStreamed && visibleLength < fullText.length
+  const shown = alreadyStreamed ? fullText : fullText.slice(0, visibleLength)
+
+  function handleSkipStreaming() {
+    if (isStreaming) {
+      setVisibleLength(fullText.length)
+    }
+  }
+
   return (
-    <div onClick={() => setVisibleLength(text.length)}>
-      <FormattedBubbleText text={shown} />
+    <div
+      onClick={handleSkipStreaming}
+      title={isStreaming ? 'Nhấn để hiển thị toàn bộ câu trả lời' : undefined}
+    >
+      <FormattedBubbleText text={shown} isStreaming={isStreaming} />
     </div>
   )
 }
@@ -156,6 +219,7 @@ export default function ChatWidget() {
   const [expanded, setExpanded] = useState(false)
   const [showHint, setShowHint] = useState(false)
   const [activeCategory, setActiveCategory] = useState('popular')
+  const [suggestionsCollapsed, setSuggestionsCollapsed] = useState(false)
   const [sessionId, setSessionId] = useState(() => getOrCreateChatSessionId())
   const [messages, setMessages] = useState(() => {
     try {
@@ -169,7 +233,7 @@ export default function ChatWidget() {
     } catch {
       // Ignore invalid sessionStorage data
     }
-    return [createWelcomeMessage(contactInfo.showroomAddress)]
+    return [createWelcomeMessage(contactInfo.showroomAddress, false)]
   })
   const [draft, setDraft] = useState('')
   const [loading, setLoading] = useState(false)
@@ -179,14 +243,36 @@ export default function ChatWidget() {
   const inputRef = useRef(null)
   const abortRef = useRef(null)
 
+  const isAnyBotStreaming = messages.some((m) => m.from === 'bot' && !m.streamed)
+
+  const scrollToBottom = useCallback((behavior = 'smooth') => {
+    const el = listRef.current
+    if (!el) return
+    if (behavior === 'auto') {
+      el.scrollTop = el.scrollHeight
+    } else {
+      el.scrollTo({
+        top: el.scrollHeight,
+        behavior,
+      })
+    }
+  }, [])
+
+  const handleStreamProgress = useCallback(() => {
+    window.requestAnimationFrame(() => {
+      scrollToBottom('auto')
+    })
+  }, [scrollToBottom])
+
   useEffect(() => {
+    if (!open && messages.length <= 1) return
     try {
       const toStore = messages.slice(-20).map((m) => ({ ...m, streamed: true }))
       globalThis.sessionStorage?.setItem(CHAT_MESSAGES_STORAGE_KEY, JSON.stringify(toStore))
     } catch {
       // Ignore storage quota errors
     }
-  }, [messages])
+  }, [messages, open])
 
   useEffect(() => {
     const timer = window.setTimeout(() => setShowHint(true), 1400)
@@ -196,13 +282,13 @@ export default function ChatWidget() {
   useEffect(() => () => abortRef.current?.abort(), [])
 
   useEffect(() => {
-    if (open && listRef.current) {
-      listRef.current.scrollTo({
-        top: listRef.current.scrollHeight,
-        behavior: 'smooth',
-      })
-    }
-  }, [open, messages, loading])
+    if (!open || !listRef.current) return undefined
+    scrollToBottom('smooth')
+    const followUpTimer = window.setTimeout(() => {
+      scrollToBottom('smooth')
+    }, 140)
+    return () => window.clearTimeout(followUpTimer)
+  }, [open, messages.length, loading, isAnyBotStreaming, suggestionsCollapsed, scrollToBottom])
 
   useEffect(() => {
     if (!open) return undefined
@@ -223,15 +309,16 @@ export default function ChatWidget() {
     abortRef.current?.abort()
     setLoading(false)
     setSessionId(resetChatSessionId())
-    setMessages([createWelcomeMessage(contactInfo.showroomAddress)])
+    setMessages([createWelcomeMessage(contactInfo.showroomAddress, false)])
     setActiveCategory('popular')
+    setSuggestionsCollapsed(false)
   }
 
-  function markMessageStreamed(id) {
+  const markMessageStreamed = useCallback((id) => {
     setMessages((prev) =>
       prev.map((m) => (m.id === id && !m.streamed ? { ...m, streamed: true } : m))
     )
-  }
+  }, [])
 
   async function handleSendQuestion(rawText) {
     const content = String(rawText || '').trim()
@@ -245,7 +332,7 @@ export default function ChatWidget() {
       text: content,
     }
 
-    const updatedHistory = [...messages, userMsg]
+    const updatedHistory = [...messages.map((m) => ({ ...m, streamed: true })), userMsg]
     setMessages(updatedHistory)
     setDraft('')
     setLoading(true)
@@ -254,15 +341,20 @@ export default function ChatWidget() {
     const controller = new AbortController()
     abortRef.current = controller
 
+    const minTypingDelay = new Promise((resolve) => window.setTimeout(resolve, 550))
+
     try {
-      const reply = await sendChatMessage({
-        message: content,
-        history: updatedHistory,
-        sessionId,
-        customerName: user?.fullName,
-        customerPhone: user?.phone,
-        signal: controller.signal,
-      })
+      const [reply] = await Promise.all([
+        sendChatMessage({
+          message: content,
+          history: updatedHistory,
+          sessionId,
+          customerName: user?.fullName,
+          customerPhone: user?.phone,
+          signal: controller.signal,
+        }),
+        minTypingDelay,
+      ])
 
       seqRef.current += 1
       setMessages((prev) => [
@@ -279,6 +371,7 @@ export default function ChatWidget() {
         },
       ])
     } catch {
+      await minTypingDelay
       seqRef.current += 1
       setMessages((prev) => [
         ...prev,
@@ -334,7 +427,7 @@ export default function ChatWidget() {
           {/* HEADER CHUYÊN NGHIỆP VỚI AVATAR RIÊNG & TRẠNG THÁI LIVE API */}
           <header className={styles.panelHead}>
             <div className={styles.headAvatarWrap}>
-              <RobotMascot size={42} active={loading} />
+              <RobotMascot size={40} active={loading || isAnyBotStreaming} />
               <span className={styles.onlineDot} title="Đã kết nối API kho xe trực tuyến" />
             </div>
 
@@ -381,36 +474,20 @@ export default function ChatWidget() {
             </div>
           </header>
 
-          {/* THANH ĐIỀU HƯỚNG CHỦ ĐỀ CÂU HỎI NHANH */}
-          <div className={styles.categoryNav} role="tablist" aria-label="Chủ đề câu hỏi gợi ý">
-            {QUESTION_CATEGORIES.map((cat) => (
-              <button
-                key={cat.key}
-                type="button"
-                role="tab"
-                aria-selected={activeCategory === cat.key}
-                className={`${styles.categoryTab} ${
-                  activeCategory === cat.key ? styles.categoryTabActive : ''
-                }`}
-                onClick={() => setActiveCategory(cat.key)}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
-
-          {/* KHU VỰC BONG BÓNG HỘI THOẠI */}
+          {/* KHU VỰC BONG BÓNG HỘI THOẠI (KHÔNG BỊ CHE BỞI THANH GỢI Ý TRÊN ĐẦU) */}
           <div className={styles.messages} ref={listRef} aria-live="polite">
             {messages.map((msg, msgIndex) => {
               const isUser = msg.from === 'user'
               const isLastBot = !isUser && msgIndex === messages.length - 1
+              const isMsgStreaming = !isUser && !msg.streamed
+              const showAttachments = isUser || Boolean(msg.streamed)
 
               return (
                 <div key={msg.id} className={styles.messageGroup}>
                   <div className={`${styles.row} ${isUser ? styles.rowUser : styles.rowBot}`}>
                     {!isUser && (
                       <div className={styles.botAvatarBadge}>
-                        <RobotMascot size={30} active={loading && isLastBot} />
+                        <RobotMascot size={30} active={(loading && isLastBot) || isMsgStreaming} />
                       </div>
                     )}
 
@@ -431,12 +508,13 @@ export default function ChatWidget() {
                           <StreamingBotText
                             text={msg.text}
                             alreadyStreamed={Boolean(msg.streamed)}
+                            onProgress={handleStreamProgress}
                             onDone={() => markMessageStreamed(msg.id)}
                           />
                         )}
 
-                        {/* THẺ XE TRỰC TIẾP TỪ API /public/cars TRONG BONG BÓNG TRẢ LỜI */}
-                        {Array.isArray(msg.cars) && msg.cars.length > 0 && (
+                        {/* THẺ XE TRỰC TIẾP TỪ API /public/cars HIỂN THỊ SAU KHI GÕ XONG CÂU TRẢ LỜI */}
+                        {showAttachments && Array.isArray(msg.cars) && msg.cars.length > 0 && (
                           <div className={styles.carCardsList}>
                             {msg.cars.map((car) => (
                               <button
@@ -479,8 +557,8 @@ export default function ChatWidget() {
                         )}
                       </div>
 
-                      {/* BONG BÓNG ĐIỀU HƯỚNG TRANG / HÀNH ĐỘNG NHANH */}
-                      {Array.isArray(msg.actions) && msg.actions.length > 0 && (
+                      {/* BONG BÓNG ĐIỀU HƯỚNG TRANG / HÀNH ĐỘNG NHANH (HIỂN THỊ SAU KHI GÕ XONG) */}
+                      {showAttachments && Array.isArray(msg.actions) && msg.actions.length > 0 && (
                         <div className={styles.actionBubbles}>
                           {msg.actions.map((action, idx) => (
                             <button
@@ -508,45 +586,77 @@ export default function ChatWidget() {
               )
             })}
 
-            {/* TRẠNG THÁI ĐANG TRUY VẤN API NHANH */}
+            {/* TRẠNG THÁI ĐANG SOẠN CÂU TRẢ LỜI NHƯ NGƯỜI THẬT */}
             {loading && (
               <div className={`${styles.row} ${styles.rowBot}`}>
                 <div className={styles.botAvatarBadge}>
                   <RobotMascot size={30} active />
                 </div>
                 <div className={`${styles.bubble} ${styles.bubbleBot} ${styles.typingBubble}`}>
-                  <div className={styles.typingDots} aria-label="Đang tra cứu dữ liệu kho xe">
+                  <div className={styles.typingDots} aria-label="Đang soạn câu trả lời">
                     <span />
                     <span />
                     <span />
                   </div>
-                  <span className={styles.typingLabel}>Đang tra cứu kho xe TrustCar...</span>
+                  <span className={styles.typingLabel}>Đang tra cứu &amp; soạn câu trả lời...</span>
                 </div>
               </div>
             )}
 
-            {/* BONG BÓNG CÂU HỎI GỢI Ý / ĐIỀU HƯỚNG HỘI THOẠI */}
-            {!loading && (
+            {/* KHUNG GỢI Ý CÂU HỎI GỌN GÀNG, CÓ THỂ THU GỌN & CHỈ HIỆN SAU KHI BOT TRẢ LỜI XONG */}
+            {!loading && !isAnyBotStreaming && (
               <div className={styles.questionDeck}>
-                <div className={styles.questionDeckHeader}>
-                  <QuestionCircleOutlined />
-                  <span>Chọn nhanh bong bóng câu hỏi ({currentCategoryObj.label}):</span>
+                <div className={styles.questionDeckTopBar}>
+                  <div className={styles.questionDeckHeader}>
+                    <QuestionCircleOutlined />
+                    <span>Gợi ý câu hỏi nhanh:</span>
+                  </div>
+                  <button
+                    type="button"
+                    className={styles.questionDeckToggle}
+                    onClick={() => setSuggestionsCollapsed((prev) => !prev)}
+                  >
+                    <span>{suggestionsCollapsed ? 'Mở gợi ý' : 'Thu gọn'}</span>
+                    {suggestionsCollapsed ? <DownOutlined /> : <UpOutlined />}
+                  </button>
                 </div>
-                <div className={styles.questionBubblesGrid}>
-                  {(activeCategory === 'popular' ? dynamicFollowUps : currentCategoryObj.questions).map(
-                    (question) => (
-                      <button
-                        key={question}
-                        type="button"
-                        className={styles.questionBubble}
-                        onClick={() => handleSendQuestion(question)}
-                      >
-                        <span className={styles.questionBubbleText}>{question}</span>
-                        <SendOutlined className={styles.questionBubbleIcon} />
-                      </button>
-                    )
-                  )}
-                </div>
+
+                {!suggestionsCollapsed && (
+                  <>
+                    <div className={styles.categoryNav} role="tablist" aria-label="Chủ đề câu hỏi gợi ý">
+                      {QUESTION_CATEGORIES.map((cat) => (
+                        <button
+                          key={cat.key}
+                          type="button"
+                          role="tab"
+                          aria-selected={activeCategory === cat.key}
+                          className={`${styles.categoryTab} ${
+                            activeCategory === cat.key ? styles.categoryTabActive : ''
+                          }`}
+                          onClick={() => setActiveCategory(cat.key)}
+                        >
+                          {cat.label}
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className={styles.questionBubblesGrid}>
+                      {(activeCategory === 'popular' ? dynamicFollowUps : currentCategoryObj.questions).map(
+                        (question) => (
+                          <button
+                            key={question}
+                            type="button"
+                            className={styles.questionBubble}
+                            onClick={() => handleSendQuestion(question)}
+                          >
+                            <span className={styles.questionBubbleText}>{question}</span>
+                            <SendOutlined className={styles.questionBubbleIcon} />
+                          </button>
+                        )
+                      )}
+                    </div>
+                  </>
+                )}
               </div>
             )}
           </div>

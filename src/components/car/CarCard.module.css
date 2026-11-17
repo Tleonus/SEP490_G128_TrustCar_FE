@@ -1,18 +1,29 @@
 .card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 14px;
+  position: relative;
+  background: linear-gradient(
+    180deg,
+    var(--color-surface) 0%,
+    var(--color-surface-alt) 100%
+  );
+  border: 1.5px solid var(--color-border);
+  border-bottom: 5px solid var(--card-3d-edge);
+  border-radius: 18px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  box-shadow: var(--shadow-card);
+  transition:
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
   height: 100%;
 }
 
 .card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-7px);
   box-shadow: var(--shadow-card-hover);
-  border-color: var(--color-accent);
+  border-color: rgba(201, 162, 39, 0.68);
+  border-bottom-color: var(--card-3d-edge-gold);
 }
 
 .imgWrap {
@@ -20,7 +31,9 @@
   width: 100%;
   padding-top: 66%;
   overflow: hidden;
-  background: var(--color-surface-alt);
+  background: #0b1f3a;
+  border-bottom: 1.5px solid var(--color-border);
+  box-shadow: inset 0 -10px 20px rgba(8, 21, 39, 0.28);
 }
 
 .img {
@@ -29,43 +42,53 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s ease;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .card:hover .img {
-  transform: scale(1.06);
+  transform: scale(1.065);
 }
 
 .badge {
   position: absolute;
   top: 10px;
   left: 10px;
-  background: var(--color-accent);
-  color: #1a1a1a;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 4px 10px;
+  background: linear-gradient(180deg, #fae498 0%, #c9a227 100%);
+  color: #081527;
+  font-size: 11.5px;
+  font-weight: 800;
+  padding: 4px 11px;
   border-radius: 999px;
+  border: 1px solid #fff2ba;
+  border-bottom: 2.5px solid #7d5d09;
+  box-shadow:
+    0 3px 8px rgba(8, 21, 39, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
 }
 
-/* Huy hiệu CPO: hiện khi xe có cpoCertificateId; góc dưới trái để không đè nhãn loại xe và nút so sánh. */
+/* Huy hiệu CPO 3D: hiện khi xe có cpoCertificateId */
 .cpoBadge {
   position: absolute;
   bottom: 10px;
   left: 10px;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  background: #0f1e3a;
-  color: #fff;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 4px 10px;
+  gap: 5px;
+  background: linear-gradient(180deg, #17345e 0%, #09172c 100%);
+  color: #fae498;
+  font-size: 11.5px;
+  font-weight: 800;
+  padding: 4px 11px;
   border-radius: 999px;
+  border: 1px solid rgba(244, 216, 121, 0.58);
+  border-bottom: 2.5px solid #040b16;
+  box-shadow:
+    0 4px 10px rgba(4, 10, 22, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
 .body {
-  padding: 16px;
+  padding: 16px 16px 14px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -74,7 +97,7 @@
 
 .title {
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--color-text);
   display: -webkit-box;
   -webkit-line-clamp: 1;
@@ -91,8 +114,9 @@
 
 .price {
   font-size: 19px;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--color-accent-hover);
+  letter-spacing: -0.2px;
 }
 
 .meta {
@@ -113,11 +137,11 @@
 .footer {
   margin-top: auto;
   padding-top: 10px;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px dashed var(--color-border);
   display: flex;
   align-items: center;
   justify-content: space-between;
   font-size: 13px;
+  font-weight: 600;
   color: var(--color-text-secondary);
 }
-

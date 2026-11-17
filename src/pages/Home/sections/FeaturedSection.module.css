@@ -1,9 +1,22 @@
 .featured {
-  background: var(--color-bg);
-  padding: 72px 0;
+  position: relative;
+  overflow: hidden;
+  padding: 78px 0 80px;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 8%, rgba(201, 162, 39, 0.1) 0%, transparent 72%),
+    radial-gradient(ellipse 60% 40% at 88% 55%, rgba(56, 189, 248, 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 12% 85%, rgba(201, 162, 39, 0.08) 0%, transparent 70%),
+    linear-gradient(
+      180deg,
+      var(--color-bg) 0%,
+      var(--color-surface-alt) 48%,
+      var(--color-surface) 100%
+    );
 }
 
 .grid {
+  position: relative;
+  z-index: 2;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 24px;
@@ -29,6 +42,34 @@
 }
 
 .actions {
+  position: relative;
+  z-index: 2;
   text-align: center;
-  margin-top: 48px;
+  margin-top: 52px;
+}
+
+.actions :global(.ant-btn-primary) {
+  height: 48px;
+  padding: 0 32px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 800;
+  color: #081527 !important;
+  background: linear-gradient(180deg, #fae498 0%, #c9a227 100%) !important;
+  border: 1.5px solid #fff2ba !important;
+  border-bottom: 4px solid #7d5d09 !important;
+  box-shadow:
+    0 6px 0 rgba(11, 31, 58, 0.2),
+    0 14px 28px rgba(201, 162, 39, 0.32),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.78) !important;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease !important;
+}
+
+.actions :global(.ant-btn-primary:hover) {
+  transform: translateY(-3px);
+  background: linear-gradient(180deg, #fff0b3 0%, #d4ad2d 100%) !important;
+  box-shadow:
+    0 9px 0 rgba(11, 31, 58, 0.24),
+    0 20px 36px rgba(201, 162, 39, 0.42),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.9) !important;
 }

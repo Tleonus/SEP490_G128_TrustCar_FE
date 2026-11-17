@@ -1,11 +1,42 @@
 .brands {
-  background: var(--color-surface);
-  padding: 72px 0;
+  position: relative;
+  overflow: hidden;
+  padding: 78px 0 74px;
+  background:
+    radial-gradient(ellipse 75% 38% at 50% 0%, var(--blend-hero-to-light) 0%, transparent 72%),
+    radial-gradient(ellipse 55% 42% at 15% 28%, rgba(56, 189, 248, 0.08) 0%, transparent 68%),
+    radial-gradient(ellipse 55% 42% at 85% 72%, rgba(201, 162, 39, 0.1) 0%, transparent 68%),
+    linear-gradient(
+      180deg,
+      var(--color-surface-alt) 0%,
+      var(--color-surface) 28%,
+      var(--color-surface) 72%,
+      var(--color-bg) 100%
+    );
+}
+
+/* Màng sương chuyển sắc ranh giới trên từ dải LED Showroom xuống khu Thương hiệu */
+.brands::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 54px;
+  background: linear-gradient(
+    180deg,
+    rgba(8, 20, 40, 0.18) 0%,
+    rgba(56, 189, 248, 0.05) 48%,
+    transparent 100%
+  );
+  pointer-events: none;
 }
 
 /* Lưới dùng trọn chiều rộng .container để thẳng mép với các section khác;
    hàng cuối (khi xuống dòng) được căn giữa thay vì dồn trái */
 .grid {
+  position: relative;
+  z-index: 2;
   --cols: 8;
   --gap: 16px;
   list-style: none;
@@ -41,24 +72,34 @@
   }
 }
 
+/* Khối 3D Podium cho từng Thương hiệu xe */
 .brandCard {
   position: relative;
   overflow: hidden;
   width: 100%;
-  height: 148px;
+  height: 152px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 14px;
-  padding: 20px 8px;
+  gap: 12px;
+  padding: 18px 10px;
   font: inherit;
   color: inherit;
-  background: var(--color-surface-alt);
-  border: 1px solid var(--color-border);
-  border-radius: 16px;
+  background: linear-gradient(
+    180deg,
+    var(--color-surface) 0%,
+    var(--color-surface-alt) 100%
+  );
+  border: 1.5px solid var(--color-border);
+  border-bottom: 5px solid var(--card-3d-edge);
+  border-radius: 18px;
+  box-shadow: var(--shadow-card);
   cursor: pointer;
-  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.24s ease,
+    box-shadow 0.24s ease;
 }
 
 /* Dải LED Showroom chạy trên đỉnh thẻ hãng xe */
@@ -68,7 +109,7 @@
   top: 0;
   left: -100%;
   width: 100%;
-  height: 2.5px;
+  height: 3px;
   background: linear-gradient(90deg, transparent, #38bdf8, #f4d879, transparent);
   transition: left 0.55s ease;
 }
@@ -78,18 +119,23 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(120deg, transparent 30%, rgba(56, 189, 248, 0.1) 50%, rgba(244, 216, 121, 0.12) 58%, transparent 75%);
+  background: linear-gradient(
+    120deg,
+    transparent 30%,
+    rgba(56, 189, 248, 0.1) 50%,
+    rgba(244, 216, 121, 0.14) 58%,
+    transparent 75%
+  );
   transform: translateX(-120%);
   transition: transform 0.6s ease;
   pointer-events: none;
 }
 
 .brandCard:hover {
-  transform: translateY(-5px);
-  border-color: rgba(56, 189, 248, 0.65);
-  box-shadow:
-    0 12px 28px rgba(15, 23, 42, 0.16),
-    0 0 18px rgba(56, 189, 248, 0.22);
+  transform: translateY(-7px) scale(1.02);
+  border-color: rgba(201, 162, 39, 0.65);
+  border-bottom-color: var(--card-3d-edge-gold);
+  box-shadow: var(--shadow-card-hover);
 }
 
 .brandCard:hover::before {
@@ -105,20 +151,33 @@
   outline-offset: 3px;
 }
 
-/* Khung logo cố định để logo vuông (Toyota...) và logo dạng chữ (VinFast) cân nhau */
+/* Bệ đỡ 3D cho Logo thương hiệu */
 .logoBox {
   width: 100%;
-  height: 52px;
+  height: 58px;
+  padding: 8px 10px;
+  border-radius: 13px;
+  background: var(--color-surface);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  box-shadow:
+    inset 0 2px 4px rgba(15, 23, 42, 0.05),
+    0 2px 6px rgba(15, 23, 42, 0.04);
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.24s ease, border-color 0.24s ease;
+}
+
+.brandCard:hover .logoBox {
+  border-color: rgba(201, 162, 39, 0.45);
+  transform: translateY(-2px);
 }
 
 .brandLogo {
-  max-width: min(100%, 112px);
+  max-width: min(100%, 104px);
   max-height: 100%;
   object-fit: contain;
-  opacity: 0.75;
+  opacity: 0.85;
   transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
@@ -128,12 +187,12 @@
 
 .brandCard:hover .brandLogo {
   opacity: 1;
-  transform: scale(1.06);
+  transform: scale(1.08);
 }
 
 .brandName {
-  font-weight: 600;
-  font-size: 14px;
+  font-weight: 700;
+  font-size: 13.5px;
   color: var(--color-text);
   text-align: center;
   white-space: nowrap;
@@ -144,8 +203,8 @@
 
 @media (max-width: 700px) {
   .brandCard {
-    height: 124px;
-    padding: 16px 6px;
+    height: 130px;
+    padding: 14px 8px;
   }
 
   .brandName {
@@ -153,6 +212,6 @@
   }
 
   .logoBox {
-    height: 42px;
+    height: 46px;
   }
 }
