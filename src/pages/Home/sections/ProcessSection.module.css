@@ -1,9 +1,39 @@
 .process {
-  background: var(--color-bg);
-  padding: 72px 0;
+  position: relative;
+  overflow: hidden;
+  padding: 78px 0 88px;
+  background:
+    radial-gradient(ellipse 75% 45% at 50% 100%, var(--blend-light-to-cta) 0%, transparent 72%),
+    radial-gradient(ellipse 55% 40% at 20% 25%, rgba(201, 162, 39, 0.09) 0%, transparent 68%),
+    radial-gradient(ellipse 55% 40% at 80% 35%, rgba(56, 189, 248, 0.08) 0%, transparent 68%),
+    linear-gradient(
+      180deg,
+      var(--color-bg) 0%,
+      var(--color-surface) 45%,
+      var(--color-surface-alt) 100%
+    );
+}
+
+/* Chuyển sắc ranh giới dưới hòa màu êm vào khu vực Showroom 3D Navy bên dưới */
+.process::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 56px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(11, 31, 58, 0.14) 55%,
+    rgba(11, 31, 58, 0.34) 100%
+  );
+  pointer-events: none;
 }
 
 .grid {
+  position: relative;
+  z-index: 2;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 24px;
@@ -26,11 +56,35 @@
 .step {
   position: relative;
   overflow: hidden;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 16px;
-  padding: 28px 20px;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  background: linear-gradient(
+    180deg,
+    var(--color-surface) 0%,
+    var(--color-surface-alt) 100%
+  );
+  border: 1.5px solid var(--color-border);
+  border-bottom: 6px solid var(--card-3d-edge);
+  border-radius: 20px;
+  padding: 30px 22px 28px;
+  box-shadow: var(--shadow-card);
+  transition:
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+/* Số thứ tự chìm 3D phía góc phải tạo chiều sâu không gian */
+.step::before {
+  counter-increment: step;
+  content: '0' counter(step);
+  position: absolute;
+  top: 10px;
+  right: 16px;
+  font-size: 46px;
+  font-weight: 900;
+  line-height: 1;
+  color: rgba(201, 162, 39, 0.12);
+  pointer-events: none;
+  transition: transform 0.25s ease, color 0.25s ease;
 }
 
 .step::after {
@@ -39,7 +93,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 3px;
+  height: 3.5px;
   background: linear-gradient(90deg, transparent, #f4d879, #38bdf8, transparent);
   background-size: 200% 100%;
   animation: stepLedRun 5s linear infinite;
@@ -55,38 +109,46 @@
 }
 
 .step:hover {
-  transform: translateY(-4px);
-  border-color: rgba(56, 189, 248, 0.55);
-  box-shadow:
-    var(--shadow-card-hover),
-    0 0 18px rgba(56, 189, 248, 0.2);
+  transform: translateY(-7px);
+  border-color: rgba(201, 162, 39, 0.65);
+  border-bottom-color: var(--card-3d-edge-gold);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.step:hover::before {
+  transform: translateY(-2px) scale(1.06);
+  color: rgba(201, 162, 39, 0.22);
 }
 
 .stepNumber {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #0b1f3a 0%, #1d4ed8 100%);
-  border: 1.5px solid rgba(56, 189, 248, 0.65);
-  color: #fff;
-  font-weight: 700;
-  font-size: 15px;
-  margin-bottom: 16px;
-  box-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #1d447a 0%, #0b1f3a 100%);
+  border: 1.5px solid rgba(244, 216, 121, 0.72);
+  border-bottom: 3.5px solid #06101f;
+  color: #fae498;
+  font-weight: 800;
+  font-size: 16px;
+  margin-bottom: 18px;
+  box-shadow:
+    0 4px 0 rgba(11, 31, 58, 0.18),
+    0 10px 20px rgba(11, 31, 58, 0.24),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.28);
 }
 
 .stepTitle {
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 17px;
+  font-weight: 800;
   color: var(--color-text);
   margin-bottom: 8px;
 }
 
 .stepDesc {
-  font-size: 13.5px;
-  line-height: 1.6;
+  font-size: 14px;
+  line-height: 1.65;
   color: var(--color-text-secondary);
 }

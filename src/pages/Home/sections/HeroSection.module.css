@@ -38,20 +38,21 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 65% 32% at 62% 0%, rgba(56, 189, 248, 0.18) 0%, transparent 70%),
-    radial-gradient(ellipse 45% 28% at 28% 8%, rgba(244, 216, 121, 0.14) 0%, transparent 72%),
+    radial-gradient(ellipse 65% 32% at 62% 0%, rgba(56, 189, 248, 0.2) 0%, transparent 70%),
+    radial-gradient(ellipse 45% 28% at 28% 8%, rgba(244, 216, 121, 0.16) 0%, transparent 72%),
+    linear-gradient(180deg, rgba(6, 15, 29, 0.52) 0%, transparent 18%),
     linear-gradient(115deg, transparent 35%, rgba(56, 189, 248, 0.08) 48%, rgba(244, 216, 121, 0.1) 52%, transparent 65%),
-    linear-gradient(0deg, rgba(6, 12, 24, 0.78) 0%, rgba(8, 15, 28, 0) 42%);
-  background-size: 100% 100%, 100% 100%, 220% 100%, 100% 100%;
+    linear-gradient(0deg, #050b16 0%, rgba(6, 12, 24, 0.82) 18%, rgba(8, 15, 28, 0) 48%);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 220% 100%, 100% 100%;
   animation: showroomBeamSweep 8s ease-in-out infinite alternate;
 }
 
 @keyframes showroomBeamSweep {
   0% {
-    background-position: 0 0, 0 0, 120% 0, 0 0;
+    background-position: 0 0, 0 0, 0 0, 120% 0, 0 0;
   }
   100% {
-    background-position: 0 0, 0 0, -20% 0, 0 0;
+    background-position: 0 0, 0 0, 0 0, -20% 0, 0 0;
   }
 }
 
@@ -64,7 +65,21 @@
 }
 
 .textBlock {
-  max-width: 500px;
+  max-width: 530px;
+  padding: 26px 28px;
+  border-radius: 24px;
+  background: linear-gradient(
+    145deg,
+    rgba(13, 30, 56, 0.72) 0%,
+    rgba(7, 17, 34, 0.56) 100%
+  );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(244, 216, 121, 0.28);
+  border-bottom: 4px solid rgba(5, 12, 24, 0.85);
+  box-shadow:
+    0 20px 44px rgba(3, 8, 20, 0.48),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.18);
   opacity: 0;
 }
 

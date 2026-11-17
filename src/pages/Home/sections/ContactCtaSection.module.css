@@ -1,11 +1,37 @@
 .cta {
   position: relative;
-  padding: 76px 0 84px;
+  overflow: hidden;
+  padding: 84px 0 88px;
   background:
-    radial-gradient(ellipse at 15% 15%, rgba(201, 162, 39, 0.14) 0%, transparent 50%),
-    radial-gradient(ellipse at 85% 80%, rgba(29, 78, 216, 0.16) 0%, transparent 55%),
-    linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-  border-top: 3px solid rgba(201, 162, 39, 0.42);
+    radial-gradient(ellipse 70% 28% at 50% 0%, rgba(244, 216, 121, 0.16) 0%, transparent 72%),
+    radial-gradient(ellipse at 15% 22%, rgba(56, 189, 248, 0.14) 0%, transparent 52%),
+    radial-gradient(ellipse at 85% 78%, rgba(201, 162, 39, 0.15) 0%, transparent 55%),
+    linear-gradient(
+      180deg,
+      #0e2444 0%,
+      #0b1f3a 32%,
+      #08172c 76%,
+      #071324 100%
+    );
+}
+
+/* Viền ánh sáng hòa màu mềm mại ở ranh giới trên của khu vực Showroom 3D */
+.cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(56, 189, 248, 0.45) 25%,
+    rgba(244, 216, 121, 0.72) 50%,
+    rgba(56, 189, 248, 0.45) 75%,
+    transparent 100%
+  );
+  box-shadow: 0 2px 24px rgba(244, 216, 121, 0.35);
 }
 
 .sectionHeader {
@@ -505,82 +531,143 @@
   white-space: nowrap;
 }
 
-/* 3D Social Links Grid inside Homepage Card */
+/* 3D Social Bubbles Grid inside Homepage Card */
 .socialLinksGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  gap: 11px;
 }
 
 .socialLink3D {
+  position: relative;
+  overflow: hidden;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  border: 1px solid rgba(148, 163, 184, 0.3);
-  border-bottom: 3px solid #071224;
-  border-radius: 12px;
-  background: linear-gradient(180deg, rgba(30, 58, 99, 0.72) 0%, rgba(16, 35, 64, 0.88) 100%);
+  gap: 11px;
+  padding: 8px 14px 8px 9px;
+  border: 1.5px solid rgba(186, 230, 253, 0.34);
+  border-bottom: 4px solid #050d1a;
+  border-radius: 999px;
+  background: radial-gradient(
+    120% 140% at 25% 15%,
+    rgba(45, 85, 145, 0.88) 0%,
+    rgba(20, 44, 80, 0.92) 55%,
+    rgba(9, 22, 42, 0.98) 100%
+  );
   color: #ffffff;
   box-shadow:
-    0 3px 0 rgba(5, 13, 25, 0.85),
-    inset 0 1px 0 rgba(255, 255, 255, 0.14);
-  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    0 5px 0 rgba(4, 10, 20, 0.92),
+    0 12px 22px rgba(0, 0, 0, 0.34),
+    inset 0 2.5px 4px rgba(255, 255, 255, 0.32),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.38);
+  transition:
+    transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+/* Điểm phản quang vòm kính bong bóng 3D phía trên viên thuốc */
+.socialLink3D::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 16px;
+  right: 22px;
+  height: 9px;
+  border-radius: 999px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.26) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  pointer-events: none;
 }
 
 .socialLink3D:hover {
-  transform: translateY(-2px);
-  border-color: #f0d067;
+  transform: translateY(-4px) scale(1.02);
+  border-color: #fae498;
   box-shadow:
-    0 5px 0 rgba(5, 13, 25, 0.95),
-    0 10px 18px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    0 8px 0 rgba(4, 10, 20, 0.96),
+    0 16px 28px rgba(0, 0, 0, 0.44),
+    0 0 18px rgba(244, 216, 121, 0.28),
+    inset 0 3px 5px rgba(255, 255, 255, 0.44),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.42);
 }
 
+/* Quả cầu bong bóng 3D chứa Icon từng mạng xã hội */
 .socialIconBadge {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
   color: #ffffff;
-  font-size: 17px;
+  font-size: 18px;
   box-shadow:
-    0 2px 0 rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    0 4px 0 rgba(0, 0, 0, 0.42),
+    0 6px 14px rgba(0, 0, 0, 0.32),
+    inset 0 3px 6px rgba(255, 255, 255, 0.75),
+    inset 0 -5px 8px rgba(0, 0, 0, 0.45);
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Điểm phản quang bong bóng thủy tinh 3D trên từng quả cầu Icon */
+.socialIconBadge::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 7px;
+  width: 17px;
+  height: 8px;
+  border-radius: 50%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.85) 0%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  transform: rotate(-18deg);
+  pointer-events: none;
+}
+
+.socialLink3D:hover .socialIconBadge {
+  transform: scale(1.1) rotate(-6deg);
 }
 
 .zaloText {
   font-size: 11px;
   font-weight: 900;
   letter-spacing: -0.4px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
 }
 
 .socialZalo .socialIconBadge {
-  background: linear-gradient(180deg, #268bff 0%, #0068ff 100%);
+  background: radial-gradient(circle at 32% 24%, #9ce4ff 0%, #2592ff 30%, #0062e6 70%, #002d75 100%);
 }
 
 .socialFacebook .socialIconBadge {
-  background: linear-gradient(180deg, #3b82f6 0%, #1877f2 100%);
+  background: radial-gradient(circle at 32% 24%, #8cd0ff 0%, #2684ff 32%, #1259c4 72%, #06265e 100%);
 }
 
 .socialMessenger .socialIconBadge {
-  background: linear-gradient(135deg, #0099ff 0%, #a033ff 100%);
+  background: radial-gradient(circle at 30% 24%, #8ef2ff 0%, #1f8fff 30%, #8c36ff 68%, #450b8c 100%);
 }
 
 .socialTiktok .socialIconBadge {
-  background: linear-gradient(180deg, #27272a 0%, #09090b 100%);
+  background: radial-gradient(circle at 32% 24%, #64748b 0%, #1e293b 34%, #090d16 72%, #020409 100%);
+  border-color: rgba(37, 244, 238, 0.65);
 }
 
 .socialPhone .socialIconBadge {
-  background: linear-gradient(180deg, #ebd074 0%, #b89018 100%);
+  background: radial-gradient(circle at 32% 24%, #fff7c2 0%, #efd165 32%, #c29616 70%, #6e5005 100%);
   color: #0b1f3a;
 }
 
 .socialEmail .socialIconBadge {
-  background: linear-gradient(180deg, #334155 0%, #0f172a 100%);
+  background: radial-gradient(circle at 32% 24%, #94a3b8 0%, #475569 34%, #1e293b 72%, #090d16 100%);
 }
 
 .socialTextWrap {
