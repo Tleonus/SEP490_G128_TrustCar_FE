@@ -1,5 +1,4 @@
 import {
-  SafetyCertificateFilled,
   ThunderboltFilled,
   CheckCircleFilled,
   CarFilled,
@@ -9,13 +8,8 @@ import styles from './ShowroomLedTicker.module.css'
 
 const LED_ITEMS = [
   {
-    icon: <SafetyCertificateFilled />,
-    tag: 'CPO 150+ POINTS',
-    text: 'Kiểm định kỹ thuật 150+ hạng mục chuẩn Showroom quốc tế',
-  },
-  {
     icon: <CheckCircleFilled />,
-    tag: '3 KHÔNG CAM KẾT',
+    tag: '3 Cam kết',
     text: 'Không đâm đụng khung gầm · Không thủy kích ngập nước · Không tua ODO',
   },
   {
@@ -48,7 +42,7 @@ export default function ShowroomLedTicker() {
         {/* Huy hiệu trạng thái LED Hologram bên trái */}
         <div className={styles.statusBadge}>
           <span className={styles.pulseDot} aria-hidden="true" />
-          <span className={styles.statusText}>SHOWROOM LIVE LED</span>
+          <span className={styles.statusText}>TrustCar xe chất</span>
         </div>
 
         {/* Dòng chữ LED chạy vô tận */}
