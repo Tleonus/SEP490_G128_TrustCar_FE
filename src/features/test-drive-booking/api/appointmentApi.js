@@ -51,6 +51,15 @@ export async function cancelMyVisit(id, reason) {
   return response.data.data.visit
 }
 
+/**
+ * Thêm xe vào lượt của chính khách khi lượt còn "Chờ xác nhận" (cùng khung giờ, tổng ≤ 3 xe).
+ * @returns {Promise<object>} lượt sau khi thêm (giữ nguyên visitId / visitCode)
+ */
+export async function addCarsToMyVisit(id, carIds) {
+  const response = await api.post(`/customer/appointments/${id}/cars`, { carIds })
+  return response.data.data.visit
+}
+
 /** @ears .sdd/features/test-drive-booking/SPEC.md#REQ-F13 */
 export async function fetchStaffVisits(params, signal) {
   return listOf(await api.get('/appointments', { params: clean(params), signal }))

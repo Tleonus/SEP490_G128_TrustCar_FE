@@ -22,6 +22,10 @@ export const APPOINTMENT_ERROR = Object.freeze({
   RESCHEDULE_NOT_ALLOWED: 'RESCHEDULE_NOT_ALLOWED',
   RESCHEDULE_LIMIT: 'RESCHEDULE_LIMIT',
   CUSTOMER_NOT_FOUND: 'CUSTOMER_NOT_FOUND',
+  // Thêm xe vào lượt đang chờ xác nhận
+  ADD_CAR_NOT_ALLOWED: 'ADD_CAR_NOT_ALLOWED',
+  CAR_LIMIT: 'CAR_LIMIT',
+  CONFIRMED_CALL: 'CONFIRMED_CALL',
 })
 
 const K = APPOINTMENT_ERROR
@@ -48,6 +52,9 @@ const KIND_BY_CODE = {
   APPOINTMENT_RESCHEDULE_NOT_ALLOWED: K.RESCHEDULE_NOT_ALLOWED,
   APPOINTMENT_RESCHEDULE_LIMIT_REACHED: K.RESCHEDULE_LIMIT,
   CUSTOMER_NOT_FOUND: K.CUSTOMER_NOT_FOUND,
+  APPOINTMENT_ADD_CAR_NOT_ALLOWED: K.ADD_CAR_NOT_ALLOWED,
+  APPOINTMENT_CAR_LIMIT_REACHED: K.CAR_LIMIT,
+  APPOINTMENT_CONFIRMED_CALL_SHOWROOM: K.CONFIRMED_CALL,
 }
 
 /** Cần tải lại gì sau lỗi: lưới khung, dữ liệu lượt, hay không cần. */
@@ -62,6 +69,9 @@ const RELOAD = {
   [K.CAR_UNAVAILABLE]: 'visit',
   [K.RESCHEDULE_NOT_ALLOWED]: 'visit',
   [K.RESCHEDULE_LIMIT]: 'visit',
+  [K.ADD_CAR_NOT_ALLOWED]: 'visit',
+  [K.CAR_LIMIT]: 'visit',
+  [K.CONFIRMED_CALL]: 'visit',
 }
 
 const ACTION = {
@@ -101,6 +111,9 @@ const MESSAGE = {
     : 'Lượt này không thể tự đổi lịch nữa. Xin gọi showroom.'),
   [K.RESCHEDULE_LIMIT]: () => 'Bạn đã đổi lịch tối đa số lần cho phép. Xin gọi showroom.',
   [K.CUSTOMER_NOT_FOUND]: () => 'Không tìm thấy khách có tài khoản. Hãy yêu cầu khách đăng ký trước.',
+  [K.ADD_CAR_NOT_ALLOWED]: () => 'Lượt này đã được xác nhận hoặc đã đổi trạng thái nên không thêm xe được nữa. Nếu cần, xin gọi showroom.',
+  [K.CAR_LIMIT]: () => 'Lượt này đã đủ 3 xe.',
+  [K.CONFIRMED_CALL]: () => 'Lịch đã được xác nhận. Muốn hủy hoặc đổi lịch, xin gọi showroom.',
 }
 
 /** 404 của một đường dẫn chưa có trên BE (BE cũ): `Route … not found.` hoặc không có thân JSON của BE. */

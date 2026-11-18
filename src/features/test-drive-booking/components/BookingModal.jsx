@@ -1,6 +1,7 @@
 import { Alert, Button, Input, Modal } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import CarPicker from './CarPicker'
+import HeldCarNotice from './HeldCarNotice'
 import SlotPicker from './SlotPicker'
 import BookingSuccess from './BookingSuccess'
 import { useBooking } from '../hooks/useBooking'
@@ -12,6 +13,7 @@ function BookingDialog({ currentCar, onClose }) {
   const navigate = useNavigate()
   const booking = useBooking(currentCar)
   const { problem, visit, submitting } = booking
+  const held = booking.heldSelected.length > 0
 
   const goTo = (path) => {
     onClose()
@@ -23,7 +25,7 @@ function BookingDialog({ currentCar, onClose }) {
     <Button key="mine" type="primary" onClick={() => goTo('/lich-hen')}>Xem lịch hẹn của tôi</Button>,
   ] : [
     <Button key="close" onClick={onClose}>Đóng</Button>,
-    <Button key="submit" type="primary" loading={submitting} disabled={!booking.validStart} onClick={booking.submit}>
+    <Button key="submit" type="primary" loading={submitting} disabled={!booking.validStart || held} onClick={booking.submit}>
       Đặt lịch lái thử
     </Button>,
   ]
@@ -47,8 +49,10 @@ function BookingDialog({ currentCar, onClose }) {
             lockedId={currentCar.id}
             onAdd={booking.addCar}
             onRemove={booking.removeCar}
+            heldIds={booking.heldIds}
             disabled={submitting}
           />
+          {held && <HeldCarNotice cars={booking.heldSelected} onGo={goTo} />}
           <SlotPicker
             status={booking.slots.status}
             days={booking.slots.days}
@@ -56,6 +60,7 @@ function BookingDialog({ currentCar, onClose }) {
             selectedDate={booking.activeDate}
             selectedStart={booking.validStart}
             carNames={booking.carNames}
+            blockedNote={held ? 'Xe đã có lịch' : undefined}
             onSelectDate={booking.selectDate}
             onSelectSlot={booking.selectSlot}
             onRetry={booking.slots.reload}

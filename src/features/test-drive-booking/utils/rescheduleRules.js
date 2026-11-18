@@ -19,7 +19,8 @@ import { isOpenVisit } from './visitRules'
  */
 export function rescheduleHint(visit, now = new Date()) {
   const hours = hoursUntil(visit?.scheduledAt, now)
-  if (!isOpenVisit(visit) || !(hours > 0)) return { canReschedule: false, message: null }
+  // Đã xác nhận: khách gọi showroom để hủy/đổi (thẻ lượt hiện lời nhắc riêng), nên không nút, không câu.
+  if (!isOpenVisit(visit) || visit.status === 'CONFIRMED' || !(hours > 0)) return { canReschedule: false, message: null }
   if (visit.canReschedule === true) return { canReschedule: true, message: null }
   if ((visit.rescheduleCount ?? 0) >= MAX_RESCHEDULES) return { canReschedule: false, message: RESCHEDULE_HINT.MAX_REACHED }
   if (hours < RESCHEDULE_MIN_HOURS) return { canReschedule: false, message: RESCHEDULE_HINT.TOO_LATE }

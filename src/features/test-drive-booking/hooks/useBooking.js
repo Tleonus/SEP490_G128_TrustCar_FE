@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { createVisit } from '../api/appointmentApi'
 import { useSlots } from './useSlots'
+import { useHeldCars } from './useHeldCars'
 import { addCar, carIdsOf, carNamesOf, removeCar } from '../utils/carSelection'
+import { heldAmong } from '../utils/heldCars'
 import { classifyAppointmentError } from '../utils/appointmentErrors'
 import { findSlot, firstAvailableDay, isSelectable } from '../utils/slotGrid'
 
@@ -26,6 +28,9 @@ export function useBooking(currentCar) {
   const carIds = carIdsOf(selected)
   const carNames = carNamesOf(selected)
   const slots = useSlots(carIds)
+  // Xe đã chọn mà khách đang giữ ở lượt khác: báo ngay, khóa việc đặt (BE vẫn là nơi quyết định cuối).
+  const heldIds = useHeldCars()
+  const heldSelected = heldAmong(selected, heldIds)
 
   // Ngày/khung đang chọn chỉ có giá trị khi dữ liệu mới nhất còn cho phép.
   const activeDate = slots.days.some((day) => day.date === dateKey) ? dateKey : firstAvailableDay(slots.days)
@@ -39,7 +44,7 @@ export function useBooking(currentCar) {
   }
 
   async function submit() {
-    if (submitting || !validStart) return
+    if (submitting || !validStart || heldSelected.length > 0) return
     setSubmitting(true)
     setProblem(null)
     try {
@@ -59,6 +64,8 @@ export function useBooking(currentCar) {
   return {
     selected,
     carNames,
+    heldIds,
+    heldSelected,
     slots,
     activeDate,
     validStart,

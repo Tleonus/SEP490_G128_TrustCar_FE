@@ -2,7 +2,7 @@
 // BE vẫn là nguồn quyết định; các hàm này chỉ để bật/tắt nút và gợi ý.
 // Ref: .sdd/features/test-drive-booking/SPEC.md#REQ-F10, #REQ-F11, #REQ-F15 và BE Spec C5
 
-import { LATE_CANCEL_HOURS } from '../constants/testDriveConstants'
+import { ADD_CAR_MIN_HOURS, LATE_CANCEL_HOURS, MAX_CARS } from '../constants/testDriveConstants'
 import { hoursUntil } from './vnTime'
 
 const OPEN = ['PENDING', 'CONFIRMED']
@@ -10,11 +10,30 @@ const OPEN = ['PENDING', 'CONFIRMED']
 export const isOpenVisit = (visit) => OPEN.includes(visit?.status)
 
 /**
- * Khách hủy được khi lượt còn mở và chưa tới giờ hẹn.
+ * Khách tự hủy được khi lượt còn "Chờ xác nhận" và chưa tới giờ hẹn.
+ * Lượt đã xác nhận thì phải gọi showroom (BE từ chối APPOINTMENT_CONFIRMED_CALL_SHOWROOM).
  * @ears .sdd/features/test-drive-booking/SPEC.md#REQ-F11
  */
 export function canCancel(visit, now = new Date()) {
-  return isOpenVisit(visit) && hoursUntil(visit.scheduledAt, now) > 0
+  return visit?.status === 'PENDING' && hoursUntil(visit.scheduledAt, now) > 0
+}
+
+/** Lượt đã xác nhận, chưa tới giờ: khách không còn nút nào, chỉ có lời nhắc gọi showroom. */
+export function needsCallToChange(visit, now = new Date()) {
+  return visit?.status === 'CONFIRMED' && hoursUntil(visit.scheduledAt, now) > 0
+}
+
+/** Các lịch con còn mở (xe còn trong lượt). */
+export const openAppointments = (visit) => (visit?.appointments ?? []).filter((a) => OPEN.includes(a.status))
+
+/**
+ * Khách thêm được xe vào lượt khi lượt còn "Chờ xác nhận", chưa đủ MAX_CARS xe và còn hơn
+ * ADD_CAR_MIN_HOURS giờ (cùng luật đặt trước tối thiểu của BE). BE vẫn kiểm tra lại.
+ */
+export function canAddCar(visit, now = new Date()) {
+  return visit?.status === 'PENDING'
+    && openAppointments(visit).length < MAX_CARS
+    && hoursUntil(visit.scheduledAt, now) >= ADD_CAR_MIN_HOURS
 }
 
 /**

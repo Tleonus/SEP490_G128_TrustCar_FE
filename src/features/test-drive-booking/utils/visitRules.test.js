@@ -1,14 +1,43 @@
 import { describe, it, expect } from 'vitest'
-import { canCancel, isLateHint, isCarCancelled, staffActions, unavailableCarIds, hasUnavailableCar } from './visitRules'
+import {
+  canAddCar, canCancel, needsCallToChange, isLateHint, isCarCancelled, staffActions, unavailableCarIds, hasUnavailableCar,
+} from './visitRules'
 
 const SLOT = '2026-11-10T03:00:00.000Z' // 10:00 VN
 const at = (hoursBefore) => new Date(new Date(SLOT).getTime() - hoursBefore * 3600e3)
 const visit = (status, extra = {}) => ({ status, scheduledAt: SLOT, appointments: [], ...extra })
 
+describe('canAddCar: thêm xe vào lượt chờ xác nhận', () => {
+  const cars = (...statuses) => statuses.map((status, i) => ({ _id: `a${i}`, status, car: { _id: `c${i}` } }))
+  it('được khi lượt Chờ xác nhận, dưới 3 xe và còn ≥ 2 giờ', () => {
+    expect(canAddCar(visit('PENDING', { appointments: cars('PENDING') }), at(24))).toBe(true)
+    expect(canAddCar(visit('PENDING', { appointments: cars('PENDING', 'PENDING') }), at(2))).toBe(true)
+  })
+  it('không được khi lượt đã xác nhận, đã hủy hoặc đã xong', () => {
+    ;['CONFIRMED', 'CANCELLED', 'COMPLETED', 'NO_SHOW'].forEach((status) => {
+      expect(canAddCar(visit(status, { appointments: cars('PENDING') }), at(24))).toBe(false)
+    })
+  })
+  it('không được khi đã đủ 3 xe còn mở; xe đã bị hủy riêng không tính', () => {
+    expect(canAddCar(visit('PENDING', { appointments: cars('PENDING', 'PENDING', 'PENDING') }), at(24))).toBe(false)
+    expect(canAddCar(visit('PENDING', { appointments: cars('PENDING', 'PENDING', 'CANCELLED') }), at(24))).toBe(true)
+  })
+  it('không được khi còn dưới 2 giờ', () => {
+    expect(canAddCar(visit('PENDING', { appointments: cars('PENDING') }), at(1.5))).toBe(false)
+  })
+})
+
 describe('canCancel / isLateHint (AC-F08)', () => {
   it('hủy được khi lượt mở và chưa tới giờ', () => {
     expect(canCancel(visit('PENDING'), at(24))).toBe(true)
-    expect(canCancel(visit('CONFIRMED'), at(0.5))).toBe(true)
+    expect(canCancel(visit('PENDING'), at(0.5))).toBe(true)
+  })
+
+  it('lượt Đã xác nhận: khách không tự hủy, phải gọi showroom', () => {
+    expect(canCancel(visit('CONFIRMED'), at(24))).toBe(false)
+    expect(needsCallToChange(visit('CONFIRMED'), at(24))).toBe(true)
+    expect(needsCallToChange(visit('CONFIRMED'), at(-1))).toBe(false)
+    expect(needsCallToChange(visit('PENDING'), at(24))).toBe(false)
   })
 
   it('không hủy được khi đã tới giờ, đã đóng hoặc thiếu dữ liệu', () => {
