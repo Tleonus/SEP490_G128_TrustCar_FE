@@ -3,7 +3,7 @@ import { rescheduleHint, rescheduledText } from './rescheduleRules'
 
 const NOW = new Date('2026-11-10T03:00:00Z') // 10:00 VN
 const at = (hours) => new Date(NOW.getTime() + hours * 3600 * 1000).toISOString()
-const visit = (extra) => ({ status: 'CONFIRMED', scheduledAt: at(30), canReschedule: true, rescheduleCount: 0, ...extra })
+const visit = (extra) => ({ status: 'PENDING', scheduledAt: at(30), canReschedule: true, rescheduleCount: 0, ...extra })
 
 describe('rescheduleHint (AC-F18)', () => {
   it('BE cho đổi → nút bật, không câu', () => {
@@ -32,8 +32,8 @@ describe('rescheduleHint (AC-F18)', () => {
     expect(result.message).toMatch(/gọi showroom/)
   })
 
-  it('PENDING cũng được xét như CONFIRMED', () => {
-    expect(rescheduleHint(visit({ status: 'PENDING' }), NOW).canReschedule).toBe(true)
+  it('lượt Đã xác nhận → không nút, không câu (khách gọi showroom; thẻ lượt tự ghi lời nhắc)', () => {
+    expect(rescheduleHint(visit({ status: 'CONFIRMED' }), NOW)).toEqual({ canReschedule: false, message: null })
   })
 
   it.each(['CANCELLED', 'COMPLETED', 'NO_SHOW'])('lượt %s → không nút, không câu', (status) => {

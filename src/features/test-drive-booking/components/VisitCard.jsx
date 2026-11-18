@@ -1,7 +1,9 @@
 import { Button, Tag } from 'antd'
+import { InfoCircleOutlined, PhoneOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
 import VisitStatusTag from './VisitStatusTag'
-import { canCancel, isCarCancelled } from '../utils/visitRules'
+import { useContactInfo } from '../../../config/contactInfo'
+import { canAddCar, canCancel, isCarCancelled, needsCallToChange } from '../utils/visitRules'
 import { rescheduleHint, rescheduledText } from '../utils/rescheduleRules'
 import { formatVnDateTime } from '../utils/vnTime'
 import {
@@ -34,9 +36,12 @@ function CancellationNote({ visit }) {
  * @param {object} visit
  * @param {(visit: object) => void} onCancel
  * @param {(visit: object) => void} onReschedule
+ * @param {(visit: object) => void} [onAddCars]  Có thì hiện nút "Thêm xe" khi lượt còn chờ xác nhận và chưa đủ 3 xe
  */
-export default function VisitCard({ visit, onCancel, onReschedule }) {
+export default function VisitCard({ visit, onCancel, onReschedule, onAddCars }) {
   const hint = rescheduleHint(visit)
+  const addable = Boolean(onAddCars) && canAddCar(visit)
+  const { phoneDisplay, phoneHref } = useContactInfo()
   const movedText = rescheduledText(visit)
   return (
     <article className={styles.card} aria-label={`Lượt lái thử ${visit.visitCode}`}>
@@ -74,10 +79,20 @@ export default function VisitCard({ visit, onCancel, onReschedule }) {
       {visit.status === 'CANCELLED' && <CancellationNote visit={visit} />}
 
       {movedText && <p className={styles.meta}>{movedText}</p>}
-      {hint.message && <p className={styles.hint} role="note">{hint.message}</p>}
+      {hint.message && <p className={styles.hint} role="note"><InfoCircleOutlined aria-hidden /> {hint.message}</p>}
+      {needsCallToChange(visit) && (
+        <p className={styles.callNote} role="note">
+          <PhoneOutlined aria-hidden />
+          <span>
+            Lịch đã được xác nhận. Muốn hủy hoặc đổi lịch, xin gọi{' '}
+            <a href={phoneHref}>{phoneDisplay}</a>.
+          </span>
+        </p>
+      )}
 
-      {(canCancel(visit) || hint.canReschedule) && (
+      {(canCancel(visit) || hint.canReschedule || addable) && (
         <div className={styles.actions}>
+          {addable && <Button onClick={() => onAddCars(visit)}>Thêm xe</Button>}
           {hint.canReschedule && <Button onClick={() => onReschedule(visit)}>Đổi lịch</Button>}
           {canCancel(visit) && <Button danger onClick={() => onCancel(visit)}>Hủy lượt</Button>}
         </div>
