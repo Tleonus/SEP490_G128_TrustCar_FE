@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { App, Button, Input, Select, Pagination, Tag, Tooltip } from 'antd'
-import { SearchOutlined, ShareAltOutlined, ShoppingCartOutlined } from '@ant-design/icons'
+import { FacebookFilled, PictureOutlined, SearchOutlined, ShoppingCartOutlined } from '@ant-design/icons'
 import { useAdminCars } from '../../hooks/useAdminCars'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useBrands } from '../../hooks/useCatalog'
@@ -22,13 +22,24 @@ import {
 import Icon from '../../features/vehicle-intake/components/VehicleIntakeIcon'
 import OrderCheckoutModal from '../../features/sales-crm/components/OrderCheckoutModal'
 import { isSellableStatus, toCarVM } from '../../features/sales-crm/data/salesCrmMappers'
+import CarImagesModal from '../../features/car-images/components/CarImagesModal'
+import CaptionComposerModal from '../../features/marketing-caption/components/CaptionComposerModal'
 import { ADMIN_PATHS } from '../../router/paths'
 import styles from './AdminCarsPage.module.css'
+
+/** Ảnh chính của xe (Backend coi ảnh chính là ảnh dùng khi chia sẻ), dùng cho modal bài đăng. */
+function primaryImageUrl(car) {
+  const cover = getCoverImage(car)
+  return (typeof cover === 'string' ? cover : cover?.url) || null
+}
 
 export default function AdminCarsPage() {
   const { notification } = App.useApp()
   const [searchParams, setSearchParams] = useSearchParams()
   const [checkoutCar, setCheckoutCar] = useState(null)
+  // Xe đang mở modal nhập ảnh / modal tạo bài đăng Facebook.
+  const [imageCar, setImageCar] = useState(null)
+  const [postCar, setPostCar] = useState(null)
   const keyword = searchParams.get('search') || ''
   const debouncedKeyword = useDebounce(keyword, 400)
   const brands = useBrands()
@@ -145,16 +156,14 @@ export default function AdminCarsPage() {
             <table className={styles.table} aria-label="Danh sách xe trong kho">
               <thead>
                 <tr>
-                  <th aria-label="Ảnh xe"></th>
-                  <th>Mã xe</th>
+                  <th className={styles.colImage} aria-label="Ảnh xe"></th>
                   <th>Xe</th>
-                  <th>Năm</th>
-                  <th>Số km</th>
-                  <th>Giá bán</th>
-                  <th>Trạng thái</th>
-                  <th>Ngày nhập kho</th>
-                  <th>Số ngày tồn</th>
-                  <th>Tình trạng tồn</th>
+                  <th className={styles.colYear}>Năm / Số km</th>
+                  <th className={styles.colPrice}>Giá bán</th>
+                  <th className={styles.colStatus}>Trạng thái</th>
+                  {/* Gộp ngày nhập kho + số ngày tồn + tình trạng tồn vào một cột để bảng vừa
+                      khung nhìn, không phải cuộn ngang mới thấy hết thông tin tồn kho. */}
+                  <th className={styles.agingCol}>Tồn kho</th>
                   <th className={styles.actionCol}>Thao tác</th>
                 </tr>
               </thead>
@@ -168,53 +177,68 @@ export default function AdminCarsPage() {
                   const { daysInStock, agingCategory } = computeAging(car.listedDate)
                   return (
                   <tr key={car.vehicleCode || car._id}>
-                    <td>
+                    <td className={styles.colImage}>
                       {image ? (
                         <img src={image} alt={getCarTitle(car)} className={styles.thumb} />
                       ) : (
                         <div className={styles.thumbPlaceholder} />
                       )}
                     </td>
-                    <td>{car.vehicleCode}</td>
-                    <td>
+                    <td className={styles.carCol}>
                       <Tooltip title={`VIN: ${car.vin || '—'} · Biển số: ${car.licensePlate || '—'}`}>
-                        {getCarTitle(car)}
+                        <span className={styles.carName}>{getCarTitle(car)}</span>
                       </Tooltip>
+                      <span className={styles.carCode}>{car.vehicleCode}</span>
                     </td>
-                    <td>{car.year}</td>
-                    <td>{formatMileage(car.mileage)}</td>
-                    <td>{formatPrice(car.price)}</td>
-                    <td>
+                    <td className={styles.colYear}>
+                      <span className={styles.cellPrimary}>{car.year || '—'}</span>
+                      <span className={styles.cellSecondary}>{formatMileage(car.mileage)}</span>
+                    </td>
+                    <td className={styles.colPrice}>{formatPrice(car.price)}</td>
+                    <td className={styles.colStatus}>
                       <Tag color={CAR_STATUS_COLOR[car.status]}>{labelOf(CAR_STATUS_LABEL, car.status)}</Tag>
                     </td>
-                    <td>{formatDate(car.listedDate)}</td>
-                    <td>{daysInStock} ngày</td>
-                    <td>
-                      <Tag color={AGING_COLOR[agingCategory]}>{labelOf(AGING_LABEL, agingCategory)}</Tag>
+                    <td className={styles.agingCol}>
+                      <div className={styles.agingCell}>
+                        <Tag color={AGING_COLOR[agingCategory]}>{labelOf(AGING_LABEL, agingCategory)}</Tag>
+                        <span className={styles.agingMeta}>
+                          {daysInStock} ngày · {formatDate(car.listedDate)}
+                        </span>
+                      </div>
                     </td>
                     <td className={styles.actionCol}>
-                      {/* KAN-66: mở màn chọn ảnh chia sẻ mạng xã hội của xe này */}
-                      <Link to={`${ADMIN_PATHS.inventory}/${car._id}`}>
+                      <div className={styles.actionGroup}>
+                        {/* Thay màn "Ảnh chia sẻ mạng xã hội" cũ (cần endpoint Backend chưa có):
+                            ảnh chính trong gallery do Backend dùng làm ảnh chia sẻ. */}
                         <Button
                           size="small"
-                          icon={<ShareAltOutlined />}
-                          aria-label={`Ảnh chia sẻ của xe ${car.vehicleCode || getCarTitle(car)}`}
+                          icon={<PictureOutlined />}
+                          onClick={() => setImageCar(car)}
+                          aria-label={`Nhập ảnh cho xe ${car.vehicleCode || getCarTitle(car)}`}
                         >
-                          Ảnh chia sẻ
+                          Nhập ảnh xe
                         </Button>
-                      </Link>
-                      {isSellableStatus(car.status) && (
                         <Button
                           size="small"
-                          type="primary"
-                          ghost
-                          icon={<ShoppingCartOutlined />}
-                          onClick={() => setCheckoutCar(toCarVM(car))}
-                          aria-label={`Chốt đơn xe ${car.vehicleCode || getCarTitle(car)}`}
+                          icon={<FacebookFilled />}
+                          onClick={() => setPostCar(car)}
+                          aria-label={`Tạo bài đăng Facebook cho xe ${car.vehicleCode || getCarTitle(car)}`}
                         >
-                          Chốt đơn
+                          Tạo bài đăng
                         </Button>
-                      )}
+                        {isSellableStatus(car.status) && (
+                          <Button
+                            size="small"
+                            type="primary"
+                            ghost
+                            icon={<ShoppingCartOutlined />}
+                            onClick={() => setCheckoutCar(toCarVM(car))}
+                            aria-label={`Chốt đơn xe ${car.vehicleCode || getCarTitle(car)}`}
+                          >
+                            Chốt đơn
+                          </Button>
+                        )}
+                      </div>
                     </td>
                   </tr>
                   )
@@ -239,6 +263,25 @@ export default function AdminCarsPage() {
         context={checkoutCar ? { car: checkoutCar } : null}
         onClose={() => setCheckoutCar(null)}
         onSuccess={handleCheckoutSuccess}
+      />
+
+      {/* Nhập ảnh xe: chọn/kéo-thả file, upload thẳng vào gallery (POST /manage/cars/:id/images).
+          key theo _id để state ảnh được khởi tạo lại đúng xe mỗi lần mở modal. */}
+      <CarImagesModal
+        key={imageCar?._id || 'no-image-car'}
+        open={imageCar !== null}
+        car={imageCar}
+        onClose={() => setImageCar(null)}
+        onImagesChange={reload}
+      />
+
+      {/* Tạo bài đăng Facebook: caption tự soạn khi mở, ảnh lấy từ ảnh chính trong gallery. */}
+      <CaptionComposerModal
+        key={postCar?._id || 'no-post-car'}
+        open={postCar !== null}
+        car={postCar}
+        imageUrl={primaryImageUrl(postCar)}
+        onClose={() => setPostCar(null)}
       />
     </div>
   )
