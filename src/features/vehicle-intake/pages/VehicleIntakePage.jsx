@@ -12,6 +12,7 @@ export default function VehicleIntakePage({ onSave = saveVehicleIntake }) {
   const [car, setCar] = useState(() => ({ ...initialVehicleIntake }));
   const [checks, setChecks] = useState(() => ({ ...initialInspectionChecks }));
   const [notes, setNotes] = useState('');
+  const [attachments, setAttachments] = useState([]);
   const [errors, setErrors] = useState({});
   const [notice, setNotice] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -36,6 +37,16 @@ export default function VehicleIntakePage({ onSave = saveVehicleIntake }) {
 
   const handleNotesChange = (value) => {
     setNotes(value);
+    setNotice(null);
+  };
+
+  const handleAddAttachments = (files) => {
+    setAttachments((current) => [...current, ...files]);
+    setNotice(null);
+  };
+
+  const handleRemoveAttachment = (index) => {
+    setAttachments((current) => current.filter((_, i) => i !== index));
     setNotice(null);
   };
 
@@ -87,6 +98,9 @@ export default function VehicleIntakePage({ onSave = saveVehicleIntake }) {
               errors={errors}
               onChange={handleCarChange}
               onOwnershipChange={handleOwnershipChange}
+              attachments={attachments}
+              onAddFiles={handleAddAttachments}
+              onRemoveFile={handleRemoveAttachment}
             />
             <div className={styles["right-column"]}>
               <TrustCarInspectionChecklist
@@ -96,7 +110,7 @@ export default function VehicleIntakePage({ onSave = saveVehicleIntake }) {
                 onCheckChange={handleCheckChange}
                 onNotesChange={handleNotesChange}
               />
-              <VehicleIntakeSummary car={car} notes={notes} checkedCount={checkedCount} isSaving={isSaving} />
+              <VehicleIntakeSummary car={car} notes={notes} checkedCount={checkedCount} isSaving={isSaving} attachmentCount={attachments.length} />
             </div>
           </div>
         </form>
