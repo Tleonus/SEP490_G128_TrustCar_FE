@@ -169,7 +169,6 @@ function StreamingBotText({ text, alreadyStreamed, onProgress, onDone }) {
 
   useEffect(() => {
     if (alreadyStreamed) {
-      setVisibleLength(fullText.length)
       doneCalledRef.current = true
       return undefined
     }

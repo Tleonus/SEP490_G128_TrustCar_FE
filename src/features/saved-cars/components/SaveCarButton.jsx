@@ -3,17 +3,18 @@ import { Button, Modal, message } from 'antd'
 import { HeartFilled, HeartOutlined, UserOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import { useSavedCarsStore } from '../store/useSavedCarsStore'
-import { savedIdOf, MAX_SAVED_CARS } from '../utils/savedCars'
+import { savedIdOf, MAX_ACCOUNT_SAVED_CARS, MAX_GUEST_SAVED_CARS } from '../utils/savedCars'
 import { useAuthStore } from '../../../store/useAuthStore'
 import styles from './SaveCarButton.module.css'
 
-const GUEST_LIMIT_MESSAGE = `Bạn chỉ lưu được tối đa ${MAX_SAVED_CARS} xe.`
+const getLimitMessage = (limit) => 'B\u1ea1n ch\u1ec9 l\u01b0u \u0111\u01b0\u1ee3c t\u1ed1i \u0111a ' + limit + ' xe.'
 
 export default function SaveCarButton({ car, variant = 'card' }) {
   const id = savedIdOf(car)
   const navigate = useNavigate()
   const [loginOpen, setLoginOpen] = useState(false)
   const isCustomer = useAuthStore((state) => state.isAuthenticated && state.user?.roleName === 'CUSTOMER')
+  const limitMessage = getLimitMessage(isCustomer ? MAX_ACCOUNT_SAVED_CARS : MAX_GUEST_SAVED_CARS)
   const saved = useSavedCarsStore((state) => Boolean(id) && state.items.some((item) => item.id === id))
   const toggle = useSavedCarsStore((state) => state.toggle)
 
@@ -27,12 +28,12 @@ export default function SaveCarButton({ car, variant = 'card' }) {
 
     if (!isCustomer) {
       if (result === 'added') setLoginOpen(true)
-      else if (result === 'full') message.warning(GUEST_LIMIT_MESSAGE)
+      else if (result === 'full') message.warning(limitMessage)
       return
     }
     if (result === 'added') message.success({ content: 'Đã lưu xe vào tài khoản của bạn.', key: 'saved-car' })
     else if (result === 'removed') message.info({ content: 'Đã bỏ xe khỏi danh sách đã lưu.', key: 'saved-car' })
-    else if (result === 'full') message.warning(GUEST_LIMIT_MESSAGE)
+    else if (result === 'full') message.warning(limitMessage)
     else if (result === 'error') message.error('Không thể cập nhật danh sách yêu thích. Vui lòng thử lại.')
   }
 
