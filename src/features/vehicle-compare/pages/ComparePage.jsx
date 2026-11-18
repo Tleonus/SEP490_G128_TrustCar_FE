@@ -8,7 +8,6 @@ import {
   TrophyFilled,
 } from '@ant-design/icons'
 import { LoadingState, ErrorState } from '../../../components/common/StateBlock'
-import { useAuthStore } from '../../../store/useAuthStore'
 import { useCompareStore } from '../store/useCompareStore'
 import { useComparison } from '../hooks/useComparison'
 import { COMPARE_ERROR } from '../utils/compareErrors'
@@ -82,7 +81,6 @@ export default function ComparePage() {
   const remove = useCompareStore((state) => state.remove)
   const prune = useCompareStore((state) => state.prune)
   const clear = useCompareStore((state) => state.clear)
-  const logout = useAuthStore((state) => state.logout)
 
   // Ảnh chụp danh sách tại lúc mở trang: chỉ gọi API khi đủ số xe tối thiểu.
   const [activeIds, setActiveIds] = useState(() =>
@@ -103,8 +101,7 @@ export default function ComparePage() {
     if (status !== 'error') return
     if (errorKind === COMPARE_ERROR.NOT_ENOUGH) prune(error.unavailableIds)
     else if (errorKind === COMPARE_ERROR.INVALID) clear()
-    else if (errorKind === COMPARE_ERROR.UNAUTHORIZED) logout()
-  }, [status, errorKind, error, prune, clear, logout])
+  }, [status, errorKind, error, prune, clear])
 
   const selectedIds = useMemo(() => new Set(items.map((item) => item.id)), [items])
   const cars = useMemo(
@@ -210,7 +207,7 @@ export default function ComparePage() {
         />
       </>
     )
-  } else if (status === 'loading' || errorKind === COMPARE_ERROR.UNAUTHORIZED) {
+  } else if (status === 'loading') {
     content = <LoadingState text="Đang tải bảng so sánh..." />
   } else if (status === 'error') {
     if (errorKind === COMPARE_ERROR.NETWORK) {
