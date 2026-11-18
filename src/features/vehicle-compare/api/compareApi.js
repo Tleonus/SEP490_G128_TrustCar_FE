@@ -1,7 +1,8 @@
 import api from '../../../services/api'
 
 /**
- * Gọi API so sánh xe (chỉ khách hàng đã đăng nhập). Dùng axios `api` có sẵn nên tự gắn Bearer token.
+ * Gọi API so sánh xe. Công khai: khách chưa đăng nhập, khách hàng, nhân viên và admin đều dùng được
+ * (không cần token). Dùng axios `api` có sẵn.
  * Không dùng dữ liệu mẫu: lỗi được ném lên cho hook phân loại.
  *
  * @ears .sdd/features/vehicle-comparison/SPEC.md#REQ-F12
@@ -10,7 +11,7 @@ import api from '../../../services/api'
  * @returns {Promise<{ cars: object[], unavailableIds: string[] }>}
  */
 export async function fetchComparison(ids, signal) {
-  const response = await api.get('/customer/cars/compare', {
+  const response = await api.get('/public/cars/compare', {
     params: { ids: ids.join(',') },
     signal,
   })
