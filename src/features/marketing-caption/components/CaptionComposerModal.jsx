@@ -1,20 +1,21 @@
 /**
- * KAN-69 – Modal "Tạo bài đăng Facebook" trong trang Admin chi tiết xe.
+ * KAN-69 – Modal "Tạo bài đăng Facebook" mở từ cột Thao tác của bảng kho xe.
  *
- * Luồng: chọn giọng điệu + độ dài → bấm Tạo caption → Backend (KAN-68) trả 3 phương án
- * → xem trước khung bài đăng → Copy từng phương án, hoặc "Mở Facebook" để tự dán bài.
+ * Luồng: mở modal → tự gọi Backend (KAN-68) một lần để soạn 3 phương án caption
+ * → xem trước khung bài đăng (ảnh + caption + hashtag) → Copy từng phương án,
+ * hoặc "Mở Facebook" để mở facebook.com ở tab mới rồi tự dán bài.
  *
- * Không tự gọi API khi mở modal: mỗi lượt gọi tính vào hạn mức 20 lượt/ngày của Backend.
+ * Chỉ tự gọi đúng một lần cho mỗi lần mở: mỗi lượt gọi tính vào hạn mức 20 lượt/ngày của
+ * Backend, nên người dùng muốn tạo lại phải bấm nút "Tạo lại caption".
  */
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { App, Alert, Button, Modal, Radio, Segmented } from 'antd'
 import { FacebookFilled, ReloadOutlined, SendOutlined, ThunderboltOutlined } from '@ant-design/icons'
 import { useCaptionSuggestions } from '../hooks/useCaptionSuggestions'
 import CaptionOptionCard from './CaptionOptionCard'
 import FacebookPostPreview from './FacebookPostPreview'
-import { copyText } from '../../../utils/clipboardText'
-import { captionToClipboard, normalizeHashtags } from '../utils/captionText'
+import { normalizeHashtags } from '../utils/captionText'
 import { getCoverImage } from '../../../utils/car'
 import {
   FACEBOOK_COMPOSER_URL,
@@ -24,16 +25,19 @@ import {
 } from '../constants/captionConstants'
 import styles from '../styles/CaptionComposer.module.css'
 
-/** Ảnh cho khung preview: gợi ý của AI → ảnh chia sẻ đã lưu → ảnh chính của xe. */
-function previewImageUrl(car, imageSuggestion) {
+/**
+ * Ảnh cho khung preview: ảnh truyền vào (ảnh chính trong gallery của xe) → gợi ý của AI → ảnh bìa.
+ * Không còn ảnh chia sẻ riêng vì Backend chưa có endpoint lưu; ảnh chính là ảnh crawler dùng.
+ */
+function previewImageUrl(car, imageSuggestion, preferredUrl) {
+  const preferred = typeof preferredUrl === 'string' ? preferredUrl.trim() : ''
+  if (preferred) return preferred
   const suggested = imageSuggestion?.url
   if (typeof suggested === 'string' && suggested.trim()) return suggested.trim()
-  const saved = car?.socialImage?.url
-  if (typeof saved === 'string' && saved.trim()) return saved.trim()
   return getCoverImage(car)?.url || null
 }
 
-export default function CaptionComposerModal({ open, car, onClose }) {
+export default function CaptionComposerModal({ open, car, onClose, imageUrl: preferredImageUrl }) {
   const { message } = App.useApp()
   const {
     presetId, setPresetId, length, setLength, lengthLocked,
@@ -45,8 +49,22 @@ export default function CaptionComposerModal({ open, car, onClose }) {
   // Không cần effect đồng bộ: nếu danh sách mới ngắn hơn thì kẹp lại khi đọc.
   const selectedIndex = options.length ? Math.min(chosenIndex, options.length - 1) : 0
 
-  const imageUrl = previewImageUrl(car, imageSuggestion)
+  const imageUrl = previewImageUrl(car, imageSuggestion, preferredImageUrl)
   const tags = normalizeHashtags(hashtags)
+
+  // Tự soạn caption ngay khi mở modal để không phải bấm thêm một bước.
+  // Chỉ chạy một lần cho mỗi lần mở (StrictMode gọi effect 2 lần, và mỗi lượt gọi tốn một
+  // suất trong hạn mức 20 lượt/ngày của Backend), nên chặn bằng ref và reset khi đóng.
+  const autoRunRef = useRef(false)
+  useEffect(() => {
+    if (!open) {
+      autoRunRef.current = false
+      return
+    }
+    if (autoRunRef.current || !car?._id) return
+    autoRunRef.current = true
+    generate()
+  }, [open, car?._id, generate])
 
   async function handleGenerate() {
     setChosenIndex(0)
@@ -54,14 +72,8 @@ export default function CaptionComposerModal({ open, car, onClose }) {
     if (result.ok) message.success(`Đã tạo ${result.count} phương án caption`)
   }
 
-  async function handleOpenFacebook() {
-    if (!options.length) return
-    try {
-      await copyText(captionToClipboard(options[selectedIndex], tags))
-      message.info('Đã copy caption. Dán vào bài đăng Facebook vừa mở.')
-    } catch {
-      message.warning('Không copy được caption tự động. Hãy bấm Copy ở phương án muốn đăng.')
-    }
+  // Chỉ mở Facebook ở tab mới. Caption đã soạn sẵn để người dùng bấm Copy ở phương án muốn đăng.
+  function handleOpenFacebook() {
     window.open(FACEBOOK_COMPOSER_URL, '_blank', 'noopener,noreferrer')
   }
 
@@ -153,14 +165,13 @@ export default function CaptionComposerModal({ open, car, onClose }) {
           <Button
             icon={<SendOutlined />}
             onClick={handleOpenFacebook}
-            disabled={!options.length || loading}
             className={styles.openFbBtn}
           >
             Mở Facebook
           </Button>
           <p className={styles.previewHint}>
-            Nút này mở Facebook ở tab mới và copy phương án đang chọn vào clipboard để bạn dán vào bài đăng.
-            TrustCar chưa có quyền đăng bài tự động lên Trang.
+            Nút này chỉ mở Facebook ở tab mới. Ảnh và caption đã có sẵn ở trên — bấm Copy ở phương án
+            muốn đăng rồi tải ảnh lên bài viết. TrustCar chưa có quyền đăng bài tự động lên Trang.
           </p>
         </aside>
       </div>

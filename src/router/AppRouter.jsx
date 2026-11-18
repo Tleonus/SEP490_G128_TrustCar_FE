@@ -38,8 +38,6 @@ const InspectionDashboardPage = lazy(() => import('../features/inspection-dashbo
 const ApprovalPage = lazy(() => import('../features/cpo-approval/pages/ApprovalPage.jsx'))
 // KAN-35: tổng quan điều hành (KPI, doanh thu, hoạt động gần đây)
 const AdminDashboardPage = lazy(() => import('../features/admin-dashboard/pages/AdminDashboardPage.jsx'))
-// KAN-66: chọn ảnh chia sẻ mạng xã hội trong kho xe
-const SocialImagePage = lazy(() => import('../features/social-share-image/pages/SocialImagePage.jsx'))
 const MyVisitsPage = lazy(() => import('../features/test-drive-booking/pages/MyVisitsPage.jsx'))
 const StaffVisitsPage = lazy(() => import('../features/test-drive-booking/pages/StaffVisitsPage.jsx'))
 // KAN-25: hồ sơ cá nhân và cài đặt
@@ -119,11 +117,6 @@ export default function AppRouter() {
         {/* Đường dẫn cũ của KAN-35: giữ để link đã chia sẻ không chết. */}
         <Route path="dashboard" element={<LegacyRedirect to={ADMIN_PATHS.overview} />} />
         <Route path="inventory" element={<AdminCarsPage />} />
-        {/* Ảnh chia sẻ mạng xã hội (KAN-66): ADMIN, SALES_STAFF */}
-        <Route
-          path="inventory/:id"
-          element={<Suspense fallback={<LoadingState />}><SocialImagePage /></Suspense>}
-        />
         {/* Quản lý bán hàng & chốt đơn (KAN-18): ADMIN, SALES_STAFF */}
         <Route path="sales" element={<Suspense fallback={<LoadingState />}><SalesCrmPage /></Suspense>} />
         <Route path="vehicle-intake" element={<Suspense fallback={<LoadingState />}><AdminVehicleIntakePage /></Suspense>} />
