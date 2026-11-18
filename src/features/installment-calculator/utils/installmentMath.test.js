@@ -70,34 +70,38 @@ describe('thuộc tính trên 500 bộ thông số ngẫu nhiên (AC-F03)', () =
   const random = makeRandom(20261116)
   const cases = Array.from({ length: 500 }, (_, i) => randomInput(random, i % 2 ? METHOD_ANNUITY : METHOD_REDUCING))
 
+  // Gom vi phạm vào mảng rồi `expect` một lần: nhanh hơn hàng chục nghìn lệnh `expect` và không bị hết 5 giây khi máy bận.
   it('tổng gốc = vay, dư nợ cuối = 0, đúng số kỳ, mọi số nguyên không âm', () => {
-    cases.forEach((input) => {
+    const problems = []
+    cases.forEach((input, n) => {
       const { rows, loan, down } = computeInstallment(input)
-      expect(rows).toHaveLength(input.termMonths)
-      expect(rows.reduce((s, r) => s + r.principal, 0)).toBe(loan)
-      expect(rows[rows.length - 1].closing).toBe(0)
-      expect(down + loan).toBe(input.price)
+      const bad = (what) => problems.push(`#${n} ${input.method} ${what}`)
+      if (rows.length !== input.termMonths) bad('số kỳ')
+      if (rows.reduce((s, r) => s + r.principal, 0) !== loan) bad('tổng gốc ≠ vay')
+      if (rows[rows.length - 1].closing !== 0) bad('dư nợ cuối ≠ 0')
+      if (down + loan !== input.price) bad('trả trước + vay ≠ giá')
       rows.forEach((r, i) => {
-        expect(Number.isInteger(r.principal) && Number.isInteger(r.interest)).toBe(true)
-        expect(r.principal).toBeGreaterThanOrEqual(0)
-        expect(r.interest).toBeGreaterThanOrEqual(0)
-        expect(r.payment).toBe(r.principal + r.interest)
-        expect(r.closing).toBe(r.opening - r.principal)
-        if (i > 0) expect(r.opening).toBe(rows[i - 1].closing)
+        if (!Number.isInteger(r.principal) || !Number.isInteger(r.interest)) bad(`kỳ ${r.period} không phải số nguyên`)
+        if (r.principal < 0 || r.interest < 0) bad(`kỳ ${r.period} âm`)
+        if (r.payment !== r.principal + r.interest) bad(`kỳ ${r.period} tổng trả sai`)
+        if (r.closing !== r.opening - r.principal) bad(`kỳ ${r.period} dư nợ cuối sai`)
+        if (i > 0 && r.opening !== rows[i - 1].closing) bad(`kỳ ${r.period} dư nợ đầu ≠ cuối kỳ trước`)
       })
     })
+    expect(problems).toEqual([])
   })
 
   it('dư nợ giảm dần: lãi không tăng theo kỳ; niên kim: các kỳ (trừ cuối) có tổng trả bằng nhau', () => {
-    cases.forEach((input) => {
+    const problems = []
+    cases.forEach((input, n) => {
       const { rows } = computeInstallment(input)
       if (input.method === METHOD_REDUCING) {
-        rows.slice(1).forEach((r, i) => expect(r.interest).toBeLessThanOrEqual(rows[i].interest))
-      } else {
-        const payments = new Set(rows.slice(0, -1).map((r) => r.payment))
-        expect(payments.size).toBeLessThanOrEqual(1)
+        rows.slice(1).forEach((r, i) => { if (r.interest > rows[i].interest) problems.push(`#${n} lãi tăng ở kỳ ${r.period}`) })
+      } else if (new Set(rows.slice(0, -1).map((r) => r.payment)).size > 1) {
+        problems.push(`#${n} niên kim: các kỳ không đều`)
       }
     })
+    expect(problems).toEqual([])
   })
 
   it('lãi 0 % → tổng lãi 0; lãi dương → tổng lãi dương; tăng lãi không làm giảm tổng lãi', () => {
