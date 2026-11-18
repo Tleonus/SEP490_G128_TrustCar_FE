@@ -46,5 +46,44 @@ export function parsePriceParam(search) {
   return price >= PRICE_MIN && price <= PRICE_MAX ? price : null
 }
 
+/** Giá xe có hợp lệ để hiện khối ước tính trả góp ở trang chi tiết xe không (KAN-62 REQ-F01/F02). */
+export const isWidgetPrice = (price) => isNumber(price) && price >= PRICE_MIN && price <= PRICE_MAX
+
+/** Số nguyên 1–3 chữ số trong URL; null nếu sai khuôn hoặc `accept(n)` từ chối. */
+const intParam = (params, name, accept) => {
+  const text = params.get(name)
+  if (text === null || !/^\d{1,3}$/.test(text)) return null
+  const value = Number(text)
+  return accept(value) ? value : null
+}
+
+/**
+ * Đọc `?price=`, `?down=`, `?term=`, `?rate=`; tham số nào sai thì bị bỏ qua (không báo lỗi).
+ * @ears .sdd/features/installment-calculator/SPEC.md#REQ-F09
+ * @ears .sdd/features/installment-widget/SPEC.md#REQ-F08
+ * @returns {{ price?: number, downPercent?: number, termMonths?: number, ratePercent?: number }}
+ */
+export function parseQueryParams(search) {
+  const params = new URLSearchParams(search ?? '')
+  const found = {
+    price: parsePriceParam(search),
+    downPercent: intParam(params, 'down', (n) => n >= DOWN_MIN && n <= DOWN_MAX),
+    termMonths: intParam(params, 'term', (n) => TERMS.includes(n)),
+  }
+  const rateText = params.get('rate')
+  if (rateText !== null && /^\d{1,2}(\.\d{1,2})?$/.test(rateText)) {
+    const rate = Number(rateText)
+    if (rate >= RATE_MIN && rate <= RATE_MAX) found.ratePercent = rate
+  }
+  return Object.fromEntries(Object.entries(found).filter(([, value]) => value !== null))
+}
+
 /** Giá trị ban đầu của biểu mẫu. */
-export const initialInput = (search) => ({ ...DEFAULTS, price: parsePriceParam(search) ?? DEFAULTS.price })
+export const initialInput = (search) => ({ ...DEFAULTS, ...parseQueryParams(search) })
+
+/**
+ * Đường dẫn sang trang tính chi tiết, mang giá xe và thông số đã chọn ở khối trang chi tiết xe.
+ * @ears .sdd/features/installment-widget/SPEC.md#REQ-F07
+ */
+export const buildInstallmentLink = ({ price, downPercent, termMonths }) =>
+  `/installment?price=${Math.round(price)}&down=${downPercent}&term=${termMonths}`
