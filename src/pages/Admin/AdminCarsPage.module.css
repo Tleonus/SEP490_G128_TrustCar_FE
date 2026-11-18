@@ -167,16 +167,18 @@
   white-space: nowrap;
 }
 
-/* Hai nút thao tác cùng bề rộng tối thiểu và canh giữa để tiêu đề cột nằm cân trên cụm nút. */
+/* Bốn nút thao tác xếp thành lưới 2×2 để không kéo dài cột quá khổ; mỗi nút cùng bề rộng
+   tối thiểu và canh giữa nội dung, nên tiêu đề cột nằm cân trên cụm nút. */
 .actionGroup {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  justify-items: stretch;
 }
 
 .actionGroup > :global(.ant-btn) {
-  min-width: 104px;
   justify-content: center;
+  width: 100%;
 }
 
 .table th {

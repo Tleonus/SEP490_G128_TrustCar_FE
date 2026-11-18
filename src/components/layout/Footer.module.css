@@ -1,16 +1,63 @@
 .footer {
-  background: var(--color-primary);
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 65% 35% at 50% 0%, rgba(201, 162, 39, 0.12) 0%, transparent 72%),
+    radial-gradient(ellipse 45% 40% at 85% 50%, rgba(56, 189, 248, 0.08) 0%, transparent 70%),
+    linear-gradient(180deg, #071324 0%, #091930 48%, #040b16 100%);
   color: #e7e9ef;
   margin-top: auto;
 }
 
+/* Ranh giới hòa màu giữa thân trang / ContactCtaSection và Footer */
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 8%;
+  right: 8%;
+  height: 1.5px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(56, 189, 248, 0.38) 25%,
+    rgba(244, 216, 121, 0.62) 50%,
+    rgba(56, 189, 248, 0.38) 75%,
+    transparent 100%
+  );
+  box-shadow: 0 0 18px rgba(244, 216, 121, 0.32);
+}
+
 .inner {
+  position: relative;
+  z-index: 2;
   max-width: 1240px;
   margin: 0 auto;
-  padding: 56px 20px 24px;
+  padding: 56px 20px 28px;
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
-  gap: 32px;
+  grid-template-columns: 1.35fr 0.95fr 0.95fr 1.35fr;
+  gap: 24px;
+}
+
+.inner > div {
+  padding: 22px 20px;
+  border-radius: 18px;
+  background: linear-gradient(
+    180deg,
+    rgba(19, 41, 74, 0.56) 0%,
+    rgba(9, 22, 42, 0.68) 100%
+  );
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-bottom: 4px solid #030811;
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: transform 0.22s ease, border-color 0.22s ease;
+}
+
+.inner > div:hover {
+  transform: translateY(-3px);
+  border-color: rgba(244, 216, 121, 0.38);
 }
 
 @media (max-width: 900px) {
@@ -28,35 +75,50 @@
 .brand {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 12px;
+  gap: 12px;
+  margin-bottom: 14px;
 }
 
 .brandLogo {
-  width: 48px;
-  height: 48px;
+  width: 50px;
+  height: 50px;
+  padding: 3px;
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(244, 216, 121, 0.42);
+  border-bottom: 2.5px solid #7d5d09;
   object-fit: contain;
   object-position: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.32);
 }
 
 .brandName {
-  font-size: 18px;
-  font-weight: 700;
-  color: #fff;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  background: linear-gradient(90deg, #ffffff 0%, #fae498 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .desc {
-  color: #b7bdcc;
+  color: #cbd5e1;
   font-size: 14px;
   line-height: 1.7;
   max-width: 320px;
 }
 
 .colTitle {
-  color: #fff;
-  font-size: 15px;
-  font-weight: 600;
+  display: inline-block;
+  color: #fae498;
+  font-size: 14px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
   margin-bottom: 16px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid rgba(244, 216, 121, 0.35);
 }
 
 .linkList {
@@ -69,23 +131,31 @@
 }
 
 .linkList a {
-  color: #b7bdcc;
+  display: inline-flex;
+  align-items: center;
+  color: #cbd5e1;
   font-size: 14px;
-  transition: color 0.2s ease;
+  font-weight: 500;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .linkList a:hover {
-  color: var(--color-accent);
+  color: #fae498;
+  transform: translateX(4px);
 }
 
 .contactItem {
   display: flex;
   align-items: flex-start;
-  gap: 8px;
-  color: #b7bdcc;
-  font-size: 14px;
+  gap: 10px;
+  color: #cbd5e1;
+  font-size: 13.5px;
   margin-bottom: 12px;
-  line-height: 1.6;
+  line-height: 1.55;
+}
+
+.contactItem:last-child {
+  margin-bottom: 0;
 }
 
 .contactItem a {
@@ -94,18 +164,30 @@
 }
 
 .contactItem a:hover {
-  color: var(--color-accent);
+  color: #fae498;
 }
 
-.contactItem .anticon {
-  margin-top: 3px;
-  color: var(--color-accent);
+.contactItem :global(.anticon) {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: rgba(201, 162, 39, 0.18);
+  border: 1px solid rgba(244, 216, 121, 0.4);
+  color: #fae498;
+  font-size: 13px;
 }
 
 .bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 18px 20px;
+  position: relative;
+  z-index: 2;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(3, 8, 17, 0.65);
+  padding: 16px 20px;
   text-align: center;
   font-size: 13px;
-  color: #8b91a3;
+  color: #94a3b8;
 }

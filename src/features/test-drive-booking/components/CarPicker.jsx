@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Input } from 'antd'
+import { CloseOutlined } from '@ant-design/icons'
 import { getCars } from '../../../services/carService'
 import {
   MAX_CARS, SEARCH_DEBOUNCE_MS, SEARCH_FETCH_LIMIT, SEARCH_LIMIT, SEARCH_MIN_CHARS,
@@ -17,9 +18,14 @@ import styles from '../styles/CarPicker.module.css'
  * @param {string} lockedId        Xe đang xem, không bỏ được
  * @param {(item: object) => void} onAdd
  * @param {(id: string) => void} onRemove
+ * @param {Set<string>} [heldIds]  Xe khách đã có lượt chưa diễn ra: hiện "Đã có lịch" và không thêm được
+ * @param {Set<string>} [lockedIds] Thêm các xe cố định khác (ví dụ xe đã có trong lượt khi thêm xe)
+ * @param {string} [lockedLabel]    Nhãn của xe cố định
  * @param {boolean} [disabled]
  */
-export default function CarPicker({ selected, lockedId, onAdd, onRemove, disabled = false }) {
+export default function CarPicker({
+  selected, lockedId, onAdd, onRemove, heldIds, lockedIds, lockedLabel = 'Xe đang xem', disabled = false,
+}) {
   const [query, setQuery] = useState('')
   const [found, setFound] = useState({ query: '', items: [], failed: false })
   const [loading, setLoading] = useState(false)
@@ -63,8 +69,8 @@ export default function CarPicker({ selected, lockedId, onAdd, onRemove, disable
           <li key={item.id} className={styles.chip}>
             {item.image && <img className={styles.thumb} src={item.image} alt="" />}
             <span className={styles.title}>{item.title}</span>
-            {item.id === lockedId ? (
-              <span className={styles.fixed}>Xe đang xem</span>
+            {item.id === lockedId || lockedIds?.has(item.id) ? (
+              <span className={styles.fixed}>{lockedLabel}</span>
             ) : (
               <button
                 type="button"
@@ -72,8 +78,9 @@ export default function CarPicker({ selected, lockedId, onAdd, onRemove, disable
                 onClick={() => onRemove(item.id)}
                 disabled={disabled}
                 aria-label={`Bỏ ${item.title} khỏi lượt lái thử`}
+                title="Bỏ xe này"
               >
-                Bỏ
+                <CloseOutlined aria-hidden />
               </button>
             )}
           </li>
@@ -99,21 +106,24 @@ export default function CarPicker({ selected, lockedId, onAdd, onRemove, disable
           )}
           {results.length > 0 && (
             <ul className={styles.results}>
-              {results.map((item) => (
-                <li key={item.id}>
-                  <button
-                    type="button"
-                    className={styles.result}
-                    onClick={() => { onAdd(item); setQuery('') }}
-                    disabled={disabled}
-                    aria-label={`Thêm ${item.title} vào lượt lái thử`}
-                  >
-                    {item.image && <img className={styles.thumb} src={item.image} alt="" />}
-                    <span className={styles.title}>{item.title}</span>
-                    <span className={styles.fixed}>+ Thêm</span>
-                  </button>
-                </li>
-              ))}
+              {results.map((item) => {
+                const held = Boolean(heldIds?.has(String(item.id)))
+                return (
+                  <li key={item.id}>
+                    <button
+                      type="button"
+                      className={styles.result}
+                      onClick={() => { onAdd(item); setQuery('') }}
+                      disabled={disabled || held}
+                      aria-label={held ? `${item.title} - bạn đã có lịch cho xe này` : `Thêm ${item.title} vào lượt lái thử`}
+                    >
+                      {item.image && <img className={styles.thumb} src={item.image} alt="" />}
+                      <span className={styles.title}>{item.title}</span>
+                      <span className={styles.fixed}>{held ? 'Đã có lịch' : '+ Thêm'}</span>
+                    </button>
+                  </li>
+                )
+              })}
             </ul>
           )}
         </>

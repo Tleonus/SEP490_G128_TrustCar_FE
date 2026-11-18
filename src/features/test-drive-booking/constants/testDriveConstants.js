@@ -7,6 +7,8 @@ export const NOTES_MAX = 500
 export const REASON_MAX = 500
 export const OUTCOME_MAX = 1000
 export const LATE_CANCEL_HOURS = 12
+/** Thêm xe vào lượt "Chờ xác nhận" khi còn ít nhất chừng này giờ (BE: đặt trước tối thiểu 2 giờ). */
+export const ADD_CAR_MIN_HOURS = 2
 export const SEARCH_MIN_CHARS = 2
 export const SEARCH_DEBOUNCE_MS = 400
 export const SEARCH_LIMIT = 8

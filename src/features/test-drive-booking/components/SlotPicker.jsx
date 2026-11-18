@@ -25,9 +25,10 @@ const cx = (...names) => names.filter(Boolean).join(' ')
  * @param {string|null} selectedStart Chuỗi `start` của khung đang chọn
  * @param {Record<string, string>} carNames  id xe → tên (ghi tên xe bị kín)
  * @param {string} [lockedStart]      Giờ hiện tại của lượt đang đổi lịch (ISO)
+ * @param {string} [blockedNote]      Có giá trị thì mọi khung bị mờ và ghi nội dung này (ví dụ khi xe đã có lượt của chính khách)
  */
 export default function SlotPicker({
-  status, days, error, selectedDate, selectedStart, carNames, lockedStart, onSelectDate, onSelectSlot, onRetry,
+  status, days, error, selectedDate, selectedStart, carNames, lockedStart, blockedNote, onSelectDate, onSelectSlot, onRetry,
 }) {
   if (status === 'loading' || status === 'idle') {
     return (
@@ -64,9 +65,9 @@ export default function SlotPicker({
         {day.slots.map((slot) => {
           const isCurrent = sameInstant(slot.start, lockedStart)
           const info = describeSlot(slot, carNames)
-          const on = isSelectable(slot) && !isCurrent
+          const on = isSelectable(slot) && !isCurrent && !blockedNote
           const chosen = slot.start === selectedStart
-          const note = isCurrent ? CURRENT_SLOT_LABEL : info.note
+          const note = blockedNote ?? (isCurrent ? CURRENT_SLOT_LABEL : info.note)
           return (
             <button
               key={slot.start}

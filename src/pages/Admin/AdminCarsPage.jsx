@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { App, Button, Input, Select, Pagination, Tag, Tooltip } from 'antd'
-import { FacebookFilled, PictureOutlined, SearchOutlined, ShoppingCartOutlined } from '@ant-design/icons'
+import { FacebookFilled, HistoryOutlined, PictureOutlined, SearchOutlined, ShoppingCartOutlined } from '@ant-design/icons'
 import { useAdminCars } from '../../hooks/useAdminCars'
 import { useDebounce } from '../../hooks/useDebounce'
 import { useBrands } from '../../hooks/useCatalog'
@@ -24,6 +24,7 @@ import OrderCheckoutModal from '../../features/sales-crm/components/OrderCheckou
 import { isSellableStatus, toCarVM } from '../../features/sales-crm/data/salesCrmMappers'
 import CarImagesModal from '../../features/car-images/components/CarImagesModal'
 import CaptionComposerModal from '../../features/marketing-caption/components/CaptionComposerModal'
+import PriceHistoryModal from '../../features/price-policy/components/PriceHistoryModal'
 import { ADMIN_PATHS } from '../../router/paths'
 import styles from './AdminCarsPage.module.css'
 
@@ -37,9 +38,10 @@ export default function AdminCarsPage() {
   const { notification } = App.useApp()
   const [searchParams, setSearchParams] = useSearchParams()
   const [checkoutCar, setCheckoutCar] = useState(null)
-  // Xe đang mở modal nhập ảnh / modal tạo bài đăng Facebook.
+  // Xe đang mở modal nhập ảnh / tạo bài đăng Facebook / xem lịch sử giá.
   const [imageCar, setImageCar] = useState(null)
   const [postCar, setPostCar] = useState(null)
+  const [historyCar, setHistoryCar] = useState(null)
   const keyword = searchParams.get('search') || ''
   const debouncedKeyword = useDebounce(keyword, 400)
   const brands = useBrands()
@@ -220,6 +222,14 @@ export default function AdminCarsPage() {
                         </Button>
                         <Button
                           size="small"
+                          icon={<HistoryOutlined />}
+                          onClick={() => setHistoryCar(car)}
+                          aria-label={`Xem lịch sử giá xe ${car.vehicleCode || getCarTitle(car)}`}
+                        >
+                          Lịch sử giá
+                        </Button>
+                        <Button
+                          size="small"
                           icon={<FacebookFilled />}
                           onClick={() => setPostCar(car)}
                           aria-label={`Tạo bài đăng Facebook cho xe ${car.vehicleCode || getCarTitle(car)}`}
@@ -273,6 +283,14 @@ export default function AdminCarsPage() {
         car={imageCar}
         onClose={() => setImageCar(null)}
         onImagesChange={reload}
+      />
+
+      {/* Lịch sử giá theo chính sách tồn kho (60 ngày giảm 5% giá gốc). */}
+      <PriceHistoryModal
+        key={historyCar?._id || 'no-history-car'}
+        open={historyCar !== null}
+        car={historyCar}
+        onClose={() => setHistoryCar(null)}
       />
 
       {/* Tạo bài đăng Facebook: caption tự soạn khi mở, ảnh lấy từ ảnh chính trong gallery. */}

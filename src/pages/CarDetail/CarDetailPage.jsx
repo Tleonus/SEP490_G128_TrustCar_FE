@@ -23,6 +23,7 @@ import SaveCarButton from '../../features/saved-cars/components/SaveCarButton'
 import TestDriveButton from '../../features/test-drive-booking/components/TestDriveButton'
 import PublicCertificateSection from '../../features/cpo-certificates/components/PublicCertificateSection'
 import ShareButtons from '../../features/car-share/components/ShareButtons'
+import InstallmentWidget from '../../features/installment-calculator/components/InstallmentWidget'
 import styles from './CarDetailPage.module.css'
 import { CONTACT_INFO } from '../../config/contactInfo'
 
@@ -154,6 +155,9 @@ export default function CarDetailPage() {
           <div className={styles.info}>
             <h1 className={styles.title}>{title}</h1>
             <div className={styles.price}>{formatPrice(car.price)}</div>
+
+            {/* KAN-62: ước tính trả góp theo giá xe; tự ẩn khi xe chưa có giá hợp lệ */}
+            <InstallmentWidget price={car.price} />
 
             {/* SCR-M05: chứng nhận CPO (trang đích của mã QR); hiện khi xe có cpoCertificateId */}
             <PublicCertificateSection

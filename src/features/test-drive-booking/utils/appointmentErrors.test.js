@@ -18,6 +18,9 @@ describe('classifyAppointmentError: mọi mã ở Spec mục 6 (AC-F05)', () => 
     [409, 'APPOINTMENT_CANCELLED_ALREADY', K.CANCELLED_ALREADY, 'visit', /đã được hủy/],
     [409, 'APPOINTMENT_STATUS_INVALID', K.STATUS_INVALID, 'visit', /trạng thái hiện tại/],
     [409, 'APPOINTMENT_CAR_UNAVAILABLE', K.CAR_UNAVAILABLE, 'visit', /không còn bán/],
+    [409, 'APPOINTMENT_ADD_CAR_NOT_ALLOWED', K.ADD_CAR_NOT_ALLOWED, 'visit', /không thêm xe được nữa/],
+    [422, 'APPOINTMENT_CAR_LIMIT_REACHED', K.CAR_LIMIT, 'visit', /đủ 3 xe/],
+    [409, 'APPOINTMENT_CONFIRMED_CALL_SHOWROOM', K.CONFIRMED_CALL, 'visit', /gọi showroom/],
   ])('%i %s → %s, tải lại %s', (status, code, kind, reload, pattern) => {
     const result = classify(status, code)
     expect(result.kind).toBe(kind)

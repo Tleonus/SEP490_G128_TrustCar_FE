@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { initialInput, parsePriceParam, validateInput } from './installmentInput'
+import { buildInstallmentLink, initialInput, isWidgetPrice, parsePriceParam, parseQueryParams, validateInput } from './installmentInput'
 import { DEFAULTS, MESSAGES, METHOD_ANNUITY } from '../constants/installmentConstants'
 
 describe('validateInput (AC-F04)', () => {
@@ -73,5 +73,53 @@ describe('parsePriceParam / initialInput (AC-F05)', () => {
 
   it('không lỗi khi thiếu tham số', () => {
     expect(parsePriceParam(undefined)).toBeNull()
+  })
+})
+
+describe('parseQueryParams / initialInput mở rộng (KAN-62 REQ-F08)', () => {
+  it('đọc đủ giá, trả trước, thời hạn, lãi', () => {
+    const search = '?price=800000000&down=40&term=36&rate=8.5'
+    expect(parseQueryParams(search)).toEqual({ price: 800_000_000, downPercent: 40, termMonths: 36, ratePercent: 8.5 })
+    expect(initialInput(search)).toEqual({ ...DEFAULTS, price: 800_000_000, downPercent: 40, termMonths: 36, ratePercent: 8.5 })
+  })
+
+  it.each([
+    ['?down=29'], ['?down=91'], ['?down=abc'], ['?down=-5'], ['?down=1.5'], ['?down='],
+    ['?term=7'], ['?term=13'], ['?term=96'], ['?term=x'],
+    ['?rate=41'], ['?rate=-1'], ['?rate=abc'], ['?rate=8.555'], ['?rate='], ['?rate=1e1'],
+  ])('bỏ qua tham số sai "%s"', (search) => {
+    expect(parseQueryParams(search)).toEqual({})
+    expect(initialInput(search)).toEqual(DEFAULTS)
+  })
+
+  it('biên hợp lệ: down 30 và 90, term 12 và 84, rate 0 và 40', () => {
+    expect(parseQueryParams('?down=30&term=12&rate=0')).toEqual({ downPercent: 30, termMonths: 12, ratePercent: 0 })
+    expect(parseQueryParams('?down=90&term=84&rate=40')).toEqual({ downPercent: 90, termMonths: 84, ratePercent: 40 })
+  })
+
+  it('tham số sai không làm hỏng tham số đúng', () => {
+    expect(parseQueryParams('?price=1200000000&down=5&term=48')).toEqual({ price: 1_200_000_000, termMonths: 48 })
+  })
+
+  it('kết quả luôn qua validateInput', () => {
+    ;['?price=500000000&down=50&term=24&rate=10', '?down=90&term=84&rate=40', '?price=10000000'].forEach((search) => {
+      expect(validateInput(initialInput(search)).ok).toBe(true)
+    })
+  })
+})
+
+describe('isWidgetPrice / buildInstallmentLink (KAN-62)', () => {
+  it.each([[800_000_000, true], [10_000_000, true], [100_000_000_000, true], [9_999_999, false], [100_000_000_001, false], [null, false], [undefined, false], [Number.NaN, false], ['800000000', false], [0, false]])(
+    'giá %p → %p', (price, expected) => { expect(isWidgetPrice(price)).toBe(expected) },
+  )
+
+  it('đường dẫn mang giá, trả trước, thời hạn và được trang tính đọc lại đúng', () => {
+    const link = buildInstallmentLink({ price: 800_000_000, downPercent: 40, termMonths: 36 })
+    expect(link).toBe('/installment?price=800000000&down=40&term=36')
+    expect(initialInput(link.slice(link.indexOf('?')))).toMatchObject({ price: 800_000_000, downPercent: 40, termMonths: 36 })
+  })
+
+  it('làm tròn giá lẻ', () => {
+    expect(buildInstallmentLink({ price: 799_999_999.6, downPercent: 30, termMonths: 60 })).toBe('/installment?price=800000000&down=30&term=60')
   })
 })

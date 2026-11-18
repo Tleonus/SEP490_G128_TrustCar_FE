@@ -73,14 +73,13 @@ export default function AppRouter() {
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/doi-mat-khau" element={<PrivateRoute><ChangePasswordPage /></PrivateRoute>} />
         <Route path="/hoan-tat-ho-so" element={<PrivateRoute><CompleteProfilePage /></PrivateRoute>} />
+        {/* So sánh xe: công khai, khách chưa đăng nhập, khách hàng, nhân viên và admin đều dùng được */}
         <Route
           path="/so-sanh"
           element={
-            <PrivateRoute>
-              <Suspense fallback={<LoadingState />}>
-                <ComparePage />
-              </Suspense>
-            </PrivateRoute>
+            <Suspense fallback={<LoadingState />}>
+              <ComparePage />
+            </Suspense>
           }
         />
         <Route

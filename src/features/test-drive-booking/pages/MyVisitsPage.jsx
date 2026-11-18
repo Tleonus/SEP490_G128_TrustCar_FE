@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import VisitCard from '../components/VisitCard'
 import CancelVisitModal from '../components/CancelVisitModal'
 import RescheduleModal from '../components/RescheduleModal'
+import AddCarsModal from '../components/AddCarsModal'
 import LoadError from '../components/LoadError'
 import { useMyVisits } from '../hooks/useVisits'
 import { useAutoRefresh } from '../hooks/useAutoRefresh'
@@ -34,10 +35,11 @@ export default function MyVisitsPage() {
   const [page, setPage] = useState(1)
   const [cancelling, setCancelling] = useState(null)
   const [rescheduling, setRescheduling] = useState(null)
+  const [addingCars, setAddingCars] = useState(null)
   const list = useMyVisits({ status: status === 'ALL' ? undefined : status, page, limit: PAGE_SIZE })
 
-  // REQ-F46: tự tải ngầm mỗi 60 giây và khi quay lại tab; không tải khi đang mở hộp hủy / đổi lịch.
-  const idle = !cancelling && !rescheduling
+  // REQ-F46: tự tải ngầm mỗi 60 giây và khi quay lại tab; không tải khi đang mở hộp hủy / đổi lịch / thêm xe.
+  const idle = !cancelling && !rescheduling && !addingCars
   useFocusRefresh(list.loadedAt, list.reloadSilently, idle)
   useAutoRefresh({ enabled: idle, settledAt: list.settledAt, silentStatus: list.silentStatus, reloadSilently: list.reloadSilently })
 
@@ -81,7 +83,7 @@ export default function MyVisitsPage() {
           <p className={styles.count}>{list.meta?.total ?? list.items.length} lượt</p>
           <ul className={styles.list}>
             {list.items.map((visit) => (
-              <li key={visit.visitId}><VisitCard visit={visit} onCancel={setCancelling} onReschedule={setRescheduling} /></li>
+              <li key={visit.visitId}><VisitCard visit={visit} onCancel={setCancelling} onReschedule={setRescheduling} onAddCars={setAddingCars} /></li>
             ))}
           </ul>
           <div className={styles.pagination}>
@@ -111,6 +113,17 @@ export default function MyVisitsPage() {
         onClose={() => setRescheduling(null)}
         onDone={handleRescheduled}
         onStale={handleStale}
+      />
+
+      <AddCarsModal
+        visit={addingCars}
+        onClose={() => setAddingCars(null)}
+        onDone={(updated) => {
+          list.replaceVisit(updated)
+          setAddingCars(null)
+          message.success('Đã thêm xe vào lượt.')
+        }}
+        onStale={list.reload}
       />
     </div>
   )

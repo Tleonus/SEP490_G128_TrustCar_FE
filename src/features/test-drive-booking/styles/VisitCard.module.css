@@ -103,12 +103,27 @@
   gap: 8px;
 }
 
-.hint {
+.hint,
+.callNote {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
   margin: 0;
   padding: 8px 12px;
   border-radius: 8px;
   background: var(--color-surface-alt);
   color: var(--color-text-secondary);
   font-size: 13px;
+  line-height: 1.5;
   overflow-wrap: anywhere;
+}
+
+.callNote {
+  border-left: 3px solid var(--color-success);
+  color: var(--color-text);
+}
+
+.callNote a {
+  font-weight: 600;
+  white-space: nowrap;
 }
