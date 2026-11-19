@@ -3,10 +3,12 @@ import {
   CheckCircleFilled,
   CarFilled,
   StarFilled,
+  CrownFilled,
 } from '@ant-design/icons'
+import { useAuthStore } from '../../../store/useAuthStore'
 import styles from './ShowroomLedTicker.module.css'
 
-const LED_ITEMS = [
+const BASE_LED_ITEMS = [
   {
     icon: <CheckCircleFilled />,
     tag: '3 Cam kết',
@@ -30,7 +32,34 @@ const LED_ITEMS = [
 ]
 
 export default function ShowroomLedTicker() {
-  const marqueeList = [...LED_ITEMS, ...LED_ITEMS]
+  const user = useAuthStore((state) => state.user)
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+
+  const userName =
+    isAuthenticated && user
+      ? (
+          user.fullName ||
+          user.full_name ||
+          user.name ||
+          user.username ||
+          user.email?.split('@')[0] ||
+          ''
+        ).trim()
+      : ''
+
+  const greetingTarget = userName || 'Quý khách'
+
+  const ledItems = [
+    {
+      isGreetingBadge: true,
+      icon: <CrownFilled />,
+      badgeText: `Kính chào ${greetingTarget}`,
+      tag: 'WELCOME',
+      text: `Kính chào ${greetingTarget} · Chào mừng Quý khách đến với Showroom TrustCar — Chúc Quý khách chọn được mẫu xe ưng ý!`,
+    },
+    ...BASE_LED_ITEMS,
+  ]
+  const marqueeList = [...ledItems, ...ledItems]
 
   return (
     <div className={styles.ledBar} role="region" aria-label="Bảng điện tử LED Showroom TrustCar">
@@ -39,17 +68,17 @@ export default function ShowroomLedTicker() {
       <div className={styles.hologramGrid} aria-hidden="true" />
 
       <div className={styles.inner}>
-        {/* Huy hiệu trạng thái LED Hologram bên trái */}
-        <div className={styles.statusBadge}>
-          <span className={styles.pulseDot} aria-hidden="true" />
-          <span className={styles.statusText}>TrustCar xe chất</span>
-        </div>
-
-        {/* Dòng chữ LED chạy vô tận */}
+        {/* Toàn bộ dòng chữ và huy hiệu chào mừng đều chạy liên tục từ phải qua trái */}
         <div className={styles.marqueeViewport}>
           <div className={styles.marqueeTrack}>
             {marqueeList.map((item, idx) => (
               <div key={`${item.tag}-${idx}`} className={styles.tickerItem}>
+                {item.isGreetingBadge && (
+                  <span className={styles.statusBadge}>
+                    <span className={styles.pulseDot} aria-hidden="true" />
+                    <span className={styles.statusText}>{item.badgeText}</span>
+                  </span>
+                )}
                 <span className={styles.itemIcon}>{item.icon}</span>
                 <span className={styles.itemTag}>{item.tag}</span>
                 <span className={styles.itemText}>{item.text}</span>

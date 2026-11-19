@@ -1,11 +1,13 @@
 /* Khối "Ước tính trả góp" ở trang chi tiết xe. Màu lấy từ token --color-* của index.css (sáng và tối). */
 
 .widget {
-  margin: 16px 0;
-  padding: 16px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
+  margin: 0;
+  padding: 22px;
+  background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-surface-alt) 100%);
+  border: 1.5px solid var(--color-border);
+  border-bottom: 6px solid var(--card-3d-edge);
+  border-radius: 22px;
+  box-shadow: var(--shadow-card);
   color: var(--color-text);
 }
 

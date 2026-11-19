@@ -28,14 +28,12 @@
   position: relative;
   height: 3px;
   width: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    #38bdf8 18%,
-    #f4d879 45%,
-    #22d3ee 72%,
-    transparent 100%
-  );
+  background: linear-gradient(90deg,
+      transparent 0%,
+      #38bdf8 18%,
+      #f4d879 45%,
+      #22d3ee 72%,
+      transparent 100%);
   background-size: 200% 100%;
   animation: ledFlowRight 4.5s linear infinite;
   box-shadow: 0 0 12px rgba(56, 189, 248, 0.8), 0 0 20px rgba(244, 216, 121, 0.55);
@@ -46,14 +44,12 @@
   position: relative;
   height: 2px;
   width: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    #f4d879 22%,
-    #38bdf8 55%,
-    #f4d879 82%,
-    transparent 100%
-  );
+  background: linear-gradient(90deg,
+      transparent 0%,
+      #f4d879 22%,
+      #38bdf8 55%,
+      #f4d879 82%,
+      transparent 100%);
   background-size: 200% 100%;
   animation: ledFlowLeft 5.5s linear infinite;
   box-shadow: 0 0 10px rgba(244, 216, 121, 0.75);
@@ -63,6 +59,7 @@
   0% {
     background-position: 200% 0;
   }
+
   100% {
     background-position: -200% 0;
   }
@@ -72,6 +69,7 @@
   0% {
     background-position: -200% 0;
   }
+
   100% {
     background-position: 200% 0;
   }
@@ -80,22 +78,21 @@
 .inner {
   position: relative;
   z-index: 2;
-  max-width: 1360px;
-  margin: 0 auto;
-  padding: 10px 20px;
+  width: 100%;
+  padding: 10px 0;
   display: flex;
   align-items: center;
-  gap: 16px;
 }
 
 .statusBadge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 5px 13px;
+  padding: 5px 14px;
+  margin-right: 6px;
   border-radius: 999px;
-  background: linear-gradient(135deg, rgba(14, 165, 233, 0.22) 0%, rgba(217, 184, 74, 0.22) 100%);
-  border: 1px solid rgba(56, 189, 248, 0.55);
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.24) 0%, rgba(217, 184, 74, 0.24) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.58);
   box-shadow:
     0 0 14px rgba(56, 189, 248, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.25);
@@ -112,11 +109,13 @@
 }
 
 @keyframes ledPulse {
+
   0%,
   100% {
     transform: scale(1);
     opacity: 1;
   }
+
   50% {
     transform: scale(1.3);
     opacity: 0.65;
@@ -124,9 +123,9 @@
 }
 
 .statusText {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
-  letter-spacing: 1.2px;
+  letter-spacing: 0.8px;
   background: linear-gradient(90deg, #7dd3fc 0%, #f5df91 100%);
   -webkit-background-clip: text;
   background-clip: text;
@@ -136,63 +135,58 @@
 
 .marqueeViewport {
   flex: 1;
+  width: 100%;
   min-width: 0;
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(
-    90deg,
-    transparent 0%,
-    #000 5%,
-    #000 95%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    90deg,
-    transparent 0%,
-    #000 5%,
-    #000 95%,
-    transparent 100%
-  );
+  -webkit-mask-image: linear-gradient(90deg,
+      transparent 0%,
+      #000 4%,
+      #000 96%,
+      transparent 100%);
+  mask-image: linear-gradient(90deg,
+      transparent 0%,
+      #000 4%,
+      #000 96%,
+      transparent 100%);
 }
 
 .marqueeTrack {
   display: flex;
   align-items: center;
   width: max-content;
-  animation: tickerScroll 36s linear infinite;
-}
-
-.ledBar:hover .marqueeTrack {
-  animation-play-state: paused;
+  will-change: transform;
+  animation: tickerScroll 60s linear infinite !important;
 }
 
 @keyframes tickerScroll {
   0% {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
+
   100% {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
 .tickerItem {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  padding: 0 14px;
+  gap: 10px;
+  padding: 0 16px;
   white-space: nowrap;
 }
 
 .itemIcon {
   color: #38bdf8;
-  font-size: 13px;
+  font-size: 14px;
   filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.7));
 }
 
 .itemTag {
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.8px;
-  padding: 2px 8px;
+  padding: 2px 9px;
   border-radius: 999px;
   color: #061326;
   background: linear-gradient(90deg, #f4d879 0%, #38bdf8 100%);
@@ -200,8 +194,8 @@
 }
 
 .itemText {
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 13.5px;
+  font-weight: 600;
   color: #e2e8f0;
   text-shadow: 0 0 8px rgba(56, 189, 248, 0.25);
 }
@@ -214,20 +208,7 @@
 }
 
 @media (max-width: 640px) {
-  .statusBadge {
-    display: none;
-  }
-
   .inner {
-    padding: 8px 12px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .marqueeTrack,
-  .ledStripTop,
-  .ledStripBottom,
-  .pulseDot {
-    animation: none;
+    padding: 8px 0;
   }
 }
