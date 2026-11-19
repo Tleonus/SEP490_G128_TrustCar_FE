@@ -5,7 +5,6 @@ import {
   CrownFilled,
   FireFilled,
   PlusOutlined,
-  RetweetOutlined,
   RocketFilled,
   SafetyCertificateFilled,
   SketchOutlined,
@@ -56,13 +55,13 @@ export default function CompareRecommendPanel({
   const showInventory = mode === 'all' || mode === 'inventory'
   const [activePersona, setActivePersona] = useState('overall')
   const [poolCars, setPoolCars] = useState([])
-  const [loadingPool, setLoadingPool] = useState(false)
+  const [poolLoaded, setPoolLoaded] = useState(false)
+  const loadingPool = showInventory && !poolLoaded
   const [swapTargetIndex, setSwapTargetIndex] = useState(0)
 
   useEffect(() => {
     if (!showInventory) return undefined
     let mounted = true
-    setLoadingPool(true)
     getCars({ limit: 12 })
       .then((res) => {
         if (mounted) setPoolCars(res?.items ?? [])
@@ -71,7 +70,7 @@ export default function CompareRecommendPanel({
         if (mounted) setPoolCars([])
       })
       .finally(() => {
-        if (mounted) setLoadingPool(false)
+        if (mounted) setPoolLoaded(true)
       })
     return () => {
       mounted = false

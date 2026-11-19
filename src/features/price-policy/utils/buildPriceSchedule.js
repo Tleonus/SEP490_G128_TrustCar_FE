@@ -65,7 +65,7 @@ export function buildPriceSchedule(car, now = Date.now()) {
 
   const appliedCount = missingListedDate ? 0 : Math.floor(daysInStock / DROP_INTERVAL_DAYS)
   // Các mốc đã qua + một mốc kế tiếp để người xem thấy xu hướng sắp giảm.
-  const lastStep = Math.min(appliedCount + 1, MAX_STEPS)
+  const lastStep = missingListedDate ? 0 : Math.min(appliedCount + 1, MAX_STEPS)
   const listed = missingListedDate ? null : new Date(car.listedDate)
 
   const entries = []

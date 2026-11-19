@@ -19,6 +19,8 @@ import { useSavedCarPrices } from '../hooks/useSavedCarPrices'
 import SavedCarItem from '../components/SavedCarItem'
 import PriceAlertModal from '../components/PriceAlertModal'
 import {
+  MAX_ACCOUNT_SAVED_CARS,
+  MAX_GUEST_SAVED_CARS,
   formatCompactPrice,
   formatRelativeTime,
   getPriceChange,
@@ -55,20 +57,45 @@ function StatCard({ icon, tone, label, value, hint }) {
   )
 }
 
+function SavedCarsLoading() {
+  return (
+    <div className={styles.loadingList} role="status" aria-label="Đang tải xe đã lưu">
+      {[0, 1].map((row) => (
+        <div key={row} className={styles.loadingCard} aria-hidden="true">
+          <div className={styles.loadingMedia} />
+          <div className={styles.loadingBody}>
+            <span className={[styles.skeleton, styles.skeletonTitle].join(' ')} />
+            <span className={[styles.skeleton, styles.skeletonMeta].join(' ')} />
+            <span className={[styles.skeleton, styles.skeletonPrice].join(' ')} />
+            <span className={[styles.skeleton, styles.skeletonFooter].join(' ')} />
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function WishlistLoadError() {
+  return (
+    <div className={styles.loadError} role="alert">
+      <InfoCircleOutlined />
+      <div>
+        <h2>Không tải được danh sách xe</h2>
+        <p>Thử tải lại trang để kết nối lại với tài khoản của bạn.</p>
+      </div>
+      <Button onClick={() => window.location.reload()}>Tải lại</Button>
+    </div>
+  )
+}
+
 function EmptyState() {
   return (
     <div className={styles.empty}>
       <div className={styles.emptyArt} aria-hidden="true">
-        <span className={styles.emptyRing} />
         <HeartFilled />
       </div>
-      <h2>Bạn chưa lưu xe nào</h2>
-      <p>Nhấn biểu tượng trái tim trên thẻ xe để lưu lại. TrustCar sẽ theo dõi giá và báo cho bạn khi xe giảm giá.</p>
-      <div className={styles.emptySteps}>
-        <span><b>1</b> Chọn xe ưng ý</span>
-        <span><b>2</b> Nhấn ♥ để lưu</span>
-        <span><b>3</b> Nhận báo giảm giá</span>
-      </div>
+      <h2>Chưa có xe nào được lưu</h2>
+      <p>Lưu xe từ danh sách để xem lại thông tin và giá tại đây.</p>
       <div className={styles.emptyActions}>
         <Link to="/xe"><Button type="primary" size="large" icon={<CarOutlined />}>Khám phá kho xe</Button></Link>
       </div>
@@ -79,6 +106,10 @@ function EmptyState() {
 /** Trang xe đã lưu: theo dõi giá, cảnh báo giảm giá và so sánh nhanh. */
 export default function SavedCarsPage() {
   const items = useSavedCarsStore((state) => state.items)
+  const loading = useSavedCarsStore((state) => state.loading)
+  const loadError = useSavedCarsStore((state) => state.error)
+  const isAuthenticatedMode = useSavedCarsStore((state) => state.isAuthenticatedMode)
+  const maxSavedCars = isAuthenticatedMode ? MAX_ACCOUNT_SAVED_CARS : MAX_GUEST_SAVED_CARS
   const setAlert = useSavedCarsStore((state) => state.setAlert)
   const remove = useSavedCarsStore((state) => state.remove)
   const restore = useSavedCarsStore((state) => state.restore)
@@ -117,7 +148,12 @@ export default function SavedCarsPage() {
       content: (
         <span>
           Đã bỏ lưu {item.title}.{' '}
-          <button type="button" className={styles.undo} onClick={() => { restore(item); message.destroy(`removed-${item.id}`) }}>
+          <button type="button" className={styles.undo} onClick={async () => {
+            const restored = await restore(item)
+            if (restored === true) message.destroy(`removed-${item.id}`)
+            else if (restored === 'full') message.warning('Danh sách đã đạt giới hạn ' + maxSavedCars + ' xe.')
+            else message.error('Không thể khôi phục xe đã lưu. Vui lòng thử lại.')
+          }}>
             Hoàn tác
           </button>
         </span>
@@ -145,9 +181,8 @@ export default function SavedCarsPage() {
         <div className="container">
           <div className={styles.heroInner}>
             <div>
-              <span className={styles.eyebrow}><HeartFilled /> Xe đã lưu &amp; Cảnh báo giá</span>
-              <h1>Danh sách yêu thích &amp; cảnh báo giảm giá</h1>
-              <p>Theo dõi những chiếc xe bạn quan tâm, nhận cảnh báo khi giá giảm hoặc chạm mức ngân sách mục tiêu của bạn.</p>
+              <h1>Xe bạn đã lưu</h1>
+              <p>Theo dõi giá và quay lại với những lựa chọn bạn đang cân nhắc.</p>
             </div>
             {items.length > 0 && (
               <div className={styles.heroActions}>
@@ -165,12 +200,11 @@ export default function SavedCarsPage() {
 
       <div className="container">
         {items.length === 0 ? (
-          <EmptyState />
+          loading ? <SavedCarsLoading /> : loadError ? <WishlistLoadError /> : <EmptyState />
         ) : (
           <div className={styles.contentStack}>
-            {/* Hàng 1: 4 khối thống kê 3D độc lập, không đè lên Hero */}
             <div className={styles.stats}>
-              <StatCard icon={<HeartFilled />} tone="rose" label="Xe đã lưu" value={stats.total} hint="Tối đa 50 xe" />
+              <StatCard icon={<HeartFilled />} tone="rose" label="Xe đã lưu" value={stats.total} hint={'Tối đa ' + maxSavedCars + ' xe'} />
               <StatCard icon={<ArrowDownOutlined />} tone="green" label="Đang giảm giá" value={stats.dropped} hint="So với giá lúc lưu" />
               <StatCard icon={<WalletOutlined />} tone="gold" label="Có thể tiết kiệm" value={stats.savings > 0 ? formatCompactPrice(stats.savings) : '0 ₫'} hint="Tổng mức giảm hiện tại" />
               <StatCard icon={<BellFilled />} tone="blue" label="Cảnh báo đang bật" value={stats.alerts} hint={stats.reached ? `${stats.reached} xe đã chạm giá mục tiêu` : 'Nhận thông báo tự động'} />
@@ -212,7 +246,6 @@ export default function SavedCarsPage() {
               </div>
             )}
 
-            {/* Hàng 3: Thanh công cụ lọc & sắp xếp 3D trải ngang toàn khung */}
             <div className={styles.toolbarCard}>
               <Segmented value={filter} onChange={setFilter} options={filterOptions} className={styles.segmented} />
               <div className={styles.toolbarRight}>

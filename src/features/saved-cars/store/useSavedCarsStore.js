@@ -1,6 +1,7 @@
 ﻿import { create } from 'zustand'
 import {
-  MAX_SAVED_CARS,
+  MAX_ACCOUNT_SAVED_CARS,
+  MAX_GUEST_SAVED_CARS,
   SAVED_CARS_STORAGE_KEY,
   applyPrice,
   sanitizeSaved,
@@ -92,10 +93,11 @@ export const useSavedCarsStore = create((set, get) => {
       set({ isAuthenticatedMode: true, items: [], loading: true, error: null })
 
       try {
-        if (guestIds.length) await syncGuestWishlist(guestIds)
+        let syncResult = null
+        if (guestIds.length) syncResult = await syncGuestWishlist(guestIds)
         const { items } = await getWishlist({ page: 1, limit: 100 })
         const serverItems = items.map(apiItemToSaved).filter(Boolean)
-        writeStored([])
+        if (syncResult?.clearLocalStorage === true) writeStored([])
         set({ items: serverItems, loading: false, initialized: true })
         return serverItems
       } catch (error) {
@@ -127,7 +129,7 @@ export const useSavedCarsStore = create((set, get) => {
         return 'removed'
       }
 
-      if (items.length >= MAX_SAVED_CARS) return 'full'
+      if (items.length >= (isAuthenticatedMode ? MAX_ACCOUNT_SAVED_CARS : MAX_GUEST_SAVED_CARS)) return 'full'
       if (isAuthenticatedMode) {
         try {
           await saveCarToWishlist(item.id)
@@ -152,6 +154,8 @@ export const useSavedCarsStore = create((set, get) => {
     },
     restore: async (item) => {
       if (!item || get().items.some((entry) => entry.id === item.id)) return true
+      const maxItems = get().isAuthenticatedMode ? MAX_ACCOUNT_SAVED_CARS : MAX_GUEST_SAVED_CARS
+      if (get().items.length >= maxItems) return 'full'
       if (get().isAuthenticatedMode) {
         try {
           await saveCarToWishlist(item.id)

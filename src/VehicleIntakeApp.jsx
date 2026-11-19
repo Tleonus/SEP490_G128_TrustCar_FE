@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { VehicleIntakePage, saveVehicleIntake } from './features/vehicle-intake/index.js';
 import Icon from './features/vehicle-intake/components/VehicleIntakeIcon.jsx';
 import styles from './VehicleIntakeApp.module.css';
