@@ -53,6 +53,7 @@ export const initialVehicleIntake = {
   ownership: 'company',
   listedPrice: '',
   floorPrice: '',
+  marketPrice: '',
 };
 
 export const initialInspectionChecks = {
