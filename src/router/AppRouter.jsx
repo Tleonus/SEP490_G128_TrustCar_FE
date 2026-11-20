@@ -46,6 +46,10 @@ const ProfilePage = lazy(() => import('../features/user-profile-settings/pages/P
 const AuditLogsPage = lazy(() => import('../features/audit-logs/pages/AuditLogsPage.jsx'))
 // KAN-61: trang tính trả góp (công khai)
 const InstallmentPage = lazy(() => import('../features/installment-calculator/pages/InstallmentPage.jsx'))
+// KAN-99: thanh toán tiền cọc qua VNPay
+const VnpayReturnPage = lazy(() => import('../features/deposits/pages/VnpayReturnPage.jsx'))
+const DepositSuccessPage = lazy(() => import('../features/deposits/pages/DepositSuccessPage.jsx'))
+const DepositCancelPage = lazy(() => import('../features/deposits/pages/DepositCancelPage.jsx'))
 
 export default function AppRouter() {
   return (
@@ -63,6 +67,12 @@ export default function AppRouter() {
           }
         />
         <Route path="/installment" element={<Suspense fallback={<LoadingState />}><InstallmentPage /></Suspense>} />
+        {/* KAN-99: 3 landing page khi khách quay lại từ VNPay */}
+        <Route path="/dat-coc/vnpay-return" element={<Suspense fallback={<LoadingState />}><VnpayReturnPage /></Suspense>} />
+        <Route path="/dat-coc/:id/thanh-cong" element={<Suspense fallback={<LoadingState />}><DepositSuccessPage /></Suspense>} />
+        <Route path="/dat-coc/:id/da-huy" element={<Suspense fallback={<LoadingState />}><DepositCancelPage /></Suspense>} />
+        <Route path="/dat-coc/:id/that-bai" element={<Suspense fallback={<LoadingState />}><DepositCancelPage /></Suspense>} />
+        <Route path="/dat-coc/that-bai" element={<Suspense fallback={<LoadingState />}><DepositCancelPage /></Suspense>} />
         <Route path="/ve-chung-toi" element={<AboutPage />} />
         <Route path="/lien-he" element={<ContactPage />} />
         <Route path="/dang-nhap" element={<LoginPage />} />
