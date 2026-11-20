@@ -44,6 +44,8 @@ const StaffVisitsPage = lazy(() => import('../features/test-drive-booking/pages/
 const ProfilePage = lazy(() => import('../features/user-profile-settings/pages/ProfilePage.jsx'))
 // KAN-40: nhật ký hoạt động hệ thống (chỉ ADMIN)
 const AuditLogsPage = lazy(() => import('../features/audit-logs/pages/AuditLogsPage.jsx'))
+// KAN-93: quản lý nhân sự & gán nhiều vai trò (chỉ ADMIN)
+const UserManagementPage = lazy(() => import('../features/user-management/pages/UserManagementPage.jsx'))
 // KAN-61: trang tính trả góp (công khai)
 const InstallmentPage = lazy(() => import('../features/installment-calculator/pages/InstallmentPage.jsx'))
 // KAN-99: thanh toán tiền cọc qua VNPay
@@ -156,6 +158,15 @@ export default function AppRouter() {
           element={
             <AdminOnlyRoute>
               <Suspense fallback={<LoadingState />}><AuditLogsPage /></Suspense>
+            </AdminOnlyRoute>
+          }
+        />
+        {/* Quản lý người dùng & gán nhiều vai trò (KAN-93): chỉ ADMIN. */}
+        <Route
+          path="nguoi-dung"
+          element={
+            <AdminOnlyRoute>
+              <Suspense fallback={<LoadingState />}><UserManagementPage /></Suspense>
             </AdminOnlyRoute>
           }
         />
