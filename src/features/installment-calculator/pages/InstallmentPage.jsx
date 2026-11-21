@@ -1,9 +1,11 @@
+import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import InstallmentForm from '../components/InstallmentForm'
 import InstallmentSummary from '../components/InstallmentSummary'
 import ScheduleTable from '../components/ScheduleTable'
 import { useInstallment } from '../hooks/useInstallment'
 import { initialInput } from '../utils/installmentInput'
+import { trackEvent } from '../../../utils/trackEvent'
 import styles from '../styles/Installment.module.css'
 
 /**
@@ -18,6 +20,9 @@ import styles from '../styles/Installment.module.css'
 export default function InstallmentPage() {
   const { search } = useLocation()
   const { values, setField, errors, result, input } = useInstallment(() => initialInput(search))
+
+  // KAN-97: ghi 1 event CALCULATOR_USE khi trang mở.
+  useEffect(() => { trackEvent('CALCULATOR_USE') }, [])
 
   return (
     <div className={styles.page}>

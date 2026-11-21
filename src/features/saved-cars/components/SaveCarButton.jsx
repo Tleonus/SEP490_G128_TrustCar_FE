@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { useSavedCarsStore } from '../store/useSavedCarsStore'
 import { savedIdOf, MAX_ACCOUNT_SAVED_CARS, MAX_GUEST_SAVED_CARS } from '../utils/savedCars'
 import { useAuthStore } from '../../../store/useAuthStore'
+import { trackEvent } from '../../../utils/trackEvent'
 import styles from './SaveCarButton.module.css'
 
 const getLimitMessage = (limit) => 'B\u1ea1n ch\u1ec9 l\u01b0u \u0111\u01b0\u1ee3c t\u1ed1i \u0111a ' + limit + ' xe.'
@@ -25,6 +26,9 @@ export default function SaveCarButton({ car, variant = 'card' }) {
     event.stopPropagation()
 
     const result = await toggle(car)
+
+    // KAN-97: ghi nhận lưu xe cho lead scoring (chỉ khi thêm mới, không khi bỏ lưu).
+    if (result === 'added' && car?._id) trackEvent('WISHLIST_ADD', { carId: car._id })
 
     if (!isCustomer) {
       if (result === 'added') setLoginOpen(true)

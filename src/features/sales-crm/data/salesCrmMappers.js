@@ -98,6 +98,11 @@ export function toLeadVM(raw, carsById, appointments = []) {
     car,
     source: raw.source ?? null,
     priority: raw.priority ?? null,
+    // KAN-97: điểm ý định + band HOT/WARM/COLD do backend chấm bằng cron.
+    score: typeof raw.score === 'number' ? raw.score : 0,
+    scoreBand: raw.scoreBand ?? 'COLD',
+    scoreFactors: raw.scoreFactors ?? null,
+    lastInteractionAt: raw.lastInteractionAt ?? null,
     createdAt: raw.createdAt ?? null,
     updatedAt: raw.updatedAt ?? raw.createdAt ?? null,
     wonAt: raw.wonAt ?? null,

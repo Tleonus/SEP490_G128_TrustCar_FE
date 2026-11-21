@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import { Alert, App, Button, ConfigProvider, Input, Pagination, Segmented, Select, Tag, Tooltip } from 'antd'
 import { CheckCircleOutlined, ReloadOutlined, SearchOutlined, ShoppingCartOutlined } from '@ant-design/icons'
 import OrderCheckoutModal from '../components/OrderCheckoutModal'
+import ScoreBadge from '../components/ScoreBadge'
 import { useSalesPipeline } from '../hooks/useSalesPipeline'
 import { isSellableStatus } from '../data/salesCrmMappers'
 import { countByStage, filterAppointments, filterLeads, paginate } from '../utils/pipelineQuery'
@@ -90,6 +91,7 @@ function LeadTable({ leads, onCheckout }) {
           <th>Xe quan tâm</th>
           <th>Giá niêm yết</th>
           <th>Trạng thái xe</th>
+          <th>Mức độ</th>
           <th>Giai đoạn</th>
           <th>Nguồn</th>
           <th>Cập nhật</th>
@@ -104,6 +106,7 @@ function LeadTable({ leads, onCheckout }) {
             <td><CarCell car={lead.car} /></td>
             <td>{lead.car ? formatPrice(lead.car.price) : '—'}</td>
             <td><CarStatusTag car={lead.car} /></td>
+            <td><ScoreBadge lead={lead} /></td>
             <td>
               <Tag color={PIPELINE_STAGE_COLOR[lead.pipelineStage]}>{PIPELINE_STAGE_LABEL[lead.pipelineStage]}</Tag>
             </td>

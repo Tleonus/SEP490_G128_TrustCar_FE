@@ -19,6 +19,7 @@ import {
 } from '@ant-design/icons'
 import { sendContactRequest } from '../../services/carService'
 import { useContactInfo } from '../../config/contactInfo'
+import { trackEvent } from '../../utils/trackEvent'
 import showroomImg1 from '../../assets/Contacts/contact_1.jpg'
 import showroomImg2 from '../../assets/Contacts/contact_2.jpg'
 import showroomImg3 from '../../assets/Contacts/contact_3.jpg'
@@ -231,7 +232,7 @@ export default function ContactPage() {
                 >
                   <CompassOutlined /> Chỉ đường Google Maps
                 </a>
-                <a href={contactInfo.phoneHref} className={styles.secondary3DBtn}>
+                <a href={contactInfo.phoneHref} className={styles.secondary3DBtn} onClick={() => trackEvent('CONTACT_CLICK', { metadata: { from: 'contact-page' } })}>
                   <PhoneOutlined /> Gọi {contactInfo.phoneDisplay}
                 </a>
                 <a href="#contact-form-section" className={styles.ghost3DBtn}>
