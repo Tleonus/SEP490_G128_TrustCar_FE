@@ -93,3 +93,26 @@ export const NEW_CUSTOMER_OPTION = '__new__'
  * khiến Alert "info" thành nền xám đậm trong khu quản trị; dùng xanh --blue của AdminLayout.
  */
 export const SALES_THEME = { token: { colorInfo: '#1d4ed8' } }
+
+/** KAN-97 — màu/nhãn cho badge Mức độ (HOT/WARM/COLD). */
+export const SCORE_BAND_COLOR = Object.freeze({
+  HOT: 'red',
+  WARM: 'gold',
+  COLD: 'default',
+})
+
+export const SCORE_BAND_LABEL = Object.freeze({
+  HOT: 'Nóng',
+  WARM: 'Ấm',
+  COLD: 'Nguội',
+})
+
+/** Nhãn gọn cho tooltip badge, map key event → tiếng Việt. */
+export const SCORE_FACTOR_LABEL = Object.freeze({
+  VIEW_CAR: 'lượt xem xe',
+  WISHLIST_ADD: 'lần lưu xe',
+  COMPARE_ADD: 'lần so sánh',
+  CALCULATOR_USE: 'lần dùng máy tính trả góp',
+  FILTER_APPLY: 'lần lọc danh sách',
+  CONTACT_CLICK: 'lần bấm hotline',
+})

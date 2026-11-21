@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { Breadcrumb, Button, Modal, Form, Input, message } from 'antd'
 import {
@@ -32,6 +32,7 @@ import TestDriveButton from '../../features/test-drive-booking/components/TestDr
 import PublicCertificateSection from '../../features/cpo-certificates/components/PublicCertificateSection'
 import ShareButtons from '../../features/car-share/components/ShareButtons'
 import InstallmentWidget from '../../features/installment-calculator/components/InstallmentWidget'
+import { trackEvent } from '../../utils/trackEvent'
 import styles from './CarDetailPage.module.css'
 import { CONTACT_INFO } from '../../config/contactInfo'
 
@@ -49,6 +50,12 @@ export default function CarDetailPage() {
   const [contactOpen, setContactOpen] = useState(false)
   const [sending, setSending] = useState(false)
   const [form] = Form.useForm()
+
+  // KAN-97: ghi nhận VIEW_CAR cho lead scoring (1 lần/khi mở trang, fire-and-forget).
+  useEffect(() => {
+    if (!car?._id) return
+    trackEvent('VIEW_CAR', { carId: car._id, metadata: { stockCode } })
+  }, [car?._id, stockCode])
 
   if (loading) return <div className="container"><LoadingState text="Đang tải thông tin xe..." /></div>
   if (error) return <div className="container"><ErrorState message={error} onRetry={() => navigate(0)} /></div>
