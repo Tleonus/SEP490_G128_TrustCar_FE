@@ -1,6 +1,6 @@
 ﻿import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { ConfigProvider, Dropdown, theme } from 'antd'
-import { AuditOutlined, CalendarOutlined, HistoryOutlined, HomeOutlined, LogoutOutlined, SafetyCertificateOutlined, TeamOutlined } from '@ant-design/icons'
+import { AuditOutlined, CalendarOutlined, HistoryOutlined, HomeOutlined, LogoutOutlined, SafetyCertificateOutlined, TeamOutlined, ToolOutlined } from '@ant-design/icons'
 import Icon from '../features/vehicle-intake/components/VehicleIntakeIcon'
 import { useAuthStore } from '../store/useAuthStore'
 import { ADMIN_PATHS } from '../router/paths'
@@ -22,6 +22,8 @@ const NAV_ITEMS = [
   { to: ADMIN_PATHS.baseSettings, label: 'Cấu hình showroom', icon: 'settings' },
   { to: '/admin/chung-nhan', label: 'Chứng nhận CPO', iconNode: <SafetyCertificateOutlined /> },
   { to: '/admin/lich-lai-thu', label: 'Lịch lái thử', iconNode: <CalendarOutlined /> },
+  // KAN-96: CRUD dịch vụ showroom. SALES_STAFF đọc được; ADMIN có quyền sửa.
+  { to: ADMIN_PATHS.services, label: 'Dịch vụ showroom', iconNode: <ToolOutlined /> },
   // KAN-40: nhật ký hoạt động hệ thống — chỉ ADMIN thấy
   { to: ADMIN_PATHS.auditLogs, label: 'Nhật ký hoạt động', iconNode: <HistoryOutlined />, adminOnly: true },
   // KAN-93: quản lý nhân sự & gán nhiều vai trò — chỉ ADMIN thấy
