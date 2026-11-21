@@ -52,6 +52,10 @@ const InstallmentPage = lazy(() => import('../features/installment-calculator/pa
 const VnpayReturnPage = lazy(() => import('../features/deposits/pages/VnpayReturnPage.jsx'))
 const DepositSuccessPage = lazy(() => import('../features/deposits/pages/DepositSuccessPage.jsx'))
 const DepositCancelPage = lazy(() => import('../features/deposits/pages/DepositCancelPage.jsx'))
+// KAN-96: dịch vụ showroom (công khai + wizard đặt lịch + CRUD admin)
+const ServicesPage = lazy(() => import('../features/services/pages/ServicesPage.jsx'))
+const ServiceBookingPage = lazy(() => import('../features/services/pages/ServiceBookingPage.jsx'))
+const AdminServicesPage = lazy(() => import('../features/services/pages/AdminServicesPage.jsx'))
 
 export default function AppRouter() {
   return (
@@ -77,6 +81,16 @@ export default function AppRouter() {
         <Route path="/dat-coc/that-bai" element={<Suspense fallback={<LoadingState />}><DepositCancelPage /></Suspense>} />
         <Route path="/ve-chung-toi" element={<AboutPage />} />
         <Route path="/lien-he" element={<ContactPage />} />
+        {/* KAN-96: dịch vụ showroom công khai + wizard đặt lịch (yêu cầu đăng nhập) */}
+        <Route path="/dich-vu" element={<Suspense fallback={<LoadingState />}><ServicesPage /></Suspense>} />
+        <Route
+          path="/dich-vu/dat/:serviceId"
+          element={
+            <PrivateRoute>
+              <Suspense fallback={<LoadingState />}><ServiceBookingPage /></Suspense>
+            </PrivateRoute>
+          }
+        />
         <Route path="/dang-nhap" element={<LoginPage />} />
         <Route path="/dang-ky" element={<RegisterPage />} />
         <Route path="/quen-mat-khau" element={<ForgotPasswordPage />} />
@@ -184,6 +198,12 @@ export default function AppRouter() {
         <Route
           path="lich-lai-thu"
           element={<Suspense fallback={<LoadingState />}><StaffVisitsPage /></Suspense>}
+        />
+        {/* KAN-96: CRUD dịch vụ showroom. Trong AdminRoute (ADMIN + SALES_STAFF đọc được).
+            Backend tự kiểm quyền service:write cho POST/PUT/DELETE, SALES_STAFF chỉ đọc. */}
+        <Route
+          path="dich-vu"
+          element={<Suspense fallback={<LoadingState />}><AdminServicesPage /></Suspense>}
         />
         {/* Route admin không tồn tại: hiện 404 trong AdminLayout thay vì vùng nội dung trống */}
         <Route

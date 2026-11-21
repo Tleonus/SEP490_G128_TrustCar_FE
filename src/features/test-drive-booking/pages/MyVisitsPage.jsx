@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { App, Button, Empty, Pagination, Segmented, Skeleton } from 'antd'
-import { Link } from 'react-router-dom'
+import { App, Button, Empty, Pagination, Segmented, Skeleton, Tabs } from 'antd'
+import { Link, useSearchParams } from 'react-router-dom'
 import VisitCard from '../components/VisitCard'
 import CancelVisitModal from '../components/CancelVisitModal'
 import RescheduleModal from '../components/RescheduleModal'
@@ -10,6 +10,8 @@ import { useMyVisits } from '../hooks/useVisits'
 import { useAutoRefresh } from '../hooks/useAutoRefresh'
 import { useFocusRefresh } from '../hooks/useFocusRefresh'
 import { VISIT_STATUS } from '../constants/testDriveConstants'
+// KAN-96: tab Dịch vụ được render song song tab Lái thử.
+import MyServiceAppointmentsTab from '../../services/pages/MyServiceAppointmentsTab'
 import styles from '../styles/MyVisitsPage.module.css'
 
 const PAGE_SIZE = 10
@@ -31,6 +33,8 @@ const FILTERS = [
  */
 export default function MyVisitsPage() {
   const { message } = App.useApp()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const activeTab = searchParams.get('tab') === 'service' ? 'service' : 'test-drive'
   const [status, setStatus] = useState('ALL')
   const [page, setPage] = useState(1)
   const [cancelling, setCancelling] = useState(null)
@@ -39,7 +43,8 @@ export default function MyVisitsPage() {
   const list = useMyVisits({ status: status === 'ALL' ? undefined : status, page, limit: PAGE_SIZE })
 
   // REQ-F46: tự tải ngầm mỗi 60 giây và khi quay lại tab; không tải khi đang mở hộp hủy / đổi lịch / thêm xe.
-  const idle = !cancelling && !rescheduling && !addingCars
+  // Chỉ chạy auto-refresh khi đang ở tab test-drive (tab service tự quản lý).
+  const idle = activeTab === 'test-drive' && !cancelling && !rescheduling && !addingCars
   useFocusRefresh(list.loadedAt, list.reloadSilently, idle)
   useAutoRefresh({ enabled: idle, settledAt: list.settledAt, silentStatus: list.silentStatus, reloadSilently: list.reloadSilently })
 
@@ -55,11 +60,15 @@ export default function MyVisitsPage() {
     list.reload()
   }
 
-  return (
-    <div className={styles.page}>
-      <h1 className={styles.title}>Lịch hẹn của tôi</h1>
-      <p className={styles.desc}>Các lượt lái thử bạn đã đặt. Showroom sẽ gọi điện để xác nhận.</p>
+  const handleTabChange = (key) => {
+    const next = new URLSearchParams(searchParams)
+    if (key === 'service') next.set('tab', 'service')
+    else next.delete('tab')
+    setSearchParams(next, { replace: true })
+  }
 
+  const testDriveContent = (
+    <>
       <div className={styles.filter}>
         <Segmented
           options={FILTERS}
@@ -98,6 +107,22 @@ export default function MyVisitsPage() {
           </div>
         </>
       )}
+    </>
+  )
+
+  return (
+    <div className={styles.page}>
+      <h1 className={styles.title}>Lịch hẹn của tôi</h1>
+      <p className={styles.desc}>Các lượt lái thử và lịch dịch vụ bạn đã đặt. Showroom sẽ gọi điện để xác nhận.</p>
+
+      <Tabs
+        activeKey={activeTab}
+        onChange={handleTabChange}
+        items={[
+          { key: 'test-drive', label: 'Lái thử', children: testDriveContent },
+          { key: 'service', label: 'Dịch vụ', children: <MyServiceAppointmentsTab /> },
+        ]}
+      />
 
       <CancelVisitModal
         key={cancelling?.visitId ?? 'none'}
