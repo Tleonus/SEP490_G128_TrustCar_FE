@@ -18,6 +18,7 @@ import {
   SettingOutlined,
   StarFilled,
   ArrowDownOutlined,
+  ZoomInOutlined,
 } from '@ant-design/icons'
 import { useCarDetail } from '../../hooks/useCarDetail'
 import { formatPrice, formatMileage } from '../../utils/format'
@@ -32,6 +33,7 @@ import TestDriveButton from '../../features/test-drive-booking/components/TestDr
 import PublicCertificateSection from '../../features/cpo-certificates/components/PublicCertificateSection'
 import ShareButtons from '../../features/car-share/components/ShareButtons'
 import InstallmentWidget from '../../features/installment-calculator/components/InstallmentWidget'
+import CarImageLightbox from '../../features/image-lightbox/components/CarImageLightbox'
 import { trackEvent } from '../../utils/trackEvent'
 import styles from './CarDetailPage.module.css'
 import { CONTACT_INFO } from '../../config/contactInfo'
@@ -47,6 +49,8 @@ export default function CarDetailPage() {
   const { car, similarCars, loading, error } = useCarDetail(stockCode)
   const [activeImage, setActiveImage] = useState(0)
   const thumbsRef = useRef(null)
+  // KAN-89: lightbox xem ảnh lớn (zoom + chuyển ảnh), chỉ xử lý ở Frontend.
+  const [lightboxOpen, setLightboxOpen] = useState(false)
   const [contactOpen, setContactOpen] = useState(false)
   const [sending, setSending] = useState(false)
   const [form] = Form.useForm()
@@ -214,7 +218,20 @@ export default function CarDetailPage() {
                   )}
 
                   {current ? (
-                    <img src={current.url} alt={current.caption || title} className={styles.mainImg} />
+                    <>
+                      {/* KAN-89: bấm vào ảnh để mở lightbox xem lớn, zoom chi tiết */}
+                      <button
+                        type="button"
+                        className={styles.mainImgButton}
+                        onClick={() => setLightboxOpen(true)}
+                        aria-label="Phóng to ảnh xe"
+                      >
+                        <img src={current.url} alt={current.caption || title} className={styles.mainImg} />
+                      </button>
+                      <span className={styles.zoomPill} aria-hidden="true">
+                        <ZoomInOutlined /> Bấm để xem lớn
+                      </span>
+                    </>
                   ) : (
                     <div className={styles.emptyStage}>
                       <CarOutlined className={styles.emptyStageIcon} />
@@ -559,6 +576,17 @@ export default function CarDetailPage() {
           </Button>
         </Form>
       </Modal>
+
+      {/* KAN-89: lightbox xem ảnh lớn. Chỉ mount khi mở để state zoom khởi tạo lại từ đầu.
+          Trang vẫn giữ activeImage nên sau khi chuyển ảnh trong lightbox, đóng ra vẫn đúng ảnh. */}
+      {lightboxOpen && (
+        <CarImageLightbox
+          images={images}
+          index={activeImage}
+          onIndexChange={setActiveImage}
+          onClose={() => setLightboxOpen(false)}
+        />
+      )}
     </div>
   )
 }
