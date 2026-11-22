@@ -51,6 +51,15 @@ import {
 import { ADMIN_PATHS } from '../../../router/paths'
 import { useAuthStore } from '../../../store/useAuthStore'
 import { ErrorState } from '../../../components/common/StateBlock'
+import { useAnalyticsOverview } from '../hooks/useAnalyticsOverview'
+import {
+  AnalyticsDateRangeFilter,
+  SalesByMonthLine,
+  LeadsFunnelChart,
+  TopCarsBar,
+  RevenueByStaffBar,
+  AvgDaysInStockTile,
+} from '../components/AnalyticsWidgets'
 import styles from '../styles/AdminDashboardPage.module.css'
 
 const countFormatter = (value) => new Intl.NumberFormat('vi-VN').format(value ?? 0)
@@ -86,6 +95,10 @@ export default function AdminDashboardPage() {
   const { cars, leads, leadsAvailable, partial, carTotal, loading, error, reload } = useDashboardData()
   // /admin/approval chỉ ADMIN vào được; SALES_STAFF xem thẻ chờ duyệt nhưng không có link.
   const isAdmin = useAuthStore((state) => state.user?.roleName === 'ADMIN')
+
+  // KAN-100 — chỉ ADMIN mới được xem phân tích chi tiết; SALES_STAFF hiển thị
+  // thông báo thân thiện ở section mới mà không gọi API (tránh 403 noise).
+  const analytics = useAnalyticsOverview()
 
   const kpis = computeKpis(cars)
   const stock = inventoryBreakdown(cars)
@@ -283,6 +296,51 @@ export default function AdminDashboardPage() {
               ? <SectionSkeleton rows={5} />
               : <RecentNewCarsTable cars={latestNew} />}
           </div>
+
+          {/* KAN-100 — Phân tích chi tiết (chỉ ADMIN) */}
+          {isAdmin && (
+            <section className={styles.analyticsSection} aria-labelledby="analytics-section-title">
+              <header className={styles.blockHead}>
+                <div>
+                  <h2 id="analytics-section-title">Phân tích chi tiết</h2>
+                  <p>Dữ liệu được lấy trực tiếp từ bảng Sale / Lead / Appointment theo khoảng thời gian bạn chọn.</p>
+                </div>
+                <AnalyticsDateRangeFilter range={analytics.range} onChange={analytics.setRange} />
+              </header>
+
+              {analytics.error ? (
+                <ErrorState message={analytics.error} />
+              ) : analytics.loading && !analytics.data ? (
+                <SectionSkeleton rows={6} />
+              ) : analytics.data ? (
+                <>
+                  <div className={styles.analyticsRow}>
+                    <div className={styles.analyticsCardWide}>
+                      <h3>Doanh số theo tháng</h3>
+                      <SalesByMonthLine data={analytics.data.salesByMonth} />
+                    </div>
+                    <AvgDaysInStockTile value={analytics.data.avgDaysInStock} />
+                  </div>
+
+                  <div className={styles.analyticsRow}>
+                    <div className={styles.analyticsCard}>
+                      <h3>Phễu chuyển đổi</h3>
+                      <LeadsFunnelChart data={analytics.data.leadsFunnel} />
+                    </div>
+                    <div className={styles.analyticsCard}>
+                      <h3>Top 5 xe bán chạy</h3>
+                      <TopCarsBar data={analytics.data.topCars} />
+                    </div>
+                  </div>
+
+                  <div className={styles.analyticsCardWide}>
+                    <h3>Hiệu suất nhân viên sales</h3>
+                    <RevenueByStaffBar data={analytics.data.revenueByStaff} />
+                  </div>
+                </>
+              ) : null}
+            </section>
+          )}
         </>
       )}
     </div>
