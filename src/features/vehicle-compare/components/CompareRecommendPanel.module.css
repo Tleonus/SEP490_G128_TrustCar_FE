@@ -5,23 +5,26 @@
   margin: 22px 0;
 }
 
-/* ===== AI SMART ADVISOR – PHONG CÁCH ÁNH ĐÈN CHIẾU SHOWROOM ===== */
+/* ===== ON-DEMAND AI QUICK ADVISOR – PHONG CÁCH ÁNH ĐÈN CHIẾU SHOWROOM ===== */
 .advisorSection {
   position: relative;
   border-radius: 20px;
   background:
-    radial-gradient(ellipse 55% 85% at 28% 0%, rgba(255, 250, 235, 0.12) 0%, transparent 72%),
+    radial-gradient(ellipse 55% 85% at 25% 0%, rgba(255, 250, 235, 0.11) 0%, transparent 72%),
     radial-gradient(ellipse 50% 75% at 78% 0%, rgba(201, 162, 39, 0.12) 0%, transparent 70%),
     linear-gradient(165deg, #081528 0%, #0d203b 55%, #071324 100%);
-  border: 1px solid rgba(201, 162, 39, 0.34);
+  border: 1px solid rgba(201, 162, 39, 0.36);
   border-bottom: 5px solid #040b16;
   box-shadow:
     0 10px 0 rgba(7, 19, 36, 0.14),
     0 22px 46px rgba(7, 19, 36, 0.25),
     inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  padding: 24px 26px 26px;
+  padding: 22px 26px 24px;
   overflow: hidden;
   color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .ledBorderTop {
@@ -43,36 +46,56 @@
     0 4px 20px rgba(255, 248, 225, 0.2);
 }
 
-.advisorHeader {
+.aiTriggerDeck {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-bottom: 20px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 18px;
 }
 
 .advisorTitleGroup {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  max-width: 720px;
+}
+
+.badgeRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .aiBadge {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  align-self: flex-start;
   padding: 4px 13px;
   border-radius: 999px;
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 1.2px;
+  letter-spacing: 1.1px;
   color: #f3dc93;
-  background: rgba(201, 162, 39, 0.15);
-  border: 1px solid rgba(201, 162, 39, 0.38);
+  background: rgba(201, 162, 39, 0.16);
+  border: 1px solid rgba(201, 162, 39, 0.42);
+}
+
+.onDemandTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 11px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
 }
 
 .advisorTitle {
-  font-size: clamp(19px, 2.2vw, 24px);
+  font-size: clamp(19px, 2.2vw, 23px);
   font-weight: 800;
   color: #ffffff;
   margin: 0;
@@ -81,11 +104,127 @@
 
 .advisorSub {
   font-size: 13.5px;
-  color: #94a3b8;
+  color: #cbd5e1;
   margin: 0;
+  line-height: 1.5;
 }
 
-/* PERSONA TABS */
+.advisorSub strong {
+  color: #fae498;
+}
+
+/* NÚT ẤN GỢI Ý TỪ AI */
+.ctaCluster {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.aiTriggerBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 13px 24px;
+  border-radius: 999px;
+  border: 1px solid #fff3c4;
+  border-bottom: 4px solid #7d5d09;
+  background: linear-gradient(180deg, #fae498 0%, #d4af37 52%, #b88f14 100%);
+  color: #071324;
+  font-size: 14.5px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  box-shadow:
+    0 8px 24px rgba(201, 162, 39, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.aiTriggerBtn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+  box-shadow:
+    0 12px 28px rgba(201, 162, 39, 0.48),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.aiTriggerBtn:active {
+  transform: translateY(0);
+}
+
+.aiTriggerIcon {
+  font-size: 17px;
+  color: #071324;
+}
+
+.aiActiveActions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.aiRefreshBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid #fff2ba;
+  border-bottom: 3px solid #7d5d09;
+  background: linear-gradient(180deg, #fae498 0%, #c9a227 100%);
+  color: #081527;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.aiRefreshBtn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.aiHideBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(15, 30, 56, 0.78);
+  color: #e2e8f0;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.aiHideBtn:hover {
+  border-color: rgba(229, 200, 120, 0.55);
+  color: #ffffff;
+}
+
+/* THANH CHỌN GÓC NHÌN ƯU TIÊN */
+.preferenceBar {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(6, 15, 30, 0.52);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.prefBarLabel {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  color: #f3dc93;
+}
+
 .personaTabs {
   display: flex;
   flex-wrap: wrap;
@@ -96,12 +235,12 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 9px 15px;
+  padding: 8px 14px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   background: rgba(11, 25, 48, 0.72);
   color: #cbd5e1;
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -113,7 +252,7 @@
 }
 
 .personaBtnActive {
-  background: linear-gradient(180deg, rgba(201, 162, 39, 0.25) 0%, rgba(201, 162, 39, 0.12) 100%);
+  background: linear-gradient(180deg, rgba(201, 162, 39, 0.26) 0%, rgba(201, 162, 39, 0.12) 100%);
   border-color: #e5c878;
   color: #ffffff;
   box-shadow:
@@ -123,319 +262,351 @@
 
 .personaIcon {
   color: #e5c878;
-  font-size: 14px;
+  font-size: 13.5px;
 }
 
-/* ADVISOR GRID */
-.advisorGrid {
-  display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
-  gap: 20px;
-  align-items: stretch;
-}
-
-/* WINNER CARD */
-.winnerCard {
-  position: relative;
-  border-radius: 16px;
-  background:
-    radial-gradient(ellipse 70% 60% at 50% 0%, rgba(255, 250, 235, 0.09) 0%, transparent 72%),
-    rgba(9, 20, 38, 0.82);
-  border: 1px solid rgba(229, 200, 120, 0.42);
-  border-bottom: 4px solid #7d5d09;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  box-shadow:
-    0 10px 26px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.14);
-}
-
-.winnerRibbon {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  align-self: flex-start;
-  padding: 4px 12px;
-  border-radius: 999px;
-  background: linear-gradient(180deg, #fae498 0%, #c9a227 100%);
-  color: #071324;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.5px;
-}
-
-.winnerTop {
-  display: grid;
-  grid-template-columns: 132px 1fr auto;
-  gap: 16px;
-  align-items: center;
-}
-
-.winnerThumb {
-  position: relative;
-  width: 132px;
-  height: 92px;
-  border-radius: 11px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: #06101f;
-}
-
-.winnerThumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.winnerRankTag {
-  position: absolute;
-  bottom: 6px;
-  left: 6px;
-  padding: 2px 8px;
-  border-radius: 999px;
-  font-size: 10px;
-  font-weight: 700;
-  background: rgba(7, 19, 36, 0.88);
-  color: #f3dc93;
-  border: 1px solid rgba(229, 200, 120, 0.45);
-}
-
-.winnerMeta {
-  min-width: 0;
-}
-
-.winnerName {
-  font-size: 18px;
-  font-weight: 800;
-  color: #ffffff;
-  margin-bottom: 4px;
-}
-
-.winnerPrice {
-  font-size: 17px;
-  font-weight: 800;
-  color: #f3dc93;
-}
-
-.personaDesc {
-  margin-top: 6px;
-  font-size: 13px;
-  color: #cbd5e1;
-  line-height: 1.45;
-}
-
-.matchCircle {
-  width: 74px;
-  height: 74px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(201, 162, 39, 0.18) 0%, rgba(7, 19, 36, 0.92) 78%);
-  border: 1.5px solid rgba(229, 200, 120, 0.58);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.matchNumber {
-  font-size: 19px;
-  font-weight: 800;
-  color: #ffffff;
-  line-height: 1;
-}
-
-.matchLabel {
-  font-size: 8.5px;
-  font-weight: 700;
-  color: #f3dc93;
-  letter-spacing: 0.5px;
-  margin-top: 3px;
-}
-
-.reasonsBlock {
-  background: rgba(6, 14, 28, 0.52);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 12px 14px;
-}
-
-.reasonsHeading {
-  font-size: 12.5px;
-  font-weight: 700;
-  color: #f3dc93;
-  margin-bottom: 9px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.reasonPills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.reasonPill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 11px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 600;
-  border: 1px solid rgba(229, 200, 120, 0.34);
-  background: rgba(201, 162, 39, 0.12);
-  color: #f8fafc;
-}
-
-.reasonPill :global(.anticon) {
-  color: #e5c878;
-}
-
-.winnerFooter {
-  margin-top: auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.runnerUpInfo {
+.prefFocusHint {
+  margin: 0;
   font-size: 12.5px;
   color: #94a3b8;
 }
 
-.runnerUpInfo strong {
-  color: #e2e8f0;
-}
-
-.winnerCta {
-  display: inline-flex;
-  align-items: center;
-  padding: 8px 16px;
-  border-radius: 999px;
+/* DẢI LƯU Ý KHI CHƯA BẤM NÚT */
+.compactCautionStrip {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(245, 158, 11, 0.11);
+  border: 1px solid rgba(251, 191, 36, 0.34);
+  color: #fde68a;
   font-size: 12.5px;
-  font-weight: 800;
-  color: #081527;
-  background: linear-gradient(180deg, #fae498 0%, #c9a227 100%);
-  border: 1px solid #fff2ba;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  line-height: 1.5;
 }
 
-.winnerCta:hover {
-  transform: translateY(-1px);
-  color: #081527;
-  box-shadow: 0 6px 16px rgba(201, 162, 39, 0.32);
+.cautionStripIcon {
+  color: #fbbf24;
+  font-size: 15px;
+  margin-top: 2px;
+  flex-shrink: 0;
 }
 
-/* 5-DIMENSION SCORE BOX */
-.radarBox {
+/* TRẠNG THÁI LOADING AI */
+.aiLoadingCard {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
   border-radius: 16px;
-  background: rgba(9, 20, 38, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  padding: 18px 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 14px;
+  background: rgba(8, 19, 36, 0.78);
+  border: 1px solid rgba(229, 200, 120, 0.36);
 }
 
-.radarHeader {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.radarHeader h3 {
-  font-size: 14.5px;
-  font-weight: 700;
-  color: #f8fafc;
-  margin: 0;
-}
-
-.carLegend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.legendItem {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #cbd5e1;
-}
-
-.legendDot {
-  width: 8px;
-  height: 8px;
+.aiLoadingSpinner {
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  background: var(--dot-color, #e5c878);
+  background: rgba(201, 162, 39, 0.16);
+  border: 1px solid rgba(229, 200, 120, 0.45);
+  color: #fae498;
+  font-size: 20px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
 }
 
-.dimensionList {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.dimensionItem {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.dimensionLabelRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.dimensionName {
-  font-size: 12.5px;
-  font-weight: 600;
-  color: #cbd5e1;
-}
-
-.dimensionScores {
-  display: flex;
-  gap: 6px;
-}
-
-.dimScoreBadge {
-  font-size: 11px;
-  font-weight: 700;
-  padding: 1px 7px;
-  border-radius: 999px;
-  border: 1px solid;
-}
-
-.multiBarGroup {
+.aiLoadingTextGroup {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.barTrack {
-  height: 5px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  overflow: hidden;
+.aiLoadingTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
 }
 
-.barFill {
+.aiLoadingSub {
+  font-size: 13px;
+  color: #cbd5e1;
+}
+
+/* KHUNG KẾT QUẢ PHÂN TÍCH TỪ AI */
+.aiResultContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 4px;
+}
+
+/* HỘP CẢNH BÁO AI CÓ THỂ SAI */
+.aiDisclaimerBanner {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0.18) 0%, rgba(120, 53, 15, 0.25) 100%);
+  border: 1.5px solid rgba(251, 191, 36, 0.55);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+}
+
+.disclaimerIconWrap {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: rgba(251, 191, 36, 0.2);
+  border: 1px solid rgba(251, 191, 36, 0.48);
+  color: #fde047;
+  font-size: 17px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.disclaimerBody {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.disclaimerTitle {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #fef08a;
+  letter-spacing: 0.1px;
+}
+
+.disclaimerText {
+  margin: 0;
+  font-size: 12.8px;
+  line-height: 1.5;
+  color: #fef3c7;
+}
+
+/* TÓM TẮT & GỢI Ý TỔNG QUAN */
+.aiOverviewGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.aiSummaryCard,
+.aiRecommendCard {
+  padding: 16px 18px;
+  border-radius: 15px;
+  background: rgba(8, 18, 35, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.aiRecommendCard {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201, 162, 39, 0.12) 0%, transparent 75%),
+    rgba(8, 18, 35, 0.85);
+  border-color: rgba(229, 200, 120, 0.42);
+}
+
+.aiBoxHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #f8fafc;
+}
+
+.aiBoxIcon {
+  color: #38bdf8;
+  font-size: 15px;
+}
+
+.aiBoxIconGold {
+  color: #facc15;
+  font-size: 15px;
+}
+
+.aiBoxText {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.58;
+  color: #e2e8f0;
+}
+
+.missingDataAlert {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 14px;
+  border-radius: 11px;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #bae6fd;
+  font-size: 12.5px;
+}
+
+/* THẺ PHÂN TÍCH TỪNG XE (KHÔNG CÓ THANH ĐIỂM HAY % PHÙ HỢP) */
+.aiCarCardsGrid {
+  display: grid;
+  grid-template-columns: repeat(var(--car-cols, 2), minmax(0, 1fr));
+  gap: 16px;
+}
+
+.aiCarCard {
+  border-radius: 16px;
+  background: rgba(9, 20, 38, 0.84);
+  border: 1px solid var(--car-border, rgba(229, 200, 120, 0.36));
+  border-bottom: 4px solid #040a14;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+}
+
+.aiCarCardTop {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.aiCarThumb {
+  width: 88px;
+  height: 62px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #050d1a;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  flex-shrink: 0;
+}
+
+.aiCarThumb img {
+  width: 100%;
   height: 100%;
+  object-fit: cover;
+}
+
+.aiCarMeta {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.aiCarSlotBadge {
+  align-self: flex-start;
+  padding: 2px 8px;
   border-radius: 999px;
-  box-shadow: none !important;
-  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--car-glow, #e5c878);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--car-border, rgba(229, 200, 120, 0.38));
+}
+
+.aiCarName {
+  margin: 0;
+  font-size: 15.5px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.3;
+}
+
+.aiCarPrice {
+  font-size: 14.5px;
+  font-weight: 800;
+  color: #f3dc93;
+}
+
+.aiPointBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.aiPointHeadingPositive,
+.aiPointHeadingNeutral {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.aiPointHeadingPositive {
+  color: #6ee7b7;
+}
+
+.aiPointHeadingNeutral {
+  color: #fcd34d;
+}
+
+.aiPointList,
+.aiPointListMuted {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 12.8px;
+  line-height: 1.5;
+}
+
+.aiPointList {
+  color: #f1f5f9;
+}
+
+.aiPointListMuted {
+  color: #cbd5e1;
+}
+
+.aiBestForBox {
+  margin-top: auto;
+  padding: 11px 13px;
+  border-radius: 11px;
+  background: rgba(201, 162, 39, 0.11);
+  border: 1px solid rgba(229, 200, 120, 0.32);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.aiBestForLabel {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #f3dc93;
+}
+
+.aiBestForText {
+  margin: 0;
+  font-size: 12.8px;
+  line-height: 1.45;
+  color: #ffffff;
+}
+
+.aiCarFooter {
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.aiCarDetailLink {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #f3dc93;
+}
+
+.aiCarDetailLink:hover {
+  color: #ffffff;
 }
 
 /* ===== MATCHUP & SIMILAR INVENTORY SECTIONS ===== */
@@ -671,7 +842,7 @@
   place-items: center;
   color: #64748b;
   font-weight: 700;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .simReasonBadge {
@@ -782,7 +953,8 @@
 }
 
 @media (max-width: 1024px) {
-  .advisorGrid {
+  .aiOverviewGrid,
+  .aiCarCardsGrid {
     grid-template-columns: 1fr;
   }
 
@@ -798,10 +970,8 @@
     padding: 16px;
   }
 
-  .winnerTop {
-    grid-template-columns: 1fr;
-    text-align: center;
-    justify-items: center;
+  .aiTriggerBtn {
+    width: 100%;
   }
 
   .similarGrid {
