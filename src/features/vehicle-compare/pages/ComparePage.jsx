@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Alert, Button, Result, Switch, message } from 'antd'
 import {
-  CrownFilled,
   DeleteOutlined,
   PlusCircleOutlined,
   TrophyFilled,
@@ -132,9 +131,8 @@ export default function ComparePage() {
       })
       groupDiffMap[g.key] = gDiff
     })
-    const topCar = analysis.find((a) => a.isTopOverall) ?? analysis[0] ?? null
-    return { totalRows, diffRows, groupDiffMap, topCar }
-  }, [allGroups, analysis])
+    return { totalRows, diffRows, groupDiffMap }
+  }, [allGroups])
 
   const handleAddRecommendedCar = useCallback(
     (car) => {
@@ -406,14 +404,10 @@ export default function ComparePage() {
                   <span className={styles.statVal}>{stats.diffRows}</span>
                   <span className={styles.statLabel}>Thông số khác biệt</span>
                 </div>
-                {stats.topCar && (
-                  <div className={`${styles.statCard} ${styles.statCardGold}`}>
-                    <span className={styles.statCrown}>
-                      <CrownFilled /> ĐỀ XUẤT TỔNG THỂ ({stats.topCar.scores.overall}/100)
-                    </span>
-                    <span className={styles.statTopName}>{stats.topCar.title}</span>
-                  </div>
-                )}
+                <div className={styles.statCard}>
+                  <span className={styles.statVal}>{stats.totalRows}</span>
+                  <span className={styles.statLabel}>Hạng mục kỹ thuật</span>
+                </div>
               </div>
             )}
           </div>

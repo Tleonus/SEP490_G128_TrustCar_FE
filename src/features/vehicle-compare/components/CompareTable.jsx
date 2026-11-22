@@ -6,7 +6,6 @@ import {
   CarOutlined,
   CloseOutlined,
   CompassOutlined,
-  CrownFilled,
   SafetyCertificateOutlined,
   StarFilled,
   ThunderboltFilled,
@@ -94,7 +93,7 @@ export default function CompareTable({
                 return (
                   <th
                     scope="col"
-                    className={`${styles.carHead} ${info?.isTopOverall ? styles.carHeadWinner : ''}`}
+                    className={styles.carHead}
                     key={car._id}
                     style={{
                       '--car-primary': theme.primary,
@@ -111,16 +110,7 @@ export default function CompareTable({
 
                       <div className={styles.podiumTopRow}>
                         <span className={styles.slotBadge}>{theme.badge}</span>
-                        {info?.isTopOverall && (
-                          <span className={styles.topPickCrown}>
-                            <CrownFilled /> ĐỀ XUẤT TỐI ƯU
-                          </span>
-                        )}
-                        {info?.scores?.overall && (
-                          <span className={styles.scorePill} title="Điểm đánh giá tổng hợp">
-                            {info.scores.overall}/100
-                          </span>
-                        )}
+                        {car.year && <span className={styles.yearPill}>Đời {car.year}</span>}
                       </div>
 
                       <div className={styles.photo}>
@@ -275,15 +265,6 @@ export default function CompareTable({
                               >
                                 {cell.text}
                               </span>
-                            )}
-
-                            {cell.barPercent != null && (
-                              <div className={styles.metricBarTrack} aria-hidden="true">
-                                <div
-                                  className={styles.metricBarFill}
-                                  style={{ width: `${cell.barPercent}%` }}
-                                />
-                              </div>
                             )}
                           </div>
                         </td>
