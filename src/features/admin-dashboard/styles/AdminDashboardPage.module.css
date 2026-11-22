@@ -699,3 +699,251 @@
     display: none;
   }
 }
+
+/* ─── KAN-100 — Phân tích chi tiết ─────────────────────────────────────── */
+.analyticsSection {
+  margin-top: 32px;
+  padding: 24px;
+  background: #fff;
+  border: 1px solid #f0f0f0;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.analyticsFilter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.analyticsFilterLabel {
+  font-size: 13px;
+  color: #595959;
+  font-weight: 500;
+}
+.analyticsRow {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(220px, 1fr);
+  gap: 20px;
+}
+.analyticsRow + .analyticsRow {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.analyticsCard,
+.analyticsCardWide {
+  padding: 20px;
+  background: #fafafa;
+  border: 1px solid #eef0f4;
+  border-radius: 10px;
+}
+.analyticsCard h3,
+.analyticsCardWide h3 {
+  margin: 0 0 12px;
+  font-size: 15px;
+  color: #141414;
+}
+.analyticsFigure {
+  margin: 0;
+}
+.analyticsSvg {
+  width: 100%;
+  height: auto;
+  max-height: 260px;
+}
+.analyticsCaption {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #595959;
+  line-height: 1.5;
+}
+
+/* Funnel */
+.funnelList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.funnelRow {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr) 70px;
+  align-items: center;
+  gap: 12px;
+}
+.funnelLabel {
+  font-size: 13px;
+  color: #595959;
+}
+.funnelBarWrap {
+  position: relative;
+  background: #f0f0f0;
+  border-radius: 6px;
+  height: 26px;
+  overflow: hidden;
+}
+.funnelBar {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+.funnelValue {
+  position: absolute;
+  top: 0;
+  left: 12px;
+  line-height: 26px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.35);
+}
+.funnelRate {
+  font-size: 12px;
+  color: #1677ff;
+  font-weight: 600;
+}
+
+/* Top cars */
+.topCarsList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.topCarRow {
+  display: grid;
+  grid-template-columns: 32px minmax(140px, 1fr) minmax(0, 1.5fr);
+  gap: 12px;
+  align-items: center;
+}
+.topCarRank {
+  font-weight: 700;
+  color: #8c8c8c;
+}
+.topCarMeta {
+  display: flex;
+  flex-direction: column;
+}
+.topCarTitle {
+  font-size: 13px;
+  color: #141414;
+}
+.topCarCode {
+  font-size: 11px;
+  color: #8c8c8c;
+}
+.topCarBarWrap {
+  position: relative;
+  background: #f0f0f0;
+  border-radius: 6px;
+  height: 20px;
+  overflow: hidden;
+}
+.topCarBar {
+  background: #fa8c16;
+  height: 100%;
+}
+.topCarValue {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  font-size: 11px;
+  color: #141414;
+  font-weight: 500;
+}
+
+/* Staff revenue */
+.staffList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.staffRow {
+  display: grid;
+  grid-template-columns: minmax(160px, 1fr) minmax(0, 2fr);
+  gap: 12px;
+  align-items: center;
+}
+.staffMeta {
+  display: flex;
+  flex-direction: column;
+}
+.staffEmail {
+  font-size: 11px;
+  color: #8c8c8c;
+}
+.staffBarWrap {
+  position: relative;
+  background: #f0f0f0;
+  border-radius: 6px;
+  height: 22px;
+  overflow: hidden;
+}
+.staffBar {
+  background: #52c41a;
+  height: 100%;
+}
+.staffValue {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #141414;
+}
+
+/* avgDaysInStock tile */
+.analyticsTile {
+  padding: 20px;
+  background: linear-gradient(135deg, #e6f4ff 0%, #f0f5ff 100%);
+  border: 1px solid #91caff;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.analyticsTileEyebrow {
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: #0958d9;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.analyticsTileValue {
+  font-size: 32px;
+  font-weight: 700;
+  color: #003eb3;
+}
+.analyticsTileValue small {
+  font-size: 14px;
+  font-weight: 500;
+  color: #0958d9;
+}
+.analyticsTileHint {
+  font-size: 12px;
+  color: #475569;
+  margin: 0;
+  line-height: 1.4;
+}
+
+@media (max-width: 880px) {
+  .analyticsRow,
+  .analyticsRow + .analyticsRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .topCarRow {
+    grid-template-columns: 28px minmax(0, 1fr);
+  }
+  .topCarBarWrap { grid-column: 1 / -1; }
+  .funnelRow { grid-template-columns: 90px minmax(0, 1fr) 60px; }
+  .staffRow { grid-template-columns: minmax(0, 1fr); }
+}

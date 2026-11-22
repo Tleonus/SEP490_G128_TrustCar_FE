@@ -4,6 +4,9 @@ import {
   fetchAssignableRoles,
   fetchStaffUsers,
   updateUserRoles,
+  resetStaffPassword,
+  lockStaffUser,
+  unlockStaffUser,
 } from '../api/userManagementApi'
 import { buildRoleIdsPayload, validateRoleSelection } from '../utils/roleSelection'
 
@@ -70,7 +73,37 @@ export function useStaffUsers() {
     }
   }, [roles])
 
-  return { items, meta, roles, status, error, page, setPage, load, saveRoles, savingId }
+  /**
+   * KAN-101 — chạy một trong 3 action "nguy hiểm": reset / lock / unlock.
+   * Trả về true khi BE chấp nhận; UI dùng giá trị trả về để đóng modal.
+   * Sau khi thành công reload trang hiện tại để lấy lại trạng thái locked.
+   */
+  const runAction = useCallback(async (user, type, reason) => {
+    setSavingId(user._id)
+    try {
+      if (type === 'reset') {
+        await resetStaffPassword(user._id, { reason })
+        message.success('Đã gửi email mật khẩu mới cho nhân sự.')
+      } else if (type === 'lock') {
+        await lockStaffUser(user._id, { reason })
+        message.success('Đã khoá tài khoản. Nhân sự không thể đăng nhập cho tới khi được mở khoá.')
+      } else if (type === 'unlock') {
+        await unlockStaffUser(user._id, { reason })
+        message.success('Đã mở khoá tài khoản.')
+      } else {
+        return false
+      }
+      await load(page)
+      return true
+    } catch (err) {
+      message.error(err?.response?.data?.message || 'Thao tác thất bại.')
+      return false
+    } finally {
+      setSavingId(null)
+    }
+  }, [load, page])
+
+  return { items, meta, roles, status, error, page, setPage, load, saveRoles, savingId, runAction }
 }
 
 export default { useStaffUsers }
