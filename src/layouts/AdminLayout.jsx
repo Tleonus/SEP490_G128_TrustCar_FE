@@ -1,6 +1,6 @@
 ﻿import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { ConfigProvider, Dropdown, theme } from 'antd'
-import { AuditOutlined, CalendarOutlined, HomeOutlined, LogoutOutlined, SafetyCertificateOutlined } from '@ant-design/icons'
+import { AuditOutlined, CalendarOutlined, HistoryOutlined, HomeOutlined, LogoutOutlined, SafetyCertificateOutlined, TeamOutlined, ToolOutlined } from '@ant-design/icons'
 import Icon from '../features/vehicle-intake/components/VehicleIntakeIcon'
 import { useAuthStore } from '../store/useAuthStore'
 import { ADMIN_PATHS } from '../router/paths'
@@ -8,7 +8,9 @@ import logo from '../assets/logo-transparent.png'
 import styles from './AdminLayout.module.css'
 
 const NAV_ITEMS = [
-  { to: ADMIN_PATHS.overview, label: 'Tổng quan', icon: 'grid' },
+  // KAN-35: tổng quan điều hành (tồn kho, doanh thu, biểu đồ, hoạt động).
+  // Hiện cho cả ADMIN và SALES_STAFF vì route mở cho cả hai (xem AppRouter).
+  { to: ADMIN_PATHS.overview, label: 'Tổng quan', icon: 'chart' },
   { to: ADMIN_PATHS.inventory, label: 'Kho xe', icon: 'car' },
   { to: ADMIN_PATHS.vehicleIntake, label: 'Nhập xe & Thẩm định', icon: 'clipboard' },
   // KAN-55: màn lập biên bản kiểm định cho Sale (ADMIN và SALES_STAFF đều vào được)
@@ -17,10 +19,27 @@ const NAV_ITEMS = [
   // KAN-56: duyệt kiểm định & mở bán — chỉ ADMIN thấy (SALES_STAFF bị ẩn)
   { to: ADMIN_PATHS.approval, label: 'Duyệt kiểm định', iconNode: <AuditOutlined />, adminOnly: true },
   { to: ADMIN_PATHS.sales, label: 'Quản lý bán hàng', icon: 'sales' },
-  { to: ADMIN_PATHS.testDrives, label: 'Lịch lái thử', iconNode: <CalendarOutlined /> },
   { to: ADMIN_PATHS.baseSettings, label: 'Cấu hình showroom', icon: 'settings' },
   { to: '/admin/chung-nhan', label: 'Chứng nhận CPO', iconNode: <SafetyCertificateOutlined /> },
+  { to: '/admin/lich-lai-thu', label: 'Lịch lái thử', iconNode: <CalendarOutlined /> },
+  // KAN-96: CRUD dịch vụ showroom. SALES_STAFF đọc được; ADMIN có quyền sửa.
+  { to: ADMIN_PATHS.services, label: 'Dịch vụ showroom', iconNode: <ToolOutlined /> },
+  // KAN-40: nhật ký hoạt động hệ thống — chỉ ADMIN thấy
+  { to: ADMIN_PATHS.auditLogs, label: 'Nhật ký hoạt động', iconNode: <HistoryOutlined />, adminOnly: true },
+  // KAN-93: quản lý nhân sự & gán nhiều vai trò — chỉ ADMIN thấy
+  { to: ADMIN_PATHS.userManagement, label: 'Quản lý người dùng', iconNode: <TeamOutlined />, adminOnly: true },
 ]
+
+const ADMIN_ROLE_LABELS = {
+  ADMIN: 'Quản trị viên',
+  SALES_STAFF: 'Nhân viên bán hàng',
+  INSPECTOR: 'Kiểm định viên',
+}
+
+/** Role của user dưới dạng mảng (KAN-93: một người có thể giữ nhiều role). */
+const rolesOf = (user) => (
+  user?.roleNames?.length ? user.roleNames : (user?.roleName ? [user.roleName] : [])
+)
 
 export default function AdminLayout() {
   const user = useAuthStore((state) => state.user)
@@ -29,7 +48,9 @@ export default function AdminLayout() {
   const { pathname } = useLocation()
   const currentPage = NAV_ITEMS.find((item) => item.to === pathname)
   const displayName = user?.fullName || user?.email || 'Tài khoản quản lý'
-  const roleLabel = user?.roleName === 'ADMIN' ? 'Quản trị viên' : 'Nhân viên bán hàng'
+  const userRoles = rolesOf(user)
+  // Primary role quyết định nhãn; KAN-93 giữ roleName = role chính.
+  const roleLabel = ADMIN_ROLE_LABELS[user?.roleName] || 'Nhân viên'
   const initials = displayName.trim().split(/\s+/).slice(-2).map((part) => part[0]).join('').toUpperCase()
 
   async function handleLogout() {
@@ -56,7 +77,7 @@ export default function AdminLayout() {
           </Link>
           <div className={styles['workspace-label']}>KHÔNG GIAN QUẢN LÝ</div>
           <nav className={styles['main-nav']} aria-label="Điều hướng quản lý">
-            {NAV_ITEMS.filter((item) => !item.adminOnly || user?.roleName === 'ADMIN').map((item) => (
+            {NAV_ITEMS.filter((item) => !item.adminOnly || userRoles.includes('ADMIN')).map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}

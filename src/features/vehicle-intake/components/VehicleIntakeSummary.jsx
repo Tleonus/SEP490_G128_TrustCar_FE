@@ -1,7 +1,7 @@
 import styles from '../styles/VehicleIntake.module.css';
 import Icon from './VehicleIntakeIcon.jsx';
 
-export default function VehicleIntakeSummary({ car, notes, checkedCount, isSaving }) {
+export default function VehicleIntakeSummary({ car, notes, checkedCount, isSaving, attachmentCount = 0 }) {
   return (
                 <section className={styles["review-card"]}>
                   <div className={styles["review-top"]}>
@@ -15,6 +15,7 @@ export default function VehicleIntakeSummary({ car, notes, checkedCount, isSavin
                     <div><span>Hồ sơ định danh</span><strong>{car.brand && car.model ? `${car.brand} ${car.model}` : 'Chưa nhập'}</strong></div>
                     <div><span>Biển số</span><strong>{car.licensePlate || '—'}</strong></div>
                     <div><span>Checklist thẩm định</span><strong>{checkedCount}/5 mục tích chọn</strong></div>
+                    <div><span>Hồ sơ đính kèm</span><strong>{attachmentCount > 0 ? `${attachmentCount} tệp` : 'Chưa đính kèm'}</strong></div>
                     <div><span>Ghi chú</span><strong>{notes.trim() ? 'Đã ghi chú' : 'Chưa ghi chú'}</strong></div>
                   </div>
                   <button type="submit" className={styles["primary-button"]} disabled={isSaving}>

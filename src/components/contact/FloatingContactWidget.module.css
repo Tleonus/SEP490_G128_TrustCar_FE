@@ -1,7 +1,7 @@
-﻿.root {
+.root {
   position: fixed;
   left: 18px;
-  bottom: 124px;
+  bottom: 118px;
   z-index: 910;
   pointer-events: none;
 }
@@ -16,166 +16,358 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 9px;
-  padding: 8px 0;
+  gap: 12px;
+  padding: 10px 6px;
 }
 
+/* Trục năng lượng ánh sáng 3D nối giữa các quả cầu bong bóng */
 .list::before {
   content: '';
   position: absolute;
-  left: 23px;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: linear-gradient(to bottom, transparent, rgba(201, 162, 39, 0.62) 16%, rgba(201, 162, 39, 0.62) 84%, transparent);
+  left: 31px;
+  top: 6px;
+  bottom: 6px;
+  width: 3px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(56, 189, 248, 0.45) 18%,
+    rgba(244, 216, 121, 0.78) 50%,
+    rgba(56, 189, 248, 0.45) 82%,
+    transparent 100%
+  );
+  box-shadow: 0 0 12px rgba(244, 216, 121, 0.45);
   pointer-events: none;
 }
 
+/* =========================================================
+   3D GLOSSY SPHERE BUBBLE (HÌNH BONG BÓNG CẦU 3D NỔI KHỐI)
+   ========================================================= */
 .channel {
+  --bubble-lip: #062b61;
+  --bubble-glow: rgba(14, 165, 233, 0.38);
   pointer-events: auto;
   position: relative;
   z-index: 1;
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 0;
-  color: #fff;
-  background: var(--color-primary);
-  border: 3px solid var(--color-surface);
+  color: #ffffff;
   border-radius: 50%;
-  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  border: 1.5px solid rgba(255, 255, 255, 0.58);
+  box-shadow:
+    0 5px 0 var(--bubble-lip),
+    0 12px 24px rgba(8, 15, 30, 0.36),
+    0 0 18px var(--bubble-glow),
+    inset 0 4px 8px rgba(255, 255, 255, 0.78),
+    inset 0 -7px 12px rgba(0, 0, 0, 0.46),
+    inset 0 0 0 1.5px rgba(255, 255, 255, 0.28);
   cursor: pointer;
   font-family: inherit;
   text-decoration: none;
-  transition: transform 0.24s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.24s ease, filter 0.24s ease;
+  animation: bubbleFloat3D 3.4s ease-in-out infinite;
+  transition:
+    transform 0.26s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.26s ease,
+    filter 0.26s ease;
 }
 
+.channel:nth-child(1) {
+  animation-delay: 0s;
+}
+.channel:nth-child(2) {
+  animation-delay: 0.35s;
+}
+.channel:nth-child(3) {
+  animation-delay: 0.7s;
+}
+.channel:nth-child(4) {
+  animation-delay: 1.05s;
+}
+.channel:nth-child(5) {
+  animation-delay: 1.4s;
+}
+
+@keyframes bubbleFloat3D {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3.5px);
+  }
+}
+
+/* Vòng hào quang bong bóng 3D lan tỏa khi hover */
 .channel::before {
   content: '';
   position: absolute;
-  inset: -5px;
-  border: 1px solid currentColor;
+  inset: -6px;
   border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.75);
+  box-shadow:
+    0 0 16px var(--bubble-glow),
+    inset 0 0 10px rgba(255, 255, 255, 0.45);
   opacity: 0;
-  transform: scale(0.82);
+  transform: scale(0.84);
   pointer-events: none;
-  transition: opacity 0.22s ease, transform 0.22s ease;
+  transition: opacity 0.24s ease, transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Điểm phản quang vòm kính 3D góc trên trái (Tạo hiệu ứng quả cầu thủy tinh / bong bóng 3D) */
+.channel::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 9px;
+  width: 23px;
+  height: 11px;
+  border-radius: 50%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.88) 0%,
+    rgba(255, 255, 255, 0.12) 100%
+  );
+  transform: rotate(-20deg);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Ánh sáng phản chiếu viền đáy quả cầu bong bóng 3D + chấm sáng phụ */
+.bubbleRimLight {
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.48);
+  border-right: 1px solid rgba(255, 255, 255, 0.28);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.bubbleRimLight::before {
+  content: '';
+  position: absolute;
+  top: 14px;
+  left: 5px;
+  width: 4.5px;
+  height: 4.5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.78);
 }
 
 .channel:hover {
-  z-index: 3;
-  color: #fff;
-  filter: brightness(1.08);
-  transform: translateX(5px) scale(1.2);
-  box-shadow: 0 13px 25px rgba(15, 23, 42, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  z-index: 4;
+  color: #ffffff;
+  filter: brightness(1.08) saturate(1.1);
+  transform: translateX(7px) translateY(-4px) scale(1.18);
+  box-shadow:
+    0 8px 0 var(--bubble-lip),
+    0 18px 32px rgba(8, 15, 30, 0.48),
+    0 0 26px var(--bubble-glow),
+    inset 0 5px 9px rgba(255, 255, 255, 0.88),
+    inset 0 -7px 12px rgba(0, 0, 0, 0.5);
 }
 
 .channel:hover::before,
 .channel:focus-visible::before {
-  opacity: 0.46;
-  transform: scale(1.08);
+  opacity: 0.85;
+  transform: scale(1.06);
 }
 
 .channel:hover .channelIcon,
 .channel:focus-visible .channelIcon {
-  animation: channelIconBounce 0.46s ease both;
+  animation: channelIconBounce 0.48s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .channel:active {
-  transform: translateX(4px) scale(1.08);
+  transform: translateX(5px) translateY(0) scale(1.06);
 }
 
 @keyframes channelIconBounce {
-  0% { transform: scale(1) rotate(0); }
-  45% { transform: scale(1.12) rotate(-8deg); }
-  100% { transform: scale(1) rotate(0); }
+  0% {
+    transform: scale(1) rotate(0);
+  }
+  45% {
+    transform: scale(1.16) rotate(-8deg);
+  }
+  100% {
+    transform: scale(1.05) rotate(0);
+  }
 }
 
-.channel:focus-visible,
-.previewAction:focus-visible,
-.previewClose:focus-visible {
+.channel:focus-visible {
   outline: 3px solid var(--color-accent);
-  outline-offset: 3px;
+  outline-offset: 4px;
 }
 
 .channelIcon {
+  position: relative;
+  z-index: 3;
   width: 100%;
   height: 100%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  font-size: 20px;
+  font-size: 21px;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.38));
 }
 
+/* =========================================================
+   NHÃN TOOLTIP DẠNG BONG BÓNG VIÊN THUỐC 3D KHI HOVER
+   ========================================================= */
 .channelLabel {
   position: absolute;
-  left: calc(100% + 10px);
+  left: calc(100% + 14px);
   top: 50%;
   min-width: max-content;
-  padding: 7px 10px;
-  color: var(--color-text);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-left: 2px solid var(--color-accent);
-  border-radius: 8px;
-  box-shadow: var(--shadow-card);
-  font-size: 12px;
-  font-weight: 700;
+  padding: 8px 14px;
+  color: #ffffff;
+  background: linear-gradient(180deg, #1b3a6b 0%, #0b1e3b 100%);
+  border: 1.5px solid rgba(244, 216, 121, 0.72);
+  border-bottom: 3px solid #050d1a;
+  border-radius: 999px;
+  box-shadow:
+    0 8px 20px rgba(5, 12, 24, 0.45),
+    inset 0 1.5px 1px rgba(255, 255, 255, 0.32);
+  font-size: 12.5px;
+  font-weight: 800;
   line-height: 1;
   opacity: 0;
   pointer-events: none;
-  transform: translate(-6px, -50%);
-  transition: opacity 0.18s ease, transform 0.18s ease;
+  transform: translate(-8px, -50%) scale(0.92);
+  transition:
+    opacity 0.2s ease,
+    transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Chấm đuôi bong bóng thoại nhỏ nối với quả cầu */
+.channelLabel::before {
+  content: '';
+  position: absolute;
+  left: -6px;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #f4d879;
+  box-shadow: 0 0 8px rgba(244, 216, 121, 0.8);
+  transform: translateY(-50%);
 }
 
 .channel:hover .channelLabel,
 .channel:focus-visible .channelLabel {
   opacity: 1;
-  transform: translate(0, -50%);
+  transform: translate(0, -50%) scale(1);
 }
 
+/* =========================================================
+   PHỐI MÀU QUẢ CẦU BONG BÓNG 3D THEO TỪNG KÊNH MẠNG XÃ HỘI
+   ========================================================= */
 .zaloChannel {
-  background: #0a79ff;
+  --bubble-lip: #003a99;
+  --bubble-glow: rgba(10, 121, 255, 0.48);
+  background: radial-gradient(
+    circle at 32% 24%,
+    #9ce4ff 0%,
+    #2592ff 28%,
+    #0062e6 68%,
+    #002d75 100%
+  );
 }
 
 .zaloWordmark {
-  font-size: 12px;
-  font-weight: 800;
+  font-size: 13px;
+  font-weight: 900;
   letter-spacing: -0.5px;
+  text-shadow: 0 2px 4px rgba(0, 32, 91, 0.55);
 }
 
 .messengerChannel {
-  background: linear-gradient(135deg, #087eff, #a033ff);
+  --bubble-lip: #3b0a85;
+  --bubble-glow: rgba(160, 51, 255, 0.48);
+  background: radial-gradient(
+    circle at 30% 24%,
+    #8ef2ff 0%,
+    #1f8fff 28%,
+    #8c36ff 66%,
+    #450b8c 100%
+  );
 }
 
 .facebookChannel {
-  background: #1877f2;
+  --bubble-lip: #083378;
+  --bubble-glow: rgba(24, 119, 242, 0.48);
+  background: radial-gradient(
+    circle at 32% 24%,
+    #8cd0ff 0%,
+    #2684ff 30%,
+    #1259c4 70%,
+    #06265e 100%
+  );
 }
 
 .tiktokChannel {
-  background: #111;
+  --bubble-lip: #04070f;
+  --bubble-glow: rgba(37, 244, 238, 0.42);
+  background: radial-gradient(
+    circle at 32% 24%,
+    #64748b 0%,
+    #1e293b 32%,
+    #090d16 70%,
+    #020409 100%
+  );
+  border-color: rgba(37, 244, 238, 0.65);
+  box-shadow:
+    0 5px 0 #04070f,
+    -2px 0 12px rgba(37, 244, 238, 0.38),
+    2px 0 12px rgba(254, 44, 85, 0.38),
+    0 12px 24px rgba(8, 15, 30, 0.42),
+    inset 0 4px 8px rgba(255, 255, 255, 0.65),
+    inset 0 -7px 12px rgba(254, 44, 85, 0.32);
 }
 
 .phoneChannel {
-  background: var(--color-accent-hover);
+  --bubble-lip: #6e5005;
+  --bubble-glow: rgba(244, 216, 121, 0.52);
+  background: radial-gradient(
+    circle at 32% 24%,
+    #fff7c2 0%,
+    #efd165 30%,
+    #c29616 68%,
+    #6e5005 100%
+  );
+  color: #081527;
+}
+
+.phoneChannel .channelIcon {
+  filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.55));
 }
 
 @media (max-width: 640px) {
   .root {
     left: 10px;
-    bottom: 112px;
+    bottom: 108px;
   }
 
   .channel {
-    width: 44px;
-    height: 44px;
+    width: 46px;
+    height: 46px;
+  }
+
+  .channel::after {
+    top: 4px;
+    left: 8px;
+    width: 19px;
+    height: 9px;
   }
 
   .list::before {
-    left: 21px;
+    left: 28px;
   }
 
   .channelLabel {

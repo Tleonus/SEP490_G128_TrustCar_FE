@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Button, Skeleton } from 'antd'
-import { CheckCircleFilled, ReloadOutlined, SafetyCertificateFilled } from '@ant-design/icons'
+import { CheckCircleFilled, FilePdfOutlined, ReloadOutlined, SafetyCertificateFilled } from '@ant-design/icons'
 import { formatDate, formatMileage } from '../../../utils/format'
+import { API_BASE_URL } from '../../../config/apiConfig'
 import { usePublicCertificate } from '../hooks/usePublicCertificate'
 import PublicCertificateModal from './PublicCertificateModal'
 import styles from '../styles/PublicCertificate.module.css'
@@ -86,6 +87,19 @@ export default function PublicCertificateSection({ carKey, vehicleCode, cpoCerti
       <Button type="primary" size="large" block onClick={() => setOpen(true)} className={styles.touch}>
         Xem chứng nhận
       </Button>
+      {vehicleCode && (
+        <Button
+          size="large"
+          block
+          icon={<FilePdfOutlined />}
+          href={`${API_BASE_URL}/public/history/${encodeURIComponent(vehicleCode)}/pdf`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.touch}
+        >
+          Tải báo cáo lịch sử xe (PDF)
+        </Button>
+      )}
       <PublicCertificateModal open={open} onClose={() => setOpen(false)} report={report} vehicleCode={vehicleCode} />
     </section>
   )

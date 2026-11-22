@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { CalendarOutlined, DashboardOutlined, SafetyCertificateFilled, ThunderboltOutlined } from '@ant-design/icons'
 import { formatPrice, formatMileage } from '../../utils/format'
-import { getCarTitle, getCoverImage } from '../../utils/car'
+import { getCarTitle, getCoverImage, getCarPriceComparison } from '../../utils/car'
 import { BODY_TYPE_LABEL, FUEL_TYPE_LABEL, TRANSMISSION_LABEL, labelOf } from '../../utils/constants'
 import styles from './CarCard.module.css'
 import CompareCardFrame from '../../features/vehicle-compare/components/CompareCardFrame'
@@ -14,6 +14,7 @@ export default function CarCard({ car }) {
   const imageUrl = typeof image === 'string' ? image : image?.image_url || image?.url
   const bodyType = car.bodyType ?? car.model?.body_type
   const fuelType = car.fuelType ?? car.fuel_type
+  const priceComp = getCarPriceComparison(car)
 
   return (
     <CompareCardFrame car={car}>
@@ -30,7 +31,17 @@ export default function CarCard({ car }) {
         <div className={styles.body}>
           <h3 className={styles.title}>{title}</h3>
           <div className={styles.priceRow}>
-            <div className={styles.price}>{formatPrice(car.price ?? car.listed_price ?? car.listedPrice)}</div>
+            <div className={styles.priceGroup}>
+              <div className={styles.price}>{formatPrice(car.price ?? car.listed_price ?? car.listedPrice)}</div>
+              {priceComp && (
+                <div className={styles.oldPriceWrap}>
+                  <del className={styles.oldPrice} title="Giá xe mới lăn bánh tham khảo">
+                    {formatPrice(priceComp.newCarPrice)}
+                  </del>
+                  <span className={styles.saveTag}>Tiết kiệm {priceComp.savingPercent}%</span>
+                </div>
+              )}
+            </div>
             <SaveCarButton car={car} variant="card" />
           </div>
           <div className={styles.meta}>

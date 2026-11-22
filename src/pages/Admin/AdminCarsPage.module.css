@@ -85,10 +85,100 @@
 
 .table th,
 .table td {
-  padding: 12px 16px;
-  text-align: left;
+  padding: 10px 12px;
+  text-align: center;
   white-space: nowrap;
   border-bottom: 1px solid var(--color-border);
+}
+
+/* Cột mô tả xe co giãn nhưng có trần để không nuốt hết bề rộng còn lại — trước đây cột này
+   chiếm toàn bộ khoảng trống nên các cột thông tin bị đẩy xa sang phải. */
+.table .colImage {
+  width: 80px;
+}
+
+.table .carCol {
+  max-width: 320px;
+  white-space: normal;
+}
+
+.carName {
+  display: block;
+  font-weight: 600;
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.carCode {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.2px;
+}
+
+.cellPrimary {
+  display: block;
+  color: var(--color-text);
+}
+
+.cellSecondary {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.table .colYear {
+  width: 112px;
+}
+
+.table .colPrice {
+  width: 152px;
+}
+
+.priceCol {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.table .colStatus {
+  width: 140px;
+}
+
+/* Cột tồn kho: tag tình trạng và dòng "số ngày · ngày nhập" xếp thành một khối dọc canh giữa,
+   nên hai dòng luôn thẳng trục với nhau thay vì lệch mép như trước. */
+.table .agingCol {
+  width: 200px;
+}
+
+.agingCell {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.agingMeta {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+/* Bốn nút thao tác xếp thành lưới 2×2 để không kéo dài cột quá khổ; mỗi nút cùng bề rộng
+   tối thiểu và canh giữa nội dung, nên tiêu đề cột nằm cân trên cụm nút. */
+.actionGroup {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  justify-items: stretch;
+}
+
+.actionGroup > :global(.ant-btn) {
+  justify-content: center;
+  width: 100%;
 }
 
 .table th {
@@ -107,12 +197,13 @@
   background: var(--color-surface-alt);
 }
 
-/* Cột thao tác dính bên phải khi bảng cuộn ngang. */
+/* Cột thao tác dính bên phải khi bảng cuộn ngang. Canh giữa để tiêu đề "THAO TÁC" nằm
+   cân trên cụm hai nút thay vì lệch hẳn về mép phải. */
 .table .actionCol {
   position: sticky;
   right: 0;
   background: var(--color-surface);
-  text-align: right;
+  text-align: center;
   box-shadow: -8px 0 12px -10px rgb(16 43 70 / 30%);
 }
 

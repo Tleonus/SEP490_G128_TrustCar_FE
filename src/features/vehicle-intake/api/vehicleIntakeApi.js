@@ -46,6 +46,8 @@ export function normalizePlateInput(plate) {
 export function mapIntakeToCreateCarDto(payload = {}) {
   const price = Number(payload.listedPrice);
   const floorPrice = Number(payload.floorPrice);
+  const rawMarketPrice = Number(payload.marketPrice);
+  const marketPrice = Number.isFinite(rawMarketPrice) && rawMarketPrice > 0 ? Math.round(rawMarketPrice) : undefined;
   const year = Number(payload.year);
   const mileage = Number(payload.mileage);
   const notes = typeof payload.notes === 'string' ? payload.notes.trim() : '';
@@ -62,6 +64,7 @@ export function mapIntakeToCreateCarDto(payload = {}) {
     price,
     listedPrice: price,
     floorPrice,
+    ...(marketPrice ? { marketPrice } : {}),
     transmission: TRANSMISSION_MAP[rawTransmission] || 'AUTOMATIC',
     fuelType: FUEL_TYPE_MAP[rawFuel] || 'GASOLINE',
     inventoryType: payload.ownership === 'consignment' ? 'CONSIGNMENT' : 'OWNED',

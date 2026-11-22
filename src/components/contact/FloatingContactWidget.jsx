@@ -17,6 +17,7 @@ function ExternalBubble({ href, label, className, children }) {
       aria-label={label}
       title={label}
     >
+      <span className={styles.bubbleRimLight} aria-hidden="true" />
       <span className={styles.channelIcon}>{children}</span>
       <span className={styles.channelLabel}>{label}</span>
     </a>
@@ -27,11 +28,17 @@ function PhoneBubble({ phoneDisplay, phoneHref }) {
   const label = `Gọi ${phoneDisplay}`
 
   return (
-    <a href={phoneHref} className={`${styles.channel} ${styles.phoneChannel}`} aria-label={label} title={label}>
+    <a
+      href={phoneHref}
+      className={`${styles.channel} ${styles.phoneChannel}`}
+      aria-label={label}
+      title={label}
+    >
+      <span className={styles.bubbleRimLight} aria-hidden="true" />
       <span className={styles.channelIcon}>
         <PhoneFilled />
       </span>
-      <span className={styles.channelLabel}>Gọi hotline</span>
+      <span className={styles.channelLabel}>Hotline: {phoneDisplay}</span>
     </a>
   )
 }

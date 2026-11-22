@@ -53,6 +53,100 @@
   gap: 8px;
 }
 
+.filterHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.filterHeaderTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.resetLinkBtn {
+  border: none;
+  background: none;
+  color: var(--color-accent);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+}
+
+.resetLinkBtn:hover {
+  text-decoration: underline;
+}
+
+.activeChipsBar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.activeChipsLabel {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.activeChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.activeChipClose {
+  border: none;
+  background: none;
+  color: var(--color-text-secondary);
+  font-size: 10px;
+  cursor: pointer;
+  padding: 2px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.activeChipClose:hover {
+  color: var(--color-danger);
+}
+
+.clearAllChipsBtn {
+  border: none;
+  background: none;
+  color: var(--color-danger);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.clearAllChipsBtn:hover {
+  text-decoration: underline;
+}
+
 .filterLabel {
   font-size: 13px;
   font-weight: 600;

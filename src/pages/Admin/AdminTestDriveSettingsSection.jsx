@@ -1,22 +1,17 @@
 import { useEffect, useState } from 'react'
-import { CheckCircleOutlined, ClockCircleOutlined, SaveOutlined, TeamOutlined, ThunderboltOutlined } from '@ant-design/icons'
+import { CheckCircleOutlined, SaveOutlined, TeamOutlined, ThunderboltOutlined } from '@ant-design/icons'
 import { ErrorState, LoadingState } from '../../components/common/StateBlock'
 import {
   getAdminTestDriveSettings, getPublicTestDriveSettings, saveTestDriveSettings,
-} from '../../features/test-drive/api/testDriveApi'
-import { useAsyncResource } from '../../features/test-drive/hooks/useAsyncResource'
-import { getTestDriveErrorMessage } from '../../features/test-drive/utils/testDriveErrors'
-import { buildSlotPreview, validateTestDriveSettings } from '../../features/test-drive/utils/testDriveSlotPreview'
+} from '../../features/test-drive-settings/api/testDriveSettingsApi'
+import { useAsyncResource } from '../../features/test-drive-settings/hooks/useAsyncResource'
+import { getSettingsErrorMessage } from '../../features/test-drive-settings/utils/settingsErrors'
+import {
+  buildCapacityChanges, FIXED_SLOT_STARTS, maxGuestsPerDay, MAX_GUESTS_MAX, MAX_GUESTS_MIN, validateMaxGuests,
+} from '../../features/test-drive-settings/utils/testDriveCapacity'
 import { useAuthStore } from '../../store/useAuthStore'
 import { Field, SectionHeading } from './AdminSettingsFields'
 import styles from './AdminBaseSettingsPage.module.css'
-
-const TIME_FIELDS = [
-  { key: 'openTime', label: 'Bắt đầu lái thử' },
-  { key: 'closeTime', label: 'Kết thúc lái thử' },
-  { key: 'lunchBreakStart', label: 'Bắt đầu nghỉ trưa' },
-  { key: 'lunchBreakEnd', label: 'Kết thúc nghỉ trưa' },
-]
 
 // Mục này tự lưu qua API, tách khỏi form showroom phía trên (form đó chỉ lưu trên trình duyệt).
 export default function AdminTestDriveSettingsSection() {
@@ -42,13 +37,14 @@ export default function AdminTestDriveSettingsSection() {
   async function handleSave() {
     setSaveState({ status: 'saving', message: '' })
     try {
-      const changes = Object.fromEntries(Object.entries(form).filter(([key, value]) => value !== saved[key]))
+      // Chỉ gửi số khách tối đa; BE ghép với phần còn lại của cấu hình nên các trường ẩn không đổi.
+      const changes = buildCapacityChanges(form, saved)
       const next = await saveTestDriveSettings(changes)
       setForm(next)
       setSaved(next)
-      setSaveState({ status: 'success', message: 'Đã lưu cấu hình. Lịch mới sẽ dùng các khung giờ này, lịch đã đặt giữ nguyên.' })
+      setSaveState({ status: 'success', message: 'Đã lưu cấu hình. Sức chứa mới áp dụng cho các lượt đặt sau, lịch đã đặt giữ nguyên.' })
     } catch (error) {
-      setSaveState({ status: 'error', message: getTestDriveErrorMessage(error, 'Không thể lưu cấu hình. Hãy thử lại.') })
+      setSaveState({ status: 'error', message: getSettingsErrorMessage(error, 'Không thể lưu cấu hình. Hãy thử lại.') })
     }
   }
 
@@ -57,60 +53,38 @@ export default function AdminTestDriveSettingsSection() {
       headingId="test-drive-heading"
       icon={<ThunderboltOutlined />}
       eyebrow="04 · QUY TẮC LÁI THỬ"
-      title="Cấu hình khung giờ lái thử"
-      description="Hệ thống dùng cấu hình này để tính khung giờ khách đặt. Thay đổi chỉ áp dụng cho lịch mới."
+      title="Số khách tối đa mỗi khung lái thử"
+      description="Khung giờ lái thử là cố định. Số khách tối đa quyết định có bao nhiêu lượt đặt cùng lúc trong một khung, theo số nhân viên showroom có thể phục vụ. Thay đổi chỉ áp dụng cho lượt đặt mới."
     />
   )
 
   let body
   if (remote.error) {
-    body = <ErrorState message={getTestDriveErrorMessage(remote.error)} onRetry={() => setReloadKey((key) => key + 1)} />
+    body = <ErrorState message={getSettingsErrorMessage(remote.error)} onRetry={() => setReloadKey((key) => key + 1)} />
   } else if (!form) {
     body = <LoadingState text="Đang tải cấu hình lái thử..." />
   } else {
-    const validationError = validateTestDriveSettings(form)
-    const slots = buildSlotPreview(form)
+    const validationError = validateMaxGuests(form.maxGuestsPerSlot)
     const isDirty = JSON.stringify(form) !== JSON.stringify(saved)
     body = (
       <>
         <div className={styles.testDriveGrid}>
           <div className={styles.testDriveFields}>
-            {TIME_FIELDS.map(({ key, label }) => (
-              <Field key={key} label={label} htmlFor={`test-drive-${key}`}>
-                <div className={styles.inputWithIcon}>
-                  <ClockCircleOutlined aria-hidden="true" />
-                  <input id={`test-drive-${key}`} className={styles.input} type="time" value={form[key] ?? ''} disabled={!isAdmin} onChange={(event) => update(key, event.target.value)} />
-                </div>
-              </Field>
-            ))}
-            <Field label="Độ dài mỗi khung" htmlFor="test-drive-duration" hint="Từ 15 đến 480 phút.">
-              <div className={`${styles.inputWithIcon} ${styles.inputWithSuffix}`}>
-                <ClockCircleOutlined aria-hidden="true" />
-                <input id="test-drive-duration" className={styles.input} type="number" min="15" max="480" value={form.slotDurationMinutes ?? ''} disabled={!isAdmin} onChange={(event) => update('slotDurationMinutes', Number(event.target.value))} />
-                <span className={styles.inputSuffix}>phút</span>
-              </div>
-            </Field>
-            <Field label="Tối đa mỗi khung giờ" htmlFor="test-drive-capacity" hint="Từ 1 đến 100 khách.">
+            <Field label="Tối đa mỗi khung giờ" htmlFor="test-drive-capacity" hint={`Từ ${MAX_GUESTS_MIN} đến ${MAX_GUESTS_MAX} khách (lượt đặt). Một lượt đặt nhiều xe vẫn tính là một khách.`}>
               <div className={`${styles.inputWithIcon} ${styles.inputWithSuffix}`}>
                 <TeamOutlined aria-hidden="true" />
-                <input id="test-drive-capacity" className={styles.input} type="number" min="1" max="100" value={form.maxGuestsPerSlot ?? ''} disabled={!isAdmin} onChange={(event) => update('maxGuestsPerSlot', Number(event.target.value))} />
+                <input id="test-drive-capacity" className={styles.input} type="number" min={MAX_GUESTS_MIN} max={MAX_GUESTS_MAX} value={form.maxGuestsPerSlot ?? ''} disabled={!isAdmin} onChange={(event) => update('maxGuestsPerSlot', Number(event.target.value))} />
                 <span className={styles.inputSuffix}>khách</span>
               </div>
             </Field>
           </div>
-          <aside className={styles.preview} aria-label="Xem trước khung giờ lái thử">
-            <div className={styles.previewTopline}><span>Xem trước một ngày mở cửa đủ giờ</span></div>
-            <strong>{form.openTime} – {form.closeTime}</strong>
+          <aside className={styles.preview} aria-label="Khung giờ lái thử cố định">
+            <div className={styles.previewTopline}><span>Các khung lái thử cố định</span></div>
             <div className={styles.previewStats}>
-              <div><span>Độ dài khung</span><b>{form.slotDurationMinutes} phút</b></div>
-              <div><span>Số khung giờ</span><b>{slots.length} khung</b></div>
-              <div><span>Tối đa/ngày</span><b>{slots.length * (form.maxGuestsPerSlot || 0)} khách</b></div>
+              <div><span>Số khung mỗi ngày</span><b>{FIXED_SLOT_STARTS.length} khung</b></div>
+              <div><span>Tối đa/ngày</span><b>{maxGuestsPerDay(form.maxGuestsPerSlot)} khách</b></div>
             </div>
-            {slots.length > 0 ? (
-              <div className={styles.slotList}>{slots.map((slot) => <span key={slot}>{slot}</span>)}</div>
-            ) : (
-              <p className={styles.previewError}>{validationError ?? 'Chưa thể tạo khung giờ từ thiết lập hiện tại.'}</p>
-            )}
+            <div className={styles.slotList}>{FIXED_SLOT_STARTS.map((slot) => <span key={slot}>{slot}</span>)}</div>
           </aside>
         </div>
 
@@ -128,7 +102,7 @@ export default function AdminTestDriveSettingsSection() {
           <div className={styles.headerActions} style={{ justifyContent: 'flex-end', marginTop: 20 }}>
             <button type="button" className={styles.secondaryButton} disabled={!isDirty} onClick={() => { setForm(saved); setSaveState({ status: 'idle', message: '' }) }}>Hủy thay đổi</button>
             <button type="button" className={styles.primaryButton} disabled={!isDirty || Boolean(validationError) || saveState.status === 'saving'} onClick={handleSave}>
-              <SaveOutlined aria-hidden="true" />{saveState.status === 'saving' ? 'Đang lưu...' : 'Lưu cấu hình lái thử'}
+              <SaveOutlined aria-hidden="true" />{saveState.status === 'saving' ? 'Đang lưu...' : 'Lưu số khách tối đa'}
             </button>
           </div>
         ) : (

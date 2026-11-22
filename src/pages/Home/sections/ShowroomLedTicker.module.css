@@ -1,0 +1,214 @@
+.ledBar {
+  position: relative;
+  width: 100%;
+  background: linear-gradient(90deg, #050b16 0%, #0b1930 50%, #050b16 100%);
+  overflow: hidden;
+  border-top: 1px solid rgba(56, 189, 248, 0.28);
+  border-bottom: 1px solid rgba(240, 208, 103, 0.32);
+  box-shadow:
+    0 10px 28px rgba(3, 8, 20, 0.45),
+    inset 0 0 24px rgba(56, 189, 248, 0.08);
+  z-index: 4;
+}
+
+/* Lưới Hologram 3D nền mảnh */
+.hologramGrid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(56, 189, 248, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(240, 208, 103, 0.06) 1px, transparent 1px);
+  background-size: 24px 12px;
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+/* Dải đèn LED chạy tia sáng viền trên (Cyan + Gold Hologram) */
+.ledStripTop {
+  position: relative;
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      #38bdf8 18%,
+      #f4d879 45%,
+      #22d3ee 72%,
+      transparent 100%);
+  background-size: 200% 100%;
+  animation: ledFlowRight 4.5s linear infinite;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.8), 0 0 20px rgba(244, 216, 121, 0.55);
+}
+
+/* Dải đèn LED chạy tia sáng viền dưới ngược chiều */
+.ledStripBottom {
+  position: relative;
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      #f4d879 22%,
+      #38bdf8 55%,
+      #f4d879 82%,
+      transparent 100%);
+  background-size: 200% 100%;
+  animation: ledFlowLeft 5.5s linear infinite;
+  box-shadow: 0 0 10px rgba(244, 216, 121, 0.75);
+}
+
+@keyframes ledFlowRight {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes ledFlowLeft {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+  margin-right: 6px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.24) 0%, rgba(217, 184, 74, 0.24) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.58);
+  box-shadow:
+    0 0 14px rgba(56, 189, 248, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  flex-shrink: 0;
+}
+
+.pulseDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22d3ee;
+  box-shadow: 0 0 10px #22d3ee, 0 0 18px #38bdf8;
+  animation: ledPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes ledPulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.3);
+    opacity: 0.65;
+  }
+}
+
+.statusText {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  background: linear-gradient(90deg, #7dd3fc 0%, #f5df91 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  white-space: nowrap;
+}
+
+.marqueeViewport {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg,
+      transparent 0%,
+      #000 4%,
+      #000 96%,
+      transparent 100%);
+  mask-image: linear-gradient(90deg,
+      transparent 0%,
+      #000 4%,
+      #000 96%,
+      transparent 100%);
+}
+
+.marqueeTrack {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  will-change: transform;
+  animation: tickerScroll 60s linear infinite !important;
+}
+
+@keyframes tickerScroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.tickerItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  white-space: nowrap;
+}
+
+.itemIcon {
+  color: #38bdf8;
+  font-size: 14px;
+  filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.7));
+}
+
+.itemTag {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  color: #061326;
+  background: linear-gradient(90deg, #f4d879 0%, #38bdf8 100%);
+  box-shadow: 0 0 10px rgba(244, 216, 121, 0.35);
+}
+
+.itemText {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #e2e8f0;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.25);
+}
+
+.separator {
+  color: #f4d879;
+  font-size: 10px;
+  margin-left: 10px;
+  opacity: 0.7;
+}
+
+@media (max-width: 640px) {
+  .inner {
+    padding: 8px 0;
+  }
+}

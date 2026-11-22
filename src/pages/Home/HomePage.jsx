@@ -1,4 +1,5 @@
 import HeroSection from './sections/HeroSection'
+import ShowroomLedTicker from './sections/ShowroomLedTicker'
 import BrandsSection from './sections/BrandsSection'
 import FeaturedSection from './sections/FeaturedSection'
 import BenefitsSection from './sections/BenefitsSection'
@@ -9,6 +10,7 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
+      <ShowroomLedTicker />
       <BrandsSection />
       <FeaturedSection />
       <BenefitsSection />

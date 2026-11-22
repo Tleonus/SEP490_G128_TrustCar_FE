@@ -2,11 +2,13 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin: 16px 0;
-  padding: 16px;
-  border: 1px solid #bfdbfe;
-  border-radius: 14px;
-  background: linear-gradient(180deg, #eff6ff 0%, #ffffff 70%);
+  margin: 0;
+  padding: 22px;
+  border: 1.5px solid rgba(201, 162, 39, 0.42);
+  border-bottom: 6px solid var(--card-3d-edge-gold);
+  border-radius: 22px;
+  background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-surface-alt) 100%);
+  box-shadow: var(--shadow-card);
 }
 
 .cardHead {
@@ -21,26 +23,28 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 12px;
+  padding: 5px 13px;
   border-radius: 999px;
-  background: #0f1e3a;
-  color: #fff;
-  font-size: 13px;
-  font-weight: 600;
+  background: linear-gradient(180deg, #17345e 0%, #09172c 100%);
+  border: 1px solid rgba(244, 216, 121, 0.58);
+  border-bottom: 2.5px solid #040b16;
+  color: #fae498;
+  font-size: 12.5px;
+  font-weight: 700;
   white-space: nowrap;
 }
 
 .passCount {
-  color: #15803d;
+  color: var(--color-success);
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .cardTitle {
   margin: 0;
   font-size: 17px;
-  font-weight: 700;
-  color: #0f1e3a;
+  font-weight: 800;
+  color: var(--color-text);
 }
 
 .facts {
@@ -49,11 +53,15 @@
   grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr);
   gap: 8px;
   margin: 0;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
 }
 
 .facts dt {
   font-size: 12px;
-  color: #64748b;
+  color: var(--color-text-secondary);
 }
 
 .facts dd {
