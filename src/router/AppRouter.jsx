@@ -54,6 +54,7 @@ const DepositSuccessPage = lazy(() => import('../features/deposits/pages/Deposit
 const DepositCancelPage = lazy(() => import('../features/deposits/pages/DepositCancelPage.jsx'))
 // KAN-96: dịch vụ showroom (công khai + wizard đặt lịch + CRUD admin)
 const ServicesPage = lazy(() => import('../features/services/pages/ServicesPage.jsx'))
+const VerifyPage = lazy(() => import('../features/vehicle-history/pages/VerifyPage.jsx'))
 const ServiceBookingPage = lazy(() => import('../features/services/pages/ServiceBookingPage.jsx'))
 const AdminServicesPage = lazy(() => import('../features/services/pages/AdminServicesPage.jsx'))
 
@@ -91,6 +92,8 @@ export default function AppRouter() {
             </PrivateRoute>
           }
         />
+        {/* KAN-98: trang xác thực chứng nhận khi khách quét mã QR trên báo cáo lịch sử xe */}
+        <Route path="/verify/:hash" element={<Suspense fallback={<LoadingState />}><VerifyPage /></Suspense>} />
         <Route path="/dang-nhap" element={<LoginPage />} />
         <Route path="/dang-ky" element={<RegisterPage />} />
         <Route path="/quen-mat-khau" element={<ForgotPasswordPage />} />
