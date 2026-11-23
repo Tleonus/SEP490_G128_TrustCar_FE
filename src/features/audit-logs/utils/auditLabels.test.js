@@ -1,6 +1,21 @@
 import { describe, expect, it } from 'vitest'
 import { EVENT_LABELS, SYSTEM_ACTOR_LABEL, UNKNOWN_ACTOR_LABEL } from '../constants/auditConstants'
-import { describeActor, describeTarget, eventLabel } from './auditLabels'
+import { actionLabel, describeActor, describeTarget, eventLabel } from './auditLabels'
+
+describe('actionLabel (KAN-92)', () => {
+  it('mã đã biết → nhãn tiếng Việt; mã lạ → nguyên mã; thiếu → rỗng', () => {
+    expect(actionLabel('CREATE')).toBe('Tạo mới')
+    expect(actionLabel('STATUS_CHANGE')).toBe('Đổi trạng thái')
+    expect(actionLabel('OTHER')).toBe('Khác')
+    expect(actionLabel('PATCH')).toBe('PATCH')
+    expect(actionLabel(null)).toBe('')
+    expect(actionLabel(undefined)).toBe('')
+  })
+
+  it('không đọc thuộc tính kế thừa', () => {
+    expect(actionLabel('toString')).toBe('toString')
+  })
+})
 
 describe('eventLabel', () => {
   it('mã đã biết → nhãn tiếng Việt', () => {

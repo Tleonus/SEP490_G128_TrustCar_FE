@@ -1,0 +1,64 @@
+{
+  "_note": "Ford Everest Titanium 4x4 – đầu xe ở -Y. Lưới tản nhiệt đen (cùng màu sơn đen) và hốc gió dưới giữ nguyên nhựa đen.",
+  "front": "-y",
+  "length": 4.91,
+  "belt": 0.6,
+  "regions": [
+    {
+      "class": "TC_Trim",
+      "nose_relative": true,
+      "box": [
+        -0.3,
+        0.3,
+        0,
+        0.08,
+        0.37,
+        0.6
+      ],
+      "facing": "front",
+      "min_dot": 0.35,
+      "only": "TC_Body_Paint"
+    },
+    {
+      "class": "TC_Trim",
+      "nose_relative": true,
+      "box": [
+        -0.3,
+        0.3,
+        0,
+        0.06,
+        0.2,
+        0.31
+      ],
+      "facing": "front",
+      "min_dot": 0.5,
+      "only": "TC_Body_Paint"
+    },
+    {
+      "class": "TC_Chrome",
+      "nose_relative": true,
+      "box": [
+        0.445,
+        0.6,
+        0.2,
+        0.42,
+        0.52,
+        0.75
+      ],
+      "_": "ốp gương mạ crôm (Titanium)"
+    },
+    {
+      "class": "TC_Chrome",
+      "nose_relative": true,
+      "box": [
+        -0.6,
+        -0.445,
+        0.2,
+        0.42,
+        0.52,
+        0.75
+      ]
+    }
+  ],
+  "rear_belt": 0.71
+}

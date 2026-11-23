@@ -3,7 +3,8 @@
  *
  * Luồng: mở modal → tự gọi Backend (KAN-68) một lần để soạn 3 phương án caption
  * → xem trước khung bài đăng (ảnh + caption + hashtag) → Copy từng phương án,
- * hoặc "Mở Facebook" để mở facebook.com ở tab mới rồi tự dán bài.
+ * "Đăng lên Facebook" (KAN-91, Backend gọi Graph API đăng thật và trả post link),
+ * hoặc "Mở Facebook (thủ công)" để tự dán bài như trước.
  *
  * Chỉ tự gọi đúng một lần cho mỗi lần mở: mỗi lượt gọi tính vào hạn mức 20 lượt/ngày của
  * Backend, nên người dùng muốn tạo lại phải bấm nút "Tạo lại caption".
@@ -11,13 +12,21 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { App, Alert, Button, Modal, Radio, Segmented } from 'antd'
-import { FacebookFilled, ReloadOutlined, SendOutlined, ThunderboltOutlined } from '@ant-design/icons'
+import {
+  CheckCircleOutlined,
+  FacebookFilled,
+  ReloadOutlined,
+  SendOutlined,
+  ThunderboltOutlined,
+} from '@ant-design/icons'
 import { useCaptionSuggestions } from '../hooks/useCaptionSuggestions'
 import CaptionOptionCard from './CaptionOptionCard'
 import FacebookPostPreview from './FacebookPostPreview'
 import AiDisclaimer from '../../../components/common/AiDisclaimer'
 import { AI_DISCLAIMER_CAPTION } from '../../../constants/aiDisclaimer'
-import { normalizeHashtags } from '../utils/captionText'
+import { publishCaptionToFacebook } from '../api/captionApi'
+import { publishErrorMessage } from '../utils/captionErrors'
+import { captionToClipboard, normalizeHashtags } from '../utils/captionText'
 import { getCoverImage } from '../../../utils/car'
 import {
   FACEBOOK_COMPOSER_URL,
@@ -47,12 +56,28 @@ export default function CaptionComposerModal({ open, car, onClose, imageUrl: pre
     loading, error, generate,
   } = useCaptionSuggestions(car?._id)
   const [chosenIndex, setChosenIndex] = useState(0)
+  // KAN-91: trạng thái đăng thật lên Facebook Page.
+  const [publishing, setPublishing] = useState(false)
+  const [published, setPublished] = useState(null) // { postId, permalinkUrl, key }
+  const [publishError, setPublishError] = useState(null)
 
   // Không cần effect đồng bộ: nếu danh sách mới ngắn hơn thì kẹp lại khi đọc.
   const selectedIndex = options.length ? Math.min(chosenIndex, options.length - 1) : 0
+  const selectedCaption = options[selectedIndex] ?? null
 
   const imageUrl = previewImageUrl(car, imageSuggestion, preferredImageUrl)
   const tags = normalizeHashtags(hashtags)
+
+  // Cùng một phương án thì không đăng lặp lại (mỗi lần đăng là một bài thật trên Page).
+  const publishKey = selectedCaption ? `${selectedIndex}|${selectedCaption}` : null
+  const alreadyPublished = Boolean(published && published.key === publishKey)
+
+  /** Đổi phương án: xoá kết quả/lỗi của lần đăng trước để không gây hiểu nhầm. */
+  function selectOption(index) {
+    setChosenIndex(index)
+    setPublishError(null)
+    if (published && published.key !== `${index}|${options[index]}`) setPublished(null)
+  }
 
   // Tự soạn caption ngay khi mở modal để không phải bấm thêm một bước.
   // Chỉ chạy một lần cho mỗi lần mở (StrictMode gọi effect 2 lần, và mỗi lượt gọi tốn một
@@ -70,11 +95,33 @@ export default function CaptionComposerModal({ open, car, onClose, imageUrl: pre
 
   async function handleGenerate() {
     setChosenIndex(0)
+    setPublished(null)
+    setPublishError(null)
     const result = await generate()
     if (result.ok) message.success(`Đã tạo ${result.count} phương án caption`)
   }
 
-  // Chỉ mở Facebook ở tab mới. Caption đã soạn sẵn để người dùng bấm Copy ở phương án muốn đăng.
+  /**
+   * KAN-91 – Đăng thật lên Facebook Page qua Backend. Chỉ báo thành công khi Backend trả
+   * postId/permalink của Graph API; mọi lỗi (thiếu cấu hình, token hết hạn…) hiện nguyên nhân.
+   */
+  async function handlePublish() {
+    if (!selectedCaption || publishing || alreadyPublished) return
+    const key = publishKey
+    setPublishing(true)
+    setPublishError(null)
+    try {
+      const result = await publishCaptionToFacebook(car?._id, captionToClipboard(selectedCaption, tags))
+      setPublished({ ...result, key })
+      message.success('Đã đăng bài lên Facebook Page')
+    } catch (err) {
+      setPublishError(publishErrorMessage(err))
+    } finally {
+      setPublishing(false)
+    }
+  }
+
+  // Đăng thủ công: chỉ mở Facebook ở tab mới, người dùng tự dán caption đã Copy.
   function handleOpenFacebook() {
     window.open(FACEBOOK_COMPOSER_URL, '_blank', 'noopener,noreferrer')
   }
@@ -149,7 +196,7 @@ export default function CaptionComposerModal({ open, car, onClose, imageUrl: pre
                     caption={caption}
                     hashtags={tags}
                     selected={index === selectedIndex}
-                    onSelect={() => setChosenIndex(index)}
+                    onSelect={() => selectOption(index)}
                   />
                 ))}
               </div>
@@ -165,16 +212,58 @@ export default function CaptionComposerModal({ open, car, onClose, imageUrl: pre
             caption={options[selectedIndex]}
             hashtags={tags}
           />
+
+          {/* KAN-91: đăng thật lên Page qua Graph API; chỉ báo thành công khi có postId từ Facebook. */}
+          <Button
+            type="primary"
+            icon={<CheckCircleOutlined />}
+            onClick={handlePublish}
+            loading={publishing}
+            disabled={!selectedCaption || alreadyPublished}
+            className={styles.publishBtn}
+          >
+            {alreadyPublished ? 'Đã đăng phương án này' : 'Đăng lên Facebook'}
+          </Button>
+
+          {published && (
+            <div className={styles.publishResult} role="status">
+              <span className={styles.publishTitle}>
+                <CheckCircleOutlined aria-hidden /> Đã đăng lên Facebook Page
+              </span>
+              <span className={styles.publishMeta}>Mã bài viết: {published.postId}</span>
+              {published.permalinkUrl && (
+                <a
+                  className={styles.publishLink}
+                  href={published.permalinkUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Xem bài viết trên Facebook
+                </a>
+              )}
+            </div>
+          )}
+
+          {publishError && (
+            <Alert
+              type="error"
+              showIcon
+              title="Không đăng được bài lên Facebook"
+              description={publishError}
+            />
+          )}
+
           <Button
             icon={<SendOutlined />}
             onClick={handleOpenFacebook}
             className={styles.openFbBtn}
           >
-            Mở Facebook
+            Mở Facebook (thủ công)
           </Button>
           <p className={styles.previewHint}>
-            Nút này chỉ mở Facebook ở tab mới. Ảnh và caption đã có sẵn ở trên — bấm Copy ở phương án
-            muốn đăng rồi tải ảnh lên bài viết. TrustCar chưa có quyền đăng bài tự động lên Trang.
+            "Đăng lên Facebook" gửi phương án đang chọn tới Backend để đăng ảnh + caption lên Page
+            qua Graph API. Nếu Page chưa được cấu hình, lỗi cấu hình sẽ hiện ở trên. Nút
+            "Mở Facebook (thủ công)" chỉ mở Facebook ở tab mới để tự dán bài như trước.
           </p>
         </aside>
       </div>

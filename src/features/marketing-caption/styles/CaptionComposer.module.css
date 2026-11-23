@@ -220,6 +220,50 @@
   width: 100%;
 }
 
+/* ── KAN-91: đăng thật lên Facebook Page ────────────────────── */
+.publishBtn {
+  width: 100%;
+  min-height: 40px;
+  font-weight: 700;
+  border-radius: 10px;
+  box-shadow: 0 8px 18px rgba(11, 31, 58, 0.16);
+}
+
+.publishResult {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--color-success) 35%, var(--color-border));
+  border-left: 3px solid var(--color-success);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--color-success) 8%, transparent);
+}
+
+.publishTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-success);
+}
+
+.publishMeta {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.publishLink {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+  overflow-wrap: anywhere;
+}
+
+.publishLink:hover {
+  color: var(--color-accent);
+}
+
 .previewHint {
   margin: 0;
   font-size: 11.5px;

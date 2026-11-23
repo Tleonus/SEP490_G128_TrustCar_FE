@@ -178,6 +178,50 @@
   transform: scale(1.02);
 }
 
+/* KAN-89: vùng bấm mở lightbox phủ lên ảnh chính; nút điều hướng vẫn nằm trên vì có z-index 2. */
+.mainImgButton {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+}
+
+.mainImgButton:focus-visible {
+  outline: 3px solid var(--gold, #c9a227);
+  outline-offset: -3px;
+}
+
+.zoomPill {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(11, 25, 48, 0.62);
+  backdrop-filter: blur(8px);
+  color: #f8fafc;
+  font-size: 12px;
+  font-weight: 600;
+  pointer-events: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+.mainImgWrap:hover .zoomPill {
+  background: rgba(201, 162, 39, 0.92);
+  color: #081527;
+}
+
 .emptyStage {
   position: absolute;
   inset: 0;

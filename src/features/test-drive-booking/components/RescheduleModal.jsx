@@ -17,7 +17,6 @@ function RescheduleDialog({ visit, audience, onClose, onDone, onStale }) {
   const reschedule = useReschedule({ visit, audience, onStale })
   const { problem, result, submitting } = reschedule
   const Picker = audience === 'staff' ? StaffSlotPicker : SlotPicker // lưới của nhân viên có chỗ còn lại và khách đang đặt
-
   // Đóng sau khi đổi thành công thì báo trang thay lượt cũ bằng lượt mới.
   // Đang gửi thì chưa đóng được (Esc, nút Đóng, bấm nền), để không mất kết quả của yêu cầu đang chờ.
   const close = () => {
@@ -73,6 +72,7 @@ function RescheduleDialog({ visit, audience, onClose, onDone, onStale }) {
           </dl>
 
           <Picker
+            variant={audience === 'staff' ? undefined : 'guest'}
             status={reschedule.slots.status}
             days={reschedule.slots.days}
             error={reschedule.slots.error}

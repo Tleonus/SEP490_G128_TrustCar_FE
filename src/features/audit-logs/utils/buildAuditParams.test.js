@@ -17,6 +17,11 @@ describe('buildAuditParams', () => {
     })
   })
 
+  it('KAN-92: gửi action khi đã chọn hành động', () => {
+    expect(buildAuditParams({ ...EMPTY_FILTERS, action: 'DELETE' }, 1)).toEqual({ page: 1, limit: 20, action: 'DELETE' })
+    expect(hasActiveFilters({ ...EMPTY_FILTERS, action: 'AUTH' })).toBe(true)
+  })
+
   it('cắt khoảng trắng; ô chỉ có khoảng trắng coi như trống', () => {
     expect(buildAuditParams({ ...EMPTY_FILTERS, actorEmail: '  a@b.vn  ', targetModel: '   ' }, 1)).toEqual({ page: 1, limit: 20, actorEmail: 'a@b.vn' })
   })

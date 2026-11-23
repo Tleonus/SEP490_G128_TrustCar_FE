@@ -1,7 +1,15 @@
 // Nhãn hiển thị của sự kiện, người thực hiện và đối tượng trong nhật ký.
 // Ref: .sdd/features/system-audit-logs/SPEC.md#REQ-F03, #REQ-F12
 
-import { EVENT_LABELS, SYSTEM_ACTOR_LABEL, UNKNOWN_ACTOR_LABEL } from '../constants/auditConstants'
+import { ACTION_LABELS, EVENT_LABELS, SYSTEM_ACTOR_LABEL, UNKNOWN_ACTOR_LABEL } from '../constants/auditConstants'
+
+/**
+ * KAN-92: nhãn tiếng Việt của nhóm hành động; mã lạ hiện nguyên mã, thiếu mã hiện chuỗi rỗng.
+ */
+export function actionLabel(code) {
+  if (code === null || code === undefined) return ''
+  return Object.hasOwn(ACTION_LABELS, code) ? ACTION_LABELS[code] : String(code)
+}
 
 /**
  * Nhãn tiếng Việt của mã sự kiện; mã lạ hiện nguyên mã (không bao giờ lỗi), thiếu mã hiện chuỗi rỗng.
