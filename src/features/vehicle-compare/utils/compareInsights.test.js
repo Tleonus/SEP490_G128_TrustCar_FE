@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { buildRows } from './compareRows'
 import {
   analyzeCars,
-  buildPersonaRecommendations,
+  buildLocalAiFallbackInsight,
   buildSuggestedMatchups,
   enrichGroups,
   recommendSimilarCars,
@@ -61,7 +61,7 @@ describe('compareInsights', () => {
     },
   )
 
-  it('enrichGroups đánh dấu đúng hàng khác biệt, ô chiến thắng và tiện nghi độc quyền', () => {
+  it('enrichGroups đánh dấu đúng hàng khác biệt, ô ưu thế thực tế, tiện nghi riêng và không tạo thanh bar điểm ảo', () => {
     const groups = buildRows([carA, carB])
     const enriched = enrichGroups(groups, [carA, carB])
 
@@ -75,7 +75,7 @@ describe('compareInsights', () => {
     const engineGroup = enriched.find((g) => g.key === 'engine')
     const hpRow = engineGroup.rows.find((r) => r.key === 'horsePower')
     expect(hpRow.cells[1].isWinner).toBe(true)
-    expect(hpRow.cells[1].barPercent).toBe(100)
+    expect(hpRow.cells[1].barPercent).toBeUndefined()
 
     const safetyGroup = enriched.find((g) => g.key === 'safety')
     const featRow = safetyGroup.rows.find((r) => r.key === 'features')
@@ -83,15 +83,24 @@ describe('compareInsights', () => {
     expect(featRow.cells[0].uniqueItems).not.toContain('Camera 360')
   })
 
-  it('analyzeCars và buildPersonaRecommendations chấm điểm 5 chiều và gợi ý theo nhu cầu', () => {
+  it('analyzeCars chỉ tổng hợp điểm mạnh thực tế dựa trên số liệu, không tạo điểm số /100 vô căn cứ', () => {
     const analysis = analyzeCars([carA, carB])
     expect(analysis).toHaveLength(2)
     expect(analysis[0].marketSavings).toBe(40000000)
-    expect(analysis[0].scores.overall).toBeGreaterThan(60)
+    expect(analysis[0].scores).toBeUndefined()
+    expect(analysis[0].isTopOverall).toBeUndefined()
+    expect(analysis[0].highlights.some((h) => h.type === 'year')).toBe(true)
+    expect(analysis[1].highlights.some((h) => h.type === 'price')).toBe(true)
+  })
 
-    const recs = buildPersonaRecommendations(analysis)
-    expect(recs.likenew.winner.id).toBe(carA._id)
-    expect(recs.performance.winner.id).toBe(carB._id)
+  it('buildLocalAiFallbackInsight tạo phân tích tham khảo kèm cảnh báo AI có thể sai, không có % phù hợp', () => {
+    const insight = buildLocalAiFallbackInsight([carA, carB], 'economy')
+    expect(insight.preference).toBe('economy')
+    expect(insight.carInsights).toHaveLength(2)
+    expect(insight.disclaimer).toMatch(/AI có thể sai/i)
+    expect(insight.disclaimer).toMatch(/tham khảo/i)
+    expect(JSON.stringify(insight)).not.toMatch(/% phù hợp/i)
+    expect(JSON.stringify(insight)).not.toMatch(/\b\d+\/100\b/)
   })
 
   it('recommendSimilarCars và buildSuggestedMatchups lọc và gợi ý xe phù hợp', () => {

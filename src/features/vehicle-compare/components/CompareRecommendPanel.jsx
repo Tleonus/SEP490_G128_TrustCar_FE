@@ -1,51 +1,54 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
+  BulbFilled,
   CheckCircleFilled,
   CrownFilled,
-  FireFilled,
+  ExclamationCircleFilled,
+  EyeInvisibleOutlined,
+  InfoCircleFilled,
+  LoadingOutlined,
   PlusOutlined,
+  ReloadOutlined,
   RocketFilled,
   SafetyCertificateFilled,
   SketchOutlined,
   SwapOutlined,
   ThunderboltFilled,
   TrophyFilled,
+  WarningFilled,
 } from '@ant-design/icons'
 import { getCars } from '../../../services/carService'
 import { formatMileage, formatPrice } from '../../../utils/format'
+import { fetchCompareAiInsight } from '../api/compareApi'
 import {
-  PERSONA_MODES,
-  buildPersonaRecommendations,
+  AI_DISCLAIMER_TEXT,
+  AI_PREFERENCE_MODES,
+  CAR_LED_THEMES,
+  buildLocalAiFallbackInsight,
   buildSuggestedMatchups,
   recommendSimilarCars,
   titleOfCar,
 } from '../utils/compareInsights'
 import styles from './CompareRecommendPanel.module.css'
 
-const PERSONA_ICONS = {
+const PREFERENCE_ICONS = {
   overall: <TrophyFilled />,
   economy: <SketchOutlined />,
-  performance: <ThunderboltFilled />,
   family: <SafetyCertificateFilled />,
+  performance: <ThunderboltFilled />,
   likenew: <CrownFilled />,
 }
 
-const SCORE_DIMENSIONS = [
-  { key: 'value', label: 'Giá trị & Kinh tế', color: '#10b981' },
-  { key: 'condition', label: 'Độ mới & Tình trạng', color: '#38bdf8' },
-  { key: 'performance', label: 'Sức mạnh vận hành', color: '#f97316' },
-  { key: 'economy', label: 'Tiết kiệm nhiên liệu', color: '#eab308' },
-  { key: 'comfort', label: 'An toàn & Tiện nghi', color: '#a855f7' },
-]
-
 /**
- * Hệ thống Gợi ý Thông minh (AI Smart Advisor + Gợi ý xe tương tự & Cặp đấu đối thủ).
+ * Hệ thống Gợi ý Thông minh:
+ * 1. Phân tích nhanh & Gợi ý từ AI theo yêu cầu (On-Demand AI Advisor — chỉ chạy khi khách bấm nút,
+ *    không có thanh điểm ảo hay % độ phù hợp vô căn cứ, kèm cảnh báo AI có thể sai).
+ * 2. Gợi ý cặp xe đối thủ & xe tương tự từ kho xe Showroom.
  */
 export default function CompareRecommendPanel({
   mode = 'all',
   cars = [],
-  analysis = [],
   canAddMore = true,
   onAddCar,
   onReplaceCar,
@@ -53,11 +56,39 @@ export default function CompareRecommendPanel({
 }) {
   const showAdvisor = mode === 'all' || mode === 'advisor'
   const showInventory = mode === 'all' || mode === 'inventory'
-  const [activePersona, setActivePersona] = useState('overall')
+
+  const [activePreference, setActivePreference] = useState('overall')
+  const [aiStatus, setAiStatus] = useState('idle') // 'idle' | 'loading' | 'success'
+  const [aiInsight, setAiInsight] = useState(null)
+  const [isAiExpanded, setIsAiExpanded] = useState(false)
+  const abortRef = useRef(null)
+
   const [poolCars, setPoolCars] = useState([])
   const [poolLoaded, setPoolLoaded] = useState(false)
   const loadingPool = showInventory && !poolLoaded
   const [swapTargetIndex, setSwapTargetIndex] = useState(0)
+
+  const carIdsKey = useMemo(
+    () => cars.map((c) => String(c?._id || c?.id || '')).filter(Boolean).join(','),
+    [cars],
+  )
+
+  // Khi danh sách xe đang so sánh thay đổi, đóng kết quả AI cũ để không hiển thị lệch xe
+  useEffect(() => {
+    if (abortRef.current) {
+      abortRef.current.abort()
+      abortRef.current = null
+    }
+    setAiStatus('idle')
+    setAiInsight(null)
+    setIsAiExpanded(false)
+  }, [carIdsKey])
+
+  useEffect(() => {
+    return () => {
+      if (abortRef.current) abortRef.current.abort()
+    }
+  }, [])
 
   useEffect(() => {
     if (!showInventory) return undefined
@@ -77,8 +108,50 @@ export default function CompareRecommendPanel({
     }
   }, [showInventory])
 
-  const personaMap = useMemo(() => buildPersonaRecommendations(analysis), [analysis])
-  const currentPersonaRec = personaMap[activePersona] ?? personaMap.overall
+  const requestAiAnalysis = useCallback(
+    async (prefKey = activePreference) => {
+      const ids = cars.map((c) => String(c?._id || c?.id || '')).filter(Boolean)
+      if (ids.length < 2) return
+
+      if (abortRef.current) abortRef.current.abort()
+      const controller = new AbortController()
+      abortRef.current = controller
+
+      setAiStatus('loading')
+      setIsAiExpanded(true)
+
+      try {
+        const result = await fetchCompareAiInsight(ids, prefKey, controller.signal)
+        if (controller.signal.aborted) return
+        setAiInsight(result)
+        setAiStatus('success')
+      } catch {
+        if (controller.signal.aborted) return
+        // Fallback an toàn dựa trên thông số thực tế nếu mạng gián đoạn
+        const fallback = buildLocalAiFallbackInsight(cars, prefKey)
+        setAiInsight(fallback)
+        setAiStatus('success')
+      }
+    },
+    [cars, activePreference],
+  )
+
+  const handleSelectPreference = (prefKey) => {
+    setActivePreference(prefKey)
+    // Nếu khung gợi ý AI đã được người dùng mở sẵn thì tự động cập nhật theo tiêu chí mới
+    if (isAiExpanded && (aiStatus === 'success' || aiStatus === 'loading')) {
+      requestAiAnalysis(prefKey)
+    }
+  }
+
+  const handleCloseAiPanel = () => {
+    if (abortRef.current) {
+      abortRef.current.abort()
+      abortRef.current = null
+    }
+    setIsAiExpanded(false)
+    if (aiStatus === 'loading') setAiStatus('idle')
+  }
 
   const similarRecommendations = useMemo(
     () => recommendSimilarCars(cars, poolCars, 4),
@@ -99,177 +172,252 @@ export default function CompareRecommendPanel({
     return null
   }
 
+  const activePrefMeta =
+    AI_PREFERENCE_MODES.find((m) => m.key === activePreference) ?? AI_PREFERENCE_MODES[0]
+
   return (
     <div className={styles.wrapper}>
-      {/* PHẦN 1: AI SMART ADVISOR & PERSONA VERDICT (HIỂN THỊ KHI ĐANG SO SÁNH >= 2 XE) */}
-      {showAdvisor && analysis.length >= 2 && currentPersonaRec?.winner && (
-        <section className={styles.advisorSection} aria-label="Gợi ý chọn xe theo nhu cầu">
+      {/* PHẦN 1: PHÂN TÍCH NHANH & GỢI Ý TỪ AI THEO YÊU CẦU (CHỈ GỌI KHI NGƯỜI DÙNG BẤM NÚT) */}
+      {showAdvisor && cars.length >= 2 && (
+        <section className={styles.advisorSection} aria-label="Gợi ý tham khảo từ AI">
           <div className={styles.ledBorderTop} />
-          <div className={styles.advisorHeader}>
+
+          {/* THANH KÍCH HOẠT AI GỌN ĐẸP */}
+          <div className={styles.aiTriggerDeck}>
             <div className={styles.advisorTitleGroup}>
-              <span className={styles.aiBadge}>
-                <RocketFilled /> AI SMART RECOMMEND
-              </span>
+              <div className={styles.badgeRow}>
+                <span className={styles.aiBadge}>
+                  <RocketFilled /> TRỢ LÝ AI • PHÂN TÍCH NHANH
+                </span>
+                <span className={styles.onDemandTag}>Chỉ gợi ý khi bạn muốn tham khảo</span>
+              </div>
+
               <h2 className={styles.advisorTitle}>
-                Tư vấn chọn xe tối ưu theo nhu cầu của bạn
+                Phân tích nhanh & Gợi ý chọn xe từ AI
               </h2>
               <p className={styles.advisorSub}>
-                Chọn tiêu chí bạn ưu tiên nhất — hệ thống sẽ phân tích thông số và đề xuất mẫu xe phù hợp nhất.
+                Chọn nhu cầu bạn ưu tiên rồi bấm nút <strong>"Gợi ý từ AI"</strong> để xem bản tóm tắt
+                ưu/nhược điểm và sự đánh đổi giữa {cars.length} mẫu xe dựa trên thông số niêm yết.
               </p>
             </div>
 
-            <div className={styles.personaTabs} role="tablist" aria-label="Tiêu chí ưu tiên">
-              {PERSONA_MODES.map((mode) => {
-                const active = mode.key === activePersona
+            <div className={styles.ctaCluster}>
+              {!isAiExpanded ? (
+                <button
+                  type="button"
+                  className={styles.aiTriggerBtn}
+                  onClick={() => requestAiAnalysis(activePreference)}
+                >
+                  <BulbFilled className={styles.aiTriggerIcon} />
+                  <span>Gợi ý từ AI</span>
+                </button>
+              ) : (
+                <div className={styles.aiActiveActions}>
+                  <button
+                    type="button"
+                    className={styles.aiRefreshBtn}
+                    disabled={aiStatus === 'loading'}
+                    onClick={() => requestAiAnalysis(activePreference)}
+                  >
+                    {aiStatus === 'loading' ? <LoadingOutlined /> : <ReloadOutlined />}
+                    <span>{aiStatus === 'loading' ? 'Đang phân tích...' : 'Phân tích lại'}</span>
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.aiHideBtn}
+                    onClick={handleCloseAiPanel}
+                  >
+                    <EyeInvisibleOutlined />
+                    <span>Thu gọn gợi ý AI</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* THANH CHỌN GÓC NHÌN ƯU TIÊN */}
+          <div className={styles.preferenceBar}>
+            <span className={styles.prefBarLabel}>Góc nhìn bạn muốn AI phân tích:</span>
+            <div className={styles.personaTabs} role="tablist" aria-label="Góc nhìn phân tích AI">
+              {AI_PREFERENCE_MODES.map((pref) => {
+                const active = pref.key === activePreference
                 return (
                   <button
-                    key={mode.key}
+                    key={pref.key}
                     type="button"
                     role="tab"
                     aria-selected={active}
                     className={`${styles.personaBtn} ${active ? styles.personaBtnActive : ''}`}
-                    onClick={() => setActivePersona(mode.key)}
+                    onClick={() => handleSelectPreference(pref.key)}
                   >
-                    <span className={styles.personaIcon}>{PERSONA_ICONS[mode.key]}</span>
-                    <span>{mode.label}</span>
+                    <span className={styles.personaIcon}>{PREFERENCE_ICONS[pref.key]}</span>
+                    <span>{pref.label}</span>
                   </button>
                 )
               })}
             </div>
+            <p className={styles.prefFocusHint}>{activePrefMeta.desc}</p>
           </div>
 
-          <div className={styles.advisorGrid}>
-            {/* THẺ XE CHIẾN THẮNG THEO NHU CẦU */}
-            <div
-              className={styles.winnerCard}
-              style={{
-                '--winner-primary': currentPersonaRec.winner.theme.primary,
-                '--winner-glow': currentPersonaRec.winner.theme.glow,
-              }}
-            >
-              <div className={styles.winnerRibbon}>
-                <CrownFilled /> {currentPersonaRec.persona.badge} • ĐỀ XUẤT SỐ #1
+          {/* DÒNG NHẮC NHỞ NGẮN KHI CHƯA BẤM NÚT */}
+          {!isAiExpanded && (
+            <div className={styles.compactCautionStrip} role="note">
+              <WarningFilled className={styles.cautionStripIcon} />
+              <span>
+                <strong>Lưu ý:</strong> Hệ thống không tự động chấm điểm xe vì mỗi khách hàng có ưu
+                tiên khác nhau. Khi bạn bấm <strong>"Gợi ý từ AI"</strong>, nhận định tạo ra chỉ mang
+                tính tham khảo nhanh và <strong>AI có thể sai sót</strong>.
+              </span>
+            </div>
+          )}
+
+          {/* TRẠNG THÁI ĐANG TẢI KHI NGƯỜI DÙNG VỪA BẤM NÚT GỢI Ý TỪ AI */}
+          {isAiExpanded && aiStatus === 'loading' && (
+            <div className={styles.aiLoadingCard} role="status" aria-live="polite">
+              <div className={styles.aiLoadingSpinner}>
+                <LoadingOutlined spin />
               </div>
-
-              <div className={styles.winnerTop}>
-                <div className={styles.winnerThumb}>
-                  {primaryImageOf(currentPersonaRec.winner.car) ? (
-                    <img
-                      src={primaryImageOf(currentPersonaRec.winner.car)}
-                      alt={currentPersonaRec.winner.title}
-                    />
-                  ) : (
-                    <div className={styles.noPhoto}>TrustCar</div>
-                  )}
-                  <span className={styles.winnerRankTag}>{currentPersonaRec.winner.theme.badge}</span>
+              <div className={styles.aiLoadingTextGroup}>
+                <div className={styles.aiLoadingTitle}>
+                  AI đang đối chiếu nhanh thông số của {cars.length} mẫu xe...
                 </div>
+                <div className={styles.aiLoadingSub}>
+                  Đang tổng hợp chênh lệch giá bán, năm sản xuất, số Odo, vận hành và trang bị theo góc
+                  nhìn <strong>"{activePrefMeta.label}"</strong>.
+                </div>
+              </div>
+            </div>
+          )}
 
-                <div className={styles.winnerMeta}>
-                  <div className={styles.winnerName}>{currentPersonaRec.winner.title}</div>
-                  <div className={styles.winnerPrice}>
-                    {formatPrice(currentPersonaRec.winner.car.price)}
+          {/* KẾT QUẢ PHÂN TÍCH NHANH & GỢI Ý TỪ AI */}
+          {isAiExpanded && aiStatus === 'success' && aiInsight && (
+            <div className={styles.aiResultContainer}>
+              {/* HỘP CẢNH BÁO AI CÓ THỂ SAI — NỔI BẬT VÀ RÕ RÀNG */}
+              <div className={styles.aiDisclaimerBanner} role="alert">
+                <div className={styles.disclaimerIconWrap}>
+                  <WarningFilled />
+                </div>
+                <div className={styles.disclaimerBody}>
+                  <div className={styles.disclaimerTitle}>
+                    Cảnh báo: AI có thể sai — Gợi ý chỉ mang tính chất tham khảo
                   </div>
-                  <p className={styles.personaDesc}>{currentPersonaRec.persona.desc}</p>
-                </div>
-
-                <div className={styles.matchCircle}>
-                  <span className={styles.matchNumber}>{currentPersonaRec.winner.matchScore}%</span>
-                  <span className={styles.matchLabel}>ĐỘ PHÙ HỢP</span>
+                  <p className={styles.disclaimerText}>
+                    {aiInsight.disclaimer || AI_DISCLAIMER_TEXT}
+                  </p>
                 </div>
               </div>
 
-              <div className={styles.reasonsBlock}>
-                <div className={styles.reasonsHeading}>
-                  <FireFilled /> Lý do nổi bật nên chọn mẫu xe này:
+              {/* KHỐI TÓM TẮT NHANH & GỢI Ý THEO NHU CẦU */}
+              <div className={styles.aiOverviewGrid}>
+                <div className={styles.aiSummaryCard}>
+                  <div className={styles.aiBoxHeader}>
+                    <InfoCircleFilled className={styles.aiBoxIcon} />
+                    <span>Tóm tắt đối chiếu nhanh</span>
+                  </div>
+                  <p className={styles.aiBoxText}>{aiInsight.summary}</p>
                 </div>
-                <div className={styles.reasonPills}>
-                  {currentPersonaRec.winner.highlights.map((hl) => (
-                    <span
-                      key={hl.type}
-                      className={`${styles.reasonPill} ${styles[`pill_${hl.color}`] || ''}`}
-                    >
-                      <CheckCircleFilled /> {hl.text}
-                    </span>
-                  ))}
-                </div>
-              </div>
 
-              <div className={styles.winnerFooter}>
-                <div className={styles.runnerUpInfo}>
-                  {currentPersonaRec.runnerUp && (
+                <div className={styles.aiRecommendCard}>
+                  <div className={styles.aiBoxHeader}>
+                    <BulbFilled className={styles.aiBoxIconGold} />
                     <span>
-                      Theo sát: <strong>{currentPersonaRec.runnerUp.title}</strong> (
-                      {currentPersonaRec.runnerUp.matchScore}% phù hợp)
+                      Gợi ý tham khảo theo góc nhìn: {aiInsight.preferenceLabel || activePrefMeta.label}
                     </span>
-                  )}
-                </div>
-                <Link
-                  to={`/xe/${currentPersonaRec.winner.car._id}`}
-                  className={styles.winnerCta}
-                >
-                  Xem chi tiết xe đề xuất →
-                </Link>
-              </div>
-            </div>
-
-            {/* BẢNG CHẤM ĐIỂM ĐA CHIỀU 5 TRỤ CỘT */}
-            <div className={styles.radarBox}>
-              <div className={styles.radarHeader}>
-                <h3>Biểu đồ đối chiếu 5 tiêu chí cốt lõi</h3>
-                <div className={styles.carLegend}>
-                  {analysis.map((item) => (
-                    <span
-                      key={item.id}
-                      className={styles.legendItem}
-                      style={{ '--dot-color': item.theme.glow }}
-                    >
-                      <i className={styles.legendDot} />
-                      {item.car.make} {item.car.model}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className={styles.dimensionList}>
-                {SCORE_DIMENSIONS.map((dim) => (
-                  <div key={dim.key} className={styles.dimensionItem}>
-                    <div className={styles.dimensionLabelRow}>
-                      <span className={styles.dimensionName}>{dim.label}</span>
-                      <div className={styles.dimensionScores}>
-                        {analysis.map((item) => (
-                          <span
-                            key={item.id}
-                            className={styles.dimScoreBadge}
-                            style={{
-                              color: item.theme.glow,
-                              borderColor: item.theme.border,
-                              background: item.theme.softBg,
-                            }}
-                          >
-                            {item.scores[dim.key]}đ
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                    <div className={styles.multiBarGroup}>
-                      {analysis.map((item) => (
-                        <div key={item.id} className={styles.barTrack}>
-                          <div
-                            className={styles.barFill}
-                            style={{
-                              width: `${item.scores[dim.key]}%`,
-                              background: item.theme.gradient,
-                              boxShadow: `0 0 10px ${item.theme.primary}`,
-                            }}
-                          />
-                        </div>
-                      ))}
-                    </div>
                   </div>
-                ))}
+                  <p className={styles.aiBoxText}>{aiInsight.recommendation}</p>
+                </div>
+              </div>
+
+              {aiInsight.missingDataNote && (
+                <div className={styles.missingDataAlert}>
+                  <ExclamationCircleFilled />
+                  <span>{aiInsight.missingDataNote}</span>
+                </div>
+              )}
+
+              {/* PHÂN TÍCH ƯU / NHƯỢC ĐIỂM THỰC TẾ CỦA TỪNG XE (KHÔNG CÓ THANH ĐIỂM HAY % PHÙ HỢP) */}
+              <div
+                className={styles.aiCarCardsGrid}
+                style={{ '--car-cols': Math.min(cars.length, 3) }}
+              >
+                {cars.map((car, index) => {
+                  const theme = CAR_LED_THEMES[index % CAR_LED_THEMES.length]
+                  const insightForCar =
+                    aiInsight.carInsights?.find(
+                      (item) => String(item.carId).toLowerCase() === String(car._id).toLowerCase(),
+                    ) ?? aiInsight.carInsights?.[index]
+                  const imgUrl = primaryImageOf(car)
+
+                  return (
+                    <article
+                      key={car._id || index}
+                      className={styles.aiCarCard}
+                      style={{
+                        '--car-primary': theme.primary,
+                        '--car-glow': theme.glow,
+                        '--car-border': theme.border,
+                      }}
+                    >
+                      <div className={styles.aiCarCardTop}>
+                        <div className={styles.aiCarThumb}>
+                          {imgUrl ? (
+                            <img src={imgUrl} alt={titleOfCar(car)} />
+                          ) : (
+                            <div className={styles.noPhoto}>TrustCar</div>
+                          )}
+                        </div>
+                        <div className={styles.aiCarMeta}>
+                          <span className={styles.aiCarSlotBadge}>{theme.badge}</span>
+                          <h3 className={styles.aiCarName}>
+                            {titleOfCar(car)} {car.year ? `(${car.year})` : ''}
+                          </h3>
+                          <div className={styles.aiCarPrice}>{formatPrice(car.price)}</div>
+                        </div>
+                      </div>
+
+                      {/* ƯU ĐIỂM THỰC TẾ */}
+                      <div className={styles.aiPointBlock}>
+                        <div className={styles.aiPointHeadingPositive}>
+                          <CheckCircleFilled /> Lợi thế nổi bật trên thông số
+                        </div>
+                        <ul className={styles.aiPointList}>
+                          {(insightForCar?.strengths ?? []).map((point) => (
+                            <li key={point}>{point}</li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* ĐIỂM CẦN CÂN NHẮC / ĐÁNH ĐỔI */}
+                      <div className={styles.aiPointBlock}>
+                        <div className={styles.aiPointHeadingNeutral}>
+                          <InfoCircleFilled /> Điểm cần lưu ý & đối chiếu thêm
+                        </div>
+                        <ul className={styles.aiPointListMuted}>
+                          {(insightForCar?.considerations ?? []).map((point) => (
+                            <li key={point}>{point}</li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* GỢI Ý ĐỐI TƯỢNG PHÙ HỢP */}
+                      {insightForCar?.bestFor && (
+                        <div className={styles.aiBestForBox}>
+                          <span className={styles.aiBestForLabel}>Gợi ý tham khảo:</span>
+                          <p className={styles.aiBestForText}>{insightForCar.bestFor}</p>
+                        </div>
+                      )}
+
+                      <div className={styles.aiCarFooter}>
+                        <Link to={`/xe/${car._id}`} className={styles.aiCarDetailLink}>
+                          Xem chi tiết mẫu xe này →
+                        </Link>
+                      </div>
+                    </article>
+                  )
+                })}
               </div>
             </div>
-          </div>
+          )}
         </section>
       )}
 
@@ -281,7 +429,7 @@ export default function CompareRecommendPanel({
               <span className={styles.sectionBadge}>⚡ QUICK BATTLE MATCHUPS</span>
               <h2 className={styles.sectionTitle}>Gợi ý các cặp đấu đối thủ đáng so sánh nhất</h2>
               <p className={styles.sectionDesc}>
-                Chỉ cần 1 chạm để nạp ngay 2 mẫu xe cùng phân khúc vào bàn cân 3D LED.
+                Chỉ cần 1 chạm để nạp ngay 2 mẫu xe cùng phân khúc vào bàn cân Showroom.
               </p>
             </div>
           </div>
@@ -416,7 +564,7 @@ export default function CompareRecommendPanel({
                         <button
                           type="button"
                           className={styles.simSwapBtn}
-                          onClick={() => onReplaceCar?.( cars[swapTargetIndex]?._id, car)}
+                          onClick={() => onReplaceCar?.(cars[swapTargetIndex]?._id, car)}
                         >
                           <SwapOutlined /> Đổi với Xe #{swapTargetIndex + 1}
                         </button>

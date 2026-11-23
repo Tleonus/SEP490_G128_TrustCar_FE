@@ -5,7 +5,8 @@ import styles from '../styles/SlotPicker.module.css'
 const cx = (...names) => names.filter(Boolean).join(' ')
 
 /**
- * Thanh chọn ngày (cuộn ngang 14 ngày), dùng chung cho lưới khung của khách và của nhân viên.
+ * Thanh chọn ngày (cuộn ngang 14 ngày) của màn hình nhân viên. Modal đặt lịch của khách dùng
+ * lịch tháng riêng (DayCalendar) nên không dùng component này.
  * Mỗi ngày ghi số khung còn trống; ngày kín bị mờ nhưng vẫn chọn được để xem.
  *
  * @ears .sdd/features/test-drive-booking/SPEC.md#REQ-F03

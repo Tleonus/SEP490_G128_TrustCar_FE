@@ -16,6 +16,8 @@ import api from '../../../services/api'
 import { resolveRequestOptions } from '../constants/captionConstants'
 
 const CAPTION_TIMEOUT_MS = 45000
+/** Đăng bài phải chờ Facebook tải ảnh + tạo post nên cho thời gian dài hơn. */
+const PUBLISH_TIMEOUT_MS = 60000
 
 /**
  * @param {string} carId ObjectId của xe
@@ -37,5 +39,31 @@ export async function suggestCaptions(carId, { presetId, length } = {}) {
     imageSuggestion: payload?.imageSuggestion ?? null,
     source: payload?.source ?? null,
     cached: Boolean(payload?.cached),
+  }
+}
+
+/**
+ * KAN-91 – Đăng bài thật lên Facebook Page qua Backend (Graph API).
+ *
+ * Backend trả { postId, permalinkUrl, pageId, publishedAt }. Nếu Page chưa được cấu hình,
+ * Backend trả 503 FACEBOOK_NOT_CONFIGURED kèm danh sách biến môi trường còn thiếu —
+ * Frontend hiển thị đúng lỗi đó, không bao giờ coi như đăng thành công.
+ *
+ * @param {string} carId ObjectId của xe
+ * @param {string} caption nội dung bài viết (đã gồm hashtag)
+ */
+export async function publishCaptionToFacebook(carId, caption) {
+  if (!carId) throw new Error('Missing carId')
+  const { data } = await api.post(
+    '/marketing/facebook/publish',
+    { carId, caption },
+    { timeout: PUBLISH_TIMEOUT_MS },
+  )
+  const payload = data?.data ?? null
+  return {
+    postId: payload?.postId ?? null,
+    permalinkUrl: payload?.permalinkUrl ?? null,
+    pageId: payload?.pageId ?? null,
+    publishedAt: payload?.publishedAt ?? null,
   }
 }

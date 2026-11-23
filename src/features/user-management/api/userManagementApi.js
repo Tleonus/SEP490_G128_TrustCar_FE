@@ -49,3 +49,23 @@ export async function activateStaffUser(id) {
   const { data } = await api.patch(`/users/${encodeURIComponent(id)}/activate`)
   return data?.data
 }
+
+// ── KAN-101 — reset / lock / unlock ────────────────────────────────────────
+
+/** POST /users/:id/reset-password — ADMIN đặt lại mật khẩu, BE gửi email. */
+export async function resetStaffPassword(id, { reason } = {}) {
+  const { data } = await api.post(`/users/${encodeURIComponent(id)}/reset-password`, { reason })
+  return data?.data
+}
+
+/** POST /users/:id/lock — khoá tài khoản, kick mọi phiên. Lý do bắt buộc. */
+export async function lockStaffUser(id, { reason }) {
+  const { data } = await api.post(`/users/${encodeURIComponent(id)}/lock`, { reason })
+  return data?.data
+}
+
+/** POST /users/:id/unlock — mở khoá, clear failedLoginAttempts. */
+export async function unlockStaffUser(id, { reason } = {}) {
+  const { data } = await api.post(`/users/${encodeURIComponent(id)}/unlock`, { reason })
+  return data?.data
+}

@@ -1,4 +1,5 @@
 import { Carousel } from 'antd'
+import { Link } from 'react-router-dom'
 import { CrownFilled, SafetyCertificateOutlined } from '@ant-design/icons'
 import { HERO_SLIDES } from '../../../mock/heroSlides'
 import { useBrands } from '../../../hooks/useCatalog'
@@ -73,6 +74,16 @@ export default function HeroSection() {
           </div>
         ))}
       </Carousel>
+
+      {/* Showroom 3D: mở trang /showroom-3d toàn màn hình */}
+      <div className={styles.ctaLayer}>
+        <div className="container">
+          <Link to="/showroom-3d" className={styles.showroomCta}>
+            <span className={styles.ctaBadge}>3D</span>
+            Xem showroom 3D
+          </Link>
+        </div>
+      </div>
 
       <div className={styles.searchLayer}>
         <div className="container">
