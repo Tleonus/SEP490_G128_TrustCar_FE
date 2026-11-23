@@ -14,10 +14,13 @@ export async function fetchCarHoldStatus(carKey, signal) {
 /**
  * POST /deposits – gửi carId + depositAmount (+ userId theo Jira; BE đối chiếu với JWT,
  * không dùng userId này làm danh tính).
+ * KAN-99: `paymentProvider` cho phép FE chọn MANUAL (chuyển khoản tay) hoặc VNPAY (cổng online).
+ * Backend default là MANUAL — bỏ trống nếu không muốn đổi.
  */
-export async function createDeposit({ carId, depositAmount, userId }) {
+export async function createDeposit({ carId, depositAmount, userId, paymentProvider }) {
   const body = { carId, depositAmount }
   if (userId) body.userId = userId
+  if (paymentProvider) body.paymentProvider = paymentProvider
   const { data } = await api.post('/deposits', body)
   return data?.data
 }
@@ -70,5 +73,22 @@ export async function refundDeposit(id, { refundAmount, refundReference, note })
     refundReference: refundReference || undefined,
     note: note || undefined,
   })
+  return data?.data
+}
+
+// ── KAN-99: VNPay ──────────────────────────────────────────────────────────
+
+/**
+ * POST /deposits/:id/vnpay-url – xin backend ký URL thanh toán VNPay sandbox.
+ * Trả về { paymentUrl, vnpTxnRef, amount, expiresAt }.
+ */
+export async function createVnpayPaymentUrl(id) {
+  const { data } = await api.post(`/deposits/${id}/vnpay-url`, {})
+  return data?.data
+}
+
+/** GET /deposits/vnpay-policy – trạng thái cấu hình VNPay (enabled, timeoutMinutes…). */
+export async function fetchVnpayPolicy(signal) {
+  const { data } = await api.get('/deposits/vnpay-policy', { signal })
   return data?.data
 }

@@ -1,7 +1,8 @@
 // Hàm thuần cho danh sách xe đã lưu (không đụng React, localStorage hay mạng).
 
 export const SAVED_CARS_STORAGE_KEY = 'trustcar:saved-cars'
-export const MAX_SAVED_CARS = 50
+export const MAX_GUEST_SAVED_CARS = 50
+export const MAX_ACCOUNT_SAVED_CARS = 100
 const MAX_HISTORY = 12
 
 const textOf = (value, nestedKey) => {
@@ -75,7 +76,7 @@ export function sanitizeSaved(value) {
         targetPrice: toNumber(entry.alert?.targetPrice),
       },
     })
-    if (items.length === MAX_SAVED_CARS) break
+    if (items.length === MAX_GUEST_SAVED_CARS) break
   }
   return items
 }

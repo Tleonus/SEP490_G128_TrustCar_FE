@@ -78,16 +78,6 @@ export default function SavedCarItem({ item, onEditAlert, onRemove }) {
             <span>{item.vehicleCode || 'TrustCar'}</span>
           </div>
         )}
-        {change.direction === 'down' && !unavailable && (
-          <span className={styles.dropRibbon}>
-            <ArrowDownOutlined /> Giảm {change.percent.toFixed(1)}%
-          </span>
-        )}
-        {unavailable && (
-          <span className={styles.soldOverlay}>
-            <StopOutlined /> Không còn bán
-          </span>
-        )}
       </Link>
 
       <div className={styles.body}>
@@ -98,9 +88,16 @@ export default function SavedCarItem({ item, onEditAlert, onRemove }) {
               {item.vehicleCode && <span className={styles.code}>{item.vehicleCode}</span>}
               {item.year && <span className={styles.metaTag}><CalendarOutlined /> {item.year}</span>}
               {item.mileage != null && <span className={styles.metaTag}><DashboardOutlined /> {formatMileage(item.mileage)}</span>}
+
+              {change.direction === 'down' && !unavailable && (
+                <span className={styles.dropBadge}><ArrowDownOutlined /> Giảm {change.percent.toFixed(1)}%</span>
+              )}
+              {unavailable && (
+                <span className={styles.soldBadge}><StopOutlined /> Không còn bán</span>
+              )}
+              {isNew && <span className={styles.newBadge}>Mới giảm giá</span>}
             </div>
           </div>
-          {isNew && <span className={styles.newBadge}>Mới giảm giá</span>}
         </div>
 
         <div className={styles.priceGrid}>

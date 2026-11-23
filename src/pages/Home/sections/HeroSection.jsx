@@ -1,13 +1,30 @@
 import { Carousel } from 'antd'
 import { Link } from 'react-router-dom'
-import { SafetyCertificateOutlined } from '@ant-design/icons'
+import { CrownFilled, SafetyCertificateOutlined } from '@ant-design/icons'
 import { HERO_SLIDES } from '../../../mock/heroSlides'
 import { useBrands } from '../../../hooks/useCatalog'
+import { useAuthStore } from '../../../store/useAuthStore'
 import SmartCarSearchBox from '../../../components/search/SmartCarSearchBox'
 import styles from './HeroSection.module.css'
 
 export default function HeroSection() {
   const brands = useBrands()
+  const user = useAuthStore((state) => state.user)
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+
+  const userName =
+    isAuthenticated && user
+      ? (
+          user.fullName ||
+          user.full_name ||
+          user.name ||
+          user.username ||
+          user.email?.split('@')[0] ||
+          ''
+        ).trim()
+      : ''
+
+  const greetingTarget = userName || 'Quý khách'
 
   return (
     <section className={styles.hero}>
@@ -25,6 +42,21 @@ export default function HeroSection() {
               <div className={styles.content}>
                 <div className="container">
                   <div className={styles.textBlock}>
+                    <div className={styles.welcomeBar}>
+                      <span className={styles.welcomeIcon} aria-hidden="true">
+                        <CrownFilled />
+                      </span>
+                      <div className={styles.welcomeCopy}>
+                        <span className={styles.welcomeText}>
+                          Kính chào <strong className={styles.welcomeName}>{greetingTarget}</strong>
+                        </span>
+                        <span className={styles.welcomeDivider} aria-hidden="true">
+                          •
+                        </span>
+                        <span className={styles.welcomeSub}>Chào mừng Quý khách</span>
+                      </div>
+                    </div>
+
                     <div className={styles.eyebrow}>
                       <SafetyCertificateOutlined />
                       <span>Kiểm định chuyên nghiệp</span>

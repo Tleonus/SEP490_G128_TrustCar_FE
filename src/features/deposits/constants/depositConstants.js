@@ -6,6 +6,54 @@ export const CAR_STATE = Object.freeze({
   UNAVAILABLE: 'UNAVAILABLE',
 })
 
+/** KAN-99: cổng thanh toán tiền cọc. MANUAL = sale xác nhận chuyển khoản tay (flow cũ). */
+export const PAYMENT_PROVIDER = Object.freeze({
+  MANUAL: 'MANUAL',
+  VNPAY:  'VNPAY',
+})
+
+export const PAYMENT_PROVIDER_META = Object.freeze({
+  MANUAL: {
+    label: 'Chuyển khoản / Thanh toán tại showroom',
+    hint:  'Sale sẽ xác nhận trong 24 giờ sau khi nhận tiền chuyển khoản hoặc tiền mặt.',
+    recommended: false,
+  },
+  VNPAY: {
+    label: 'VNPay (ATM / QR / thẻ quốc tế)',
+    hint:  'Thanh toán online qua cổng VNPay sandbox, cập nhật trạng thái tức thì.',
+    recommended: true,
+  },
+})
+
+/**
+ * KAN-99: mã trả về của VNPay ở query string returnUrl.
+ * Ref: https://sandbox.vnpayment.vn/apis/docs/thanh-toan-pay/pay.html
+ */
+export const VNPAY_RESPONSE_CODE = Object.freeze({
+  SUCCESS:          '00',
+  SUSPICIOUS_FRAUD: '07',
+  CUSTOMER_CANCEL:  '24',
+  OTP_WRONG:        '75',
+  OTP_LIMIT:        '79',
+  BAD_SIGNATURE:    '97',
+})
+
+export const VNPAY_MESSAGE_BY_CODE = Object.freeze({
+  '00': 'Thanh toán thành công.',
+  '07': 'Giao dịch bị nghi ngờ gian lận, VNPay đã tạm giữ để xác minh.',
+  '09': 'Thẻ/Tài khoản chưa đăng ký Internet Banking tại ngân hàng.',
+  '10': 'Xác thực thẻ/Tài khoản không đúng quá 3 lần.',
+  '11': 'Hết hạn chờ thanh toán. Vui lòng thực hiện lại.',
+  '12': 'Thẻ/Tài khoản bị khóa.',
+  '24': 'Bạn đã hủy giao dịch tại trang VNPay.',
+  '51': 'Tài khoản không đủ số dư.',
+  '65': 'Vượt quá hạn mức giao dịch trong ngày.',
+  '75': 'Ngân hàng đang bảo trì.',
+  '79': 'Nhập sai mật khẩu thanh toán quá số lần cho phép.',
+  '97': 'Chữ ký không hợp lệ.',
+  '99': 'Lỗi không xác định. Vui lòng thử lại.',
+})
+
 /** Trạng thái lượt giữ xe. */
 export const DEPOSIT_STATUS = Object.freeze({
   PENDING_PAYMENT: 'PENDING_PAYMENT',

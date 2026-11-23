@@ -9,6 +9,10 @@ import styles from './LoginPage.module.css'
 import { signInWithGoogle } from '../../config/firebase'
 import { ADMIN_PATHS } from '../../router/paths'
 import { loginDestination } from '../../features/test-drive-booking/utils/resumeBooking'
+import { hasAnyRole } from '../../utils/roles'
+
+// KAN-93/94: các role nội bộ được vào khu quản trị (khớp AdminRoute).
+const STAFF_ROLES = ['ADMIN', 'SALES_STAFF', 'INSPECTOR']
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -29,7 +33,8 @@ export default function LoginPage() {
     const ok = await login(values)
     if (!ok) return
     const user = useAuthStore.getState().user
-    if (user?.roleName === 'ADMIN' || user?.roleName === 'SALES_STAFF') {
+    // KAN-93: nhân sự có thể giữ nhiều role; INSPECTOR cũng thuộc khu quản trị.
+    if (hasAnyRole(user, STAFF_ROLES)) {
       const from = location.state?.from
       const destination = from?.pathname?.startsWith('/admin/')
         ? `${from.pathname}${from.search || ''}${from.hash || ''}`

@@ -44,10 +44,21 @@ const StaffVisitsPage = lazy(() => import('../features/test-drive-booking/pages/
 const ProfilePage = lazy(() => import('../features/user-profile-settings/pages/ProfilePage.jsx'))
 // KAN-40: nhật ký hoạt động hệ thống (chỉ ADMIN)
 const AuditLogsPage = lazy(() => import('../features/audit-logs/pages/AuditLogsPage.jsx'))
+// KAN-93: quản lý nhân sự & gán nhiều vai trò (chỉ ADMIN)
+const UserManagementPage = lazy(() => import('../features/user-management/pages/UserManagementPage.jsx'))
 // KAN-61: trang tính trả góp (công khai)
 const InstallmentPage = lazy(() => import('../features/installment-calculator/pages/InstallmentPage.jsx'))
 // Showroom 3D toàn màn hình (tải lười three.js, không có header/footer)
 const Showroom3DPage = lazy(() => import('../features/showroom-3d/pages/Showroom3DPage.jsx'))
+// KAN-99: thanh toán tiền cọc qua VNPay
+const VnpayReturnPage = lazy(() => import('../features/deposits/pages/VnpayReturnPage.jsx'))
+const DepositSuccessPage = lazy(() => import('../features/deposits/pages/DepositSuccessPage.jsx'))
+const DepositCancelPage = lazy(() => import('../features/deposits/pages/DepositCancelPage.jsx'))
+// KAN-96: dịch vụ showroom (công khai + wizard đặt lịch + CRUD admin)
+const ServicesPage = lazy(() => import('../features/services/pages/ServicesPage.jsx'))
+const VerifyPage = lazy(() => import('../features/vehicle-history/pages/VerifyPage.jsx'))
+const ServiceBookingPage = lazy(() => import('../features/services/pages/ServiceBookingPage.jsx'))
+const AdminServicesPage = lazy(() => import('../features/services/pages/AdminServicesPage.jsx'))
 
 export default function AppRouter() {
   return (
@@ -65,8 +76,26 @@ export default function AppRouter() {
           }
         />
         <Route path="/installment" element={<Suspense fallback={<LoadingState />}><InstallmentPage /></Suspense>} />
+        {/* KAN-99: 3 landing page khi khách quay lại từ VNPay */}
+        <Route path="/dat-coc/vnpay-return" element={<Suspense fallback={<LoadingState />}><VnpayReturnPage /></Suspense>} />
+        <Route path="/dat-coc/:id/thanh-cong" element={<Suspense fallback={<LoadingState />}><DepositSuccessPage /></Suspense>} />
+        <Route path="/dat-coc/:id/da-huy" element={<Suspense fallback={<LoadingState />}><DepositCancelPage /></Suspense>} />
+        <Route path="/dat-coc/:id/that-bai" element={<Suspense fallback={<LoadingState />}><DepositCancelPage /></Suspense>} />
+        <Route path="/dat-coc/that-bai" element={<Suspense fallback={<LoadingState />}><DepositCancelPage /></Suspense>} />
         <Route path="/ve-chung-toi" element={<AboutPage />} />
         <Route path="/lien-he" element={<ContactPage />} />
+        {/* KAN-96: dịch vụ showroom công khai + wizard đặt lịch (yêu cầu đăng nhập) */}
+        <Route path="/dich-vu" element={<Suspense fallback={<LoadingState />}><ServicesPage /></Suspense>} />
+        <Route
+          path="/dich-vu/dat/:serviceId"
+          element={
+            <PrivateRoute>
+              <Suspense fallback={<LoadingState />}><ServiceBookingPage /></Suspense>
+            </PrivateRoute>
+          }
+        />
+        {/* KAN-98: trang xác thực chứng nhận khi khách quét mã QR trên báo cáo lịch sử xe */}
+        <Route path="/verify/:hash" element={<Suspense fallback={<LoadingState />}><VerifyPage /></Suspense>} />
         <Route path="/dang-nhap" element={<LoginPage />} />
         <Route path="/dang-ky" element={<RegisterPage />} />
         <Route path="/quen-mat-khau" element={<ForgotPasswordPage />} />
@@ -152,6 +181,15 @@ export default function AppRouter() {
             </AdminOnlyRoute>
           }
         />
+        {/* Quản lý người dùng & gán nhiều vai trò (KAN-93): chỉ ADMIN. */}
+        <Route
+          path="nguoi-dung"
+          element={
+            <AdminOnlyRoute>
+              <Suspense fallback={<LoadingState />}><UserManagementPage /></Suspense>
+            </AdminOnlyRoute>
+          }
+        />
         <Route path="kho-xe" element={<LegacyRedirect to={ADMIN_PATHS.inventory} />} />
         {/* Chứng nhận CPO: AdminRoute chỉ cho ADMIN, SALES_STAFF; BE vẫn kiểm quyền cuối cùng */}
         <Route
@@ -166,6 +204,12 @@ export default function AppRouter() {
         <Route
           path="lich-lai-thu"
           element={<Suspense fallback={<LoadingState />}><StaffVisitsPage /></Suspense>}
+        />
+        {/* KAN-96: CRUD dịch vụ showroom. Trong AdminRoute (ADMIN + SALES_STAFF đọc được).
+            Backend tự kiểm quyền service:write cho POST/PUT/DELETE, SALES_STAFF chỉ đọc. */}
+        <Route
+          path="dich-vu"
+          element={<Suspense fallback={<LoadingState />}><AdminServicesPage /></Suspense>}
         />
         {/* Route admin không tồn tại: hiện 404 trong AdminLayout thay vì vùng nội dung trống */}
         <Route

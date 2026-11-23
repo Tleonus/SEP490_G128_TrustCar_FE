@@ -12,5 +12,9 @@ export const ADMIN_PATHS = {
   cpoCertificates: '/admin/chung-nhan',
   // KAN-40: nhật ký hoạt động hệ thống (chỉ ADMIN)
   auditLogs: '/admin/nhat-ky',
+  // KAN-93: quản lý nhân sự & gán nhiều vai trò (chỉ ADMIN)
+  userManagement: '/admin/nguoi-dung',
+  // KAN-96: dịch vụ showroom (CRUD + xem lịch)
+  services: '/admin/dich-vu',
 }
 

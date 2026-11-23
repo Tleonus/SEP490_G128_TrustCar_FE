@@ -107,9 +107,16 @@
 
 .priceRow {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 10px;
+}
+
+.priceGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
 }
 
 .price {
@@ -117,6 +124,36 @@
   font-weight: 800;
   color: var(--color-accent-hover);
   letter-spacing: -0.2px;
+  line-height: 1.2;
+}
+
+.oldPriceWrap {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.oldPrice {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  text-decoration: line-through;
+  text-decoration-color: rgba(224, 91, 76, 0.85);
+  text-decoration-thickness: 1.5px;
+  opacity: 0.82;
+}
+
+.saveTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(31, 138, 76, 0.14);
+  color: var(--color-success);
+  border: 1px solid rgba(31, 138, 76, 0.3);
 }
 
 .meta {

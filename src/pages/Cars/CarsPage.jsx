@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Select, Pagination, Button } from 'antd'
 import { CloseOutlined, FilterOutlined, ReloadOutlined } from '@ant-design/icons'
@@ -19,6 +19,7 @@ import {
 } from '../../utils/constants'
 import { formatPrice } from '../../utils/format'
 import { parseSmartSearchQuery } from '../../utils/smartCarSearch'
+import { trackEvent } from '../../utils/trackEvent'
 import SmartCarSearchBox from '../../components/search/SmartCarSearchBox'
 import CarCard from '../../components/car/CarCard'
 import { LoadingState, ErrorState, EmptyState } from '../../components/common/StateBlock'
@@ -78,6 +79,18 @@ export default function CarsPage() {
   }, [rawSearch, page, searchParams])
 
   const { items = [], total = 0, loading, error } = useCars(filters)
+
+  // KAN-97: ghi FILTER_APPLY khi bộ lọc đổi, debounce 800ms để không spam khi
+  // người dùng gõ chữ hoặc sửa nhiều ô liên tiếp.
+  const filterSignature = useMemo(() => JSON.stringify({ ...filters, page: undefined }), [filters])
+  const firstFilterRef = useRef(true)
+  useEffect(() => {
+    if (firstFilterRef.current) { firstFilterRef.current = false; return }
+    const timer = setTimeout(() => {
+      trackEvent('FILTER_APPLY', { metadata: { filters: filterSignature.slice(0, 500) } })
+    }, 800)
+    return () => clearTimeout(timer)
+  }, [filterSignature])
 
   function updateParams(changes) {
     const next = new URLSearchParams(searchParams)

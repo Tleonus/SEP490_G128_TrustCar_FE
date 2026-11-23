@@ -3,6 +3,7 @@ import { CheckOutlined, SwapOutlined } from '@ant-design/icons'
 import { useCompareStore } from '../store/useCompareStore'
 import { toCompareItem, hasItem } from '../utils/compareSelection'
 import { COMPARE_FULL_MESSAGE, MAX_COMPARE } from '../constants/compareConstants'
+import { trackEvent } from '../../../utils/trackEvent'
 import styles from './CompareToggle.module.css'
 
 /**
@@ -37,7 +38,10 @@ export default function CompareToggle({ car, variant = 'card' }) {
   function handleClick(event) {
     event.preventDefault()
     event.stopPropagation()
-    if (toggle(car) === 'full') message.warning(COMPARE_FULL_MESSAGE)
+    const result = toggle(car)
+    if (result === 'full') message.warning(COMPARE_FULL_MESSAGE)
+    // KAN-97: chỉ ghi khi thêm vào so sánh, không khi bỏ.
+    else if (!selected && car?._id) trackEvent('COMPARE_ADD', { carId: car._id })
   }
 
   if (variant === 'detail') {

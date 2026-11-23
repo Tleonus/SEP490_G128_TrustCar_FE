@@ -1,14 +1,18 @@
-// Phân tích thông số, tạo highlight đa sắc và hệ thống gợi ý thông minh (Smart Recommend) cho trang so sánh xe.
+// Phân tích thông số thực tế, tạo highlight đối chiếu khách quan và hỗ trợ gợi ý tham khảo từ AI cho trang so sánh xe.
+// Không chấm điểm giả lập (/100), không tính % độ phù hợp ảo và không vẽ thanh điểm vô căn cứ.
 
 import { formatPrice, formatMileage } from '../../../utils/format'
 import { BODY_TYPE_LABEL, FUEL_TYPE_LABEL, labelFor } from '../constants/compareLabels'
 import { isDifferent } from './compareRows'
 
+export const AI_DISCLAIMER_TEXT =
+  'Lưu ý: Nội dung phân tích và gợi ý trên được tạo tự động bởi AI chỉ nhằm mục đích tham khảo nhanh dựa trên thông số niêm yết. AI có thể sai sót hoặc chưa phản ánh hết tình trạng thực tế — quý khách vui lòng đối chiếu bảng thông số kỹ thuật chi tiết và đặt lịch xem xe/lái thử trực tiếp tại Showroom TrustCar.'
+
 export const CAR_LED_THEMES = [
   {
     key: 'champagne',
     name: 'Champagne Gold',
-    badge: 'VỊ TRÍ #1',
+    badge: 'XE #1',
     primary: '#c9a227',
     glow: '#e5c878',
     softBg: 'rgba(201, 162, 39, 0.10)',
@@ -18,7 +22,7 @@ export const CAR_LED_THEMES = [
   {
     key: 'platinum',
     name: 'Platinum Daylight',
-    badge: 'VỊ TRÍ #2',
+    badge: 'XE #2',
     primary: '#6488a8',
     glow: '#9cc0de',
     softBg: 'rgba(100, 136, 168, 0.10)',
@@ -28,7 +32,7 @@ export const CAR_LED_THEMES = [
   {
     key: 'emerald',
     name: 'Titanium Sage',
-    badge: 'VỊ TRÍ #3',
+    badge: 'XE #3',
     primary: '#2e8b67',
     glow: '#6cc4a1',
     softBg: 'rgba(46, 139, 103, 0.10)',
@@ -80,7 +84,6 @@ const ROW_RULES = {
     mode: 'min',
     winnerLabel: 'Odo thấp nhất',
     color: 'cyan',
-    showBar: true,
   },
   conditionGrade: {
     getter: (c) => GRADE_SCORE[c.conditionGrade] ?? null,
@@ -93,28 +96,24 @@ const ROW_RULES = {
     mode: 'max',
     winnerLabel: 'Dung tích lớn nhất',
     color: 'amber',
-    showBar: true,
   },
   horsePower: {
     getter: (c) => numOrNull(c.specifications?.horsePower),
     mode: 'max',
     winnerLabel: 'Mã lực mạnh nhất',
     color: 'orange',
-    showBar: true,
   },
   torqueNm: {
     getter: (c) => numOrNull(c.specifications?.torqueNm),
     mode: 'max',
     winnerLabel: 'Lực kéo cao nhất',
     color: 'violet',
-    showBar: true,
   },
   fuelConsumption: {
     getter: (c) => numOrNull(c.specifications?.fuelConsumption),
     mode: 'min',
     winnerLabel: 'Tiết kiệm nhất',
     color: 'emerald',
-    showBar: true,
   },
   numberOfSeats: {
     getter: (c) => numOrNull(c.specifications?.numberOfSeats),
@@ -134,8 +133,8 @@ const ROW_RULES = {
 }
 
 /**
- * Làm giàu dữ liệu hàng bảng so sánh với trạng thái khác biệt, người chiến thắng từng dòng,
- * thanh % trực quan và tiện nghi độc quyền.
+ * Làm giàu dữ liệu hàng bảng so sánh với trạng thái khác biệt, thông số vượt trội thực tế
+ * và tiện nghi riêng biệt (không tạo thanh bar % vô nghĩa).
  */
 export function enrichGroups(groups, cars) {
   const list = Array.isArray(cars) ? cars : []
@@ -153,12 +152,8 @@ export function enrichGroups(groups, cars) {
       const validValues = rawValues.filter((v) => v != null)
 
       let bestVal = null
-      let maxVal = null
-      if (rule && validValues.length >= 2 && hasDiff) {
+      if (rule && validValues.length >= 2 && hasDiff && new Set(validValues).size > 1) {
         bestVal = rule.mode === 'max' ? Math.max(...validValues) : Math.min(...validValues)
-        maxVal = Math.max(...validValues)
-      } else if (rule && validValues.length >= 1) {
-        maxVal = Math.max(...validValues)
       }
 
       // Tìm tiện nghi chung vs tiện nghi riêng biệt
@@ -172,10 +167,6 @@ export function enrichGroups(groups, cars) {
       const cells = row.cells.map((cell, idx) => {
         const val = rawValues[idx]
         const isWinner = bestVal != null && val != null && val === bestVal
-        let barPercent = null
-        if (rule?.showBar && val != null && maxVal != null && maxVal > 0) {
-          barPercent = Math.max(14, Math.round((val / maxVal) * 100))
-        }
 
         const uniqueItems =
           row.key === 'features' && Array.isArray(cell.items)
@@ -188,7 +179,6 @@ export function enrichGroups(groups, cars) {
           isWinner,
           winnerLabel: isWinner ? rule.winnerLabel : null,
           highlightColor: rule?.color ?? 'cyan',
-          barPercent,
           uniqueItems,
         }
       })
@@ -210,28 +200,12 @@ export function enrichGroups(groups, cars) {
   })
 }
 
-/**
- * Chuẩn hóa điểm (65 -> 98) cho một mảng giá trị số giữa các xe đang so sánh.
- */
-function normalizeMetric(values, mode = 'max', fallback = 74) {
-  const valid = values.filter((v) => v != null && Number.isFinite(v))
-  if (valid.length === 0) return values.map(() => fallback)
-  const min = Math.min(...valid)
-  const max = Math.max(...valid)
-  if (max === min) return values.map((v) => (v != null ? 88 : fallback))
-
-  return values.map((v) => {
-    if (v == null || !Number.isFinite(v)) return fallback
-    const ratio = mode === 'max' ? (v - min) / (max - min) : (max - v) / (max - min)
-    return Math.round(68 + ratio * 30)
-  })
-}
-
 export const titleOfCar = (car) =>
   [car?.make, car?.model, car?.variant].filter(Boolean).join(' ') || 'Xe TrustCar'
 
 /**
- * Phân tích tổng hợp điểm số 5 chiều, lợi thế nổi bật và huy hiệu chiến thắng cho từng xe.
+ * Tổng hợp các điểm nổi bật thực tế (Fact-based highlights) từ số liệu niêm yết của từng xe.
+ * Hoàn toàn không tự chấm điểm (/100) hay áp đặt xe chiến thắng tổng thể.
  */
 export function analyzeCars(cars) {
   const list = Array.isArray(cars) ? cars : []
@@ -240,66 +214,46 @@ export function analyzeCars(cars) {
   const prices = list.map((c) => numOrNull(c.price))
   const years = list.map((c) => numOrNull(c.year))
   const mileages = list.map((c) => (typeof c.mileage === 'number' && c.mileage >= 0 ? c.mileage : null))
-  const grades = list.map((c) => GRADE_SCORE[c.conditionGrade] ?? null)
   const hps = list.map((c) => numOrNull(c.specifications?.horsePower))
-  const torques = list.map((c) => numOrNull(c.specifications?.torqueNm))
   const fuels = list.map((c) => numOrNull(c.specifications?.fuelConsumption))
   const featureCounts = list.map((c) =>
     Array.isArray(c.specifications?.features) ? c.specifications.features.length : 0,
   )
-  const seats = list.map((c) => numOrNull(c.specifications?.numberOfSeats))
 
-  const priceScores = normalizeMetric(prices, 'min', 76)
-  const yearScores = normalizeMetric(years, 'max', 75)
-  const mileageScores = normalizeMetric(mileages, 'min', 75)
-  const gradeScores = normalizeMetric(grades, 'max', 78)
-  const hpScores = normalizeMetric(hps, 'max', 74)
-  const torqueScores = normalizeMetric(torques, 'max', 74)
-  const fuelScores = normalizeMetric(fuels, 'min', 76)
-  const featureScores = normalizeMetric(featureCounts, 'max', 74)
-  const seatScores = normalizeMetric(seats, 'max', 78)
+  const validPrices = prices.filter(Boolean)
+  const minPrice = validPrices.length >= 2 ? Math.min(...validPrices) : null
+  const maxPrice = validPrices.length >= 2 ? Math.max(...validPrices) : null
 
-  const minPrice = prices.filter(Boolean).length >= 2 ? Math.min(...prices.filter(Boolean)) : null
-  const maxPrice = prices.filter(Boolean).length >= 2 ? Math.max(...prices.filter(Boolean)) : null
-  const maxYear = years.filter(Boolean).length >= 2 ? Math.max(...years.filter(Boolean)) : null
-  const minMileage =
-    mileages.filter((v) => v != null).length >= 2 ? Math.min(...mileages.filter((v) => v != null)) : null
-  const maxHp = hps.filter(Boolean).length >= 2 ? Math.max(...hps.filter(Boolean)) : null
-  const minFuel = fuels.filter(Boolean).length >= 2 ? Math.min(...fuels.filter(Boolean)) : null
+  const validYears = years.filter(Boolean)
+  const maxYear = validYears.length >= 2 ? Math.max(...validYears) : null
+
+  const validMileages = mileages.filter((v) => v != null)
+  const minMileage = validMileages.length >= 2 ? Math.min(...validMileages) : null
+
+  const validHps = hps.filter(Boolean)
+  const maxHp = validHps.length >= 2 ? Math.max(...validHps) : null
+
+  const validFuels = fuels.filter(Boolean)
+  const minFuel = validFuels.length >= 2 ? Math.min(...validFuels) : null
+
   const maxFeatures = Math.max(...featureCounts)
   const minFeatures = Math.min(...featureCounts)
 
-  const results = list.map((car, idx) => {
+  return list.map((car, idx) => {
     const theme = CAR_LED_THEMES[idx % CAR_LED_THEMES.length]
 
-    // Điểm 5 trụ cột
     const marketSavings =
       numOrNull(car.marketPrice) && numOrNull(car.price) && car.marketPrice > car.price
         ? car.marketPrice - car.price
         : 0
-    const valueScore = Math.min(99, Math.round(priceScores[idx] + (marketSavings > 0 ? 5 : 0)))
-    const conditionScore = Math.round(yearScores[idx] * 0.4 + mileageScores[idx] * 0.35 + gradeScores[idx] * 0.25)
-    const performanceScore = Math.round(hpScores[idx] * 0.6 + torqueScores[idx] * 0.4)
-    const ecoBonus = car.fuelType === 'ELECTRIC' ? 10 : car.fuelType === 'HYBRID' ? 7 : car.fuelType === 'DIESEL' ? 3 : 0
-    const economyScore = Math.min(99, Math.round(fuelScores[idx] + ecoBonus))
-    const comfortScore = Math.round(featureScores[idx] * 0.65 + seatScores[idx] * 0.35)
 
-    const overallScore = Math.round(
-      valueScore * 0.24 +
-        conditionScore * 0.22 +
-        performanceScore * 0.18 +
-        economyScore * 0.18 +
-        comfortScore * 0.18,
-    )
-
-    // Các điểm mạnh cụ thể của xe này
     const highlights = []
     if (minPrice != null && maxPrice !== minPrice && car.price === minPrice) {
       const diff = maxPrice - minPrice
       highlights.push({
         type: 'price',
-        text: `Giá tốt nhất (tiết kiệm tới ${formatPrice(diff)})`,
-        short: 'Giá tốt nhất',
+        text: `Giá thấp nhất nhóm (chênh ${formatPrice(diff)})`,
+        short: 'Giá thấp nhất',
         color: 'emerald',
       })
     }
@@ -311,7 +265,7 @@ export function analyzeCars(cars) {
         color: 'gold',
       })
     }
-    if (maxYear != null && new Set(years.filter(Boolean)).size > 1 && car.year === maxYear) {
+    if (maxYear != null && new Set(validYears).size > 1 && car.year === maxYear) {
       highlights.push({
         type: 'year',
         text: `Đời xe mới nhất (${car.year})`,
@@ -319,11 +273,7 @@ export function analyzeCars(cars) {
         color: 'cyan',
       })
     }
-    if (
-      minMileage != null &&
-      new Set(mileages.filter((v) => v != null)).size > 1 &&
-      car.mileage === minMileage
-    ) {
+    if (minMileage != null && new Set(validMileages).size > 1 && car.mileage === minMileage) {
       highlights.push({
         type: 'mileage',
         text: `Odo thấp nhất (${formatMileage(car.mileage)})`,
@@ -331,19 +281,15 @@ export function analyzeCars(cars) {
         color: 'cyan',
       })
     }
-    if (maxHp != null && new Set(hps.filter(Boolean)).size > 1 && car.specifications?.horsePower === maxHp) {
+    if (maxHp != null && new Set(validHps).size > 1 && car.specifications?.horsePower === maxHp) {
       highlights.push({
         type: 'power',
-        text: `Động cơ mạnh nhất (${maxHp} HP)`,
-        short: `${maxHp} HP mạnh nhất`,
+        text: `Công suất cao nhất (${maxHp} HP)`,
+        short: `${maxHp} HP cao nhất`,
         color: 'orange',
       })
     }
-    if (
-      minFuel != null &&
-      new Set(fuels.filter(Boolean)).size > 1 &&
-      car.specifications?.fuelConsumption === minFuel
-    ) {
+    if (minFuel != null && new Set(validFuels).size > 1 && car.specifications?.fuelConsumption === minFuel) {
       highlights.push({
         type: 'fuel',
         text: `Tiết kiệm nhiên liệu nhất (${minFuel} L/100km)`,
@@ -354,7 +300,7 @@ export function analyzeCars(cars) {
     if (maxFeatures > minFeatures && featureCounts[idx] === maxFeatures && maxFeatures > 0) {
       highlights.push({
         type: 'features',
-        text: `Trang bị phong phú nhất (${maxFeatures} tiện nghi)`,
+        text: `Nhiều trang bị nhất (${maxFeatures} tiện nghi)`,
         short: `${maxFeatures} tiện nghi`,
         color: 'violet',
       })
@@ -368,117 +314,140 @@ export function analyzeCars(cars) {
       })
     }
 
-    if (highlights.length === 0) {
-      highlights.push({
-        type: 'balanced',
-        text: `Lựa chọn cân bằng trong phân khúc ${labelFor(BODY_TYPE_LABEL, car.bodyType)}`,
-        short: 'Cấu hình cân bằng',
-        color: 'cyan',
-      })
-    }
-
     return {
       id: car._id,
       car,
       title: titleOfCar(car),
       theme,
       marketSavings,
-      scores: {
-        overall: overallScore,
-        value: valueScore,
-        condition: conditionScore,
-        performance: performanceScore,
-        economy: economyScore,
-        comfort: comfortScore,
-      },
       highlights,
-      winCount: highlights.length,
     }
   })
-
-  const maxOverall = Math.max(...results.map((r) => r.scores.overall))
-  return results.map((r) => ({
-    ...r,
-    isTopOverall: r.scores.overall === maxOverall,
-  }))
 }
 
-export const PERSONA_MODES = [
+export const AI_PREFERENCE_MODES = [
   {
     key: 'overall',
-    label: 'Toàn diện nhất',
-    badge: 'AI SMART PICK',
-    desc: 'Cân bằng hoàn hảo giữa giá bán, độ mới, vận hành và trang bị tiện nghi.',
-    weights: { value: 0.25, condition: 0.25, performance: 0.18, economy: 0.16, comfort: 0.16 },
+    label: 'Tổng quan cân bằng',
+    desc: 'Đối chiếu toàn diện giữa giá bán, đời xe, số Odo, vận hành và trang bị tiện nghi.',
   },
   {
     key: 'economy',
     label: 'Kinh tế & Tiết kiệm',
-    badge: 'TỐI ƯU TÀI CHÍNH',
-    desc: 'Ưu tiên mức giá hợp lý nhất, tiết kiệm nhiên liệu và chi phí sử dụng lâu dài.',
-    weights: { value: 0.45, economy: 0.35, condition: 0.12, comfort: 0.04, performance: 0.04 },
-  },
-  {
-    key: 'performance',
-    label: 'Mạnh mẽ & Cảm giác lái',
-    badge: 'ĐỘNG CƠ VƯỢT TRỘI',
-    desc: 'Ưu tiên công suất mã lực, mô-men xoắn và khả năng tăng tốc ấn tượng.',
-    weights: { performance: 0.55, condition: 0.18, comfort: 0.12, value: 0.08, economy: 0.07 },
+    desc: 'Tập trung vào mức giá đầu tư ban đầu và mức tiêu hao nhiên liệu công bố.',
   },
   {
     key: 'family',
     label: 'Gia đình & Tiện nghi',
-    badge: 'AN TOÀN & RỘNG RÃI',
-    desc: 'Ưu tiên không gian chỗ ngồi, đánh giá an toàn và danh sách tiện nghi đầy đủ.',
-    weights: { comfort: 0.52, condition: 0.2, economy: 0.12, value: 0.1, performance: 0.06 },
+    desc: 'Tập trung vào không gian chỗ ngồi, đánh giá an toàn và danh sách tiện nghi.',
+  },
+  {
+    key: 'performance',
+    label: 'Vận hành & Cảm giác lái',
+    desc: 'Tập trung vào công suất động cơ (HP), mô-men xoắn (Nm), hộp số và hệ dẫn động.',
   },
   {
     key: 'likenew',
-    label: 'Xe lướt như mới',
-    badge: 'ĐỘ MỚI CAO NHẤT',
-    desc: 'Ưu tiên xe đời cao, số Odo thấp nhất và phân hạng tình trạng A/B xuất sắc.',
-    weights: { condition: 0.62, comfort: 0.14, value: 0.1, performance: 0.07, economy: 0.07 },
+    label: 'Xe lướt & Độ mới',
+    desc: 'Tập trung vào năm sản xuất đời cao, số km đã đi (Odo) thấp và phân hạng tình trạng.',
   },
 ]
 
+// Giữ alias PERSONA_MODES để tương thích ngược nếu cần
+export const PERSONA_MODES = AI_PREFERENCE_MODES
+
 /**
- * Tạo gợi ý xe chiến thắng theo từng nhu cầu (Persona) của khách hàng.
+ * Dựng dữ liệu phân tích đối chiếu dự phòng tại client dựa trên 100% thông số thật
+ * (dùng khi mất kết nối mạng hoặc làm fallback tức thì, hoàn toàn không có điểm số / % phù hợp).
  */
-export function buildPersonaRecommendations(analysisList) {
-  if (!Array.isArray(analysisList) || analysisList.length === 0) return {}
+export function buildLocalAiFallbackInsight(cars, preference = 'overall') {
+  const list = Array.isArray(cars) ? cars : []
+  const pref = AI_PREFERENCE_MODES.find((m) => m.key === preference) ?? AI_PREFERENCE_MODES[0]
+  if (list.length === 0) return null
 
-  const output = {}
-  PERSONA_MODES.forEach((persona) => {
-    const ranked = analysisList
-      .map((item) => {
-        const w = persona.weights
-        const matchScore = Math.min(
-          99,
-          Math.round(
-            item.scores.value * w.value +
-              item.scores.condition * w.condition +
-              item.scores.performance * w.performance +
-              item.scores.economy * w.economy +
-              item.scores.comfort * w.comfort,
-          ),
-        )
-        return { ...item, matchScore }
-      })
-      .sort((a, b) => b.matchScore - a.matchScore)
+  const analysis = analyzeCars(list)
+  const prices = list.map((c) => numOrNull(c.price)).filter(Boolean)
+  const minPrice = prices.length >= 2 ? Math.min(...prices) : null
+  const maxPrice = prices.length >= 2 ? Math.max(...prices) : null
 
-    output[persona.key] = {
-      persona,
-      winner: ranked[0],
-      runnerUp: ranked[1] ?? null,
-      ranked,
+  const featureSets = list.map((c) => new Set(Array.isArray(c.specifications?.features) ? c.specifications.features : []))
+  const sharedFeatures =
+    featureSets.length >= 2
+      ? [...featureSets[0]].filter((item) => featureSets.every((s) => s.has(item)))
+      : []
+
+  const carInsights = analysis.map((item, idx) => {
+    const c = item.car
+    const specs = c.specifications ?? {}
+    const strengths = item.highlights.map((h) => h.text)
+    const considerations = []
+
+    const uniqueFeats = (Array.isArray(specs.features) ? specs.features : []).filter(
+      (f) => !sharedFeatures.includes(f),
+    )
+    if (uniqueFeats.length > 0) {
+      strengths.push(`Có thêm trang bị riêng: ${uniqueFeats.slice(0, 4).join(', ')}.`)
+    }
+
+    if (minPrice != null && maxPrice !== minPrice && numOrNull(c.price) && c.price > minPrice) {
+      considerations.push(
+        `Giá niêm yết cao hơn ${formatPrice(c.price - minPrice)} so với mẫu xe có giá thấp nhất trong bàn cân.`,
+      )
+    }
+
+    const missing = []
+    if (!numOrNull(specs.horsePower)) missing.push('công suất')
+    if (!numOrNull(specs.fuelConsumption)) missing.push('mức tiêu hao nhiên liệu')
+    if (!specs.safetyRating) missing.push('đánh giá an toàn')
+    if (missing.length > 0) {
+      considerations.push(
+        `Thông số ${missing.join(', ')} hiện "Chưa cập nhật" — nên kiểm tra thực tế tại showroom.`,
+      )
+    }
+
+    if (strengths.length === 0) {
+      strengths.push(
+        `Cấu hình ${labelFor(BODY_TYPE_LABEL, c.bodyType)}, nhiên liệu ${labelFor(FUEL_TYPE_LABEL, c.fuelType).toLowerCase()} với mức giá ${formatPrice(c.price)}.`,
+      )
+    }
+    if (considerations.length === 0) {
+      considerations.push(
+        'Nên đặt lịch xem xe và lái thử trực tiếp để đánh giá độ cách âm, cảm giác lái và nội thất thực tế.',
+      )
+    }
+
+    return {
+      carId: String(c._id ?? idx),
+      carTitle: `${item.title}${c.year ? ` (${c.year})` : ''}`,
+      strengths,
+      considerations,
+      bestFor:
+        item.highlights.length > 0
+          ? `Đáng cân nhắc nếu bạn ưu tiên: ${item.highlights.map((h) => h.short.toLowerCase()).join(', ')}.`
+          : `Phù hợp nếu bạn ưa chuộng dòng ${item.title} trong tầm giá ${formatPrice(c.price)}.`,
     }
   })
 
-  return output
+  const names = analysis.map((a) => a.title).join(' và ')
+  const priceText =
+    minPrice != null && maxPrice != null && minPrice !== maxPrice
+      ? `chênh lệch giá niêm yết khoảng ${formatPrice(maxPrice - minPrice)}`
+      : 'mức giá niêm yết tương đương nhau'
+
+  return {
+    preference: pref.key,
+    preferenceLabel: pref.label,
+    summary: `Đối chiếu nhanh giữa ${names}: các mẫu xe có ${priceText}. Mỗi lựa chọn có ưu thế riêng về năm sản xuất, số km đã đi (Odo) hoặc danh sách tiện nghi đi kèm.`,
+    recommendation: `Theo góc nhìn "${pref.label}": Không có mẫu xe nào thắng tuyệt đối ở mọi tiêu chí. Bạn nên đối chiếu các điểm mạnh/đánh đổi của từng xe bên dưới với ngân sách thực tế và đặt lịch lái thử trực tiếp tại Showroom.`,
+    carInsights,
+    missingDataNote: null,
+    disclaimer: AI_DISCLAIMER_TEXT,
+    source: 'local-fallback',
+  }
 }
 
 /**
- * Chấm điểm và gợi ý các xe tương tự từ kho xe để người dùng thêm hoặc đổi xe so sánh.
+ * Gợi ý các xe tương tự từ kho xe để người dùng thêm hoặc đổi xe so sánh.
  */
 export function recommendSimilarCars(currentCars, poolCars, limit = 4) {
   const current = Array.isArray(currentCars) ? currentCars : []
@@ -496,7 +465,7 @@ export function recommendSimilarCars(currentCars, poolCars, limit = 4) {
   const makes = new Set(current.map((c) => c.make).filter(Boolean))
 
   const scored = candidates.map((car) => {
-    let score = 50
+    let rankPriority = 1
     let reasonTag = 'Đáng cân nhắc'
     let reasonColor = 'cyan'
 
@@ -505,33 +474,30 @@ export function recommendSimilarCars(currentCars, poolCars, limit = 4) {
       avgPrice > 0 && car.price ? Math.abs(car.price - avgPrice) / avgPrice : 1
 
     if (sameBody && priceDiffRatio <= 0.25) {
-      score += 42
+      rankPriority = 5
       reasonTag = `Đối thủ ${labelFor(BODY_TYPE_LABEL, car.bodyType)} cùng tầm giá`
       reasonColor = 'gold'
-    } else if (sameBody) {
-      score += 28
-      reasonTag = `Cùng phân khúc ${labelFor(BODY_TYPE_LABEL, car.bodyType)}`
-      reasonColor = 'cyan'
     } else if (priceDiffRatio <= 0.2) {
-      score += 32
+      rankPriority = 4
       reasonTag = 'Cùng tầm ngân sách'
       reasonColor = 'emerald'
+    } else if (sameBody) {
+      rankPriority = 3
+      reasonTag = `Cùng phân khúc ${labelFor(BODY_TYPE_LABEL, car.bodyType)}`
+      reasonColor = 'cyan'
     } else if (car.make && makes.has(car.make)) {
-      score += 20
+      rankPriority = 2
       reasonTag = `Cùng thương hiệu ${car.make}`
       reasonColor = 'violet'
     } else if (car.price && avgPrice > 0 && car.price < avgPrice) {
-      score += 18
+      rankPriority = 2
       reasonTag = 'Lựa chọn tiết kiệm ngân sách'
       reasonColor = 'emerald'
     }
 
-    if (car.year >= 2022) score += 6
-    if (car.conditionGrade === 'A') score += 5
-
     return {
       car,
-      score,
+      rankPriority,
       reasonTag,
       reasonColor,
       fuelLabel: labelFor(FUEL_TYPE_LABEL, car.fuelType),
@@ -539,7 +505,7 @@ export function recommendSimilarCars(currentCars, poolCars, limit = 4) {
     }
   })
 
-  return scored.sort((a, b) => b.score - a.score).slice(0, limit)
+  return scored.sort((a, b) => b.rankPriority - a.rankPriority).slice(0, limit)
 }
 
 /**
@@ -552,7 +518,6 @@ export function buildSuggestedMatchups(poolCars, maxPairs = 3) {
   const pairs = []
   const usedPairKeys = new Set()
 
-  // Ưu tiên ghép các xe cùng bodyType hoặc gần tầm giá
   for (let i = 0; i < pool.length; i += 1) {
     for (let j = i + 1; j < pool.length; j += 1) {
       const a = pool[i]
@@ -564,28 +529,28 @@ export function buildSuggestedMatchups(poolCars, maxPairs = 3) {
       const avg = ((Number(a.price) || 0) + (Number(b.price) || 0)) / 2
       const priceDiff = avg > 0 ? Math.abs((a.price || 0) - (b.price || 0)) / avg : 1
 
-      let score = 40
+      let priority = 1
       let tag = 'Cặp đấu tâm điểm'
       if (sameBody && priceDiff <= 0.3) {
-        score = 95
+        priority = 4
         tag = `Đại chiến ${labelFor(BODY_TYPE_LABEL, a.bodyType)} cùng tầm giá`
-      } else if (sameBody) {
-        score = 80
-        tag = `So găng phân khúc ${labelFor(BODY_TYPE_LABEL, a.bodyType)}`
       } else if (priceDiff <= 0.2) {
-        score = 85
+        priority = 3
         tag = 'Đối đầu cùng tầm ngân sách'
+      } else if (sameBody) {
+        priority = 2
+        tag = `So găng phân khúc ${labelFor(BODY_TYPE_LABEL, a.bodyType)}`
       }
 
       usedPairKeys.add(key)
       pairs.push({
         id: key,
         tag,
-        score,
+        priority,
         cars: [a, b],
       })
     }
   }
 
-  return pairs.sort((x, y) => y.score - x.score).slice(0, maxPairs)
+  return pairs.sort((x, y) => y.priority - x.priority).slice(0, maxPairs)
 }
