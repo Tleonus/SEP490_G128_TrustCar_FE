@@ -11,11 +11,11 @@ const signal = new AbortController().signal
 beforeEach(() => vi.resetAllMocks())
 
 describe('auditLogsApi: đúng đường dẫn, tham số và signal (hợp đồng BE)', () => {
-  it('fetchAuditLogs gọi /admin/activity-logs với params và signal, trả items + meta', async () => {
+  it('fetchAuditLogs gọi /manage/audit-logs với params và signal, trả items + meta', async () => {
     api.get.mockResolvedValue({ data: { success: true, data: [{ id: '1' }], meta: { page: 1, total: 1 } } })
     const params = { page: 2, limit: 20, eventType: 'USER_LOGIN' }
     const result = await fetchAuditLogs(params, signal)
-    expect(api.get).toHaveBeenCalledWith('/admin/activity-logs', { params, signal })
+    expect(api.get).toHaveBeenCalledWith('/manage/audit-logs', { params, signal })
     expect(result).toEqual({ items: [{ id: '1' }], meta: { page: 1, total: 1 } })
   })
 
@@ -24,28 +24,49 @@ describe('auditLogsApi: đúng đường dẫn, tham số và signal (hợp đ�
     expect(await fetchAuditLogs({ page: 1, limit: 20 })).toEqual({ items: [], meta: null })
   })
 
-  it('fetchAuditLog gọi /admin/activity-logs/:id và trả bản ghi', async () => {
+  it('fetchAuditLog gọi /manage/audit-logs/:id và trả bản ghi', async () => {
     api.get.mockResolvedValue({ data: { success: true, data: { id: 'abc', changes: null } } })
     const result = await fetchAuditLog('abc', signal)
-    expect(api.get).toHaveBeenCalledWith('/admin/activity-logs/abc', { signal })
+    expect(api.get).toHaveBeenCalledWith('/manage/audit-logs/abc', { signal })
     expect(result).toEqual({ id: 'abc', changes: null })
   })
 
   it('id được mã hóa nên không thoát khỏi đường dẫn', async () => {
     api.get.mockResolvedValue({ data: { data: {} } })
     await fetchAuditLog('../users/1', signal)
-    expect(api.get.mock.calls[0][0]).toBe('/admin/activity-logs/..%2Fusers%2F1')
+    expect(api.get.mock.calls[0][0]).toBe('/manage/audit-logs/..%2Fusers%2F1')
   })
 
-  it('fetchAuditMeta gọi /admin/activity-logs/meta và chuẩn hóa kết quả', async () => {
-    api.get.mockResolvedValue({ data: { data: { eventTypes: ['A', 'B'], targetModels: ['Car'] } } })
-    expect(await fetchAuditMeta(signal)).toEqual({ eventTypes: ['A', 'B'], targetModels: ['Car'] })
-    expect(api.get).toHaveBeenCalledWith('/admin/activity-logs/meta', { signal })
+  it('fetchAuditMeta gọi /manage/audit-logs/meta và chuẩn hóa kết quả', async () => {
+    api.get.mockResolvedValue({
+      data: {
+        data: {
+          eventTypes: ['A', 'B'],
+          targetModels: ['Car'],
+          actions: ['CREATE', 'OTHER'],
+          eventActions: { A: 'CREATE', B: 'OTHER' },
+          actorEmails: ['admin@trustcar.vn'],
+        },
+      },
+    })
+    expect(await fetchAuditMeta(signal)).toEqual({
+      eventTypes: ['A', 'B'],
+      targetModels: ['Car'],
+      actions: ['CREATE', 'OTHER'],
+      eventActions: { A: 'CREATE', B: 'OTHER' },
+      actorEmails: ['admin@trustcar.vn'],
+    })
+    expect(api.get).toHaveBeenCalledWith('/manage/audit-logs/meta', { signal })
   })
 
-  it('fetchAuditMeta thiếu dữ liệu → hai mảng rỗng', async () => {
+  it('fetchAuditMeta thiếu dữ liệu → mảng rỗng và bảng hành động rỗng', async () => {
     api.get.mockResolvedValue({ data: {} })
-    expect(await fetchAuditMeta()).toEqual({ eventTypes: [], targetModels: [] })
+    expect(await fetchAuditMeta()).toEqual({ eventTypes: [], targetModels: [], actions: [], eventActions: {}, actorEmails: [] })
+  })
+
+  it('fetchAuditMeta: giá trị sai kiểu được thay bằng giá trị rỗng', async () => {
+    api.get.mockResolvedValue({ data: { data: { eventTypes: 'x', actions: null, eventActions: 'y', actorEmails: 5 } } })
+    expect(await fetchAuditMeta()).toEqual({ eventTypes: [], targetModels: [], actions: [], eventActions: {}, actorEmails: [] })
   })
 
   it('không bắt lỗi: lỗi axios được ném nguyên vẹn lên hook', async () => {

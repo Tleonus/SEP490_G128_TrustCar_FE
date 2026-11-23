@@ -1,57 +1,101 @@
 import { Pagination, Table } from 'antd'
 import { PAGE_SIZE } from '../constants/auditConstants'
-import { describeActor, describeTarget, eventLabel } from '../utils/auditLabels'
-import { formatAuditTime } from '../utils/formatAuditTime'
+import ActionTag from './ActionTag'
+import { actionTone } from '../utils/actionTone'
+import { describeActor, eventLabel } from '../utils/auditLabels'
+import { auditTimeParts, formatAuditTime } from '../utils/formatAuditTime'
 import { formatValue } from '../utils/formatValue'
 import styles from '../styles/AuditLogs.module.css'
 
-/** Một ô chữ thuần (mọi giá trị đi qua `formatValue`, render bằng JSX thường). */
-const Text = ({ value }) => <span className={styles.wrap}>{formatValue(value).text}</span>
+const clean = (value) => (typeof value === 'string' ? value.trim() : '')
+
+/** Người thực hiện: avatar chữ cái đầu + email (hệ thống: chữ nghiêng nhạt). */
+function ActorCell({ actor }) {
+  const info = describeActor(actor)
+  const email = clean(actor?.email)
+  const initial = info.system ? 'HT' : (email ? email[0] : '?')
+  return (
+    <div className={styles.actor}>
+      <span className={styles.avatar} aria-hidden="true">{initial}</span>
+      <span className={info.system ? styles.actorSystem : styles.actorEmail}>{info.text}</span>
+    </div>
+  )
+}
+
+/** Đối tượng: chip loại + mã (font mono); không có gì → "—". */
+function TargetCell({ target }) {
+  const model = clean(target?.model)
+  const code = clean(target?.code)
+  if (!model && !code) return <span className={styles.muted}>—</span>
+  return (
+    <div className={styles.target}>
+      {model && <span className={styles.modelChip}>{formatValue(model).text}</span>}
+      {code && <span className={styles.targetCode}>{formatValue(code).text}</span>}
+    </div>
+  )
+}
 
 function buildColumns(onOpen) {
   return [
     {
       title: 'Thời gian',
       key: 'time',
-      width: 170,
-      render: (_, row) => (
-        <button type="button" className={styles.timeButton} onClick={() => onOpen(row)} aria-label={`Xem chi tiết: ${eventLabel(row.eventType)} lúc ${formatAuditTime(row.createdAt)}`}>
-          {formatAuditTime(row.createdAt)}
-        </button>
-      ),
-    },
-    {
-      title: 'Sự kiện',
-      key: 'event',
-      width: 210,
+      width: 128,
       render: (_, row) => {
-        const label = eventLabel(row.eventType)
+        const { date, clock } = auditTimeParts(row.createdAt)
         return (
-          <div className={styles.stack}>
-            <strong className={styles.wrap}>{label}</strong>
-            {label !== row.eventType && <span className={styles.code}>{row.eventType}</span>}
-          </div>
+          <button
+            type="button"
+            className={styles.timeButton}
+            onClick={() => onOpen(row)}
+            aria-label={`Xem chi tiết: ${eventLabel(row.eventType)} lúc ${formatAuditTime(row.createdAt)}`}
+          >
+            {date ? (
+              <span className={styles.timeCell}>
+                <span className={styles.timeClock}>{clock}</span>
+                <span className={styles.timeDate}>{date}</span>
+              </span>
+            ) : <span className={styles.muted}>—</span>}
+          </button>
         )
       },
     },
     {
-      title: 'Người thực hiện',
-      key: 'actor',
-      width: 200,
+      title: 'Sự kiện',
+      key: 'event',
+      width: 240,
       render: (_, row) => {
-        const actor = describeActor(row.actor)
-        return <span className={actor.system ? styles.muted : styles.wrap}>{actor.text}</span>
+        const label = eventLabel(row.eventType)
+        return (
+          <div className={styles.eventCell}>
+            <span className={styles.eventDot} style={{ background: actionTone(row.action).dot }} aria-hidden="true" />
+            <div className={styles.eventBody}>
+              <span className={`${styles.eventName} ${styles.wrap}`}>{label || '—'}</span>
+              {label !== row.eventType && row.eventType && <span className={styles.eventCode}>{row.eventType}</span>}
+            </div>
+          </div>
+        )
       },
     },
-    { title: 'Đối tượng', key: 'target', width: 170, render: (_, row) => <Text value={describeTarget(row.target)} /> },
-    { title: 'Tóm tắt', key: 'summary', render: (_, row) => <Text value={row.summary} /> },
-    { title: 'IP', key: 'ip', width: 120, render: (_, row) => <Text value={row.ipAddress} /> },
+    // KAN-92: nhóm hành động do BE suy ra từ mã sự kiện
+    { title: 'Hành động', key: 'action', width: 140, render: (_, row) => <ActionTag action={row.action} /> },
+    { title: 'Người thực hiện', key: 'actor', width: 230, render: (_, row) => <ActorCell actor={row.actor} /> },
+    { title: 'Đối tượng', key: 'target', width: 180, render: (_, row) => <TargetCell target={row.target} /> },
+    {
+      title: 'Tóm tắt',
+      key: 'summary',
+      render: (_, row) => {
+        const { text, full } = formatValue(row.summary)
+        return <span className={styles.summary} title={full}>{text}</span>
+      },
+    },
+    { title: 'IP', key: 'ip', width: 130, render: (_, row) => <span className={styles.ip}>{formatValue(row.ipAddress).text}</span> },
   ]
 }
 
 /**
- * Bảng sự kiện (6 cột) có phân trang 20 dòng. Mở chi tiết bằng nút ở cột "Thời gian" (Tab → Enter) hoặc bấm vào dòng.
- * Bảng cuộn ngang BÊN TRONG khung khi hẹp, không làm trang cuộn.
+ * Bảng sự kiện (7 cột, KAN-92 thêm "Hành động") có phân trang 20 dòng. Mở chi tiết bằng nút ở cột "Thời gian" (Tab → Enter) hoặc bấm vào dòng.
+ * Bảng cuộn ngang BÊN TRONG khung khi hẹp, không làm trang cuộn. Khung thẻ (tiêu đề, tổng số) do trang cha vẽ.
  *
  * @ears .sdd/features/system-audit-logs/SPEC.md#REQ-F03
  * @ears .sdd/features/system-audit-logs/SPEC.md#REQ-F06
@@ -68,25 +112,22 @@ export default function AuditTable({ items, page, total, loading = false, onPage
     <>
       <div className={styles.tableWrap} aria-busy={loading || undefined}>
         <Table
+          className={styles.table}
           columns={buildColumns(onOpen)}
           dataSource={items}
           rowKey="id"
           loading={loading}
           pagination={false}
-          scroll={{ x: 960 }}
+          scroll={{ x: 1180 }}
           size="middle"
           onRow={(row) => ({ onClick: (event) => { if (!event.target.closest('button')) onOpen(row) }, style: { cursor: 'pointer' } })}
         />
       </div>
-      <Pagination
-        current={page}
-        pageSize={PAGE_SIZE}
-        total={total}
-        showSizeChanger={false}
-        hideOnSinglePage
-        onChange={onPageChange}
-        style={{ alignSelf: 'flex-end' }}
-      />
+      {total > PAGE_SIZE && (
+        <div className={styles.cardFoot}>
+          <Pagination current={page} pageSize={PAGE_SIZE} total={total} showSizeChanger={false} onChange={onPageChange} />
+        </div>
+      )}
     </>
   )
 }

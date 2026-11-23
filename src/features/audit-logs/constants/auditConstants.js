@@ -3,6 +3,29 @@
 
 export const PAGE_SIZE = 20
 
+/**
+ * KAN-92: nhãn tiếng Việt của nhóm hành động (BE suy ra từ mã sự kiện, xem `auditActions.js` của BE).
+ * Thứ tự hiển thị lấy từ `/meta.actions`; mã lạ hiện nguyên mã.
+ */
+export const ACTION_LABELS = Object.freeze({
+  CREATE: 'Tạo mới',
+  UPDATE: 'Cập nhật',
+  DELETE: 'Xóa',
+  STATUS_CHANGE: 'Đổi trạng thái',
+  AUTH: 'Đăng nhập / bảo mật',
+  OTHER: 'Khác',
+})
+
+/** Màu thẻ (preset của antd `Tag`) cho từng nhóm hành động; mã lạ dùng màu mặc định. */
+export const ACTION_COLORS = Object.freeze({
+  CREATE: 'green',
+  UPDATE: 'blue',
+  DELETE: 'red',
+  STATUS_CHANGE: 'orange',
+  AUTH: 'purple',
+  OTHER: 'default',
+})
+
 export const SYSTEM_ACTOR_LABEL = 'Hệ thống'
 export const UNKNOWN_ACTOR_LABEL = '(không rõ email)'
 
