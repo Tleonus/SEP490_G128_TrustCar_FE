@@ -1,0 +1,108 @@
+.page {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: #0d0e10;
+  color: #f4f4f4;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --sr-pad: clamp(16px, 2.4vw, 36px);
+}
+.page p { color: inherit; }
+.canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; outline: none; cursor: grab; }
+
+/* thanh trên */
+.topBar { position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 14px var(--sr-pad); pointer-events: none; }
+.topBar > * { pointer-events: auto; }
+.brand { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; }
+.brand:hover { color: #fff; }
+.brandLogo { width: 40px; height: 40px; object-fit: contain; }
+.brand span { display: flex; flex-direction: column; line-height: 1.1; }
+.brand strong { font-size: 17px; font-weight: 700; letter-spacing: 0.04em; }
+.brand small { font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; opacity: 0.7; }
+.topActions { display: flex; gap: 8px; align-items: center; }
+.realism, .close { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 14px; border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 4px; background: rgba(12, 13, 15, 0.55); color: #f4f4f4; font-size: 12px; letter-spacing: 0.06em; cursor: pointer; text-decoration: none; backdrop-filter: blur(6px); }
+.close:hover, .realism:hover { color: #fff; border-color: rgba(255, 255, 255, 0.5); }
+.realism em { font-style: normal; opacity: 0.6; font-variant-numeric: tabular-nums; }
+.dotOn, .dotOff, .dotBusy { width: 7px; height: 7px; border-radius: 50%; background: #f4f4f4; }
+.dotOff { background: transparent; border: 1px solid #aaa; }
+.dotBusy { background: #c9a227; animation: pulse 1s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: 0.25; } }
+
+/* cột 01–04 */
+.stopNav { position: absolute; left: var(--sr-pad); top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 6px; }
+.stopItem, .stopActive { display: flex; align-items: center; gap: 10px; min-height: 28px; padding: 0; border: 0; background: none; color: rgba(255, 255, 255, 0.5); font-size: 11px; letter-spacing: 0.08em; cursor: pointer; text-align: left; }
+.stopActive { color: #fff; }
+.stopNum { font-variant-numeric: tabular-nums; width: 18px; }
+.stopLine { width: 18px; height: 1px; background: currentColor; transition: width 0.3s; }
+.stopActive .stopLine { width: 44px; }
+.stopLabel { opacity: 0; transition: opacity 0.3s; white-space: nowrap; }
+.stopActive .stopLabel, .stopItem:hover .stopLabel { opacity: 1; }
+
+/* chữ lớn góc dưới trái */
+.caption { position: absolute; left: var(--sr-pad); bottom: clamp(20px, 5vh, 56px); max-width: min(560px, 60vw); text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55); animation: rise 0.6s ease both; }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } }
+.eyebrow { margin: 0 0 8px; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255, 255, 255, 0.82) !important; }
+.title { margin: 0; font-size: clamp(30px, 4.4vw, 58px); font-weight: 300; line-height: 1.05; color: #fff; }
+.text { margin: 10px 0 0; max-width: 420px; font-size: 14px; line-height: 1.5; color: rgba(255, 255, 255, 0.86) !important; }
+.scrollHint { position: absolute; left: 50%; bottom: 28px; transform: translateX(-50%); margin: 0; font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; opacity: 0.75; animation: bob 2s ease-in-out infinite; }
+@keyframes bob { 50% { transform: translate(-50%, 6px); } }
+.empty { margin: 14px 0 0; font-size: 14px; }
+.empty a { color: #c9a227; }
+
+/* dàn xe: 2 kệ */
+.shelves { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 10px 28px; }
+.shelf { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.shelfLabel { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255, 255, 255, 0.7); }
+.shelfEmpty { font-size: 14px; color: rgba(255, 255, 255, 0.6); font-style: italic; }
+.carLink { padding: 4px 0; border: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.6); background: none; color: #fff; font-size: 14px; cursor: pointer; }
+.carLink:hover { border-color: #c9a227; color: #c9a227; }
+.swap { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 12px; border: 1px solid rgba(255, 255, 255, 0.35); border-radius: 4px; background: rgba(0, 0, 0, 0.35); color: #fff; font-size: 12px; cursor: pointer; }
+.swap:hover { border-color: #fff; }
+
+/* màu sơn */
+.paints { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; max-width: 520px; }
+.paint, .paintOn { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 12px; border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 4px; background: rgba(10, 11, 13, 0.55); color: #f4f4f4; font-size: 12px; cursor: pointer; }
+.paintOn { border-color: #fff; background: rgba(255, 255, 255, 0.14); }
+.paint:disabled { opacity: 0.5; cursor: wait; }
+.swatch { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.6); }
+
+/* đặt lịch */
+.bookBar { position: absolute; right: var(--sr-pad); bottom: clamp(20px, 5vh, 56px); }
+.bookBar :global(.ant-btn), .bookLink { height: 44px; padding: 0 22px; border-radius: 4px; background: #f4f4f4; color: #111; border: 0; font-size: 13px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; }
+.bookBar :global(.ant-btn:hover) { background: #fff !important; color: #000 !important; }
+
+/* che màn và thanh tải */
+.cover { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; background: #0d0e10; text-align: center; padding: 24px; }
+.cover p { margin: 0; font-size: 14px; letter-spacing: 0.08em; }
+.coverBrand { font-size: 28px !important; font-weight: 300; letter-spacing: 0.4em !important; }
+.loadBar { position: absolute; left: 50%; top: 70px; transform: translateX(-50%); width: min(320px, 70vw); height: 2px; background: rgba(255, 255, 255, 0.15); }
+.loadBar span { display: block; height: 100%; background: #f4f4f4; transition: width 0.2s; }
+.loadBar em { position: absolute; top: 8px; left: 0; right: 0; text-align: center; font-size: 11px; font-style: normal; letter-spacing: 0.12em; opacity: 0.8; }
+
+@media (max-width: 720px) {
+  .stopNav { top: 72px; transform: none; flex-direction: row; gap: 10px; }
+  .stopLine, .stopLabel { display: none; }
+  .stopItem, .stopActive { min-height: 32px; min-width: 32px; justify-content: center; border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 50%; }
+  .stopActive { border-color: #fff; }
+  .caption { max-width: none; right: var(--sr-pad); bottom: 84px; }
+  .text { font-size: 13px; }
+  .brand span { display: none; }
+  .realism { white-space: nowrap; }
+  .realism em { display: none; }
+  .realism { padding: 0 10px; }
+  .bookBar { left: var(--sr-pad); bottom: 20px; }
+  .bookBar :global(.ant-btn), .bookLink { width: 100%; justify-content: center; }
+}
+
+
+/* chuyển điểm dừng (cuộn chuột dùng để phóng to) */
+.stepper { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.stepBtns { display: flex; gap: 8px; }
+.stepBtns button { display: inline-flex; align-items: center; gap: 8px; min-height: 38px; padding: 0 16px; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 999px; background: rgba(10, 11, 13, 0.6); backdrop-filter: blur(8px); color: #f4f4f4; font-size: 12px; letter-spacing: 0.04em; cursor: pointer; }
+.stepBtns button:hover:not(:disabled) { border-color: #fff; }
+.stepBtns button:disabled { opacity: 0.35; cursor: default; }
+.stepBtns .stepNext { background: rgba(244, 244, 244, 0.92); color: #111; border-color: transparent; font-weight: 600; }
+.stepHint { margin: 0; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255, 255, 255, 0.7) !important; }
+@media (max-width: 720px) {
+  .stepper { display: none; }
+}

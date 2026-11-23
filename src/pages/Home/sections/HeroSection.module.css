@@ -130,6 +130,71 @@
   margin: 0;
 }
 
+/* Nút Showroom 3D: góc trên phải, nằm ngoài carousel nên không đổi theo slide */
+.ctaLayer {
+  position: absolute;
+  top: 28px;
+  left: 0;
+  right: 0;
+  z-index: 21;
+  pointer-events: none;
+}
+
+.ctaLayer :global(.container) {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.showroomCta {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 20px 0 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(244, 216, 121, 0.55);
+  background: rgba(7, 17, 34, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  box-shadow: 0 10px 28px rgba(3, 8, 20, 0.45), 0 0 18px rgba(244, 216, 121, 0.18);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.showroomCta:hover {
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 14px 32px rgba(3, 8, 20, 0.5), 0 0 24px rgba(244, 216, 121, 0.35);
+}
+
+.ctaBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #d9b84a;
+  color: #0b1220;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+@media (max-width: 560px) {
+  .ctaLayer {
+    top: 16px;
+  }
+
+  .showroomCta {
+    font-size: 14px;
+    min-height: 40px;
+  }
+}
+
 /* Thanh tìm kiếm nằm ngoài carousel nên giữ nguyên khi đổi slide */
 .searchLayer {
   position: absolute;

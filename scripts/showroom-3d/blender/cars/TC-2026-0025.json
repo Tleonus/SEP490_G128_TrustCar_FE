@@ -1,0 +1,8 @@
+{
+  "_note": "VinFast Lux SA2.0 Premium – mô hình Hyper3D Rodin (base_basic_pbr.glb, De-light nên texture ra xanh dương). Đầu xe ở -Y. paint_color: màu sơn thật (đen) dùng làm 'Màu gốc' trên web.",
+  "front": "-y",
+  "length": 4.94,
+  "belt": 0.655,
+  "rear_belt": 0.7,
+  "paint_color": "#0e1013"
+}

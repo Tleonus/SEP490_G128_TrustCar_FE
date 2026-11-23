@@ -46,6 +46,8 @@ const ProfilePage = lazy(() => import('../features/user-profile-settings/pages/P
 const AuditLogsPage = lazy(() => import('../features/audit-logs/pages/AuditLogsPage.jsx'))
 // KAN-61: trang tính trả góp (công khai)
 const InstallmentPage = lazy(() => import('../features/installment-calculator/pages/InstallmentPage.jsx'))
+// Showroom 3D toàn màn hình (tải lười three.js, không có header/footer)
+const Showroom3DPage = lazy(() => import('../features/showroom-3d/pages/Showroom3DPage.jsx'))
 
 export default function AppRouter() {
   return (
@@ -98,6 +100,7 @@ export default function AppRouter() {
         />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
+      <Route path="/showroom-3d" element={<Suspense fallback={<LoadingState />}><Showroom3DPage /></Suspense>} />
       <Route path="/quan-ly/nhap-xe" element={<LegacyRedirect to={ADMIN_PATHS.vehicleIntake} />} />
       <Route
         path="/admin"

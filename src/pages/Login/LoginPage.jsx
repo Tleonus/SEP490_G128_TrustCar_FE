@@ -8,6 +8,7 @@ import { useAuthStore } from '../../store/useAuthStore'
 import styles from './LoginPage.module.css'
 import { signInWithGoogle } from '../../config/firebase'
 import { ADMIN_PATHS } from '../../router/paths'
+import { loginDestination } from '../../features/test-drive-booking/utils/resumeBooking'
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -35,8 +36,8 @@ export default function LoginPage() {
         : ADMIN_PATHS.overview
       navigate(destination, { replace: true })
     } else {
-      const redirectTo = location.state?.from?.pathname || '/'
-      navigate(redirectTo, { replace: true })
+      // quay về đúng trang đang xem (giữ ?query, ví dụ ?datlich= để mở lại hộp đặt lịch lái thử)
+      navigate(loginDestination(location.state?.from), { replace: true })
     }
   }
 
@@ -49,7 +50,7 @@ export default function LoginPage() {
         navigate('/hoan-tat-ho-so', { replace: true })
         return
       }
-      navigate('/', { replace: true })
+      navigate(loginDestination(location.state?.from), { replace: true })
     } catch (googleError) {
       useAuthStore.setState({ error: googleError.message || 'Đăng nhập Google thất bại.' })
     }

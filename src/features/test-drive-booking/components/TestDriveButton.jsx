@@ -1,15 +1,17 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from 'antd'
 import { CalendarOutlined } from '@ant-design/icons'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../../store/useAuthStore'
 import BookingModal from './BookingModal'
 import { toCarItem } from '../utils/carSelection'
+import { pendingBookingId, resumeLocation, withoutResume } from '../utils/resumeBooking'
 
 /**
- * Nút "Đặt lịch lái thử" ở trang chi tiết xe.
+ * Nút "Đặt lịch lái thử" (trang chi tiết xe, showroom 3D).
  * - Ẩn nếu xe không có id hợp lệ (dữ liệu mẫu), vì BE chỉ nhận id thật.
- * - Chưa đăng nhập: chuyển tới /dang-nhap kèm trang hiện tại để quay lại sau khi đăng nhập.
+ * - Chưa đăng nhập: chuyển tới /dang-nhap, nhớ trang hiện tại + xe (?datlich=<id>); đăng nhập xong quay về
+ *   đúng trang đó và tự mở lại hộp đặt lịch cho xe đó.
  * - Đã đăng nhập: mở hộp thoại; quyền/hồ sơ do BE quyết định (403 được hiển thị rõ trong hộp thoại).
  *
  * @ears .sdd/features/test-drive-booking/SPEC.md#REQ-F01
@@ -23,11 +25,20 @@ export default function TestDriveButton({ car }) {
   const [open, setOpen] = useState(false)
 
   const item = toCarItem(car)
+  const resume = Boolean(item) && isAuthenticated && pendingBookingId(location.search) === item.id
+
+  // Vừa đăng nhập xong và quay về: mở hộp đặt lịch, bỏ ?datlich để tải lại trang không mở lại lần nữa.
+  useEffect(() => {
+    if (!resume) return
+    setOpen(true) // eslint-disable-line react-hooks/set-state-in-effect -- phản ứng một lần với đường dẫn (hệ thống ngoài)
+    navigate({ pathname: location.pathname, search: withoutResume(location.search), hash: location.hash }, { replace: true })
+  }, [resume, navigate, location.pathname, location.search, location.hash])
+
   if (!item) return null
 
   function handleClick() {
     if (!isAuthenticated) {
-      navigate('/dang-nhap', { state: { from: location } })
+      navigate('/dang-nhap', { state: { from: resumeLocation(location, item.id) } })
       return
     }
     setOpen(true)
