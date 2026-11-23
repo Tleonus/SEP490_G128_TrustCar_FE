@@ -2,11 +2,11 @@
 // Không chấm điểm giả lập (/100), không tính % độ phù hợp ảo và không vẽ thanh điểm vô căn cứ.
 
 import { formatPrice, formatMileage } from '../../../utils/format'
+import { AI_DISCLAIMER_COMPARE } from '../../../constants/aiDisclaimer'
 import { BODY_TYPE_LABEL, FUEL_TYPE_LABEL, labelFor } from '../constants/compareLabels'
 import { isDifferent } from './compareRows'
 
-export const AI_DISCLAIMER_TEXT =
-  'Lưu ý: Nội dung phân tích và gợi ý trên được tạo tự động bởi AI chỉ nhằm mục đích tham khảo nhanh dựa trên thông số niêm yết. AI có thể sai sót hoặc chưa phản ánh hết tình trạng thực tế — quý khách vui lòng đối chiếu bảng thông số kỹ thuật chi tiết và đặt lịch xem xe/lái thử trực tiếp tại Showroom TrustCar.'
+export const AI_DISCLAIMER_TEXT = AI_DISCLAIMER_COMPARE
 
 export const CAR_LED_THEMES = [
   {
