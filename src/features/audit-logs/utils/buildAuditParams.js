@@ -4,17 +4,18 @@
 import { PAGE_SIZE } from '../constants/auditConstants'
 
 /** Bộ lọc rỗng (mọi ô trống). */
-export const EMPTY_FILTERS = Object.freeze({ eventType: '', targetModel: '', actorEmail: '', from: '', to: '' })
+// KAN-92: thêm `action` (nhóm hành động). `actorEmail` giờ được chọn từ danh sách người có trong nhật ký.
+export const EMPTY_FILTERS = Object.freeze({ action: '', eventType: '', targetModel: '', actorEmail: '', from: '', to: '' })
 
 const clean = (value) => (typeof value === 'string' ? value.trim() : '')
 
 /**
- * Tham số gửi cho `GET /admin/activity-logs`: chỉ các ô có giá trị (cắt khoảng trắng), `page`, `limit=20`.
+ * Tham số gửi cho `GET /manage/audit-logs`: chỉ các ô có giá trị (cắt khoảng trắng), `page`, `limit=20`.
  * Ngày là `YYYY-MM-DD` (giờ VN) gửi nguyên cho BE.
  * @ears .sdd/features/system-audit-logs/SPEC.md#REQ-F04
  * @param {Partial<typeof EMPTY_FILTERS>} [filters]
  * @param {number} [page]
- * @returns {{ page: number, limit: number, eventType?: string, targetModel?: string, actorEmail?: string, from?: string, to?: string }}
+ * @returns {{ page: number, limit: number, action?: string, eventType?: string, targetModel?: string, actorEmail?: string, from?: string, to?: string }}
  */
 export function buildAuditParams(filters = {}, page = 1) {
   const params = { page: Math.max(1, Math.floor(Number(page)) || 1), limit: PAGE_SIZE }

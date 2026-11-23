@@ -14,14 +14,27 @@ const formatter = new Intl.DateTimeFormat('en-GB', {
 })
 
 /**
+ * Tách `createdAt` thành ngày và giờ Việt Nam để bảng hiển thị hai dòng (giờ đậm, ngày nhạt).
+ * @param {string|number|Date|null|undefined} value
+ * @returns {{ date: string, clock: string }} Chuỗi rỗng cho cả hai khi thiếu/không hợp lệ.
+ */
+export function auditTimeParts(value) {
+  if (value === null || value === undefined || value === '') return { date: '', clock: '' }
+  const date = value instanceof Date ? value : new Date(value)
+  if (Number.isNaN(date.getTime())) return { date: '', clock: '' }
+  const p = Object.fromEntries(formatter.formatToParts(date).map((part) => [part.type, part.value]))
+  return {
+    date: `${p.day}/${p.month}/${p.year}`,
+    clock: `${p.hour}:${p.minute}:${p.second}`,
+  }
+}
+
+/**
  * @ears .sdd/features/system-audit-logs/SPEC.md#REQ-F03
  * @param {string|number|Date|null|undefined} value Chuỗi ISO của `createdAt`
  * @returns {string} `15/11/2026 00:30:00`, hoặc chuỗi rỗng nếu thiếu/không hợp lệ
  */
 export function formatAuditTime(value) {
-  if (value === null || value === undefined || value === '') return ''
-  const date = value instanceof Date ? value : new Date(value)
-  if (Number.isNaN(date.getTime())) return ''
-  const p = Object.fromEntries(formatter.formatToParts(date).map((part) => [part.type, part.value]))
-  return `${p.day}/${p.month}/${p.year} ${p.hour}:${p.minute}:${p.second}`
+  const { date, clock } = auditTimeParts(value)
+  return date ? `${date} ${clock}` : ''
 }

@@ -1,43 +1,81 @@
-import { Descriptions, Drawer, Skeleton } from 'antd'
+import { useState } from 'react'
+import { Drawer, Skeleton, Switch } from 'antd'
+import { CodeOutlined, DesktopOutlined, InfoCircleOutlined, SwapOutlined } from '@ant-design/icons'
+import ActionTag from './ActionTag'
+import AuditNotice from './AuditNotice'
+import ChangesTable from './ChangesTable'
 import { describeActor, describeTarget, eventLabel } from '../utils/auditLabels'
 import { diffChanges } from '../utils/diffChanges'
 import { formatAuditTime } from '../utils/formatAuditTime'
 import { formatValue, prettyJson } from '../utils/formatValue'
-import AuditNotice from './AuditNotice'
-import ChangesTable from './ChangesTable'
 import styles from '../styles/AuditLogs.module.css'
 
-const plain = (value) => <span className={styles.wrap}>{formatValue(value).full}</span>
+const full = (value) => formatValue(value).full
+
+function Panel({ id, icon, title, extra, children }) {
+  return (
+    <section className={styles.panel} aria-labelledby={id}>
+      <div className={styles.panelHead}>
+        <h3 id={id} className={styles.panelTitle}>{icon} {title}</h3>
+        {extra}
+      </div>
+      {children}
+    </section>
+  )
+}
 
 /** Thông tin có sẵn ngay từ dòng danh sách (hiện trước khi chi tiết tải xong). */
-function summaryItems(row) {
+function GeneralInfo({ row }) {
   const actor = describeActor(row.actor)
-  const actorId = row.actor?.id ? ` (id: ${row.actor.id})` : ''
-  const targetId = row.target?.id ? ` (id: ${row.target.id})` : ''
-  return [
-    { key: 'code', label: 'Mã sự kiện', children: plain(row.eventType) },
-    { key: 'time', label: 'Thời gian', children: formatAuditTime(row.createdAt) },
-    { key: 'actor', label: 'Người thực hiện', children: plain(`${actor.text}${actorId}`) },
-    { key: 'target', label: 'Đối tượng', children: plain(`${describeTarget(row.target)}${targetId}`) },
-    { key: 'summary', label: 'Tóm tắt', children: plain(row.summary) },
-    { key: 'ip', label: 'Địa chỉ IP', children: plain(row.ipAddress) },
-  ]
+  return (
+    <Panel id="audit-detail-general" icon={<InfoCircleOutlined aria-hidden="true" />} title="Thông tin chung">
+      <dl className={styles.info}>
+        <dt>Người thực hiện</dt>
+        <dd className={actor.system ? styles.muted : undefined}>{actor.text}</dd>
+        {row.actor?.id && (<><dt>Mã người dùng</dt><dd className={styles.mono}>{full(row.actor.id)}</dd></>)}
+        <dt>Đối tượng</dt>
+        <dd>{describeTarget(row.target)}</dd>
+        {row.target?.id && (<><dt>Mã đối tượng</dt><dd className={styles.mono}>{full(row.target.id)}</dd></>)}
+        <dt>Tóm tắt</dt>
+        <dd>{full(row.summary)}</dd>
+        <dt>Địa chỉ IP</dt>
+        <dd className={styles.mono}>{full(row.ipAddress)}</dd>
+      </dl>
+    </Panel>
+  )
 }
 
 function DetailBody({ data }) {
-  const hasChanges = diffChanges(data.changes).length > 0
+  const [onlyChanged, setOnlyChanged] = useState(false)
+  const rows = diffChanges(data.changes)
+  const changedCount = rows.filter((row) => row.changed).length
+  const canFilter = changedCount > 0 && changedCount < rows.length
+
+  const toggle = canFilter && (
+    <label className={styles.diffToggle}>
+      <Switch size="small" checked={onlyChanged} onChange={setOnlyChanged} />
+      Chỉ trường đã đổi
+    </label>
+  )
+
   return (
     <>
-      <h3 className={styles.sectionTitle}>Thay đổi (trước / sau)</h3>
-      {hasChanges
-        ? <ChangesTable changes={data.changes} />
-        : <p className={styles.muted}>Sự kiện này không ghi lại thay đổi chi tiết.</p>}
+      <Panel id="audit-detail-changes" icon={<SwapOutlined aria-hidden="true" />} title="Thay đổi (trước / sau)" extra={toggle}>
+        {rows.length > 0 ? (
+          <>
+            <p className={styles.panelNote}>{changedCount} / {rows.length} trường có thay đổi</p>
+            <ChangesTable changes={data.changes} onlyChanged={canFilter && onlyChanged} />
+          </>
+        ) : <p className={styles.diffNote}>Sự kiện này không ghi lại thay đổi chi tiết.</p>}
+      </Panel>
 
-      <h3 className={styles.sectionTitle}>Dữ liệu bổ sung (metadata)</h3>
-      <pre className={styles.json} tabIndex={0} aria-label="Dữ liệu bổ sung của sự kiện">{prettyJson(data.metadata)}</pre>
+      <Panel id="audit-detail-meta" icon={<CodeOutlined aria-hidden="true" />} title="Dữ liệu bổ sung (metadata)">
+        <pre className={styles.json} tabIndex={0} aria-label="Dữ liệu bổ sung của sự kiện">{prettyJson(data.metadata)}</pre>
+      </Panel>
 
-      <h3 className={styles.sectionTitle}>Trình duyệt (user agent)</h3>
-      <p className={styles.wrap}>{formatValue(data.userAgent).full}</p>
+      <Panel id="audit-detail-ua" icon={<DesktopOutlined aria-hidden="true" />} title="Trình duyệt (user agent)">
+        <p className={`${styles.wrap} ${styles.mono}`} style={{ margin: 0, fontSize: 12.5, color: '#334155' }}>{full(data.userAgent)}</p>
+      </Panel>
     </>
   )
 }
@@ -59,15 +97,20 @@ export default function AuditDetailDrawer({ row, detail, onClose }) {
     <Drawer
       open={Boolean(row)}
       onClose={onClose}
-      size={560}
+      size={600}
       destroyOnHidden
       title={row ? eventLabel(row.eventType) : ''}
-      styles={{ wrapper: { maxWidth: '100vw' } }}
+      styles={{ wrapper: { maxWidth: '100vw' }, body: { padding: 18, background: '#f6f8fb' } }}
     >
       {row && (
-        <div className={styles.detailBlock}>
-          <Descriptions column={1} size="small" items={summaryItems(row)} />
-          {detail.status === 'loading' && <Skeleton active paragraph={{ rows: 5 }} aria-busy="true" />}
+        <div className={styles.detail}>
+          <div className={styles.detailTop}>
+            <ActionTag action={row.action} />
+            <span className={styles.detailTime}>{formatAuditTime(row.createdAt) || '—'}</span>
+            {row.eventType && <span className={styles.detailCode}>{row.eventType}</span>}
+          </div>
+          <GeneralInfo row={row} />
+          {detail.status === 'loading' && <div className={styles.panel}><Skeleton active paragraph={{ rows: 5 }} aria-busy="true" /></div>}
           {detail.status === 'error' && <AuditNotice kind="error" error={detail.error} onRetry={detail.retry} title="Không thể tải chi tiết sự kiện" />}
           {detail.status === 'success' && <DetailBody data={detail.data} />}
         </div>
