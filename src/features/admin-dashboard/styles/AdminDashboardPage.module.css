@@ -1,35 +1,112 @@
-/* KAN-35 – Trang Tổng quan điều hành (/admin/dashboard).
-   Token màu/xám lấy từ src/index.css để đồng bộ với AdminLayout và các màn KAN-55/56/66.
-   Chỉ dùng màu trực tiếp cho accents của biểu đồ (xem CHART_COLORS). */
+/* ==========================================================================
+   KAN-35 & KAN-100 — TRANG TỔNG QUAN KINH DOANH & PHÂN TÍCH ĐIỀU HÀNH
+   Đồng bộ hệ thống TrustCar Executive Studio (AdminLayout.module.css)
+   ========================================================================== */
 
 .page {
   width: 100%;
   max-width: 1440px;
   min-width: 0;
   margin: 0 auto;
-  padding: 24px;
+  padding: 28px 32px 48px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 22px;
   color: var(--color-text);
 }
 
-/* ── Dải tồn kho ──────────────────────────────────────────── */
+/* ── Header chuẩn Studio ──────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding-bottom: 4px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(29, 78, 216, 0.1) 0%, rgba(201, 162, 39, 0.14) 100%);
+  border: 1px solid rgba(29, 78, 216, 0.22);
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.35px;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+
+.eyebrow::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 0 2px rgba(201, 162, 39, 0.24);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 2.1vw, 30px);
+  font-weight: 800;
+  margin: 10px 0 6px;
+  color: var(--navy);
+  letter-spacing: -0.025em;
+}
+
+.desc {
+  margin: 0;
+  font-size: 14.5px;
+  color: var(--color-text-secondary);
+  max-width: 68ch;
+  line-height: 1.55;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.headerActions :global(.ant-btn) {
+  min-height: 42px;
+  padding-inline: 16px;
+  border-radius: 10px;
+}
+
+.notices {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.errorActions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ── Dải tồn kho (Stock Strip) ────────────────────────────── */
 .stockStrip {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 12px;
+  gap: 14px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 12px;
+  border-radius: 16px;
   box-shadow: var(--shadow-card);
-  padding: 14px;
+  padding: 16px;
 }
 
 .stockLink {
   text-decoration: none;
   color: inherit;
-  border-radius: 10px;
+  border-radius: 12px;
   min-width: 0;
 }
 
@@ -40,23 +117,32 @@
     'icon value'
     'icon label';
   align-items: center;
-  column-gap: 10px;
-  row-gap: 1px;
-  padding: 10px 12px;
-  border-radius: 10px;
-  background: var(--color-surface-alt);
+  column-gap: 12px;
+  row-gap: 2px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #ffffff 0%, #f6f9fe 100%);
+  border: 1px solid #e2eaf4;
+  border-left: 3.5px solid var(--stock-accent, var(--blue));
   min-width: 0;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    transform 200ms var(--tc-ease),
+    box-shadow 200ms var(--tc-ease),
+    border-color 200ms var(--tc-ease),
+    background 200ms var(--tc-ease);
 }
 
 .stockLink:hover .stockTile,
 .stockLink:focus-visible .stockTile {
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-card);
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--stock-accent) 45%, #cbd8ea);
+  border-left-color: var(--stock-accent);
+  background: #ffffff;
+  box-shadow: var(--shadow-card-hover);
 }
 
 .stockLink:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--blue);
   outline-offset: 2px;
 }
 
@@ -65,26 +151,29 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
-  font-size: 15px;
-  background: color-mix(in srgb, var(--stock-accent) 16%, transparent);
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  font-size: 17px;
+  background: color-mix(in srgb, var(--stock-accent) 13%, #ffffff);
+  border: 1px solid color-mix(in srgb, var(--stock-accent) 26%, transparent);
   color: var(--stock-accent);
 }
 
 .stockValue {
   grid-area: value;
-  font-size: 19px;
-  font-weight: 700;
-  line-height: 1.2;
-  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--navy);
   font-variant-numeric: tabular-nums;
 }
 
 .stockLabel {
   grid-area: label;
-  font-size: 12px;
+  font-size: 12.5px;
+  font-weight: 600;
   color: var(--color-text-secondary);
   white-space: nowrap;
   overflow: hidden;
@@ -93,77 +182,20 @@
 
 .stockSkeleton {
   display: inline-block;
-  width: 28px;
-  height: 16px;
-  border-radius: 4px;
+  width: 32px;
+  height: 18px;
+  border-radius: 5px;
   background: var(--color-border);
   vertical-align: middle;
 }
 
-.stockTotal { --stock-accent: var(--color-primary); }
-.stockAvailable { --stock-accent: var(--color-success); }
+.stockTotal { --stock-accent: #0f294a; }
+.stockAvailable { --stock-accent: #0f766e; }
 .stockIncoming { --stock-accent: #1d4ed8; }
 .stockReserved { --stock-accent: #b45309; }
-.stockSold { --stock-accent: #7c3aed; }
+.stockSold { --stock-accent: #6d28d9; }
 
-/* ── Header ───────────────────────────────────────────────── */
-.header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.eyebrow {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1.3px;
-  color: var(--color-text-secondary);
-}
-
-.title {
-  font-size: 24px;
-  margin: 6px 0 6px;
-  color: var(--color-text);
-  letter-spacing: -0.4px;
-}
-
-.desc {
-  margin: 0;
-  font-size: 14px;
-  color: var(--color-text-secondary);
-  max-width: 70ch;
-}
-
-.notices {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.errorActions {
-  display: flex;
-  gap: 8px;
-}
-
-.headerActions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.wideBlock {
-  display: block;
-}
-
-.wideBlock > .tableBlock,
-.wideBlock .tableBlock {
-  width: 100%;
-}
-
-/* ── Lưới KPI ─────────────────────────────────────────────── */
+/* ── Lưới 4 thẻ KPI chính ─────────────────────────────────── */
 .kpiGrid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -172,21 +204,39 @@
 
 .kpiCard {
   height: 100%;
-  box-shadow: var(--shadow-card);
-  transition: box-shadow 0.18s ease, transform 0.18s ease;
+  border-radius: 16px !important;
+  border: 1px solid var(--color-border) !important;
+  border-top: 3.5px solid var(--kpi-accent, var(--blue)) !important;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%) !important;
+  box-shadow: var(--shadow-card) !important;
+  transition:
+    box-shadow 220ms var(--tc-ease),
+    transform 220ms var(--tc-ease),
+    border-color 220ms var(--tc-ease) !important;
 }
+
+.kpiCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover) !important;
+}
+
+.kpiRevenue { --kpi-accent: #c9a227; }
+.kpiSold { --kpi-accent: #0f766e; }
+.kpiInventory { --kpi-accent: #1d4ed8; }
+.kpiPending { --kpi-accent: #b91c1c; }
 
 .kpiHead {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .kpiTitle {
+  font-family: var(--font-display);
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--color-text-secondary);
 }
 
@@ -194,32 +244,14 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  font-size: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  font-size: 17px;
   flex: 0 0 auto;
-}
-
-/* Dải màu nhận diện riêng cho từng thẻ, dùng màu nhấn của dự án. */
-.kpiRevenue .kpiIcon {
-  background: color-mix(in srgb, var(--color-accent) 22%, transparent);
-  color: var(--color-accent);
-}
-
-.kpiSold .kpiIcon {
-  background: color-mix(in srgb, var(--color-success) 18%, transparent);
-  color: var(--color-success);
-}
-
-.kpiInventory .kpiIcon {
-  background: color-mix(in srgb, #1d4ed8 18%, transparent);
-  color: #1d4ed8;
-}
-
-.kpiPending .kpiIcon {
-  background: color-mix(in srgb, var(--color-danger) 18%, transparent);
-  color: var(--color-danger);
+  background: color-mix(in srgb, var(--kpi-accent, var(--blue)) 14%, #ffffff);
+  border: 1px solid color-mix(in srgb, var(--kpi-accent, var(--blue)) 28%, transparent);
+  color: var(--kpi-accent, var(--blue));
 }
 
 .kpiLink {
@@ -228,17 +260,18 @@
   gap: 6px;
   text-decoration: none;
   color: inherit;
-  border-radius: 12px;
+  border-radius: 16px;
+  height: 100%;
 }
 
 .kpiLink:hover .kpiCard,
 .kpiLink:focus-visible .kpiCard {
-  box-shadow: var(--shadow-card-hover);
-  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover) !important;
+  transform: translateY(-3px);
 }
 
 .kpiLink:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--blue);
   outline-offset: 2px;
 }
 
@@ -247,20 +280,22 @@
   align-items: center;
   gap: 6px;
   align-self: flex-end;
+  margin-top: auto;
+  font-family: var(--font-display);
   font-size: 12.5px;
-  font-weight: 600;
-  color: var(--color-accent-hover);
+  font-weight: 700;
+  color: var(--blue);
 }
 
 .kpiFoot {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
 .kpiDescription {
-  font-size: 12px;
+  font-size: 12.5px;
   color: var(--color-text-secondary);
 }
 
@@ -285,9 +320,9 @@
 .deltaNeutral {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   font-size: 12.5px;
-  font-weight: 600;
+  font-weight: 700;
   flex-wrap: wrap;
 }
 
@@ -296,17 +331,17 @@
 .deltaNeutral { color: var(--color-text-secondary); }
 
 .deltaCaption {
-  font-weight: 400;
+  font-weight: 500;
   color: var(--color-text-secondary);
   margin-left: 2px;
 }
 
-/* ── Biểu đồ ──────────────────────────────────────────────── */
+/* ── Khối Biểu đồ & Bảng dữ liệu ─────────────────────────── */
 .chartsGrid {
   display: grid;
-  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
-  gap: 16px;
-  align-items: start;
+  grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: stretch;
 }
 
 .chartBlock,
@@ -314,10 +349,19 @@
 .skeletonBlock {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 12px;
+  border-radius: 16px;
   box-shadow: var(--shadow-card);
-  padding: 18px 18px 16px;
+  padding: 20px 22px 18px;
   min-width: 0;
+}
+
+.wideBlock {
+  display: block;
+}
+
+.wideBlock > .tableBlock,
+.wideBlock .tableBlock {
+  width: 100%;
 }
 
 .blockHead {
@@ -326,13 +370,17 @@
   justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #edf2f9;
 }
 
 .blockHead h2 {
-  font-size: 15px;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 800;
   margin: 0 0 4px;
-  color: var(--color-text);
+  color: var(--navy);
 }
 
 .blockHead p {
@@ -342,7 +390,7 @@
 }
 
 .understandable {
-  border-bottom: 1px dotted var(--color-text-secondary);
+  border-bottom: 1px dashed var(--color-text-secondary);
   cursor: help;
 }
 
@@ -359,7 +407,7 @@
 }
 
 .gridLine {
-  stroke: var(--color-border);
+  stroke: #e6eef8;
   stroke-width: 1;
 }
 
@@ -371,37 +419,36 @@
 .axisLabelActive {
   font-size: 11px;
   font-weight: 700;
-  fill: var(--color-text);
+  fill: var(--navy);
 }
 
 .linePath {
   fill: none;
-  stroke: var(--color-accent);
-  stroke-width: 2.5;
+  stroke: var(--blue);
+  stroke-width: 2.75;
   stroke-linejoin: round;
   stroke-linecap: round;
 }
 
 .dot {
   fill: var(--color-surface);
-  stroke: var(--color-accent);
-  stroke-width: 2;
+  stroke: var(--blue);
+  stroke-width: 2.25;
 }
 
 .dotActive {
-  fill: var(--color-accent);
-  stroke: var(--color-surface);
-  stroke-width: 2;
+  fill: var(--gold);
+  stroke: var(--navy);
+  stroke-width: 2.25;
 }
 
-/* Vùng bắt hover: trong suốt, phủ cả chiều cao biểu đồ. */
 .hoverBand {
   fill: transparent;
   cursor: pointer;
 }
 
 .hoverBand:focus-visible {
-  fill: color-mix(in srgb, var(--color-accent) 10%, transparent);
+  fill: rgba(29, 78, 216, 0.08);
   outline: none;
 }
 
@@ -409,23 +456,24 @@
   position: absolute;
   top: 4px;
   transform: translateX(-50%);
-  min-width: 132px;
+  min-width: 138px;
   display: flex;
   flex-direction: column;
   gap: 2px;
-  padding: 8px 10px;
-  border-radius: 8px;
-  background: var(--color-primary);
-  color: #fff;
+  padding: 9px 12px;
+  border-radius: 10px;
+  background: #0b1f3a;
+  border: 1px solid rgba(244, 216, 121, 0.35);
+  color: #ffffff;
   font-size: 12px;
   pointer-events: none;
-  box-shadow: var(--shadow-card);
+  box-shadow: 0 10px 24px rgba(11, 31, 58, 0.25);
   z-index: 2;
 }
 
 .chartTooltip strong {
-  font-size: 12.5px;
-  color: var(--color-accent);
+  font-size: 13px;
+  color: #f4d879;
 }
 
 .chartHint {
@@ -434,17 +482,17 @@
   color: var(--color-text-secondary);
 }
 
-/* ── Biểu đồ tròn ─────────────────────────────────────────── */
+/* ── Biểu đồ tròn (BrandPieChart) ─────────────────────────── */
 .pieBlock {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
 }
 
 .pieWrap {
   width: 100%;
-  max-width: 260px;
+  max-width: 248px;
 }
 
 .pieSvg {
@@ -454,7 +502,7 @@
 }
 
 .slice {
-  transition: opacity 0.15s ease, transform 0.15s ease;
+  transition: opacity 0.18s ease, transform 0.18s ease;
   cursor: pointer;
   transform-origin: 120px 120px;
 }
@@ -465,13 +513,15 @@
 }
 
 .pieCenterValue {
+  font-family: var(--font-display);
   font-size: 26px;
-  font-weight: 700;
-  fill: var(--color-text);
+  font-weight: 800;
+  fill: var(--navy);
 }
 
 .pieCenterLabel {
   font-size: 11px;
+  font-weight: 600;
   fill: var(--color-text-secondary);
 }
 
@@ -482,14 +532,17 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 7px;
 }
 
 .legendItem {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 12.5px;
+  gap: 9px;
+  font-size: 13px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: var(--color-surface-alt);
 }
 
 .legendDot {
@@ -505,20 +558,22 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-weight: 600;
   color: var(--color-text);
 }
 
 .legendValue {
   flex: 0 0 auto;
+  font-weight: 600;
   color: var(--color-text-secondary);
   font-variant-numeric: tabular-nums;
 }
 
-/* ── Bảng hoạt động ───────────────────────────────────────── */
+/* ── Bảng hoạt động gần đây ───────────────────────────────── */
 .tablesGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  gap: 18px;
   align-items: start;
 }
 
@@ -527,10 +582,23 @@
 }
 
 .viewAll {
-  font-size: 12.5px;
-  font-weight: 600;
-  color: var(--color-accent-hover);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  border: 1px solid #cfe0fc;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--blue);
   white-space: nowrap;
+}
+
+.viewAll:hover {
+  background: #dbeafe;
+  color: #1e3a8a;
 }
 
 .cellStack {
@@ -541,7 +609,7 @@
 }
 
 .cellStack strong {
-  font-size: 13px;
+  font-size: 13.5px;
   color: var(--color-text);
 }
 
@@ -551,16 +619,19 @@
 }
 
 .mono {
-  font-family: "Consolas", "SF Mono", ui-monospace, monospace;
-  font-size: 12.5px;
-  color: var(--color-text-secondary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: #334e68;
 }
 
 .price {
-  font-weight: 600;
-  font-size: 13px;
-  color: var(--color-text);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13.5px;
+  color: var(--navy);
   white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
 .softText {
@@ -571,15 +642,16 @@
 .carCell {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   min-width: 0;
 }
 
 .carThumb,
 .carThumbEmpty {
-  width: 72px;
-  height: 48px;
-  border-radius: 6px;
+  width: 68px;
+  height: 46px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
   object-fit: cover;
   flex: 0 0 auto;
 }
@@ -597,8 +669,8 @@
 
 .skeletonLine,
 .skeletonChart {
-  border-radius: 6px;
-  background: linear-gradient(90deg, var(--color-surface-alt) 25%, var(--color-border) 50%, var(--color-surface-alt) 75%);
+  border-radius: 8px;
+  background: linear-gradient(90deg, var(--color-surface-alt) 25%, #e2ebf5 50%, var(--color-surface-alt) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.4s ease-in-out infinite;
 }
@@ -616,14 +688,6 @@
   100% { background-position: -200% 0; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .skeletonLine,
-  .skeletonChart {
-    animation: none;
-  }
-}
-
-/* ── Chỉ dành cho trình đọc màn hình ──────────────────────── */
 .srOnly {
   position: absolute;
   width: 1px;
@@ -636,124 +700,79 @@
   border: 0;
 }
 
-/* ── Responsive ───────────────────────────────────────────── */
-
-/* Laptop nhỏ: 2 thẻ KPI một hàng, biểu đồ xếp dọc. */
-@media (max-width: 1200px) {
-  .kpiGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .stockStrip {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .chartsGrid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .pieBlock {
-    flex-direction: row;
-    align-items: center;
-    gap: 24px;
-  }
-
-  .pieWrap {
-    max-width: 220px;
-    flex: 0 0 auto;
-  }
-}
-
-@media (max-width: 900px) {
-  .tablesGrid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .stockStrip {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 620px) {
-  .page {
-    padding: 16px;
-  }
-
-  .kpiGrid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .stockStrip {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .title {
-    font-size: 20px;
-  }
-
-  .pieBlock {
-    flex-direction: column;
-  }
-
-  .chartTooltip {
-    display: none;
-  }
-}
-
-/* ─── KAN-100 — Phân tích chi tiết ─────────────────────────────────────── */
+/* ── KAN-100 — Phân tích chi tiết (Executive Analytics) ──── */
 .analyticsSection {
-  margin-top: 32px;
+  margin-top: 8px;
   padding: 24px;
-  background: #fff;
-  border: 1px solid #f0f0f0;
-  border-radius: 14px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-top: 3.5px solid var(--navy);
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
+
 .analyticsFilter {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  padding: 6px 12px;
+  border-radius: 12px;
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
 }
+
 .analyticsFilterLabel {
-  font-size: 13px;
-  color: #595959;
-  font-weight: 500;
+  font-family: var(--font-display);
+  font-size: 12.5px;
+  color: var(--color-text-secondary);
+  font-weight: 700;
 }
+
 .analyticsRow {
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(220px, 1fr);
-  gap: 20px;
+  grid-template-columns: minmax(0, 2fr) minmax(240px, 1fr);
+  gap: 18px;
 }
+
 .analyticsRow + .analyticsRow {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
+
 .analyticsCard,
 .analyticsCardWide {
   padding: 20px;
-  background: #fafafa;
-  border: 1px solid #eef0f4;
-  border-radius: 10px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  border: 1px solid #dce6f3;
+  border-radius: 14px;
+  box-shadow: var(--shadow-xs);
 }
+
 .analyticsCard h3,
 .analyticsCardWide h3 {
-  margin: 0 0 12px;
+  margin: 0 0 14px;
+  font-family: var(--font-display);
   font-size: 15px;
-  color: #141414;
+  font-weight: 800;
+  color: var(--navy);
 }
+
 .analyticsFigure {
   margin: 0;
 }
+
 .analyticsSvg {
   width: 100%;
   height: auto;
   max-height: 260px;
 }
+
 .analyticsCaption {
-  margin-top: 8px;
-  font-size: 12px;
-  color: #595959;
+  margin-top: 10px;
+  font-size: 12.5px;
+  color: var(--color-text-secondary);
   line-height: 1.5;
 }
 
@@ -764,43 +783,59 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
+
 .funnelRow {
   display: grid;
-  grid-template-columns: 120px minmax(0, 1fr) 70px;
+  grid-template-columns: 124px minmax(0, 1fr) 72px;
   align-items: center;
   gap: 12px;
 }
+
 .funnelLabel {
   font-size: 13px;
-  color: #595959;
+  font-weight: 600;
+  color: var(--color-text-secondary);
 }
+
 .funnelBarWrap {
   position: relative;
-  background: #f0f0f0;
-  border-radius: 6px;
-  height: 26px;
+  background: #edf2f9;
+  border: 1px solid #dce6f3;
+  border-radius: 8px;
+  height: 30px;
   overflow: hidden;
 }
+
 .funnelBar {
   height: 100%;
-  transition: width 0.3s ease;
+  border-radius: 7px;
+  opacity: 0.25;
+  transition: width 0.35s var(--tc-ease);
 }
+
 .funnelValue {
   position: absolute;
-  top: 0;
-  left: 12px;
-  line-height: 26px;
-  color: #fff;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid #d5e0ee;
+  color: var(--navy);
+  font-family: var(--font-mono);
   font-size: 12px;
-  font-weight: 600;
-  text-shadow: 0 0 2px rgba(0, 0, 0, 0.35);
+  font-weight: 700;
+  line-height: 1.35;
 }
+
 .funnelRate {
+  font-family: var(--font-mono);
   font-size: 12px;
-  color: #1677ff;
-  font-weight: 600;
+  color: var(--blue);
+  font-weight: 700;
 }
 
 /* Top cars */
@@ -810,50 +845,76 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
+
 .topCarRow {
   display: grid;
-  grid-template-columns: 32px minmax(140px, 1fr) minmax(0, 1.5fr);
+  grid-template-columns: 34px minmax(140px, 1fr) minmax(170px, 1.4fr);
   gap: 12px;
   align-items: center;
 }
+
 .topCarRank {
-  font-weight: 700;
-  color: #8c8c8c;
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: #eff5ff;
+  border: 1px solid #cfe0fc;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--blue);
 }
+
 .topCarMeta {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
+
 .topCarTitle {
-  font-size: 13px;
-  color: #141414;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--navy);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
+
 .topCarCode {
-  font-size: 11px;
-  color: #8c8c8c;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--color-text-secondary);
 }
+
 .topCarBarWrap {
   position: relative;
-  background: #f0f0f0;
-  border-radius: 6px;
-  height: 20px;
+  background: #f1f5fb;
+  border: 1px solid #dce6f3;
+  border-radius: 8px;
+  height: 28px;
   overflow: hidden;
 }
+
 .topCarBar {
-  background: #fa8c16;
+  background: linear-gradient(90deg, #fef08a 0%, #fde047 100%);
+  border-right: 2px solid #eab308;
   height: 100%;
 }
+
 .topCarValue {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
-  padding: 0 8px;
-  font-size: 11px;
-  color: #141414;
-  font-weight: 500;
+  padding: 0 10px;
+  font-size: 12px;
+  color: #0b1f3a;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
 /* Staff revenue */
@@ -863,87 +924,167 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
+
 .staffRow {
   display: grid;
-  grid-template-columns: minmax(160px, 1fr) minmax(0, 2fr);
-  gap: 12px;
+  grid-template-columns: minmax(170px, 1fr) minmax(180px, 2fr);
+  gap: 14px;
   align-items: center;
 }
+
 .staffMeta {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
+
+.staffMeta strong {
+  font-size: 13.5px;
+  color: var(--navy);
+}
+
 .staffEmail {
-  font-size: 11px;
-  color: #8c8c8c;
+  font-size: 11.5px;
+  color: var(--color-text-secondary);
 }
+
 .staffBarWrap {
   position: relative;
-  background: #f0f0f0;
-  border-radius: 6px;
-  height: 22px;
+  background: #f1f5fb;
+  border: 1px solid #dce6f3;
+  border-radius: 8px;
+  height: 28px;
   overflow: hidden;
 }
+
 .staffBar {
-  background: #52c41a;
+  background: linear-gradient(90deg, #a7f3d0 0%, #6ee7b7 100%);
+  border-right: 2px solid #10b981;
   height: 100%;
 }
+
 .staffValue {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
-  padding: 0 8px;
-  font-size: 11px;
-  font-weight: 500;
-  color: #141414;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #0b1f3a;
+  white-space: nowrap;
 }
 
 /* avgDaysInStock tile */
 .analyticsTile {
-  padding: 20px;
-  background: linear-gradient(135deg, #e6f4ff 0%, #f0f5ff 100%);
-  border: 1px solid #91caff;
-  border-radius: 10px;
+  padding: 22px;
+  background: linear-gradient(145deg, #eff6ff 0%, #f8fbff 100%);
+  border: 1px solid #bfdbfe;
+  border-top: 3.5px solid var(--blue);
+  border-radius: 14px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-}
-.analyticsTileEyebrow {
-  font-size: 11px;
-  letter-spacing: 1px;
-  color: #0958d9;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-.analyticsTileValue {
-  font-size: 32px;
-  font-weight: 700;
-  color: #003eb3;
-}
-.analyticsTileValue small {
-  font-size: 14px;
-  font-weight: 500;
-  color: #0958d9;
-}
-.analyticsTileHint {
-  font-size: 12px;
-  color: #475569;
-  margin: 0;
-  line-height: 1.4;
+  justify-content: center;
+  gap: 10px;
+  color: var(--navy);
+  box-shadow: var(--shadow-xs);
 }
 
-@media (max-width: 880px) {
+.analyticsTileEyebrow {
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 1.3px;
+  color: var(--blue);
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.analyticsTileValue {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--navy);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.analyticsTileValue small {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--blue);
+}
+
+.analyticsTileHint {
+  font-size: 12.5px;
+  color: var(--color-text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 1200px) {
+  .kpiGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .stockStrip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .chartsGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .pieBlock {
+    flex-direction: row;
+    align-items: center;
+    gap: 24px;
+  }
+  .pieWrap {
+    max-width: 220px;
+    flex: 0 0 auto;
+  }
+}
+
+@media (max-width: 900px) {
+  .page {
+    padding: 24px;
+  }
+  .tablesGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .stockStrip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .analyticsRow,
   .analyticsRow + .analyticsRow {
     grid-template-columns: minmax(0, 1fr);
   }
   .topCarRow {
-    grid-template-columns: 28px minmax(0, 1fr);
+    grid-template-columns: 32px minmax(0, 1fr);
   }
-  .topCarBarWrap { grid-column: 1 / -1; }
-  .funnelRow { grid-template-columns: 90px minmax(0, 1fr) 60px; }
-  .staffRow { grid-template-columns: minmax(0, 1fr); }
+  .topCarBarWrap {
+    grid-column: 1 / -1;
+  }
+  .funnelRow {
+    grid-template-columns: 96px minmax(0, 1fr) 64px;
+  }
+  .staffRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 620px) {
+  .page {
+    padding: 20px 16px 36px;
+  }
+  .kpiGrid,
+  .stockStrip {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .pieBlock {
+    flex-direction: column;
+  }
+  .chartTooltip {
+    display: none;
+  }
 }

@@ -6,7 +6,7 @@ import styles from './NotFoundPage.module.css'
 
 const PUBLIC_SUGGESTIONS = [
   { to: '/xe', label: 'Xem danh sách xe' },
-  { to: '/ve-chung-toi', label: 'Về TrustCar' },
+  { to: '/dich-vu', label: 'Dịch vụ showroom' },
   { to: '/lien-he', label: 'Liên hệ hỗ trợ' },
 ]
 

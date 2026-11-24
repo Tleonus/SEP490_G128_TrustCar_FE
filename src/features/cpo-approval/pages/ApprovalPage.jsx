@@ -36,7 +36,7 @@ export default function ApprovalPage() {
     <div className={styles.page}>
       <header className={styles.header}>
         <div>
-          <span className={styles.eyebrow}>QUẢN TRỊ · DUYỆT</span>
+          <span className={styles.eyebrow}>HỘI ĐỒNG PHÊ DUYỆT · ADMIN</span>
           <h1 className={styles.title}>Duyệt kiểm định &amp; mở bán</h1>
           <p className={styles.desc}>
             Xe đạt chuẩn CPO cần Quản trị viên duyệt thì mới được mở bán trên trang công khai.

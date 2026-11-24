@@ -27,7 +27,7 @@ export default function Footer() {
           <ul className={styles.linkList}>
             <li><Link to="/">Trang chủ</Link></li>
             <li><Link to="/xe">Danh sách xe</Link></li>
-            <li><Link to="/ve-chung-toi">Về chúng tôi</Link></li>
+            <li><Link to="/dich-vu">Dịch vụ</Link></li>
             <li><Link to="/lien-he">Liên hệ</Link></li>
           </ul>
         </div>

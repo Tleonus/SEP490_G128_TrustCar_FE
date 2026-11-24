@@ -1,16 +1,16 @@
 /* Modal render qua portal ra ngoài .app-shell nên tự khai báo lại token màu của khu quản trị. */
 .modalRoot {
-  --navy: #102b46;
+  --navy: #0b1f3a;
   --blue: #1d4ed8;
-  --ink: #172b43;
+  --ink: #0f2137;
   --muted: #475569;
-  --line: #c6d2df;
-  --soft: #f3f6fa;
-  --primary-soft: #edf3ff;
-  --success: #15803d;
+  --line: #d5e0ee;
+  --soft: #f5f8fd;
+  --primary-soft: #ecf3ff;
+  --success: #0f766e;
   --danger: #b91c1c;
-  --danger-soft: #fff1f0;
-  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+  --danger-soft: #fef2f2;
+  font-family: 'Plus Jakarta Sans', 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
   color: var(--ink);
 }
 

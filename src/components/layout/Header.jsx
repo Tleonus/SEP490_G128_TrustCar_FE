@@ -15,7 +15,6 @@ const NAV_ITEMS = [
   { to: '/xe', label: 'Danh sách xe' },
   { to: '/dich-vu', label: 'Dịch vụ' },
   { to: '/installment', label: 'Tính trả góp' },
-  { to: '/ve-chung-toi', label: 'Về chúng tôi' },
   { to: '/lien-he', label: 'Liên hệ' },
 ]
 

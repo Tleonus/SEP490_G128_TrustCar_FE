@@ -1,48 +1,79 @@
-/* KAN-55 – Màn danh sách xe cần kiểm định. Token màu lấy từ src/index.css để đồng bộ
-   với khu quản trị và không phá giao diện hiện có. */
+/* ==========================================================================
+   KAN-55 — DANH SÁCH XE CẦN KIỂM ĐỊNH (/admin/inspection)
+   Đồng bộ hệ thống TrustCar Executive Studio
+   ========================================================================== */
 
 .page {
+  width: 100%;
   max-width: 1440px;
   margin: 0 auto;
-  padding: 32px;
+  padding: 28px 32px 48px;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
 }
 
 .header {
   display: flex;
-  align-items: flex-start;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 20px;
   flex-wrap: wrap;
 }
 
 .eyebrow {
-  color: var(--color-text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(29, 78, 216, 0.1) 0%, rgba(201, 162, 39, 0.14) 100%);
+  border: 1px solid rgba(29, 78, 216, 0.22);
+  font-family: var(--font-display);
+  color: var(--blue);
   font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1.3px;
+  font-weight: 800;
+  letter-spacing: 1.35px;
+  text-transform: uppercase;
+}
+
+.eyebrow::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 0 2px rgba(201, 162, 39, 0.24);
 }
 
 .title {
-  font-size: 24px;
-  margin: 6px 0 8px;
+  font-family: var(--font-display);
+  font-size: clamp(24px, 2.1vw, 30px);
+  font-weight: 800;
+  color: var(--navy);
+  margin: 10px 0 6px;
+  letter-spacing: -0.025em;
 }
 
 .desc {
-  font-size: 14px;
+  font-size: 14.5px;
   color: var(--color-text-secondary);
   margin: 0;
   max-width: 70ch;
+  line-height: 1.55;
 }
 
 .toolbar {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
   align-items: center;
+  padding: 14px 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-xs);
 }
 
 .search {
@@ -56,15 +87,16 @@
 
 .count {
   margin: 0;
+  font-family: var(--font-display);
   font-size: 13px;
+  font-weight: 700;
   color: var(--color-text-secondary);
 }
 
 .tableWrap {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 12px;
-  padding: 8px;
+  border-radius: 16px;
   overflow: hidden;
   box-shadow: var(--shadow-card);
 }
@@ -72,7 +104,19 @@
 .codeCell {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
+}
+
+.codeCell strong {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: #f1f5fb;
+  border: 1px solid #dce6f2;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--navy);
 }
 
 .titleCell {
@@ -87,16 +131,19 @@
   flex-direction: column;
   gap: 2px;
   min-width: 0;
+  font-weight: 700;
+  color: var(--navy);
 }
 
 .subCell {
   font-size: 12px;
+  font-weight: 500;
   color: var(--color-text-secondary);
 }
 
 .thumb {
-  width: 56px;
-  height: 40px;
+  width: 64px;
+  height: 44px;
   object-fit: cover;
   border-radius: 8px;
   border: 1px solid var(--color-border);
@@ -105,8 +152,8 @@
 }
 
 .thumbPlaceholder {
-  width: 56px;
-  height: 40px;
+  width: 64px;
+  height: 44px;
   border-radius: 8px;
   border: 1px dashed var(--color-border);
   background: var(--color-surface-alt);
@@ -114,15 +161,24 @@
 }
 
 .empty {
-  padding: 32px 16px;
+  padding: 40px 16px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   align-items: center;
   color: var(--color-text-secondary);
 }
 
+.empty a {
+  color: var(--blue);
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .page { padding: 24px; }
+}
+
 @media (max-width: 768px) {
-  .page { padding: 16px; }
+  .page { padding: 20px 16px 36px; }
   .statusSelect { flex: 1 1 100%; }
 }

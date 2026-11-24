@@ -33,10 +33,11 @@ export default function StaffVisitsPage() {
     <div className={styles.page}>
       <header className={styles.pageHead}>
         <div>
+          <span className={styles.eyebrow}>ĐIỀU PHỐI ĐÓN KHÁCH TẠI SHOWROOM</span>
           <h1 className={styles.title}>Lịch lái thử</h1>
           <p className={styles.desc}>Lượt khách đặt từ hôm nay. Gọi nhắc trước giờ hẹn, gọi xác nhận các lượt chờ và gọi báo khi xe không còn bán.</p>
         </div>
-        <Button type="primary" icon={<PlusOutlined />} onClick={() => setBooking(true)}>Đặt hộ khách</Button>
+        <Button type="primary" size="large" icon={<PlusOutlined />} onClick={() => setBooking(true)}>Đặt hộ khách</Button>
       </header>
 
       <Tabs activeKey={tab} onChange={setTab} items={items} />

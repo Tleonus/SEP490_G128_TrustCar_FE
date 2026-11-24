@@ -1,30 +1,25 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  margin: 22px 0;
+  gap: 18px;
+  margin: 16px 0;
 }
 
-/* ===== ON-DEMAND AI QUICK ADVISOR – PHONG CÁCH ÁNH ĐÈN CHIẾU SHOWROOM ===== */
+/* ===== ON-DEMAND AI QUICK ADVISOR – TINH GỌN Ở CUỐI TRANG ===== */
 .advisorSection {
   position: relative;
-  border-radius: 20px;
+  border-radius: 16px;
   background:
-    radial-gradient(ellipse 55% 85% at 25% 0%, rgba(255, 250, 235, 0.11) 0%, transparent 72%),
-    radial-gradient(ellipse 50% 75% at 78% 0%, rgba(201, 162, 39, 0.12) 0%, transparent 70%),
-    linear-gradient(165deg, #081528 0%, #0d203b 55%, #071324 100%);
-  border: 1px solid rgba(201, 162, 39, 0.36);
-  border-bottom: 5px solid #040b16;
-  box-shadow:
-    0 10px 0 rgba(7, 19, 36, 0.14),
-    0 22px 46px rgba(7, 19, 36, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  padding: 22px 26px 24px;
+    radial-gradient(ellipse 55% 85% at 25% 0%, rgba(255, 250, 235, 0.08) 0%, transparent 72%),
+    linear-gradient(165deg, #091526 0%, #0e213b 55%, #081322 100%);
+  border: 1px solid rgba(201, 162, 39, 0.32);
+  box-shadow: 0 12px 32px rgba(7, 19, 36, 0.18);
+  padding: 16px 20px;
   overflow: hidden;
   color: #f8fafc;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .ledBorderTop {
@@ -95,18 +90,18 @@
 }
 
 .advisorTitle {
-  font-size: clamp(19px, 2.2vw, 23px);
+  font-size: clamp(16px, 1.8vw, 19px);
   font-weight: 800;
   color: #ffffff;
   margin: 0;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.2px;
 }
 
 .advisorSub {
-  font-size: 13.5px;
+  font-size: 12.5px;
   color: #cbd5e1;
   margin: 0;
-  line-height: 1.5;
+  line-height: 1.45;
 }
 
 .advisorSub strong {
@@ -124,20 +119,17 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 13px 24px;
+  gap: 8px;
+  padding: 9px 18px;
   border-radius: 999px;
   border: 1px solid #fff3c4;
-  border-bottom: 4px solid #7d5d09;
   background: linear-gradient(180deg, #fae498 0%, #d4af37 52%, #b88f14 100%);
   color: #071324;
-  font-size: 14.5px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.2px;
   cursor: pointer;
-  box-shadow:
-    0 8px 24px rgba(201, 162, 39, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  box-shadow: 0 4px 14px rgba(201, 162, 39, 0.28);
   transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 
@@ -210,15 +202,15 @@
 .preferenceBar {
   display: flex;
   flex-direction: column;
-  gap: 9px;
-  padding: 14px 16px;
-  border-radius: 14px;
+  gap: 6px;
+  padding: 10px 14px;
+  border-radius: 12px;
   background: rgba(6, 15, 30, 0.52);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.09);
 }
 
 .prefBarLabel {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.7px;
@@ -228,19 +220,19 @@
 .personaTabs {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
 }
 
 .personaBtn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
+  gap: 6px;
+  padding: 5px 11px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   background: rgba(11, 25, 48, 0.72);
   color: #cbd5e1;
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;

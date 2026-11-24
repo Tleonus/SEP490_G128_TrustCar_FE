@@ -102,7 +102,7 @@ export default function AdminCarsPage() {
     <div className={styles.page}>
       <div className={styles.header}>
         <div>
-          <span className={styles.eyebrow}>QUẢN LÝ SHOWROOM</span>
+          <span className={styles.eyebrow}>ĐIỀU PHỐI TỒN KHO · SHOWROOM</span>
           <h1 className={styles.title}>Quản lý kho xe</h1>
           <p className={styles.desc}>Theo dõi toàn bộ xe trong kho và tình trạng tồn kho.</p>
         </div>
@@ -159,7 +159,7 @@ export default function AdminCarsPage() {
               <thead>
                 <tr>
                   <th className={styles.colImage} aria-label="Ảnh xe"></th>
-                  <th>Xe</th>
+                  <th className={styles.carCol}>Xe</th>
                   <th className={styles.colYear}>Năm / Số km</th>
                   <th className={styles.colPrice}>Giá bán</th>
                   <th className={styles.colStatus}>Trạng thái</th>

@@ -351,7 +351,7 @@ export async function sendChatMessage({
       cars: [],
       actions: [
         { label: 'Xem các xe đạt chuẩn CPO', to: '/xe', type: 'navigate' },
-        { label: 'Tìm hiểu thêm về TrustCar', to: '/ve-chung-toi', type: 'navigate' },
+        { label: 'Liên hệ & Thông tin TrustCar', to: '/lien-he', type: 'navigate' },
         { label: 'So sánh các mẫu xe', to: '/so-sanh', type: 'navigate' },
       ],
       followUps: [

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
-  Alert, Button, Card, Form, Input, InputNumber, Modal, Popconfirm, Select, Space, Table, Tag, Typography, message,
+  Alert, Button, Form, Input, InputNumber, Modal, Popconfirm, Select, Space, Table, Tag, message,
 } from 'antd'
 import { PlusOutlined, EditOutlined, StopOutlined } from '@ant-design/icons'
 import {
@@ -9,8 +9,6 @@ import {
 import { useAuthStore } from '../../../store/useAuthStore'
 import { hasAnyRole } from '../../../utils/roles'
 import styles from '../styles/AdminServicesPage.module.css'
-
-const { Title, Paragraph } = Typography
 
 const formatPrice = (value) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(value)
 
@@ -137,25 +135,26 @@ export default function AdminServicesPage() {
     <div className={styles.page}>
       <div className={styles.header}>
         <div>
-          <Title level={3}>Dịch vụ showroom</Title>
-          <Paragraph type="secondary">
+          <span className={styles.eyebrow}>DANH MỤC CHĂM SÓC &amp; BẢO DƯỠNG</span>
+          <h1 className={styles.title}>Dịch vụ showroom</h1>
+          <p className={styles.desc}>
             Quản lý 6 gói dịch vụ chuẩn (rửa cao cấp, đánh bóng, phủ nano, bọc gầm, detailing, kiểm tra tổng quát).
             Khách đặt lịch trên trang <strong>/dich-vu</strong>.
-          </Paragraph>
+          </p>
         </div>
         {canWrite && (
-          <Button type="primary" icon={<PlusOutlined />} onClick={openCreate}>
+          <Button type="primary" size="large" icon={<PlusOutlined />} onClick={openCreate}>
             Thêm gói mới
           </Button>
         )}
       </div>
 
-      <Card className={styles.filters}>
-        <Space wrap>
+      <div className={styles.filters}>
+        <Space wrap size={12}>
           <Select
             placeholder="Tất cả trạng thái"
             allowClear
-            style={{ width: 180 }}
+            style={{ width: 200 }}
             value={filter.status}
             onChange={(status) => setFilter((prev) => ({ ...prev, status }))}
             options={[
@@ -165,13 +164,13 @@ export default function AdminServicesPage() {
           />
           <Input.Search
             allowClear
-            placeholder="Tìm theo tên hoặc mã"
-            style={{ width: 280 }}
+            placeholder="Tìm theo tên hoặc mã gói dịch vụ..."
+            style={{ width: 320 }}
             defaultValue={filter.search}
             onSearch={(search) => setFilter((prev) => ({ ...prev, search }))}
           />
         </Space>
-      </Card>
+      </div>
 
       {state.status === 'error' && (
         <Alert
@@ -180,14 +179,16 @@ export default function AdminServicesPage() {
         />
       )}
 
-      <Table
-        rowKey="id"
-        columns={columns}
-        dataSource={state.items}
-        loading={state.status === 'loading'}
-        pagination={false}
-        scroll={{ x: 960 }}
-      />
+      <div className={styles.tableWrap}>
+        <Table
+          rowKey="id"
+          columns={columns}
+          dataSource={state.items}
+          loading={state.status === 'loading'}
+          pagination={false}
+          scroll={{ x: 960 }}
+        />
+      </div>
 
       <Modal
         open={editor.open}

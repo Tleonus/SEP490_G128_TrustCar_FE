@@ -177,20 +177,22 @@ export default function UserManagementPage() {
       )}
 
       {s.status !== 'error' && (
-        <Table
-          rowKey="_id"
-          columns={columns}
-          dataSource={s.items}
-          loading={s.status === 'loading'}
-          pagination={{
-            current: s.meta?.page ?? s.page,
-            pageSize: s.meta?.limit ?? 20,
-            total: s.meta?.total ?? s.items.length,
-            showSizeChanger: false,
-            onChange: (nextPage) => s.setPage(nextPage),
-          }}
-          scroll={{ x: 820 }}
-        />
+        <div className={styles.tableWrap}>
+          <Table
+            rowKey="_id"
+            columns={columns}
+            dataSource={s.items}
+            loading={s.status === 'loading'}
+            pagination={{
+              current: s.meta?.page ?? s.page,
+              pageSize: s.meta?.limit ?? 20,
+              total: s.meta?.total ?? s.items.length,
+              showSizeChanger: false,
+              onChange: (nextPage) => s.setPage(nextPage),
+            }}
+            scroll={{ x: 820 }}
+          />
+        </div>
       )}
 
       <RoleAssignModal
