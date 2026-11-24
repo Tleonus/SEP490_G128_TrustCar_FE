@@ -30,8 +30,15 @@ export function useAuditScreen() {
   const list = useAuditList(params)
   const detail = useAuditDetail(openRow?.id ?? null)
 
+  // KAN-92: đổi "Hành động" mà loại sự kiện đang chọn không thuộc hành động đó → bỏ chọn loại sự kiện
+  // (nếu giữ lại, BE sẽ trả về rỗng). Chỉ bỏ khi `/meta` biết mã đó thuộc hành động nào.
   const change = (patch) => {
-    setDraft((previous) => ({ ...previous, ...patch }))
+    setDraft((previous) => {
+      const next = { ...previous, ...patch }
+      const owner = meta.eventActions?.[next.eventType]
+      if ('action' in patch && next.action && next.eventType && owner && owner !== next.action) next.eventType = ''
+      return next
+    })
     setRangeError(null)
   }
 
