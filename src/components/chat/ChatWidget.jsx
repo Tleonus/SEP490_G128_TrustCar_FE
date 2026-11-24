@@ -18,6 +18,8 @@ import {
   DownOutlined,
 } from '@ant-design/icons'
 import RobotMascot, { UserChatAvatar } from './RobotMascot'
+import AiDisclaimer from '../common/AiDisclaimer'
+import { AI_DISCLAIMER_CHAT } from '../../constants/aiDisclaimer'
 import {
   sendChatMessage,
   getOrCreateChatSessionId,
@@ -82,7 +84,7 @@ function createWelcomeMessage(showroomAddress, streamed = false) {
     from: 'bot',
     time: formatTimeNow(),
     streamed,
-    text: `Xin chào! Mình là **Trợ lý AI TrustCar** — kết nối trực tiếp với dữ liệu kho xe thực tế tại **${showroomAddress}**.\n\nBạn có thể chọn nhanh **câu hỏi gợi ý** bên dưới hoặc nhập mẫu xe, tầm giá để mình lọc xe ngay lập tức!`,
+    text: `Xin chào! Mình là **Trợ lý AI TrustCar** — hỗ trợ tra cứu nhanh dữ liệu kho xe đang mở bán tại **${showroomAddress}**.\n\nBạn có thể chọn nhanh **câu hỏi gợi ý** bên dưới hoặc nhập mẫu xe, tầm giá để mình lọc xe ngay lập tức! *(Thông tin từ AI mang tính tham khảo nhanh.)*`,
     actions: [
       { label: 'Khám phá kho xe', to: '/xe', type: 'navigate' },
       { label: 'Vị trí Showroom 3D', to: '/lien-he', type: 'navigate' },
@@ -681,6 +683,9 @@ export default function ChatWidget() {
               <SendOutlined />
             </button>
           </form>
+
+          {/* CẢNH BÁO AI TOÀN HỆ THỐNG (KAN-77) */}
+          <AiDisclaimer variant="chat" text={AI_DISCLAIMER_CHAT} />
 
           <footer className={styles.panelFooter}>
             <span>

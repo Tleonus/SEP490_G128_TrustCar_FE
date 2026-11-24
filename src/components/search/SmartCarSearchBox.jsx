@@ -250,7 +250,7 @@ export default function SmartCarSearchBox({
             <div className={styles.smartBannerLeft}>
               <span className={styles.smartBannerTitle}>
                 <ThunderboltFilled style={{ color: '#eab308' }} />
-                Nhận diện:
+                Gợi ý lọc nhanh:
               </span>
               {smartParsed.recognizedTags.map((tag) => (
                 <span key={tag.key} className={styles.smartTag}>
@@ -372,7 +372,7 @@ export default function SmartCarSearchBox({
             <div className={styles.sectionHeader}>
               <span>
                 {hasTyped
-                  ? `Xe đang sẵn có khớp từ khóa (${displayedCars.length})`
+                  ? `Xe đang sẵn có phù hợp gợi ý (${displayedCars.length})`
                   : 'Xe nổi bật đang sẵn có tại Showroom'}
               </span>
             </div>

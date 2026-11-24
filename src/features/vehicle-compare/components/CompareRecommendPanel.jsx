@@ -16,8 +16,9 @@ import {
   SwapOutlined,
   ThunderboltFilled,
   TrophyFilled,
-  WarningFilled,
 } from '@ant-design/icons'
+import AiDisclaimer from '../../../components/common/AiDisclaimer'
+import { AI_DISCLAIMER_COMPARE_COMPACT } from '../../../constants/aiDisclaimer'
 import { getCars } from '../../../services/carService'
 import { formatMileage, formatPrice } from '../../../utils/format'
 import { fetchCompareAiInsight } from '../api/compareApi'
@@ -259,16 +260,13 @@ export default function CompareRecommendPanel({
             <p className={styles.prefFocusHint}>{activePrefMeta.desc}</p>
           </div>
 
-          {/* DÒNG NHẮC NHỞ NGẮN KHI CHƯA BẤM NÚT */}
+          {/* DÒNG NHẮC NHỞ NGẮN KHI CHƯA BẤM NÚT (KAN-77: dùng chung AiDisclaimer) */}
           {!isAiExpanded && (
-            <div className={styles.compactCautionStrip} role="note">
-              <WarningFilled className={styles.cautionStripIcon} />
-              <span>
-                <strong>Lưu ý:</strong> Hệ thống không tự động chấm điểm xe vì mỗi khách hàng có ưu
-                tiên khác nhau. Khi bạn bấm <strong>"Gợi ý từ AI"</strong>, nhận định tạo ra chỉ mang
-                tính tham khảo nhanh và <strong>AI có thể sai sót</strong>.
-              </span>
-            </div>
+            <AiDisclaimer
+              variant="strip"
+              surface="dark"
+              text={AI_DISCLAIMER_COMPARE_COMPACT}
+            />
           )}
 
           {/* TRẠNG THÁI ĐANG TẢI KHI NGƯỜI DÙNG VỪA BẤM NÚT GỢI Ý TỪ AI */}
@@ -292,20 +290,12 @@ export default function CompareRecommendPanel({
           {/* KẾT QUẢ PHÂN TÍCH NHANH & GỢI Ý TỪ AI */}
           {isAiExpanded && aiStatus === 'success' && aiInsight && (
             <div className={styles.aiResultContainer}>
-              {/* HỘP CẢNH BÁO AI CÓ THỂ SAI — NỔI BẬT VÀ RÕ RÀNG */}
-              <div className={styles.aiDisclaimerBanner} role="alert">
-                <div className={styles.disclaimerIconWrap}>
-                  <WarningFilled />
-                </div>
-                <div className={styles.disclaimerBody}>
-                  <div className={styles.disclaimerTitle}>
-                    Cảnh báo: AI có thể sai — Gợi ý chỉ mang tính chất tham khảo
-                  </div>
-                  <p className={styles.disclaimerText}>
-                    {aiInsight.disclaimer || AI_DISCLAIMER_TEXT}
-                  </p>
-                </div>
-              </div>
+              {/* HỘP CẢNH BÁO AI CÓ THỂ SAI — DÙNG CHUNG SITE-WIDE (KAN-77) */}
+              <AiDisclaimer
+                variant="banner"
+                surface="dark"
+                text={aiInsight.disclaimer || AI_DISCLAIMER_TEXT}
+              />
 
               {/* KHỐI TÓM TẮT NHANH & GỢI Ý THEO NHU CẦU */}
               <div className={styles.aiOverviewGrid}>
@@ -426,7 +416,7 @@ export default function CompareRecommendPanel({
         <section className={styles.matchupSection} aria-label="Gợi ý cặp xe so sánh">
           <div className={styles.sectionHeadRow}>
             <div>
-              <span className={styles.sectionBadge}>⚡ QUICK BATTLE MATCHUPS</span>
+              <span className={styles.sectionBadge}>⚡ GỢI Ý CẶP XE CÙNG PHÂN KHÚC</span>
               <h2 className={styles.sectionTitle}>Gợi ý các cặp đấu đối thủ đáng so sánh nhất</h2>
               <p className={styles.sectionDesc}>
                 Chỉ cần 1 chạm để nạp ngay 2 mẫu xe cùng phân khúc vào bàn cân Showroom.
@@ -487,7 +477,7 @@ export default function CompareRecommendPanel({
         <section className={styles.similarSection} aria-label="Đề xuất xe tương tự từ kho xe">
           <div className={styles.sectionHeadRow}>
             <div>
-              <span className={styles.sectionBadge}>🔥 SMART INVENTORY RECOMMEND</span>
+              <span className={styles.sectionBadge}>🔥 GỢI Ý XE TƯƠNG TỰ TỪ KHO XE</span>
               <h2 className={styles.sectionTitle}>
                 {cars.length >= 2
                   ? 'Đề xuất đối thủ cùng tầm giá & phân khúc đáng đặt lên bàn cân'
