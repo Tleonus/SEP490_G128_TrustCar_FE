@@ -13,7 +13,6 @@ import ForgotPasswordPage from '../pages/ForgotPassword/ForgotPasswordPage'
 import ResetPasswordPage from '../pages/ResetPassword/ResetPasswordPage'
 import ChangePasswordPage from '../pages/ChangePassword/ChangePasswordPage'
 import CompleteProfilePage from '../pages/CompleteProfile/CompleteProfilePage'
-import AboutPage from '../pages/About/AboutPage'
 import ContactPage from '../pages/Contact/ContactPage'
 import NotFoundPage from '../pages/NotFound/NotFoundPage'
 import AdminCarsPage from '../pages/Admin/AdminCarsPage'
@@ -82,7 +81,6 @@ export default function AppRouter() {
         <Route path="/dat-coc/:id/da-huy" element={<Suspense fallback={<LoadingState />}><DepositCancelPage /></Suspense>} />
         <Route path="/dat-coc/:id/that-bai" element={<Suspense fallback={<LoadingState />}><DepositCancelPage /></Suspense>} />
         <Route path="/dat-coc/that-bai" element={<Suspense fallback={<LoadingState />}><DepositCancelPage /></Suspense>} />
-        <Route path="/ve-chung-toi" element={<AboutPage />} />
         <Route path="/lien-he" element={<ContactPage />} />
         {/* KAN-96: dịch vụ showroom công khai + wizard đặt lịch (yêu cầu đăng nhập) */}
         <Route path="/dich-vu" element={<Suspense fallback={<LoadingState />}><ServicesPage /></Suspense>} />

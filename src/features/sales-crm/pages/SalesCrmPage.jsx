@@ -227,8 +227,8 @@ export default function SalesCrmPage() {
     <div className={styles.page}>
       <div className={styles.header}>
         <div>
-          <span className={styles.eyebrow}>QUẢN LÝ BÁN HÀNG</span>
-          <h1 className={styles.title}>Quản lý bán hàng</h1>
+          <span className={styles.eyebrow}>CRM &amp; PIPELINE KHÁCH HÀNG</span>
+          <h1 className={styles.title}>Quản lý bán hàng &amp; Chốt đơn</h1>
           <p className={styles.desc}>Theo dõi khách hàng tiềm năng, lịch hẹn đã hoàn thành và chốt đơn bán xe.</p>
         </div>
         <button type="button" className={styles.primaryAction} onClick={() => setCheckoutContext({})}>

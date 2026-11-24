@@ -1,120 +1,197 @@
-/* Đồng bộ với AdminCarsPage.module.css (khu quản trị dùng chung token từ AdminLayout). */
+/* ==========================================================================
+   QUẢN LÝ BÁN HÀNG & CRM (/admin/sales)
+   Đồng bộ hệ thống TrustCar Executive Studio
+   ========================================================================== */
+
 .page {
+  width: 100%;
   max-width: 1440px;
   margin: 0 auto;
-  padding: 32px;
+  padding: 28px 32px 48px;
   min-width: 0;
-}
-
-.header {
-  margin-bottom: 24px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
   gap: 20px;
 }
 
-.eyebrow { color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: 1.3px; }
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(29, 78, 216, 0.1) 0%, rgba(201, 162, 39, 0.14) 100%);
+  border: 1px solid rgba(29, 78, 216, 0.22);
+  font-family: var(--font-display);
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.35px;
+  text-transform: uppercase;
+}
+
+.eyebrow::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 0 2px rgba(201, 162, 39, 0.24);
+}
 
 .title {
-  font-size: 24px;
-  margin-bottom: 8px;
+  font-family: var(--font-display);
+  font-size: clamp(24px, 2.1vw, 30px);
+  font-weight: 800;
+  color: var(--navy);
+  margin: 10px 0 6px;
+  letter-spacing: -0.025em;
 }
 
 .desc {
-  font-size: 14px;
+  font-size: 14.5px;
   color: var(--color-text-secondary);
+  line-height: 1.55;
 }
 
 .primaryAction {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 9px;
   flex-shrink: 0;
   min-height: 44px;
-  padding: 10px 16px;
-  border: 0;
-  border-radius: 8px;
-  background: var(--blue);
-  color: #fff;
+  padding: 10px 18px;
+  border: 1px solid #1e3a8a;
+  border-radius: 11px;
+  background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 55%, #2563eb 100%);
+  color: #ffffff;
+  font-family: var(--font-display);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(29, 78, 216, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
-.primaryAction:hover { background: #1e40af; }
+
+.primaryAction:hover {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 55%, #1d4ed8 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(29, 78, 216, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
 
 .demoAlert {
-  margin-bottom: 20px;
+  border-radius: 12px;
 }
 
+/* ── 5 Thẻ Pipeline Stages ─────────────────────────────────── */
 .statRow {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 16px;
-  margin-bottom: 20px;
+  gap: 14px;
 }
 
 .statCard {
   --tone: var(--blue);
-  background: var(--color-surface);
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
   border: 1px solid var(--color-border);
-  border-top: 3px solid var(--tone);
-  border-radius: 12px;
-  padding: 16px 20px;
+  border-top: 3.5px solid var(--tone);
+  border-radius: 15px;
+  padding: 16px 18px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 4px;
+  gap: 6px;
   min-width: 0;
   box-shadow: var(--shadow-card);
   color: inherit;
   text-align: left;
+  transition:
+    transform 200ms var(--tc-ease),
+    box-shadow 200ms var(--tc-ease),
+    border-color 200ms var(--tc-ease),
+    background 200ms var(--tc-ease);
 }
 
-button.statCard:hover { border-color: var(--tone); }
+button.statCard:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--tone) 50%, #cbd8ea);
+  border-top-color: var(--tone);
+  box-shadow: var(--shadow-card-hover);
+}
 
 .statCardActive {
   border-color: var(--tone);
-  background: color-mix(in srgb, var(--tone) 7%, #fff);
-  box-shadow: 0 0 0 1px var(--tone), var(--shadow-card);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--tone) 9%, #ffffff) 0%, #ffffff 100%);
+  box-shadow: 0 0 0 1.5px var(--tone), var(--shadow-card-hover);
 }
 
 .toneBlue { --tone: #1d4ed8; }
 .toneTeal { --tone: #0e7490; }
 .toneOrange { --tone: #c2410c; }
-.toneGreen { --tone: #15803d; }
-.statInfo { --tone: #102b46; background: var(--color-surface-alt); }
+.toneGreen { --tone: #0f766e; }
+.statInfo {
+  --tone: #c9a227;
+  background: linear-gradient(180deg, #fffdf5 0%, #fef9e7 100%);
+  border-color: #e6cf82;
+}
+
+.statInfo .statLabel {
+  color: #78350f;
+}
+
+.statInfo .statValue {
+  color: var(--navy);
+}
 
 .statLabel {
-  font-size: 13px;
+  font-family: var(--font-display);
+  font-size: 12.5px;
+  font-weight: 700;
   color: var(--color-text-secondary);
 }
 
 .statValue {
-  font-size: 26px;
-  font-weight: 700;
-  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--navy);
+  font-variant-numeric: tabular-nums;
 }
 
+/* ── Thanh công cụ Tabs + Tìm kiếm + Lọc ───────────────────── */
 .toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
-  margin-bottom: 20px;
+  padding: 14px 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-xs);
 }
 
 .tabs {
-  padding: 3px;
-  background: #dfe7f0;
+  padding: 4px;
+  background: #eaf0f8;
+  border-radius: 10px;
 }
 
 .tabs :global(.ant-segmented-item-label) {
   min-height: 34px;
   line-height: 34px;
   padding-inline: 14px;
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-weight: 700;
 }
 
 .filters {
@@ -131,10 +208,11 @@ button.statCard:hover { border-color: var(--tone); }
   min-width: 220px;
 }
 
+/* ── Bảng dữ liệu CRM ──────────────────────────────────────── */
 .tableWrap {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 12px;
+  border-radius: 16px;
   overflow-x: auto;
   box-shadow: var(--shadow-card);
 }
@@ -147,37 +225,56 @@ button.statCard:hover { border-color: var(--tone); }
 
 .table th,
 .table td {
-  padding: 12px 16px;
+  padding: 12px 11px;
   text-align: left;
   white-space: nowrap;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid #edf2f9;
   vertical-align: middle;
 }
 
 .table th {
-  color: var(--color-text-secondary);
-  font-weight: 600;
-  font-size: 12.5px;
+  background: #f6f9fd;
+  color: #475569;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 11.5px;
   text-transform: uppercase;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid #dde6f2;
+}
+
+.table tbody tr {
+  transition: background-color 150ms ease;
 }
 
 .table tbody tr:last-child td { border-bottom: none; }
-.table tbody tr:hover { background: var(--color-surface-alt); }
+.table tbody tr:hover { background: #f2f7ff; }
 
 .table .actionCol {
   position: sticky;
   right: 0;
   background: var(--color-surface);
   text-align: right;
-  box-shadow: -8px 0 12px -10px rgb(16 43 70 / 30%);
+  box-shadow: -8px 0 16px -10px rgba(15, 33, 55, 0.18);
+  transition: background-color 150ms ease;
 }
 
-.table tbody tr:hover .actionCol { background: var(--color-surface-alt); }
+.table thead .actionCol {
+  background: #f6f9fd;
+}
+
+.table tbody tr:hover .actionCol { background: #f2f7ff; }
 
 .code {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: #f1f5fb;
+  border: 1px solid #dce6f2;
+  font-family: var(--font-mono);
+  font-size: 12px;
   color: var(--navy);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .stack {
@@ -187,19 +284,21 @@ button.statCard:hover { border-color: var(--tone); }
 }
 
 .stack strong {
-  color: var(--color-text);
-  font-weight: 600;
+  color: var(--navy);
+  font-weight: 700;
 }
 
 .carTitle {
   max-width: 260px;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-weight: 600;
+  color: var(--color-text);
 }
 
 .muted {
   color: var(--color-text-secondary);
-  font-size: 12.5px;
+  font-size: 12px;
 }
 
 .outcome span {
@@ -214,8 +313,14 @@ button.statCard:hover { border-color: var(--tone); }
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: #15803d;
-  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #0f766e;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .disabledWrap {
@@ -226,7 +331,7 @@ button.statCard:hover { border-color: var(--tone); }
 .pagination {
   display: flex;
   justify-content: center;
-  margin-top: 28px;
+  margin-top: 8px;
 }
 
 @media (max-width: 1280px) {
@@ -241,7 +346,7 @@ button.statCard:hover { border-color: var(--tone); }
 }
 
 @media (max-width: 760px) {
-  .page { padding: 20px 16px; }
+  .page { padding: 20px 16px 36px; }
   .header { align-items: flex-start; gap: 16px; }
   .primaryAction { width: 100%; }
   .statRow { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }

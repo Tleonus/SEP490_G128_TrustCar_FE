@@ -88,7 +88,7 @@ export default function AdminBaseSettingsPage() {
       <form onSubmit={handleSave}>
         <header className={styles.pageHeader}>
           <div className={styles.headingCopy}>
-            <span className={styles.eyebrow}>C&#7844;U H&Igrave;NH SHOWROOM</span>
+            <span className={styles.eyebrow}>TH&Ocirc;NG S&#7888; H&#7878; TH&#7888;NG &amp; KHUNG GI&#7900;</span>
             <h1>C&#7845;u h&igrave;nh v&#7853;n h&agrave;nh</h1>
             <p>Thi&#7871;t l&#7853;p th&ocirc;ng tin d&ugrave;ng chung v&agrave; quy t&#7855;c nh&#7853;n l&#7883;ch l&aacute;i th&#7917; cho showroom.</p>
           </div>

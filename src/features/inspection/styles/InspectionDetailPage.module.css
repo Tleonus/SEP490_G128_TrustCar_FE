@@ -1,22 +1,31 @@
-/* KAN-55 – Màn lập biên bản kiểm định. Dùng token của src/index.css, bố cục theo cột,
-   thanh hành động dính đáy để Sale luôn thấy trạng thái lưu/gửi khi cuộn trang dài. */
+/* ==========================================================================
+   KAN-55 — LẬP BIÊN BẢN KIỂM ĐỊNH CHI TIẾT (/admin/inspection/:carId)
+   Đồng bộ hệ thống TrustCar Executive Studio
+   ========================================================================== */
 
 .page {
-  max-width: 1180px;
+  width: 100%;
+  max-width: 1260px;
   margin: 0 auto;
-  padding: 32px 32px 120px;
+  padding: 28px 32px 120px;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 20px;
 }
 
 .breadcrumb {
   display: flex;
   align-items: center;
   gap: 8px;
+  font-family: var(--font-display);
   font-size: 13px;
+  font-weight: 600;
   color: var(--color-text-secondary);
+}
+
+.breadcrumb a {
+  color: var(--blue);
 }
 
 .backLink {
@@ -27,44 +36,44 @@
 }
 
 .inlineAlert {
-  border-radius: 10px;
+  border-radius: 12px;
 }
 
 .inlineTag {
   margin: 0 4px;
 }
 
-/* ── Thông tin xe ─────────────────────────────────────────────────────── */
-
+/* ── Thông tin tóm tắt xe ──────────────────────────────────── */
 .summary {
   display: flex;
-  gap: 20px;
-  background: var(--color-surface);
+  gap: 22px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
   border: 1px solid var(--color-border);
-  border-radius: 12px;
-  padding: 18px;
+  border-top: 3.5px solid var(--navy);
+  border-radius: 16px;
+  padding: 20px 22px;
   box-shadow: var(--shadow-card);
   flex-wrap: wrap;
 }
 
 .summaryMedia {
-  flex: 0 0 220px;
+  flex: 0 0 228px;
 }
 
 .summaryImage {
   width: 100%;
-  height: 150px;
+  height: 154px;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 12px;
   border: 1px solid var(--color-border);
   background: var(--color-surface-alt);
 }
 
 .summaryImagePlaceholder {
   width: 100%;
-  height: 150px;
-  border-radius: 10px;
-  border: 1px dashed var(--color-border);
+  height: 154px;
+  border-radius: 12px;
+  border: 1.5px dashed var(--color-border);
   background: var(--color-surface-alt);
 }
 
@@ -81,36 +90,45 @@
 }
 
 .eyebrow {
-  color: var(--color-text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-display);
+  color: var(--blue);
   font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1.3px;
+  font-weight: 800;
+  letter-spacing: 1.35px;
+  text-transform: uppercase;
 }
 
 .summaryTitle {
+  font-family: var(--font-display);
   font-size: 22px;
+  font-weight: 800;
+  color: var(--navy);
   margin: 6px 0 4px;
 }
 
 .summaryCode {
   margin: 0;
-  font-size: 13px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  font-weight: 600;
   color: var(--color-text-secondary);
 }
 
 .statusTag {
-  font-size: 13px;
-  padding: 2px 10px;
+  font-size: 12.5px;
+  padding: 3px 12px;
 }
 
 .summaryFacts {
-  margin-top: 12px;
+  margin-top: 14px;
 }
 
-/* ── Banner biên bản bị trả lại ───────────────────────────────────────── */
-
+/* ── Banner biên bản bị trả lại ────────────────────────────── */
 .rejectedBanner {
-  border-radius: 10px;
+  border-radius: 14px;
 }
 
 .rejectedBody {
@@ -121,7 +139,7 @@
 
 .rejectedReason {
   margin: 0;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .rejectedCriteria {
@@ -133,7 +151,7 @@
 
 .rejectedLabel {
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .rejectedNotes {
@@ -148,7 +166,7 @@
 .rejectedSource {
   margin: 0;
   font-size: 12px;
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
 .rejectedAction {
@@ -159,26 +177,25 @@
   border-radius: 8px;
   padding: 6px 14px;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
 }
 
 .rejectedAction:hover {
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.2);
 }
 
-/* ── Thẻ nội dung ─────────────────────────────────────────────────────── */
-
+/* ── Thẻ nội dung ─────────────────────────────────────────── */
 .card,
 .startCard {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 12px;
-  padding: 18px;
+  border-radius: 16px;
+  padding: 22px;
   box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 
 .cardHead {
@@ -186,18 +203,24 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #edf2f9;
 }
 
 .cardTitle {
-  font-size: 17px;
+  font-family: var(--font-display);
+  font-size: 17.5px;
+  font-weight: 800;
+  color: var(--navy);
   margin: 0;
 }
 
 .cardDesc {
   margin: 4px 0 0;
-  font-size: 13px;
+  font-size: 13.5px;
   color: var(--color-text-secondary);
   max-width: 78ch;
+  line-height: 1.55;
 }
 
 .badgeOk,
@@ -205,48 +228,50 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  font-family: var(--font-display);
   font-size: 12px;
-  font-weight: 600;
-  padding: 4px 10px;
+  font-weight: 700;
+  padding: 5px 12px;
   border-radius: 999px;
   white-space: nowrap;
 }
 
 .badgeOk {
-  color: var(--color-success);
-  background: color-mix(in srgb, var(--color-success) 12%, transparent);
+  color: #065f46;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
 }
 
 .badgeWarn {
-  color: var(--color-danger);
-  background: color-mix(in srgb, var(--color-danger) 12%, transparent);
+  color: #991b1b;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
 }
 
 .metaRow {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
   font-size: 13px;
   color: var(--color-text-secondary);
 }
 
 .metaItem strong {
-  color: var(--color-text);
+  color: var(--navy);
 }
 
 .noteScope {
-  margin: -8px 0 0;
+  margin: -6px 0 0;
   font-size: 12.5px;
   color: var(--color-text-secondary);
 }
 
-/* ── Form ─────────────────────────────────────────────────────────────── */
-
+/* ── Form ─────────────────────────────────────────────────── */
 .infoGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 14px;
+  gap: 16px;
 }
 
 .field {
@@ -257,8 +282,10 @@
 }
 
 .fieldLabel {
+  font-family: var(--font-display);
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--navy);
 }
 
 .fieldControl {
@@ -273,13 +300,14 @@
 .fieldError,
 .fieldErrorInline {
   font-size: 12.5px;
+  font-weight: 600;
   color: var(--color-danger);
   margin: 0;
 }
 
 .requiredInline {
   color: var(--color-danger);
-  font-weight: 600;
+  font-weight: 700;
   margin-left: 4px;
 }
 
@@ -288,8 +316,7 @@
   color: var(--color-text-secondary);
 }
 
-/* ── Ảnh tổng thể ─────────────────────────────────────────────────────── */
-
+/* ── Ảnh tổng thể ─────────────────────────────────────────── */
 .overviewGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -297,31 +324,32 @@
 }
 
 .overviewSlot {
-  border: 1px solid var(--color-border);
-  border-radius: 10px;
-  padding: 12px;
-  background: var(--color-surface-alt);
+  border: 1px solid #dce6f3;
+  border-radius: 12px;
+  padding: 14px;
+  background: #f8fbff;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .slotTitle {
-  font-size: 13px;
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 800;
   margin: 0;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.6px;
   text-transform: uppercase;
-  color: var(--color-text-secondary);
+  color: var(--navy);
 }
 
-/* ── Panel tiêu chí ───────────────────────────────────────────────────── */
-
+/* ── Panel tiêu chí ───────────────────────────────────────── */
 .collapseLabel {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-weight: 700;
   flex-wrap: wrap;
 }
 
@@ -343,7 +371,10 @@
 }
 
 .groupTitle {
-  font-size: 15px;
+  font-family: var(--font-display);
+  font-size: 15.5px;
+  font-weight: 800;
+  color: var(--navy);
   margin: 0;
 }
 
@@ -374,13 +405,19 @@
 }
 
 .item {
-  border: 1px solid var(--color-border);
-  border-radius: 10px;
-  padding: 12px;
+  border: 1px solid #dce6f3;
+  border-radius: 12px;
+  padding: 14px;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  background: var(--color-surface);
+  background: #fbfdff;
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+.item:hover {
+  border-color: #b8cde8;
+  background: #ffffff;
 }
 
 .itemRow {
@@ -393,6 +430,8 @@
 
 .itemLabel {
   font-size: 14px;
+  font-weight: 600;
+  color: var(--navy);
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -404,8 +443,7 @@
   margin: 0;
 }
 
-/* ── Upload ảnh ───────────────────────────────────────────────────────── */
-
+/* ── Upload ảnh ───────────────────────────────────────────── */
 .uploader {
   display: flex;
   flex-direction: column;
@@ -466,8 +504,8 @@
   height: 26px;
   display: grid;
   place-items: center;
-  background: rgba(15, 23, 42, 0.72);
-  color: #fff;
+  background: rgba(11, 31, 58, 0.78);
+  color: #ffffff;
   cursor: pointer;
 }
 
@@ -494,9 +532,9 @@
 }
 
 .photoAdd {
-  border: 1px dashed var(--color-border);
+  border: 1.5px dashed #a8bdd8;
   border-radius: 10px;
-  background: var(--color-surface);
+  background: #ffffff;
   color: var(--color-text-secondary);
   cursor: pointer;
   display: flex;
@@ -505,14 +543,16 @@
   justify-content: center;
   gap: 6px;
   font-size: 12.5px;
+  font-weight: 600;
   min-height: 92px;
   padding: 10px;
-  transition: border-color 0.15s ease, color 0.15s ease;
+  transition: border-color 0.18s ease, color 0.18s ease, background-color 0.18s ease;
 }
 
 .photoAdd:hover {
-  border-color: var(--color-accent);
-  color: var(--color-text);
+  border-color: var(--blue);
+  background: #f0f6ff;
+  color: var(--blue);
 }
 
 .fileInput {
@@ -526,23 +566,22 @@
   justify-content: space-between;
 }
 
-/* ── Lỗi nhỏ ──────────────────────────────────────────────────────────── */
-
+/* ── Lỗi nhỏ ──────────────────────────────────────────────── */
 .defects {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .defectCard {
-  border: 1px solid var(--color-border);
-  border-left: 3px solid var(--color-accent);
-  border-radius: 10px;
-  padding: 12px;
+  border: 1px solid #e2eaf4;
+  border-left: 3.5px solid var(--gold);
+  border-radius: 12px;
+  padding: 14px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  background: var(--color-surface-alt);
+  gap: 12px;
+  background: #f8fbff;
 }
 
 .defectHead {
@@ -553,9 +592,10 @@
 }
 
 .defectIndex {
-  font-size: 12.5px;
-  font-weight: 700;
-  color: var(--color-text-secondary);
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--navy);
   letter-spacing: 0.4px;
 }
 
@@ -575,8 +615,7 @@
   align-self: flex-start;
 }
 
-/* ── Kiểm tra trước khi gửi ───────────────────────────────────────────── */
-
+/* ── Kiểm tra trước khi gửi ───────────────────────────────── */
 .criteriaRow {
   display: flex;
   flex-wrap: wrap;
@@ -590,14 +629,16 @@
   border: 1px solid var(--color-border);
   background: var(--color-surface-alt);
   border-radius: 999px;
-  padding: 6px 12px;
+  padding: 6px 13px;
   font-size: 12.5px;
+  font-weight: 600;
   cursor: pointer;
   color: var(--color-text);
 }
 
 .criteriaChip:hover {
-  border-color: var(--color-accent);
+  border-color: var(--blue);
+  background: #eff6ff;
 }
 
 .criteriaChipLabel {
@@ -628,7 +669,7 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .violationItem {
@@ -636,36 +677,41 @@
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  border-left: 3px solid var(--color-danger);
-  background: var(--color-surface-alt);
-  border-radius: 6px;
-  padding: 6px 10px;
+  border: 1px solid #fecaca;
+  border-left: 3.5px solid var(--color-danger);
+  background: #fef2f2;
+  border-radius: 10px;
+  padding: 8px 12px;
 }
 
 .violationMessage {
   font-size: 13px;
+  font-weight: 500;
+  color: #991b1b;
 }
 
-/* ── Thanh hành động ──────────────────────────────────────────────────── */
-
+/* ── Thanh hành động dính đáy ─────────────────────────────── */
 .actionBar {
   position: sticky;
-  bottom: 0;
-  z-index: 5;
+  bottom: 12px;
+  z-index: 15;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  padding: 12px 16px;
-  box-shadow: var(--shadow-card-hover);
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid #bfd2eb;
+  border-radius: 16px;
+  padding: 14px 20px;
+  box-shadow: 0 12px 32px rgba(11, 31, 58, 0.16);
 }
 
 .actionNote {
   font-size: 13px;
+  font-weight: 600;
   color: var(--color-text-secondary);
 }
 
@@ -676,10 +722,10 @@
 }
 
 @media (max-width: 768px) {
-  .page { padding: 16px 16px 130px; }
+  .page { padding: 20px 16px 130px; }
   .summaryMedia { flex: 1 1 100%; }
   .itemRow { align-items: flex-start; }
-  .actionBar { flex-direction: column; align-items: stretch; }
+  .actionBar { flex-direction: column; align-items: stretch; bottom: 8px; }
   .actionButtons { justify-content: stretch; }
   .actionButtons > * { flex: 1 1 auto; }
 }

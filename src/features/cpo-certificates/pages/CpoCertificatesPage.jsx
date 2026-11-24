@@ -22,6 +22,7 @@ export default function CpoCertificatesPage() {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
+        <span className={styles.eyebrow}>HỒ SƠ CHẤT LƯỢNG &amp; TEM QR</span>
         <h1 className={styles.title}>Chứng nhận CPO</h1>
         <p className={styles.desc}>Tra cứu chứng nhận đã cấp, xem kết quả kiểm định và tạo mã QR, tem in cho xe.</p>
       </header>

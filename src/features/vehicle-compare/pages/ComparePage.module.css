@@ -1,65 +1,45 @@
+/* ==========================================================================
+   TRANG SO SÁNH XE (/so-sanh) — MERCEDES-BENZ EDITORIAL SPEC LIST STYLE
+   Header & Control Deck tinh gọn để lộ diện ngay hình ảnh xe & thông số
+   ========================================================================== */
+
 .page {
-  padding: 28px 0 64px;
+  padding: 18px 0 56px;
 }
 
-/* ===== HERO BANNER ÁNH ĐÈN CHIẾU SHOWROOM ===== */
+/* ===== COMPACT SHOWROOM HEADER BAR ===== */
 .heroBanner {
   position: relative;
-  border-radius: 20px;
-  padding: 28px 32px;
-  margin-bottom: 24px;
+  border-radius: 14px;
+  padding: 14px 22px;
+  margin-bottom: 12px;
   background:
-    radial-gradient(ellipse 45% 90% at 22% 0%, rgba(255, 248, 225, 0.14) 0%, transparent 72%),
-    radial-gradient(ellipse 48% 85% at 76% 0%, rgba(201, 162, 39, 0.14) 0%, transparent 72%),
-    linear-gradient(165deg, #081528 0%, #0d213d 55%, #071324 100%);
-  border: 1px solid rgba(201, 162, 39, 0.34);
-  border-bottom: 5px solid #040b16;
-  box-shadow:
-    0 10px 0 rgba(7, 19, 36, 0.16),
-    0 22px 44px rgba(7, 19, 36, 0.24),
-    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+    radial-gradient(ellipse 45% 90% at 20% 0%, rgba(255, 248, 225, 0.08) 0%, transparent 72%),
+    linear-gradient(165deg, #091526 0%, #0e213b 60%, #081322 100%);
+  border: 1px solid rgba(201, 162, 39, 0.28);
+  box-shadow: 0 8px 24px rgba(7, 19, 36, 0.16);
   overflow: hidden;
   color: #f8fafc;
 }
 
-/* Dải đèn hắt trần Showroom ánh vàng Champagne mảnh và dịu */
 .heroLedTop {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 2px;
+  height: 1.5px;
   background: linear-gradient(
     90deg,
-    transparent 5%,
-    rgba(255, 248, 225, 0.45) 25%,
+    transparent 8%,
+    rgba(255, 248, 225, 0.35) 28%,
     #e5c878 50%,
-    rgba(255, 248, 225, 0.45) 75%,
-    transparent 95%
+    rgba(255, 248, 225, 0.35) 72%,
+    transparent 92%
   );
-  box-shadow:
-    0 1px 12px rgba(229, 200, 120, 0.55),
-    0 4px 24px rgba(255, 248, 225, 0.22);
 }
 
-/* Chùm đèn Spotlight rọi từ trần xuống */
 .spotlightBeams {
-  position: absolute;
-  inset: 0;
-  background:
-    conic-gradient(
-      from 165deg at 25% -10%,
-      transparent 0deg,
-      rgba(255, 250, 235, 0.06) 15deg,
-      transparent 32deg
-    ),
-    conic-gradient(
-      from 165deg at 75% -10%,
-      transparent 0deg,
-      rgba(229, 200, 120, 0.06) 15deg,
-      transparent 32deg
-    );
-  pointer-events: none;
+  display: none;
 }
 
 .heroContent {
@@ -69,120 +49,87 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 14px;
 }
 
 .heroLeft {
-  max-width: 620px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-width: 680px;
 }
 
 .heroEyebrow {
   display: inline-flex;
   align-items: center;
+  align-self: flex-start;
   gap: 6px;
-  padding: 4px 13px;
-  border-radius: 999px;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 1.4px;
-  background: rgba(201, 162, 39, 0.14);
-  color: #f3dc93;
-  border: 1px solid rgba(201, 162, 39, 0.38);
-  margin-bottom: 10px;
+  color: #e5c878;
+  text-transform: uppercase;
 }
 
 .title {
-  margin: 0 0 8px;
-  font-size: clamp(26px, 3vw, 33px);
+  margin: 0;
+  font-size: clamp(19px, 2vw, 23px);
   font-weight: 800;
-  letter-spacing: -0.4px;
+  letter-spacing: -0.3px;
   color: #ffffff;
+  line-height: 1.25;
 }
 
 .heroSubtitle {
-  font-size: 14px;
-  line-height: 1.6;
-  color: #cbd5e1;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: #94a3b8;
   margin: 0;
 }
 
 .heroStats {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 8px;
 }
 
 .statCard {
-  min-width: 122px;
-  padding: 12px 16px;
-  border-radius: 14px;
-  background: rgba(11, 25, 48, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-bottom: 3px solid rgba(4, 10, 20, 0.9);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(8px);
-}
-
-.statCardGold {
-  min-width: 195px;
-  align-items: flex-start;
-  background: linear-gradient(145deg, rgba(201, 162, 39, 0.18) 0%, rgba(11, 25, 48, 0.85) 100%);
-  border-color: rgba(229, 200, 120, 0.48);
-  border-bottom-color: #7d5d09;
+  padding: 6px 12px;
+  border-radius: 10px;
+  background: rgba(15, 31, 56, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
 }
 
 .statVal {
-  font-size: 21px;
+  font-size: 15px;
   font-weight: 800;
-  color: #ffffff;
-  line-height: 1.1;
+  color: #f3dc93;
+  font-variant-numeric: tabular-nums;
 }
 
 .statLabel {
   font-size: 11.5px;
-  font-weight: 600;
-  color: #94a3b8;
-  margin-top: 4px;
+  font-weight: 500;
+  color: #cbd5e1;
 }
 
-.statCrown {
-  font-size: 10.5px;
-  font-weight: 800;
-  color: #f3dc93;
-  letter-spacing: 0.5px;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.statTopName {
-  font-size: 14.5px;
-  font-weight: 700;
-  color: #ffffff;
-  margin-top: 4px;
-}
-
-/* ===== CONTROL DECK & TOOLBAR ===== */
+/* ===== COMPACT SINGLE-ROW CONTROL DECK ===== */
 .alert,
 .sameAlert {
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   border-radius: 12px;
 }
 
 .controlDeck {
-  border-radius: 16px;
-  padding: 16px 20px;
-  margin-bottom: 20px;
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-bottom: 4px solid var(--card-3d-edge);
-  box-shadow: var(--shadow-card);
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
 }
 
 .toolbar {
@@ -190,106 +137,29 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
-}
-
-.switchGroup {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 20px;
-}
-
-.switch {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 13.5px;
-  color: var(--color-text);
-}
-
-.switchLabelText {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.trophyIcon {
-  color: var(--color-accent);
-}
-
-/* TOOLBAR ACTIONS */
-.toolbarActions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.addMore {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 15px;
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 700;
-  background: linear-gradient(180deg, #fae498 0%, #c9a227 100%);
-  color: #081527;
-  border: 1px solid #fff2ba;
-  border-bottom: 3px solid #7d5d09;
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
-}
-
-.addMore:hover {
-  transform: translateY(-1px);
-  color: #081527;
-  box-shadow: 0 6px 16px rgba(201, 162, 39, 0.28);
-}
-
-.clearBtn {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 7px 13px;
-  border-radius: 999px;
-  border: 1px solid var(--color-border);
-  background: var(--color-surface-alt);
-  color: var(--color-text-secondary);
-  font-size: 12.5px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.18s ease;
-}
-
-.clearBtn:hover {
-  color: var(--color-danger);
-  border-color: var(--color-danger);
+  gap: 10px 16px;
 }
 
 /* CATEGORY TABS */
 .categoryNav {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  padding-top: 12px;
-  border-top: 1px solid var(--color-border);
+  gap: 6px;
 }
 
 .catBtn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 14px;
+  gap: 6px;
+  padding: 5px 12px;
   border-radius: 999px;
   border: 1px solid var(--color-border);
   background: var(--color-surface-alt);
   color: var(--color-text-secondary);
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.18s ease;
 }
 
 .catBtn:hover {
@@ -301,16 +171,16 @@
   background: #0b1f3a;
   color: #f8fafc;
   border-color: rgba(201, 162, 39, 0.65);
-  box-shadow: 0 3px 10px rgba(11, 31, 58, 0.16);
 }
 
 .catCount {
-  padding: 1px 7px;
+  padding: 0 6px;
   border-radius: 999px;
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 700;
   background: rgba(201, 162, 39, 0.14);
   color: var(--color-accent-hover);
+  font-variant-numeric: tabular-nums;
 }
 
 .catBtnActive .catCount {
@@ -318,15 +188,89 @@
   color: #fae498;
 }
 
+/* SWITCHES & ACTIONS */
+.switchGroup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+}
+
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12.5px;
+  color: var(--color-text);
+}
+
+.switchLabelText {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.trophyIcon {
+  color: var(--color-accent);
+  font-size: 12px;
+}
+
+.toolbarActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.addMore {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  background: linear-gradient(180deg, #fae498 0%, #c9a227 100%);
+  color: #081527;
+  border: 1px solid #e5c878;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.addMore:hover {
+  transform: translateY(-1px);
+  color: #081527;
+  box-shadow: 0 4px 12px rgba(201, 162, 39, 0.25);
+}
+
+.clearBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-alt);
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.clearBtn:hover {
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
 /* NOTICE CARD */
 .noticeCard {
-  border-radius: 18px;
+  border-radius: 16px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-bottom: 4px solid var(--card-3d-edge);
   box-shadow: var(--shadow-card);
   padding: 12px 16px 20px;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .noticeActions {
@@ -339,29 +283,23 @@
 .singleSelectedHint {
   margin: 0 auto;
   max-width: 620px;
-  padding: 12px 18px;
-  border-radius: 12px;
+  padding: 10px 16px;
+  border-radius: 10px;
   background: rgba(201, 162, 39, 0.08);
   border: 1px solid rgba(201, 162, 39, 0.32);
   text-align: center;
-  font-size: 13.5px;
+  font-size: 13px;
   color: var(--color-text);
 }
 
 @media (max-width: 768px) {
   .page {
-    padding: 18px 0 40px;
+    padding: 14px 0 36px;
   }
-
   .heroBanner {
-    padding: 20px 18px;
+    padding: 12px 16px;
   }
-
-  .title {
-    font-size: 24px;
-  }
-
   .controlDeck {
-    padding: 14px;
+    padding: 10px 12px;
   }
 }

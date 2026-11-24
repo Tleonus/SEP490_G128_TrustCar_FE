@@ -1,55 +1,211 @@
+/* ==========================================================================
+   QUẢN LÝ NGƯỜI DÙNG & PHÂN QUYỀN (/admin/nguoi-dung)
+   Đồng bộ hệ thống TrustCar Executive Studio
+   ========================================================================== */
+
 .page {
+  width: 100%;
   max-width: 1440px;
   margin: 0 auto;
-  padding: 32px;
+  padding: 28px 32px 48px;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .header {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 20px;
-  margin-bottom: 24px;
+  flex-wrap: wrap;
 }
 
-.eyebrow { color: var(--muted, #64748b); font-size: 11px; font-weight: 700; letter-spacing: 1.3px; }
-.title { font-size: 24px; margin-bottom: 8px; }
-.desc { font-size: 14px; color: var(--color-text-secondary); max-width: 720px; }
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(29, 78, 216, 0.1) 0%, rgba(201, 162, 39, 0.14) 100%);
+  border: 1px solid rgba(29, 78, 216, 0.22);
+  font-family: var(--font-display);
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.35px;
+  text-transform: uppercase;
+}
 
-.person { display: flex; flex-direction: column; gap: 2px; }
-.personName { font-size: 14px; }
-.personEmail { font-size: 12px; color: var(--color-text-secondary); }
+.eyebrow::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 0 2px rgba(201, 162, 39, 0.24);
+}
 
-.badgeRow { display: flex; flex-wrap: wrap; gap: 6px; }
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 2.1vw, 30px);
+  font-weight: 800;
+  color: var(--navy);
+  margin: 10px 0 6px;
+  letter-spacing: -0.025em;
+}
+
+.desc {
+  font-size: 14.5px;
+  color: var(--color-text-secondary);
+  max-width: 720px;
+  line-height: 1.55;
+}
+
+.tableWrap {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+.tableWrap :global(.ant-pagination) {
+  padding: 0 16px;
+}
+
+.person {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.personName {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.personEmail {
+  font-size: 12.5px;
+  color: var(--color-text-secondary);
+}
+
+.badgeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
 .badge {
   display: inline-flex;
   align-items: center;
-  padding: 2px 9px;
+  padding: 3px 10px;
   border-radius: 999px;
+  font-family: var(--font-display);
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   border: 1px solid transparent;
   white-space: nowrap;
 }
 
-.badgeAdmin { background: #eef2ff; color: #3730a3; border-color: #c7d2fe; }
-.badgeInspector { background: #ecfdf5; color: #065f46; border-color: #a7f3d0; }
-.badgeSales { background: #eff6ff; color: #1e40af; border-color: #bfdbfe; }
-.badgeDefault { background: #f1f5f9; color: #475569; border-color: #e2e8f0; }
+.badgeAdmin {
+  background: linear-gradient(135deg, #fffdf5 0%, #fef3c7 100%);
+  color: #78350f;
+  border-color: rgba(201, 162, 39, 0.45);
+}
 
-.activeText { color: #15803d; font-weight: 600; font-size: 13px; }
-.inactiveText { color: #b91c1c; font-weight: 600; font-size: 13px; }
+.badgeInspector {
+  background: #ecfdf5;
+  color: #065f46;
+  border-color: #a7f3d0;
+}
 
-.modalHint { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 12px; }
+.badgeSales {
+  background: #eff6ff;
+  color: #1e40af;
+  border-color: #bfdbfe;
+}
 
-.currentBadges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.badgeDefault {
+  background: #f1f5f9;
+  color: #475569;
+  border-color: #e2e8f0;
+}
 
-.roleGroup { display: flex; flex-direction: column; gap: 10px; }
-.roleOption { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-.roleOptionLabel { font-size: 14px; display: inline-flex; align-items: center; gap: 8px; }
+.activeText {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #0f766e;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.activeText::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+}
+
+.inactiveText {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.modalHint {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  margin-bottom: 12px;
+}
+
+.currentBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.roleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.roleOption {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.roleOptionLabel {
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
 
 .primaryTag {
+  font-family: var(--font-display);
   font-size: 11px;
   font-weight: 700;
   color: #1d4ed8;
@@ -62,9 +218,17 @@
 .warning {
   margin-top: 16px;
   padding: 10px 12px;
-  border-radius: 8px;
+  border-radius: 10px;
   background: #fffbeb;
   border: 1px solid #fde68a;
   color: #92400e;
   font-size: 13px;
+}
+
+@media (max-width: 900px) {
+  .page { padding: 24px; }
+}
+
+@media (max-width: 760px) {
+  .page { padding: 20px 16px 36px; }
 }

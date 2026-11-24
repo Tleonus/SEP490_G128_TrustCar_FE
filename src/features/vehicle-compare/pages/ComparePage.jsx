@@ -267,79 +267,70 @@ export default function ComparePage() {
           />
         )}
 
-        {/* KHỐI TƯ VẤN CHỌN XE THEO NHU CẦU */}
-        <CompareRecommendPanel
-          mode="advisor"
-          cars={cars}
-          analysis={analysis}
-          canAddMore={cars.length < MAX_COMPARE}
-          onAddCar={handleAddRecommendedCar}
-          onReplaceCar={handleReplaceCar}
-          onApplyMatchup={handleApplyMatchup}
-        />
-
-        {/* THANH ĐIỀU KHIỂN TINH GỌN */}
+        {/* THANH ĐIỀU KHIỂN & BỘ LỌC HẠNG MỤC TINH GỌN */}
         <div className={styles.controlDeck}>
           <div className={styles.toolbar}>
+            <div className={styles.categoryNav} role="tablist" aria-label="Nhóm thông số">
+              {CATEGORY_TABS.map((tab) => {
+                const active = activeCategory === tab.key
+                const diffCount =
+                  tab.key === 'all' ? stats.diffRows : stats.groupDiffMap[tab.key] ?? 0
+                return (
+                  <button
+                    key={tab.key}
+                    type="button"
+                    role="tab"
+                    aria-selected={active}
+                    className={`${styles.catBtn} ${active ? styles.catBtnActive : ''}`}
+                    onClick={() => setActiveCategory(tab.key)}
+                  >
+                    <span>{tab.label}</span>
+                    <span className={styles.catCount}>{diffCount}</span>
+                  </button>
+                )
+              })}
+            </div>
+
             <div className={styles.switchGroup}>
               <label className={styles.switch}>
                 <Switch
+                  size="small"
                   checked={differencesOnly}
                   onChange={setDifferencesOnly}
                   aria-label="Chỉ hiện điểm khác biệt"
                 />
                 <span className={styles.switchLabelText}>
-                  Chỉ hiện điểm khác biệt ({stats.diffRows})
+                  Chỉ hiện khác biệt ({stats.diffRows})
                 </span>
               </label>
 
               <label className={styles.switch}>
                 <Switch
+                  size="small"
                   checked={highlightWinners}
                   onChange={setHighlightWinners}
                   aria-label="Tô sáng thông số vượt trội"
                 />
                 <span className={styles.switchLabelText}>
-                  <TrophyFilled className={styles.trophyIcon} /> Làm nổi bật ưu thế từng xe
+                  <TrophyFilled className={styles.trophyIcon} /> Nhấn điểm nổi bật
                 </span>
               </label>
-            </div>
 
-            <div className={styles.toolbarActions}>
-              {cars.length < MAX_COMPARE && (
-                <Link to="/xe" className={styles.addMore}>
-                  <PlusCircleOutlined /> Thêm xe thứ {cars.length + 1}
-                </Link>
-              )}
-              <button type="button" className={styles.clearBtn} onClick={handleClearAll}>
-                <DeleteOutlined /> Xóa tất cả
-              </button>
-            </div>
-          </div>
-
-          <div className={styles.categoryNav} role="tablist" aria-label="Nhóm thông số">
-            {CATEGORY_TABS.map((tab) => {
-              const active = activeCategory === tab.key
-              const diffCount =
-                tab.key === 'all' ? stats.diffRows : stats.groupDiffMap[tab.key] ?? 0
-              return (
-                <button
-                  key={tab.key}
-                  type="button"
-                  role="tab"
-                  aria-selected={active}
-                  className={`${styles.catBtn} ${active ? styles.catBtnActive : ''}`}
-                  onClick={() => setActiveCategory(tab.key)}
-                >
-                  <span>{tab.label}</span>
-                  <span className={styles.catCount}>{diffCount} khác biệt</span>
+              <div className={styles.toolbarActions}>
+                {cars.length < MAX_COMPARE && (
+                  <Link to="/xe" className={styles.addMore}>
+                    <PlusCircleOutlined /> Thêm xe
+                  </Link>
+                )}
+                <button type="button" className={styles.clearBtn} onClick={handleClearAll}>
+                  <DeleteOutlined /> Xóa tất cả
                 </button>
-              )
-            })}
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* BẢNG SO SÁNH KHUNG 3D ÁNH ĐÈN SHOWROOM */}
+        {/* BẢNG SO SÁNH PHONG CÁCH MERCEDES-BENZ SPEC LIST */}
         {groups.length === 0 ? (
           <Alert
             type="info"
@@ -361,6 +352,17 @@ export default function ComparePage() {
         {/* GỢI Ý XE TƯƠNG TỰ TỪ KHO XE */}
         <CompareRecommendPanel
           mode="inventory"
+          cars={cars}
+          analysis={analysis}
+          canAddMore={cars.length < MAX_COMPARE}
+          onAddCar={handleAddRecommendedCar}
+          onReplaceCar={handleReplaceCar}
+          onApplyMatchup={handleApplyMatchup}
+        />
+
+        {/* KHỐI PHÂN TÍCH & GỢI Ý TỪ AI (CHUYỂN XUỐNG CUỐI TRANG & THU GỌN) */}
+        <CompareRecommendPanel
+          mode="advisor"
           cars={cars}
           analysis={analysis}
           canAddMore={cars.length < MAX_COMPARE}
