@@ -49,6 +49,24 @@ describe('mapIntakeToCreateCarDto', () => {
     });
   });
 
+  it('gửi kiểu dáng, số chỗ ngồi và màu ngoại/nội thất', () => {
+    const dto = mapIntakeToCreateCarDto({
+      ...sampleIntakePayload,
+      bodyType: 'suv',
+      numberOfSeats: '7',
+      exteriorColor: '  Trắng ngọc trai ',
+      interiorColor: 'Da màu kem',
+    });
+    expect(dto.bodyType).toBe('SUV');
+    expect(dto.specifications).toEqual({ color: 'Trắng ngọc trai', interiorColor: 'Da màu kem', numberOfSeats: 7 });
+  });
+
+  it('bỏ qua kiểu dáng không hợp lệ và các thông số để trống', () => {
+    const dto = mapIntakeToCreateCarDto({ ...sampleIntakePayload, bodyType: 'TANK', numberOfSeats: '', exteriorColor: '  ', interiorColor: '' });
+    expect(dto).not.toHaveProperty('bodyType');
+    expect(dto).not.toHaveProperty('specifications');
+  });
+
   it('map đúng xe ký gửi, hộp số hybrid -> CVT và nhiên liệu diesel -> DIESEL', () => {
     const dto = mapIntakeToCreateCarDto({
       ...sampleIntakePayload,
