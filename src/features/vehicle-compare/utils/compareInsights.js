@@ -11,13 +11,13 @@ export const AI_DISCLAIMER_TEXT = AI_DISCLAIMER_COMPARE
 export const CAR_LED_THEMES = [
   {
     key: 'champagne',
-    name: 'Champagne Gold',
+    name: 'Cobalt Highlight',
     badge: 'XE #1',
-    primary: '#c9a227',
-    glow: '#e5c878',
-    softBg: 'rgba(201, 162, 39, 0.10)',
-    border: 'rgba(201, 162, 39, 0.42)',
-    gradient: 'linear-gradient(90deg, #b8911b 0%, #e5c878 100%)',
+    primary: '#1d4ed8',
+    glow: '#93c5fd',
+    softBg: 'rgba(29, 78, 216, 0.10)',
+    border: 'rgba(29, 78, 216, 0.42)',
+    gradient: 'linear-gradient(90deg, #1e40af 0%, #93c5fd 100%)',
   },
   {
     key: 'platinum',
@@ -43,16 +43,16 @@ export const CAR_LED_THEMES = [
 
 export const GROUP_THEMES = {
   general: {
-    accent: '#c9a227',
+    accent: '#1d4ed8',
     badge: 'TỔNG QUAN',
     icon: 'compass',
-    gradient: 'linear-gradient(90deg, rgba(201, 162, 39, 0.10) 0%, transparent 100%)',
+    gradient: 'linear-gradient(90deg, rgba(29, 78, 216, 0.10) 0%, transparent 100%)',
   },
   engine: {
-    accent: '#b8911b',
+    accent: '#1e40af',
     badge: 'VẬN HÀNH',
     icon: 'thunder',
-    gradient: 'linear-gradient(90deg, rgba(201, 162, 39, 0.10) 0%, transparent 100%)',
+    gradient: 'linear-gradient(90deg, rgba(29, 78, 216, 0.10) 0%, transparent 100%)',
   },
   seats: {
     accent: '#64748b',
@@ -89,7 +89,7 @@ const ROW_RULES = {
     getter: (c) => GRADE_SCORE[c.conditionGrade] ?? null,
     mode: 'max',
     winnerLabel: 'Tình trạng tốt nhất',
-    color: 'gold',
+    color: 'blue',
   },
   engineDisplacementCC: {
     getter: (c) => numOrNull(c.specifications?.engineDisplacementCC),
@@ -262,7 +262,7 @@ export function analyzeCars(cars) {
         type: 'market',
         text: `Thấp hơn giá thị trường ${formatPrice(marketSavings)}`,
         short: `Rẻ hơn TT ${formatPrice(marketSavings)}`,
-        color: 'gold',
+        color: 'blue',
       })
     }
     if (maxYear != null && new Set(validYears).size > 1 && car.year === maxYear) {
@@ -310,7 +310,7 @@ export function analyzeCars(cars) {
         type: 'grade',
         text: 'Tình trạng hạng A – Rất tốt',
         short: 'Hạng A – Rất tốt',
-        color: 'gold',
+        color: 'blue',
       })
     }
 
@@ -476,7 +476,7 @@ export function recommendSimilarCars(currentCars, poolCars, limit = 4) {
     if (sameBody && priceDiffRatio <= 0.25) {
       rankPriority = 5
       reasonTag = `Đối thủ ${labelFor(BODY_TYPE_LABEL, car.bodyType)} cùng tầm giá`
-      reasonColor = 'gold'
+      reasonColor = 'blue'
     } else if (priceDiffRatio <= 0.2) {
       rankPriority = 4
       reasonTag = 'Cùng tầm ngân sách'

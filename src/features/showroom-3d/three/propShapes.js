@@ -5,7 +5,7 @@ import { PAINTS } from './paint'
 // Đồ vật dựng bằng code (không có sẵn mô hình): thùng sơn, kệ sơn, đèn thả trần.
 // @ears .sdd/features/showroom-3d/SPEC.md#REQ-F15
 
-const CAN_COLORS = [...PAINTS.filter((p) => p.color).map((p) => p.color), '#c9a227', '#4a6fa5', '#7a7f86', '#b53a1f']
+const CAN_COLORS = [...PAINTS.filter((p) => p.color).map((p) => p.color), '#1d4ed8', '#4a6fa5', '#7a7f86', '#b53a1f']
 
 let labelTex = null
 /** Nhãn thùng sơn "TRUST CAR · PAINT" (dùng chung). */

@@ -71,7 +71,7 @@
   gap: 7px;
   padding: 4px 12px;
   border-radius: 999px;
-  background: linear-gradient(135deg, rgba(29, 78, 216, 0.1) 0%, rgba(201, 162, 39, 0.14) 100%);
+  background: linear-gradient(135deg, rgba(29, 78, 216, 0.1) 0%, rgba(29, 78, 216, 0.14) 100%);
   border: 1px solid rgba(29, 78, 216, 0.22);
 }
 
@@ -79,8 +79,8 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--gold, #c9a227);
-  box-shadow: 0 0 0 2px rgba(201, 162, 39, 0.24);
+  background: var(--gold, #1d4ed8);
+  box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.24);
 }
 
 .page h1 {
@@ -113,7 +113,7 @@
 }
 
 .heading-meta svg {
-  color: var(--gold, #c9a227);
+  color: var(--gold, #1d4ed8);
 }
 
 /* ── Stepper tiến độ hồ sơ ─────────────────────────────────── */
@@ -184,7 +184,7 @@
 }
 
 .step-line.filled {
-  background: linear-gradient(90deg, #1d4ed8 0%, #c9a227 100%);
+  background: linear-gradient(90deg, #1d4ed8 0%, #1d4ed8 100%);
 }
 
 /* ── Thông báo trạng thái ──────────────────────────────────── */
@@ -332,7 +332,7 @@
   display: grid;
   place-items: center;
   background: linear-gradient(135deg, #0b1f3a 0%, #16355c 100%);
-  color: #f4d879;
+  color: #93c5fd;
   font-family: var(--font-display);
   font-size: 13px;
   font-weight: 800;

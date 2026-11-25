@@ -18,7 +18,7 @@ export function makeRunningLed(root) {
     if (m.userData.led) return
     o.geometry.computeBoundingBox()
     const center = o.geometry.boundingBox.getCenter(new Vector3())
-    m.emissive.set('#ffb52e')
+    m.emissive.set('#60a5fa')
     m.emissiveIntensity = 3
     m.onBeforeCompile = (shader) => {
       shader.uniforms.uLedTime = LED_TIME
@@ -54,7 +54,7 @@ let bandMaterial = null
  */
 export function ledBand(radius, height, y) {
   if (!bandMaterial) {
-    bandMaterial = new MeshStandardMaterial({ name: 'TC_LedBand_glow', color: '#000000', emissive: '#ffb52e', side: DoubleSide })
+    bandMaterial = new MeshStandardMaterial({ name: 'TC_LedBand_glow', color: '#000000', emissive: '#60a5fa', side: DoubleSide })
     const holder = new Mesh(new CylinderGeometry(1, 1, 1, 8, 1, true), bandMaterial)
     makeRunningLed(holder)
   }

@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { interestTone, ratingText, previewNotes, PREVIEW_MAX } from './feedbackView'
 
 describe('interestTone', () => {
-  it.each([['Nóng', 'volcano'], ['Ấm', 'gold'], ['Lạnh', 'blue'], ['Rất nóng', 'default'], ['', 'default'], [undefined, 'default']])(
+  it.each([['Nóng', 'volcano'], ['Ấm', 'blue'], ['Lạnh', 'blue'], ['Rất nóng', 'default'], ['', 'default'], [undefined, 'default']])(
     '%s → %s', (label, tone) => expect(interestTone(label)).toBe(tone),
   )
 })

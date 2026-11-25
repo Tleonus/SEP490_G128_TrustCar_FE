@@ -20,7 +20,7 @@ function CodeCell({ visit }) {
       {(visit.isNewRequest || visit.needsReminderCall || visit.needsOutcome) && (
         <span>
           {visit.isNewRequest && <Tag color="blue">{PIN_LABEL}</Tag>}
-          {visit.needsReminderCall && <Tag color="gold">{REMINDER_LABEL}</Tag>}
+          {visit.needsReminderCall && <Tag color="blue">{REMINDER_LABEL}</Tag>}
           {visit.needsOutcome && <Tag color="volcano">{OUTCOME_LABEL}</Tag>}
         </span>
       )}

@@ -33,7 +33,7 @@ export const CAR_MAX_PAGES = 20
 export const CHART_COLORS = [
   '#1d4ed8',
   '#0ea5e9',
-  '#c9a227',
+  '#1d4ed8',
   '#1f8a4c',
   '#8b5cf6',
   '#e05b4c',

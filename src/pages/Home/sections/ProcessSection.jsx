@@ -1,3 +1,4 @@
+import ScrollReveal from '../components/ScrollReveal'
 import styles from './ProcessSection.module.css'
 
 const STEPS = [
@@ -23,20 +24,22 @@ export default function ProcessSection() {
   return (
     <section className={styles.process}>
       <div className="container">
-        <div className="section-head">
+        <ScrollReveal variant="up" className="section-head">
           <div className="section-eyebrow">Quy trình mua xe</div>
           <h2 className="section-title">Chỉ 4 bước để sở hữu xe mơ ước</h2>
           <p className="section-desc">
             Quy trình đơn giản, rõ ràng, tiết kiệm thời gian cho khách hàng.
           </p>
-        </div>
+        </ScrollReveal>
         <div className={styles.grid}>
           {STEPS.map((step, idx) => (
-            <div key={step.title} className={styles.step}>
-              <div className={styles.stepNumber}>{idx + 1}</div>
-              <div className={styles.stepTitle}>{step.title}</div>
-              <p className={styles.stepDesc}>{step.desc}</p>
-            </div>
+            <ScrollReveal key={step.title} variant="up" delay={idx * 85}>
+              <div className={styles.step}>
+                <div className={styles.stepNumber}>0{idx + 1}</div>
+                <div className={styles.stepTitle}>{step.title}</div>
+                <p className={styles.stepDesc}>{step.desc}</p>
+              </div>
+            </ScrollReveal>
           ))}
         </div>
       </div>

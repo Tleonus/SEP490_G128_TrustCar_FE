@@ -97,7 +97,7 @@ export const SALES_THEME = { token: { colorInfo: '#1d4ed8' } }
 /** KAN-97 — màu/nhãn cho badge Mức độ (HOT/WARM/COLD). */
 export const SCORE_BAND_COLOR = Object.freeze({
   HOT: 'red',
-  WARM: 'gold',
+  WARM: 'blue',
   COLD: 'default',
 })
 

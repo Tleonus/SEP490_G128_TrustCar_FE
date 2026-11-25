@@ -17,7 +17,7 @@ export const SERVICE_SLOT_REASON_LABEL = Object.freeze({
 
 /** Trạng thái lịch dịch vụ (BE: AppointmentStatus). */
 export const SERVICE_STATUS = Object.freeze({
-  PENDING: { label: 'Chờ xác nhận', color: 'gold' },
+  PENDING: { label: 'Chờ xác nhận', color: 'blue' },
   CONFIRMED: { label: 'Đã xác nhận', color: 'green' },
   COMPLETED: { label: 'Đã hoàn tất', color: 'blue' },
   NO_SHOW: { label: 'Vắng mặt', color: 'red' },
