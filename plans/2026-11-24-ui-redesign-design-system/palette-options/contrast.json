@@ -1,0 +1,554 @@
+{
+  "current": {
+    "light": [
+      {
+        "pair": "text/bg",
+        "ratio": 16.08,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "text/surface",
+        "ratio": 17.42,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "muted/surface",
+        "ratio": 6.18,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "muted/surfaceAlt",
+        "ratio": 5.39,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "onPrimary/primary",
+        "ratio": 16.52,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "primary/surface",
+        "ratio": 16.52,
+        "min": 3,
+        "pass": true
+      },
+      {
+        "pair": "onAccent/accent",
+        "ratio": 6.83,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "accentText/surface",
+        "ratio": 4.91,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "success/surface",
+        "ratio": 4.38,
+        "min": 4.5,
+        "pass": false
+      },
+      {
+        "pair": "warning/surface",
+        "ratio": 5.02,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "danger/surface",
+        "ratio": 5.44,
+        "min": 4.5,
+        "pass": true
+      }
+    ],
+    "dark": [
+      {
+        "pair": "text/bg",
+        "ratio": 16.99,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "text/surface",
+        "ratio": 15.5,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "muted/surface",
+        "ratio": 7.37,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "muted/surfaceAlt",
+        "ratio": 6.66,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "onPrimary/primary",
+        "ratio": 8.58,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "primary/surface",
+        "ratio": 9,
+        "min": 3,
+        "pass": true
+      },
+      {
+        "pair": "onAccent/accent",
+        "ratio": 8.58,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "accentText/surface",
+        "ratio": 9,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "success/surface",
+        "ratio": 6.59,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "warning/surface",
+        "ratio": 8.07,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "danger/surface",
+        "ratio": 4.76,
+        "min": 4.5,
+        "pass": true
+      }
+    ]
+  },
+  "graphite": {
+    "light": [
+      {
+        "pair": "text/bg",
+        "ratio": 16.28,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "text/surface",
+        "ratio": 17.75,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "muted/surface",
+        "ratio": 6.29,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "muted/surfaceAlt",
+        "ratio": 5.28,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "onPrimary/primary",
+        "ratio": 5.18,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "primary/surface",
+        "ratio": 5.18,
+        "min": 3,
+        "pass": true
+      },
+      {
+        "pair": "onAccent/accent",
+        "ratio": 17.75,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "accentText/surface",
+        "ratio": 5.18,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "success/surface",
+        "ratio": 5.35,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "warning/surface",
+        "ratio": 5.19,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "danger/surface",
+        "ratio": 5.62,
+        "min": 4.5,
+        "pass": true
+      }
+    ],
+    "dark": [
+      {
+        "pair": "text/bg",
+        "ratio": 16.85,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "text/surface",
+        "ratio": 15.56,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "muted/surface",
+        "ratio": 7.07,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "muted/surfaceAlt",
+        "ratio": 6.31,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "onPrimary/primary",
+        "ratio": 6.83,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "primary/surface",
+        "ratio": 6.77,
+        "min": 3,
+        "pass": true
+      },
+      {
+        "pair": "onAccent/accent",
+        "ratio": 15.72,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "accentText/surface",
+        "ratio": 7.53,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "success/surface",
+        "ratio": 10.09,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "warning/surface",
+        "ratio": 10.53,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "danger/surface",
+        "ratio": 6.35,
+        "min": 4.5,
+        "pass": true
+      }
+    ]
+  },
+  "petrol": {
+    "light": [
+      {
+        "pair": "text/bg",
+        "ratio": 15.77,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "text/surface",
+        "ratio": 17.03,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "muted/surface",
+        "ratio": 6.42,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "muted/surfaceAlt",
+        "ratio": 5.48,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "onPrimary/primary",
+        "ratio": 9.64,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "primary/surface",
+        "ratio": 9.64,
+        "min": 3,
+        "pass": true
+      },
+      {
+        "pair": "onAccent/accent",
+        "ratio": 9.2,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "accentText/surface",
+        "ratio": 5.3,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "success/surface",
+        "ratio": 5.08,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "warning/surface",
+        "ratio": 5.19,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "danger/surface",
+        "ratio": 5.45,
+        "min": 4.5,
+        "pass": true
+      }
+    ],
+    "dark": [
+      {
+        "pair": "text/bg",
+        "ratio": 16.67,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "text/surface",
+        "ratio": 14.85,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "muted/surface",
+        "ratio": 7.68,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "muted/surfaceAlt",
+        "ratio": 6.46,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "onPrimary/primary",
+        "ratio": 10.19,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "primary/surface",
+        "ratio": 10.16,
+        "min": 3,
+        "pass": true
+      },
+      {
+        "pair": "onAccent/accent",
+        "ratio": 10.19,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "accentText/surface",
+        "ratio": 10.16,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "success/surface",
+        "ratio": 9.56,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "warning/surface",
+        "ratio": 9.98,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "danger/surface",
+        "ratio": 6.02,
+        "min": 4.5,
+        "pass": true
+      }
+    ]
+  },
+  "bordeaux": {
+    "light": [
+      {
+        "pair": "text/bg",
+        "ratio": 16.53,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "text/surface",
+        "ratio": 17.67,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "muted/surface",
+        "ratio": 6.25,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "muted/surfaceAlt",
+        "ratio": 5.28,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "onPrimary/primary",
+        "ratio": 10.25,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "primary/surface",
+        "ratio": 10.25,
+        "min": 3,
+        "pass": true
+      },
+      {
+        "pair": "onAccent/accent",
+        "ratio": 12.69,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "accentText/surface",
+        "ratio": 10.25,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "success/surface",
+        "ratio": 5.28,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "warning/surface",
+        "ratio": 5.19,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "danger/surface",
+        "ratio": 6.57,
+        "min": 4.5,
+        "pass": true
+      }
+    ],
+    "dark": [
+      {
+        "pair": "text/bg",
+        "ratio": 16.55,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "text/surface",
+        "ratio": 15.5,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "muted/surface",
+        "ratio": 7.54,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "muted/surfaceAlt",
+        "ratio": 6.79,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "onPrimary/primary",
+        "ratio": 6.82,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "primary/surface",
+        "ratio": 6.35,
+        "min": 3,
+        "pass": true
+      },
+      {
+        "pair": "onAccent/accent",
+        "ratio": 11.25,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "accentText/surface",
+        "ratio": 7.8,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "success/surface",
+        "ratio": 10.16,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "warning/surface",
+        "ratio": 10.6,
+        "min": 4.5,
+        "pass": true
+      },
+      {
+        "pair": "danger/surface",
+        "ratio": 6.4,
+        "min": 4.5,
+        "pass": true
+      }
+    ]
+  }
+}

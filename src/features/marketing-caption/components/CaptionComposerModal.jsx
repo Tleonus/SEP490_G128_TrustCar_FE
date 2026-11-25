@@ -22,6 +22,8 @@ import {
 import { useCaptionSuggestions } from '../hooks/useCaptionSuggestions'
 import CaptionOptionCard from './CaptionOptionCard'
 import FacebookPostPreview from './FacebookPostPreview'
+import AiDisclaimer from '../../../components/common/AiDisclaimer'
+import { AI_DISCLAIMER_CAPTION } from '../../../constants/aiDisclaimer'
 import { publishCaptionToFacebook } from '../api/captionApi'
 import { publishErrorMessage } from '../utils/captionErrors'
 import { captionToClipboard, normalizeHashtags } from '../utils/captionText'
@@ -181,6 +183,7 @@ export default function CaptionComposerModal({ open, car, onClose, imageUrl: pre
 
           {options.length > 0 && (
             <>
+              <AiDisclaimer variant="strip" text={AI_DISCLAIMER_CAPTION} />
               <p className={styles.resultNote}>
                 {SOURCE_NOTE[source] || 'Ba phương án do Backend trả về.'}
                 {cached ? ' Nội dung lấy từ bản đã lưu vì thông tin xe chưa đổi.' : ''}

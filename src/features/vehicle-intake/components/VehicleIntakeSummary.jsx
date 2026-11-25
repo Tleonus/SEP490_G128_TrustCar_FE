@@ -1,7 +1,12 @@
 import styles from '../styles/VehicleIntake.module.css';
 import Icon from './VehicleIntakeIcon.jsx';
+import { BODY_TYPE_OPTIONS } from '../constants/vehicleIntakeConstants.js';
 
 export default function VehicleIntakeSummary({ car, notes, checkedCount, isSaving, attachmentCount = 0 }) {
+  const bodyTypeLabel = BODY_TYPE_OPTIONS.find((option) => option.value === car.bodyType)?.label;
+  const seats = String(car.numberOfSeats ?? '').trim();
+  const exteriorColor = String(car.exteriorColor ?? '').trim();
+  const appearance = [bodyTypeLabel, seats && `${seats} chỗ`, exteriorColor].filter(Boolean).join(' · ');
   return (
                 <section className={styles["review-card"]}>
                   <div className={styles["review-top"]}>
@@ -13,6 +18,7 @@ export default function VehicleIntakeSummary({ car, notes, checkedCount, isSavin
                   </div>
                   <div className={styles["review-rows"]}>
                     <div><span>Hồ sơ định danh</span><strong>{car.brand && car.model ? `${car.brand} ${car.model}` : 'Chưa nhập'}</strong></div>
+                    <div><span>Kiểu dáng & màu</span><strong>{appearance || 'Chưa nhập'}</strong></div>
                     <div><span>Biển số</span><strong>{car.licensePlate || '—'}</strong></div>
                     <div><span>Checklist thẩm định</span><strong>{checkedCount}/5 mục tích chọn</strong></div>
                     <div><span>Hồ sơ đính kèm</span><strong>{attachmentCount > 0 ? `${attachmentCount} tệp` : 'Chưa đính kèm'}</strong></div>

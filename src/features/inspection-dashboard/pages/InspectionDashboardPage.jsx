@@ -21,7 +21,7 @@ export default function InspectionDashboardPage() {
     <div className={styles.page}>
       <div className={styles.header}>
         <div>
-          <span className={styles.eyebrow}>KIỂM ĐỊNH CPO</span>
+          <span className={styles.eyebrow}>TIẾN ĐỘ &amp; HÀNG CHỜ THẨM ĐỊNH</span>
           <h1 className={styles.title}>Tổng quan kiểm định</h1>
           <p className={styles.desc}>Số xe ở từng giai đoạn kiểm định và những xe đã chờ lâu nhất.</p>
         </div>

@@ -58,7 +58,7 @@ export default function KpiCard({
             value={value ?? 0}
             suffix={suffix}
             formatter={formatter}
-            styles={{ content: { fontSize: 30, fontWeight: 700, color: 'var(--color-text)', lineHeight: 1.2 } }}
+            styles={{ content: { fontSize: 'clamp(20px, 1.7vw, 26px)', fontWeight: 800, color: 'var(--color-text)', lineHeight: 1.2, overflowWrap: 'anywhere' } }}
           />
 
           <div className={styles.kpiFoot}>

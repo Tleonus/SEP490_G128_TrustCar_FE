@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TrustCar – So sánh bảng màu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  body { font-family: 'Be Vietnam Pro', system-ui, sans-serif; background: #e9e9e9; color: #111; padding: 24px; }
+  h1 { font-size: 24px; margin-bottom: 4px; }
+  .intro { color: #555; margin-bottom: 24px; font-size: 14px; }
+  .option { margin-bottom: 40px; }
+  .option > h2 { font-size: 20px; }
+  .option > p { color: #555; font-size: 14px; margin: 4px 0 12px; }
+  .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 1100px) { .modes { grid-template-columns: 1fr; } }
+
+  .frame { background: var(--bg); color: var(--text); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+  .mode-label { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 8px 16px; border-bottom: 1px solid var(--border); }
+  .nav { display: flex; align-items: center; gap: 20px; padding: 14px 20px; background: var(--surface); border-bottom: 1px solid var(--border); font-size: 14px; }
+  .logo { font-weight: 700; font-size: 18px; }
+  .logo span { color: var(--accentText); }
+  .nav a { color: var(--muted); text-decoration: none; }
+  .nav a.active { color: var(--text); font-weight: 600; }
+  .nav .spacer { flex: 1; }
+
+  .hero { position: relative; height: 220px; background: center/cover; display: flex; align-items: flex-end; }
+  .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.72), rgba(0,0,0,.1) 70%); }
+  .hero-body { position: relative; z-index: 1; padding: 20px; color: #fff; max-width: 420px; }
+  .hero-body h3 { font-size: 26px; line-height: 1.2; margin-bottom: 8px; }
+  .hero-body p { font-size: 14px; opacity: .9; margin-bottom: 14px; }
+
+  .btn { display: inline-flex; align-items: center; height: 40px; padding: 0 18px; border-radius: 8px; font: 600 14px inherit; font-family: inherit; border: 1px solid transparent; cursor: pointer; transition: background-color 200ms cubic-bezier(.2,0,0,1); }
+  .btn-primary { background: var(--primary); color: var(--onPrimary); }
+  .btn-secondary { background: var(--surface); color: var(--text); border-color: var(--border); }
+  .btn-accent { background: var(--accent); color: var(--onAccent); }
+  .btn-sm { height: 32px; padding: 0 12px; font-size: 13px; }
+
+  .content { padding: 20px; display: grid; gap: 16px; }
+  .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+  .card img { width: 100%; height: 120px; object-fit: cover; display: block; }
+  .card-body { padding: 12px; display: grid; gap: 6px; }
+  .card-title { font-weight: 600; font-size: 15px; }
+  .card-meta { color: var(--muted); font-size: 12px; }
+  .price { font-size: 18px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+  .badges { display: flex; gap: 6px; flex-wrap: wrap; }
+  .badge { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 999px; background: var(--surfaceAlt); color: var(--muted); }
+  .badge-cpo { background: var(--accent); color: var(--onAccent); }
+
+  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .status { font-size: 13px; font-weight: 600; }
+  .panel { background: var(--surfaceAlt); border-radius: 12px; padding: 12px; }
+  .swatches { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+  .sw { height: 36px; border-radius: 6px; border: 1px solid var(--border); }
+  .sw-label { font-size: 10px; color: var(--muted); margin-top: 3px; word-break: break-all; }
+  .contrast { font-size: 12px; color: var(--muted); }
+  .contrast b { color: var(--text); }
+</style>
+</head>
+<body>
+<h1>TrustCar – So sánh bảng màu</h1>
+<p class="intro">Mỗi phương án hiển thị cùng một hero, thẻ xe, nút, huy hiệu và màu trạng thái ở Light và Dark. Font: Be Vietnam Pro. Số tương phản tính theo WCAG 2.x.</p>
+<main id="root"></main>
+<!--SCRIPT-->
+</body>
+</html>

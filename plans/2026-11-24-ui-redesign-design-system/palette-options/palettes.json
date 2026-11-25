@@ -1,0 +1,30 @@
+[
+  {
+    "id": "current",
+    "name": "Hiện tại: Navy & Vàng",
+    "mood": "Bản đang dùng, để so sánh",
+    "light": { "bg": "#F3F6FB", "surface": "#FFFFFF", "surfaceAlt": "#EAF0F8", "text": "#15192B", "muted": "#5B6172", "border": "#DBE3EF", "primary": "#0B1F3A", "onPrimary": "#FFFFFF", "accent": "#C9A227", "onAccent": "#0B1F3A", "accentText": "#8A6D12", "success": "#1F8A4C", "warning": "#B45309", "danger": "#C0392B" },
+    "dark":  { "bg": "#0A101D", "surface": "#111A2E", "surfaceAlt": "#17233B", "text": "#F1F2F6", "muted": "#A3A9B8", "border": "#24324C", "primary": "#D9B84A", "onPrimary": "#0B1F3A", "accent": "#D9B84A", "onAccent": "#0B1F3A", "accentText": "#D9B84A", "success": "#37B56A", "warning": "#F59E0B", "danger": "#E05B4C" }
+  },
+  {
+    "id": "graphite",
+    "name": "A. Than chì & Cam tín hiệu",
+    "mood": "Mạnh, thể thao, chất xe. Nền trung tính để ảnh xe nổi; cam chỉ cho hành động chính.",
+    "light": { "bg": "#F6F5F2", "surface": "#FFFFFF", "surfaceAlt": "#EDEBE6", "text": "#17181B", "muted": "#5E6066", "border": "#DDDAD3", "primary": "#C2410C", "onPrimary": "#FFFFFF", "accent": "#17181B", "onAccent": "#FFFFFF", "accentText": "#C2410C", "success": "#1E7A46", "warning": "#A15C07", "danger": "#C62828" },
+    "dark":  { "bg": "#0F1012", "surface": "#18191C", "surfaceAlt": "#222327", "text": "#F2F1EE", "muted": "#A3A4A9", "border": "#2E2F34", "primary": "#FF7A33", "onPrimary": "#17181B", "accent": "#F2F1EE", "onAccent": "#17181B", "accentText": "#FF8A4C", "success": "#4ADE80", "warning": "#FBBF24", "danger": "#F87171" }
+  },
+  {
+    "id": "petrol",
+    "name": "B. Xanh dầu & Bạc hà",
+    "mood": "Điềm tĩnh, minh bạch, gợi cảm giác 'đã kiểm định'. Khác hẳn các trang xe navy/vàng phổ biến.",
+    "light": { "bg": "#F3F7F6", "surface": "#FFFFFF", "surfaceAlt": "#E6EFED", "text": "#0E1F1E", "muted": "#4D6361", "border": "#D3E0DD", "primary": "#0D4D4A", "onPrimary": "#FFFFFF", "accent": "#3DD6A3", "onAccent": "#0E1F1E", "accentText": "#0B7A5E", "success": "#157F3D", "warning": "#A15C07", "danger": "#C2362B" },
+    "dark":  { "bg": "#0A1414", "surface": "#102120", "surfaceAlt": "#17302E", "text": "#EAF4F2", "muted": "#9DB5B1", "border": "#23403D", "primary": "#5EE0B5", "onPrimary": "#052220", "accent": "#5EE0B5", "onAccent": "#052220", "accentText": "#5EE0B5", "success": "#4ADE80", "warning": "#FBBF24", "danger": "#F87171" }
+  },
+  {
+    "id": "bordeaux",
+    "name": "C. Đỏ rượu & Kem",
+    "mood": "Sang, ấm, kiểu showroom cao cấp. Hợp nếu TrustCar định vị xe lướt/xe sang.",
+    "light": { "bg": "#FAF7F2", "surface": "#FFFFFF", "surfaceAlt": "#F1EBE2", "text": "#1E1715", "muted": "#6A5E59", "border": "#E4DBD0", "primary": "#7A1E2C", "onPrimary": "#FFFFFF", "accent": "#E9D8C4", "onAccent": "#1E1715", "accentText": "#7A1E2C", "success": "#2F7A3F", "warning": "#A15C07", "danger": "#B42318" },
+    "dark":  { "bg": "#141010", "surface": "#1D1716", "surfaceAlt": "#282020", "text": "#F5EFE8", "muted": "#B3A79F", "border": "#3A2E2C", "primary": "#E8798A", "onPrimary": "#1E0A0E", "accent": "#E9C9A6", "onAccent": "#1E1715", "accentText": "#F0919F", "success": "#4ADE80", "warning": "#FBBF24", "danger": "#F87171" }
+  }
+]

@@ -232,6 +232,7 @@ export async function sendChatMessage({
           ],
           conversationCode: payload.conversationCode || sessionId,
           leadCaptured: payload.leadCaptured || null,
+          disclaimer: payload.disclaimer || null,
           source: payload.source || 'backend-ai',
         }
       }
@@ -287,7 +288,7 @@ export async function sendChatMessage({
   }
 
   // 3. Phân tích ý định hỏi về Showroom / Địa chỉ / Giờ mở cửa / Liên hệ
-  if (/\b(địa chỉ|dia chi|showroom|ở đâu|o dau|bản đồ|ban do|giờ mở cửa|연hệ|liên hệ|hotline|số điện thoại|cầu giấy|hoàng quán chi)\b/i.test(text)) {
+  if (/\b(địa chỉ|dia chi|showroom|ở đâu|o dau|bản đồ|ban do|giờ mở cửa|liên hệ|lien he|hotline|số điện thoại|cầu giấy|hoàng quán chi)\b/i.test(text)) {
     return {
       text: `📍 **${contactInfo.showroomName}**\n• Địa chỉ: ${contactInfo.showroomAddress}\n• Giờ mở cửa: ${contactInfo.showroomHours}\n• Hotline tư vấn: ${contactInfo.phoneDisplay}\n\nBạn có thể ghé trực tiếp Showroom để xem xe thực tế, kiểm tra chứng nhận CPO và đăng ký lái thử miễn phí!`,
       cars: [],
@@ -350,7 +351,7 @@ export async function sendChatMessage({
       cars: [],
       actions: [
         { label: 'Xem các xe đạt chuẩn CPO', to: '/xe', type: 'navigate' },
-        { label: 'Tìm hiểu thêm về TrustCar', to: '/ve-chung-toi', type: 'navigate' },
+        { label: 'Liên hệ & Thông tin TrustCar', to: '/lien-he', type: 'navigate' },
         { label: 'So sánh các mẫu xe', to: '/so-sanh', type: 'navigate' },
       ],
       followUps: [
@@ -489,12 +490,12 @@ export async function sendChatMessage({
       }
     }
 
-    // Nếu bộ lọc hiện tại chưa có xe khớp 100%, lấy xe nổi bật để gợi ý thay thế
+    // Nếu bộ lọc hiện tại chưa có xe trùng khớp hoàn toàn, lấy xe nổi bật để gợi ý thay thế
     const featuredFallback = await getFeaturedCars(3)
     const fallbackCards = (featuredFallback.items || []).slice(0, 3).map(mapCarToChatCard)
 
     return {
-      text: `Hiện tại tiêu chí ${filterCriteriaLabels.join(', ') || `"${text}"`} chưa có mẫu xe khớp chính xác 100% trên kệ trực tuyến. Tuy nhiên Showroom vừa cập nhật thêm nhiều xe mới về đội! Bạn có thể tham khảo các mẫu xe nổi bật bên dưới hoặc để lại **Số điện thoại** để chuyên viên tìm xe đúng cấu hình cho bạn nhé.`,
+      text: `Hiện tại tiêu chí ${filterCriteriaLabels.join(', ') || `"${text}"`} chưa có mẫu xe trùng khớp hoàn toàn trên kệ trực tuyến. Tuy nhiên Showroom vừa cập nhật thêm nhiều xe mới về đội! Bạn có thể tham khảo các mẫu xe nổi bật bên dưới hoặc để lại **Số điện thoại** để chuyên viên tìm xe đúng cấu hình cho bạn nhé.`,
       cars: fallbackCards,
       actions: [
         { label: 'Xem tất cả xe đang bán', to: '/xe', type: 'navigate' },

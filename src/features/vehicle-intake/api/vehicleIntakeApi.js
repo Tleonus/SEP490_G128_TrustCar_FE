@@ -1,4 +1,7 @@
 import api from '../../../services/api.js';
+import { BODY_TYPE_OPTIONS } from '../constants/vehicleIntakeConstants.js';
+
+const BODY_TYPE_VALUES = new Set(BODY_TYPE_OPTIONS.map((option) => option.value));
 
 const TRANSMISSION_MAP = Object.freeze({
   automatic: 'AUTOMATIC',
@@ -53,6 +56,16 @@ export function mapIntakeToCreateCarDto(payload = {}) {
   const notes = typeof payload.notes === 'string' ? payload.notes.trim() : '';
   const rawTransmission = String(payload.transmission || '').trim().toLowerCase();
   const rawFuel = String(payload.fuel || '').trim().toLowerCase();
+  const bodyType = String(payload.bodyType || '').trim().toUpperCase();
+  const exteriorColor = String(payload.exteriorColor || '').trim();
+  const interiorColor = String(payload.interiorColor || '').trim();
+  const numberOfSeats = Number(payload.numberOfSeats);
+  // Chỉ gửi các thông số đã nhập: Backend không nhận chuỗi rỗng cho specifications.*
+  const specifications = {
+    ...(exteriorColor ? { color: exteriorColor } : {}),
+    ...(interiorColor ? { interiorColor } : {}),
+    ...(Number.isInteger(numberOfSeats) && numberOfSeats > 0 ? { numberOfSeats } : {}),
+  };
 
   return {
     vin: String(payload.vin || '').trim().toUpperCase(),
@@ -69,6 +82,8 @@ export function mapIntakeToCreateCarDto(payload = {}) {
     fuelType: FUEL_TYPE_MAP[rawFuel] || 'GASOLINE',
     inventoryType: payload.ownership === 'consignment' ? 'CONSIGNMENT' : 'OWNED',
     ownerType: payload.ownership === 'company' ? 'COMPANY' : 'INDIVIDUAL',
+    ...(BODY_TYPE_VALUES.has(bodyType) ? { bodyType } : {}),
+    ...(Object.keys(specifications).length ? { specifications } : {}),
     ...(notes ? { internalNotes: notes } : {}),
   };
 }

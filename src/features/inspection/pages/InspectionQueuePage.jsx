@@ -134,7 +134,7 @@ export default function InspectionQueuePage() {
     <div className={styles.page}>
       <header className={styles.header}>
         <div>
-          <span className={styles.eyebrow}>QUẢN LÝ SHOWROOM</span>
+          <span className={styles.eyebrow}>QUY TRÌNH THẨM ĐỊNH KỸ THUẬT CPO</span>
           <h1 className={styles.title}>Kiểm định xe</h1>
           <p className={styles.desc}>
             Danh sách xe cần lập biên bản kiểm định CPO: bản nháp, đang kiểm định và kiểm định không đạt.
