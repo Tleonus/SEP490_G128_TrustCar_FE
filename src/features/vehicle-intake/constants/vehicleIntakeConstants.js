@@ -54,7 +54,25 @@ export const initialVehicleIntake = {
   listedPrice: '',
   floorPrice: '',
   marketPrice: '',
+  bodyType: '',
+  numberOfSeats: '',
+  exteriorColor: '',
+  interiorColor: '',
 };
+
+// Giá trị khớp enum BodyType ở Backend (appConstants.js).
+export const BODY_TYPE_OPTIONS = Object.freeze([
+  { value: 'SEDAN', label: 'Sedan' },
+  { value: 'SUV', label: 'SUV' },
+  { value: 'HATCHBACK', label: 'Hatchback' },
+  { value: 'MPV', label: 'MPV' },
+  { value: 'PICKUP', label: 'Bán tải' },
+  { value: 'COUPE', label: 'Coupe' },
+  { value: 'CONVERTIBLE', label: 'Mui trần (Convertible)' },
+  { value: 'WAGON', label: 'Wagon' },
+  { value: 'VAN', label: 'Van' },
+  { value: 'MINIVAN', label: 'Minivan' },
+]);
 
 export const initialInspectionChecks = {
   chassis: false,
