@@ -34,6 +34,7 @@ import PublicCertificateSection from '../../features/cpo-certificates/components
 import ShareButtons from '../../features/car-share/components/ShareButtons'
 import InstallmentWidget from '../../features/installment-calculator/components/InstallmentWidget'
 import CarImageLightbox from '../../features/image-lightbox/components/CarImageLightbox'
+import { CarDepositPanel } from '../../features/deposits'
 import { trackEvent } from '../../utils/trackEvent'
 import styles from './CarDetailPage.module.css'
 import { CONTACT_INFO } from '../../config/contactInfo'
@@ -518,6 +519,10 @@ export default function CarDetailPage() {
 
               {/* KAN-67: chia sẻ Facebook / Zalo / Copy link, dùng link Backend /share/car/:code */}
               <ShareButtons car={car} />
+
+              {/* KAN-22/KAN-99: đặt cọc giữ xe online + thanh toán VNPay.
+                  Panel tự ẩn khi xe không bán được hoặc API hold-status lỗi. */}
+              <CarDepositPanel car={car} />
             </div>
 
             {/* SCR-M05: chứng nhận CPO (trang đích của mã QR); hiện khi xe có cpoCertificateId */}

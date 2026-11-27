@@ -8,6 +8,8 @@ export const ADMIN_PATHS = {
   // KAN-56: bảng điều khiển duyệt kiểm định & mở bán (chỉ ADMIN)
   approval: '/admin/approval',
   sales: '/admin/sales',
+  // KAN-22: quản lý lượt đặt cọc giữ xe (ADMIN + SALES_STAFF; hoàn cọc chỉ ADMIN)
+  deposits: '/admin/deposits',
   baseSettings: '/admin/base-settings',
   cpoCertificates: '/admin/chung-nhan',
   // KAN-40: nhật ký hoạt động hệ thống (chỉ ADMIN)

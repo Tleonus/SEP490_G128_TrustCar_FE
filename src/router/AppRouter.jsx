@@ -54,6 +54,10 @@ const Showroom3DPage = lazy(() => import('../features/showroom-3d/pages/Showroom
 const VnpayReturnPage = lazy(() => import('../features/deposits/pages/VnpayReturnPage.jsx'))
 const DepositSuccessPage = lazy(() => import('../features/deposits/pages/DepositSuccessPage.jsx'))
 const DepositCancelPage = lazy(() => import('../features/deposits/pages/DepositCancelPage.jsx'))
+// KAN-22: đặt cọc giữ xe (trang riêng cho xe RESERVED, lịch sử của khách, quản lý cho nhân viên)
+const CarDepositPage = lazy(() => import('../features/deposits/pages/CarDepositPage.jsx'))
+const MyDepositsPage = lazy(() => import('../features/deposits/pages/MyDepositsPage.jsx'))
+const AdminDepositsPage = lazy(() => import('../features/deposits/pages/AdminDepositsPage.jsx'))
 // KAN-96: dịch vụ showroom (công khai + wizard đặt lịch + CRUD admin)
 const ServicesPage = lazy(() => import('../features/services/pages/ServicesPage.jsx'))
 const VerifyPage = lazy(() => import('../features/vehicle-history/pages/VerifyPage.jsx'))
@@ -67,6 +71,20 @@ export default function AppRouter() {
         <Route path="/" element={<HomePage />} />
         <Route path="/xe" element={<CarsPage />} />
         <Route path="/xe/:stockCode" element={<CarDetailPage />} />
+        {/* KAN-22: trang đặt cọc riêng. Cần vì /public/cars/:id chỉ trả xe AVAILABLE,
+            nên khi xe RESERVED trang chi tiết không tải được còn trang này thì có. */}
+        <Route
+          path="/xe/:carKey/dat-coc"
+          element={<Suspense fallback={<LoadingState />}><CarDepositPage /></Suspense>}
+        />
+        <Route
+          path="/dat-coc-cua-toi"
+          element={
+            <PrivateRoute>
+              <Suspense fallback={<LoadingState />}><MyDepositsPage /></Suspense>
+            </PrivateRoute>
+          }
+        />
         <Route
           path="/xe-da-luu"
           element={
@@ -150,6 +168,9 @@ export default function AppRouter() {
         <Route path="inventory" element={<AdminCarsPage />} />
         {/* Quản lý bán hàng & chốt đơn (KAN-18): ADMIN, SALES_STAFF */}
         <Route path="sales" element={<Suspense fallback={<LoadingState />}><SalesCrmPage /></Suspense>} />
+        {/* KAN-22: quản lý đặt cọc. BE cho ADMIN + SALES_STAFF đọc/xác nhận;
+            riêng hoàn cọc là ADMIN — nút đó AdminDepositsPage tự ẩn theo roleName. */}
+        <Route path="deposits" element={<Suspense fallback={<LoadingState />}><AdminDepositsPage /></Suspense>} />
         <Route path="vehicle-intake" element={<Suspense fallback={<LoadingState />}><AdminVehicleIntakePage /></Suspense>} />
         <Route path="base-settings" element={<Suspense fallback={<LoadingState />}><AdminBaseSettingsPage /></Suspense>} />
         <Route path="inspection-dashboard" element={<Suspense fallback={<LoadingState />}><InspectionDashboardPage /></Suspense>} />
