@@ -13,6 +13,7 @@ import {
   SafetyCertificateOutlined,
   TeamOutlined,
   ToolOutlined,
+  WalletOutlined,
 } from '@ant-design/icons'
 import Icon from '../features/vehicle-intake/components/VehicleIntakeIcon'
 import { useAuthStore } from '../store/useAuthStore'
@@ -45,6 +46,7 @@ const NAV_GROUPS = [
     title: 'Kinh doanh & Dịch vụ',
     items: [
       { to: ADMIN_PATHS.sales, label: 'Quản lý bán hàng', shortLabel: 'Bán hàng', icon: 'sales', groupLabel: 'KINH DOANH' },
+      { to: ADMIN_PATHS.deposits, label: 'Quản lý đặt cọc', shortLabel: 'Đặt cọc', iconNode: <WalletOutlined />, groupLabel: 'KINH DOANH' },
       { to: '/admin/lich-lai-thu', label: 'Lịch lái thử', shortLabel: 'Lịch lái thử', iconNode: <CalendarOutlined />, groupLabel: 'KINH DOANH' },
       { to: ADMIN_PATHS.services, label: 'Dịch vụ showroom', shortLabel: 'Dịch vụ', iconNode: <ToolOutlined />, groupLabel: 'DỊCH VỤ' },
     ],
