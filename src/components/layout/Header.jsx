@@ -52,6 +52,8 @@ export default function Header() {
       ? [
           // KAN-16: lượt lái thử (đặt tối đa 3 xe).
           { key: 'my-visits', label: <Link to="/lich-hen">Lịch hẹn của tôi</Link> },
+          // KAN-22: lịch sử đặt cọc giữ xe của khách.
+          { key: 'my-deposits', label: <Link to="/dat-coc-cua-toi">Đặt cọc của tôi</Link> },
         ]
       : []),
     // Chỉ hiện "Quản trị" nếu user có role ADMIN hoặc SALES_STAFF.
