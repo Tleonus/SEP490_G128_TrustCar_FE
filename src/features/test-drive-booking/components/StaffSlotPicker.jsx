@@ -24,6 +24,7 @@ function SlotVisits({ info }) {
           </span>
           <span>{visit.name || '(không rõ)'}{visit.phone && <> · <a href={`tel:${visit.phone}`}>{visit.phone}</a></>}</span>
           <span className={styles.sub}>{visit.cars}</span>
+          <span className={styles.sub}>Phụ trách: {visit.assignee || 'chưa có'}</span>
         </li>
       ))}
     </ul>

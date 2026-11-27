@@ -4,11 +4,14 @@ import { PlusOutlined } from '@ant-design/icons'
 import StaffVisitsList from './StaffVisitsList'
 import StaffAvailabilityTab from '../components/StaffAvailabilityTab'
 import StaffCalendarTab from '../../staff-test-drive-calendar/pages/StaffCalendarTab'
+import StaffAttendanceTab from '../components/StaffAttendanceTab'
+import { useAttendanceAccess } from '../hooks/useAttendanceAccess'
 import styles from '../styles/StaffVisits.module.css'
 
 /**
  * Lịch lái thử cho nhân viên (/admin/lich-lai-thu, ADMIN và SALES_STAFF qua AdminRoute).
- * Hai tab: "Danh sách lượt" (xác nhận, hủy có lý do, đổi lịch, cờ nhắc việc) và "Lịch trống" (xem ai đã đặt khung nào).
+ * Các tab: "Danh sách lượt" (xác nhận, hủy có lý do, đổi lịch, đổi người phụ trách, cờ nhắc việc), "Lịch trống" (xem ai đã
+ * đặt khung nào), "Lịch" và "Điểm danh" (chỉ ADMIN hoặc nhân viên được ADMIN giao quyền).
  * Nút "Đặt hộ khách" ở tiêu đề. Tab "Lịch trống" chỉ được dựng khi mở lần đầu nên đúng một lần gọi API.
  *
  * @ears .sdd/features/test-drive-booking/SPEC.md#REQ-F13
@@ -18,6 +21,7 @@ import styles from '../styles/StaffVisits.module.css'
 export default function StaffVisitsPage() {
   const [booking, setBooking] = useState(false)
   const [tab, setTab] = useState('list')
+  const attendance = useAttendanceAccess()
 
   const items = [
     {
@@ -27,6 +31,7 @@ export default function StaffVisitsPage() {
     },
     { key: 'availability', label: 'Lịch trống', children: <StaffAvailabilityTab /> },
     { key: 'calendar', label: 'Lịch', children: <StaffCalendarTab active={tab === 'calendar'} bookingOpen={booking} /> },
+    ...(attendance ? [{ key: 'attendance', label: 'Điểm danh', children: <StaffAttendanceTab /> }] : []),
   ]
 
   return (

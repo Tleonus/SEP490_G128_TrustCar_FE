@@ -3,6 +3,7 @@ import StaffFilters from '../components/StaffFilters'
 import StaffVisitTable from '../components/StaffVisitTable'
 import StaffActionModal from '../components/StaffActionModal'
 import RescheduleModal from '../components/RescheduleModal'
+import AssigneeModal from '../components/AssigneeModal'
 import StaffBookingModal from '../components/StaffBookingModal'
 import LoadError from '../components/LoadError'
 import { useStaffListScreen } from '../hooks/useStaffListScreen'
@@ -69,6 +70,13 @@ export default function StaffVisitsList({ active = true, bookingOpen = false, on
         onClose={() => s.setRescheduling(null)}
         onDone={s.rescheduled}
         onStale={s.stale}
+      />
+
+      <AssigneeModal
+        key={s.assigning ? `assign:${s.assigning.visitId}` : 'assign-none'}
+        visit={s.assigning}
+        onClose={() => s.setAssigning(null)}
+        onDone={s.assigned}
       />
 
       <StaffBookingModal

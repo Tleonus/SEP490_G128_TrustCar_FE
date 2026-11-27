@@ -22,7 +22,9 @@ export function rescheduleHint(visit, now = new Date()) {
   // Đã xác nhận: khách gọi showroom để hủy/đổi (thẻ lượt hiện lời nhắc riêng), nên không nút, không câu.
   if (!isOpenVisit(visit) || visit.status === 'CONFIRMED' || !(hours > 0)) return { canReschedule: false, message: null }
   if (visit.canReschedule === true) return { canReschedule: true, message: null }
-  if ((visit.rescheduleCount ?? 0) >= MAX_RESCHEDULES) return { canReschedule: false, message: RESCHEDULE_HINT.MAX_REACHED }
+  // Giới hạn 2 lần chỉ tính các lần KHÁCH tự đổi; lần do nhân viên đổi không tính (BE cũ: dùng tổng).
+  const ownMoves = visit.customerRescheduleCount ?? visit.rescheduleCount ?? 0
+  if (ownMoves >= MAX_RESCHEDULES) return { canReschedule: false, message: RESCHEDULE_HINT.MAX_REACHED }
   if (hours < RESCHEDULE_MIN_HOURS) return { canReschedule: false, message: RESCHEDULE_HINT.TOO_LATE }
   return { canReschedule: false, message: RESCHEDULE_HINT.OTHER }
 }

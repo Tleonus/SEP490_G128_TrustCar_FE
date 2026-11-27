@@ -29,9 +29,10 @@ export function useStaffListScreen({ active, bookingOpen }) {
   const [page, setPage] = useState(1)
   const [action, setAction] = useState(null)
   const [rescheduling, setRescheduling] = useState(null)
+  const [assigning, setAssigning] = useState(null)
   const list = useStaffVisits(buildStaffParams(filters, page))
 
-  const idle = active && !action && !rescheduling && !bookingOpen
+  const idle = active && !action && !rescheduling && !assigning && !bookingOpen
   useFocusRefresh(list.loadedAt, list.reloadSilently, idle)
   useAutoRefresh({ enabled: idle, settledAt: list.settledAt, silentStatus: list.silentStatus, reloadSilently: list.reloadSilently })
 
@@ -42,6 +43,7 @@ export function useStaffListScreen({ active, bookingOpen }) {
 
   const open = (visit, status) => {
     if (status === 'RESCHEDULE') setRescheduling(visit)
+    else if (status === 'ASSIGN') setAssigning(visit)
     else setAction({ visit, status })
   }
 
@@ -57,6 +59,12 @@ export function useStaffListScreen({ active, bookingOpen }) {
     list.reloadSilently()
   }
 
+  const assigned = (visit) => {
+    message.success(`Đã đổi người phụ trách lượt ${visit.visitCode}: ${visit.assignedTo?.fullName ?? ''}`)
+    setAssigning(null)
+    list.reloadSilently()
+  }
+
   const booked = (visit) => {
     message.success(`Đã đặt hộ: mã ${visit.visitCode}`)
     list.reloadSilently()
@@ -69,7 +77,7 @@ export function useStaffListScreen({ active, bookingOpen }) {
   }
 
   return {
-    filters, page, setPage, action, setAction, rescheduling, setRescheduling, list,
-    change, open, actionDone, rescheduled, booked, stale,
+    filters, page, setPage, action, setAction, rescheduling, setRescheduling, assigning, setAssigning, list,
+    change, open, actionDone, rescheduled, assigned, booked, stale,
   }
 }

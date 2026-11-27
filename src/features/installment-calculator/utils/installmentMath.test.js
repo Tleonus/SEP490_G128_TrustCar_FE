@@ -22,7 +22,7 @@ const randomInput = (random, method) => ({
 })
 
 describe('computeInstallment — ví dụ mặc định (AC-F02)', () => {
-  const result = computeInstallment(DEFAULTS)
+  const result = computeInstallment({ ...DEFAULTS, ratePercent: 9 }) // AC-F02 kiểm bằng 9 %/năm (trước 1.1.0 là mặc định)
 
   it('trả trước 30 %, vay 70 %', () => {
     expect(result.down).toBe(240_000_000)

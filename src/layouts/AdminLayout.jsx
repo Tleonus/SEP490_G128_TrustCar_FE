@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-do
 import { ConfigProvider, Dropdown, theme } from 'antd'
 import {
   AuditOutlined,
+  BankOutlined,
   CalendarOutlined,
   ClockCircleOutlined,
   HistoryOutlined,
@@ -53,6 +54,7 @@ const NAV_GROUPS = [
     title: 'Hệ thống & Bảo mật',
     items: [
       { to: ADMIN_PATHS.baseSettings, label: 'Cấu hình showroom', shortLabel: 'Cấu hình', icon: 'settings', groupLabel: 'HỆ THỐNG' },
+      { to: ADMIN_PATHS.loanSettings, label: 'Lãi suất trả góp', shortLabel: 'Lãi trả góp', iconNode: <BankOutlined />, adminOnly: true, groupLabel: 'HỆ THỐNG' },
       { to: ADMIN_PATHS.auditLogs, label: 'Nhật ký hoạt động', shortLabel: 'Nhật ký', iconNode: <HistoryOutlined />, adminOnly: true, groupLabel: 'BẢO MẬT' },
       { to: ADMIN_PATHS.userManagement, label: 'Quản lý người dùng', shortLabel: 'Nhân sự', iconNode: <TeamOutlined />, adminOnly: true, groupLabel: 'HỆ THỐNG' },
     ],
