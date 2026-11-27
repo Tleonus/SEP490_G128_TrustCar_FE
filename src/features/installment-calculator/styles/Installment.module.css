@@ -25,9 +25,9 @@
   --note-ink-muted: #857866;
   --note-border: #dfd3be;
   --note-border-strong: #cbb99b;
-  --note-bronze: #8c6527;
-  --note-bronze-light: #b68b40;
-  --note-bronze-soft: rgba(140, 101, 39, 0.11);
+  --note-bronze: #1e40af;
+  --note-bronze-light: #60a5fa;
+  --note-bronze-soft: rgba(30, 64, 175, 0.11);
   --note-bank-green: #184e35;
   --note-bank-green-soft: #e6f2ec;
   --note-danger: #b93829;
@@ -42,8 +42,8 @@
     radial-gradient(circle at 90% 14%, rgba(24, 78, 53, 0.07) 0%, transparent 38%),
     repeating-linear-gradient(
       0deg,
-      rgba(140, 101, 39, 0.025) 0px,
-      rgba(140, 101, 39, 0.025) 1px,
+      rgba(30, 64, 175, 0.025) 0px,
+      rgba(30, 64, 175, 0.025) 1px,
       transparent 1px,
       transparent 32px
     );
@@ -100,7 +100,7 @@
   padding: 3px 10px;
   border-radius: 999px;
   background: var(--note-bronze-soft);
-  border: 1px solid rgba(140, 101, 39, 0.24);
+  border: 1px solid rgba(30, 64, 175, 0.24);
   color: var(--note-bronze);
   font-size: 11px;
   font-weight: 700;
@@ -352,7 +352,7 @@
 .field:focus-within {
   background: #fffdf9;
   border-color: var(--note-bronze-light);
-  box-shadow: 0 8px 20px -12px rgba(140, 101, 39, 0.2);
+  box-shadow: 0 8px 20px -12px rgba(30, 64, 175, 0.2);
 }
 
 .fieldHeader {
@@ -492,7 +492,7 @@
   background: var(--note-bronze);
   border-color: var(--note-bronze);
   color: #fffdf9 !important;
-  box-shadow: 0 3px 10px -2px rgba(140, 101, 39, 0.4);
+  box-shadow: 0 3px 10px -2px rgba(30, 64, 175, 0.4);
 }
 
 /* Lưới 2 ô Thời hạn vay & Lãi suất năm cân bằng 100% chiều cao */
@@ -585,7 +585,7 @@
 }
 
 .capitalBarLoan {
-  background: linear-gradient(90deg, #8c6527, #b98b3e);
+  background: linear-gradient(90deg, #1e40af, #60a5fa);
   border-radius: 0 999px 999px 0;
   transition: width 0.5s var(--ios-spring);
 }
@@ -624,7 +624,7 @@
 }
 
 .legendDotLoan {
-  background: #9a6f2b;
+  background: #1e40af;
 }
 
 /* Nút chọn cách tính */
@@ -772,7 +772,7 @@
 }
 
 .costSegmentLoan {
-  background: #e0b36a;
+  background: #93c5fd;
   transition: width 0.5s var(--ios-spring);
 }
 
@@ -810,7 +810,7 @@
 }
 
 .dotLoan {
-  background: #e0b36a;
+  background: #93c5fd;
 }
 
 .dotInterest {
@@ -1187,7 +1187,7 @@
 }
 
 .table :global(.ant-table-tbody > tr:nth-child(even) > td) {
-  background: #faf5ea !important;
+  background: #f8fbff !important;
 }
 
 /* Nhấn nhẹ cột Tổng trả trong kỳ */

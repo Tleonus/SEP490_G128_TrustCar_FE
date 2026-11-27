@@ -233,7 +233,7 @@ export default function InspectionDetailPage() {
               </Tag>
             )}
             {submitResult?.inspectionRecord?.cpoCertificateId && (
-              <Tag color="gold">Mã CPO: {submitResult.inspectionRecord.cpoCertificateId}</Tag>
+              <Tag color="blue">Mã CPO: {submitResult.inspectionRecord.cpoCertificateId}</Tag>
             )}
             {isDirty && <Tag color="warning">Chưa lưu</Tag>}
           </div>

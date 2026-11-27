@@ -1,113 +1,217 @@
 .benefits {
   position: relative;
   overflow: hidden;
-  padding: 78px 0 80px;
-  background:
-    radial-gradient(ellipse 65% 42% at 18% 20%, rgba(56, 189, 248, 0.08) 0%, transparent 70%),
-    radial-gradient(ellipse 65% 42% at 82% 80%, rgba(201, 162, 39, 0.1) 0%, transparent 70%),
-    linear-gradient(
-      180deg,
-      var(--color-surface) 0%,
-      var(--color-surface-alt) 52%,
-      var(--color-bg) 100%
-    );
+  padding: 76px 0;
+  background: var(--color-bg);
 }
 
-.grid {
-  position: relative;
-  z-index: 2;
+.splitLayout {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 26px;
-  margin-top: 40px;
+  grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+  gap: 44px;
+  align-items: start;
 }
 
-@media (max-width: 840px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
+.leftColumn {
+  position: sticky;
+  top: 100px;
 }
 
-.card {
-  position: relative;
-  overflow: hidden;
-  background:
-    linear-gradient(180deg, var(--color-surface) 0%, var(--color-surface-alt) 100%) padding-box,
-    linear-gradient(
-      135deg,
-      rgba(56, 189, 248, 0.5),
-      rgba(201, 162, 39, 0.65),
-      rgba(56, 189, 248, 0.4)
-    ) border-box;
-  border: 1.5px solid transparent;
-  border-bottom: 6px solid var(--card-3d-edge-gold);
-  border-radius: 22px;
-  padding: 36px 26px 32px;
-  text-align: center;
-  box-shadow: var(--shadow-card);
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease;
+.kicker {
+  display: inline-block;
+  margin-bottom: 10px;
+  font-family: var(--font-mono, monospace);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--color-accent);
+  text-transform: uppercase;
 }
 
-.card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3.5px;
-  background: linear-gradient(90deg, transparent, #38bdf8, #f4d879, #38bdf8, transparent);
-  background-size: 200% 100%;
-  animation: benefitLedRun 4s linear infinite;
+.heading {
+  margin: 0 0 14px;
+  font-family: var(--font-display, 'Be Vietnam Pro', sans-serif);
+  font-size: clamp(28px, 3vw, 38px);
+  font-weight: 800;
+  line-height: 1.18;
+  letter-spacing: -0.025em;
+  color: var(--color-text);
 }
 
-@keyframes benefitLedRun {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
+.lead {
+  margin: 0 0 28px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
 }
 
-.card:hover {
-  transform: translateY(-8px) scale(1.01);
-  box-shadow: var(--shadow-card-hover);
+.statsRow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  padding-top: 22px;
+  border-top: 1px solid var(--color-border);
 }
 
-.icon {
+.statBox {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.statValue {
+  font-family: var(--font-display, 'Plus Jakarta Sans', sans-serif);
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--color-accent-hover);
+}
+
+:root[data-theme='dark'] .statValue {
+  color: #93c5fd;
+}
+
+.statLabel {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pillarRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 24px 26px;
+  border-radius: 18px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  transition:
+    transform 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.25s ease,
+    box-shadow 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.pillarRow:hover {
+  transform: translateX(6px);
+  border-color: rgba(29, 78, 216, 0.5);
+  box-shadow: 0 18px 36px -18px rgba(15, 23, 42, 0.2);
+}
+
+.pillarLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.pillarCode {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--color-accent);
+  letter-spacing: 0.08em;
+}
+
+.iconBox {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 68px;
-  height: 68px;
-  border-radius: 20px;
-  background: linear-gradient(180deg, #fae498 0%, #c9a227 65%, #9b7710 100%);
-  border: 1.5px solid #fff4c2;
-  border-bottom: 4px solid #6e5105;
-  color: #081527;
-  font-size: 30px;
-  margin-bottom: 18px;
-  box-shadow:
-    0 6px 0 rgba(11, 31, 58, 0.16),
-    0 14px 26px rgba(201, 162, 39, 0.34),
-    inset 0 2px 2px rgba(255, 255, 255, 0.8);
-  transition: transform 0.25s ease;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: rgba(29, 78, 216, 0.12);
+  border: 1px solid rgba(29, 78, 216, 0.28);
+  color: var(--color-accent-hover);
+  font-size: 22px;
 }
 
-.card:hover .icon {
-  transform: translateY(-3px) scale(1.05);
+:root[data-theme='dark'] .iconBox {
+  color: #93c5fd;
 }
 
-.cardTitle {
-  font-size: 19px;
+.pillarBody {
+  min-width: 0;
+  flex: 1;
+}
+
+.pillarTitle {
+  margin: 0 0 6px;
+  font-size: 18px;
   font-weight: 800;
   color: var(--color-text);
-  margin-bottom: 10px;
-  letter-spacing: -0.2px;
+  letter-spacing: -0.01em;
 }
 
-.cardDesc {
+.pillarDesc {
+  margin: 0 0 14px;
   font-size: 14.5px;
-  line-height: 1.7;
+  line-height: 1.65;
   color: var(--color-text-secondary);
+}
+
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tagChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.tagChip :global(.anticon) {
+  font-size: 10px;
+  color: var(--color-accent);
+}
+
+@media (max-width: 920px) {
+  .splitLayout {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .leftColumn {
+    position: static;
+  }
+
+  .pillarRow:hover {
+    transform: translateY(-4px);
+  }
+}
+
+@media (max-width: 520px) {
+  .pillarRow {
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px;
+  }
+
+  .pillarLeft {
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .statsRow {
+    gap: 8px;
+  }
+
+  .statValue {
+    font-size: 22px;
+  }
 }

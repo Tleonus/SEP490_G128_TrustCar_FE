@@ -6,7 +6,7 @@ import { ADMIN_PATHS } from '../../../router/paths'
 export const DASHBOARD_STAGES = [
   { status: 'INCOMING', label: 'Mới nhập', hint: 'Chưa mở biên bản kiểm định', color: 'blue' },
   { status: 'DRAFT', label: 'Bản nháp', hint: 'Hồ sơ xe chưa hoàn tất', color: 'default' },
-  { status: 'UNDER_INSPECTION', label: 'Đang kiểm định', hint: 'Biên bản đang điền, chưa gửi', color: 'gold' },
+  { status: 'UNDER_INSPECTION', label: 'Đang kiểm định', hint: 'Biên bản đang điền, chưa gửi', color: 'blue' },
   { status: 'REJECTED', label: 'Không đạt', hint: 'Cần kiểm định lại hoặc gỡ xe', color: 'red' },
   { status: 'APPROVED_CPO', label: 'Chờ mở bán', hint: 'Đạt CPO, chờ ADMIN mở bán', color: 'green' },
 ]

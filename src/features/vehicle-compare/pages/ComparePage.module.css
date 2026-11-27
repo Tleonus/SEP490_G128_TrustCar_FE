@@ -16,7 +16,7 @@
   background:
     radial-gradient(ellipse 45% 90% at 20% 0%, rgba(255, 248, 225, 0.08) 0%, transparent 72%),
     linear-gradient(165deg, #091526 0%, #0e213b 60%, #081322 100%);
-  border: 1px solid rgba(201, 162, 39, 0.28);
+  border: 1px solid rgba(29, 78, 216, 0.28);
   box-shadow: 0 8px 24px rgba(7, 19, 36, 0.16);
   overflow: hidden;
   color: #f8fafc;
@@ -32,7 +32,7 @@
     90deg,
     transparent 8%,
     rgba(255, 248, 225, 0.35) 28%,
-    #e5c878 50%,
+    #93c5fd 50%,
     rgba(255, 248, 225, 0.35) 72%,
     transparent 92%
   );
@@ -67,7 +67,7 @@
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 1.4px;
-  color: #e5c878;
+  color: #93c5fd;
   text-transform: uppercase;
 }
 
@@ -106,7 +106,7 @@
 .statVal {
   font-size: 15px;
   font-weight: 800;
-  color: #f3dc93;
+  color: #93c5fd;
   font-variant-numeric: tabular-nums;
 }
 
@@ -163,14 +163,14 @@
 }
 
 .catBtn:hover {
-  border-color: rgba(201, 162, 39, 0.55);
+  border-color: rgba(29, 78, 216, 0.55);
   color: var(--color-text);
 }
 
 .catBtnActive {
   background: #0b1f3a;
   color: #f8fafc;
-  border-color: rgba(201, 162, 39, 0.65);
+  border-color: rgba(29, 78, 216, 0.65);
 }
 
 .catCount {
@@ -178,14 +178,14 @@
   border-radius: 999px;
   font-size: 10.5px;
   font-weight: 700;
-  background: rgba(201, 162, 39, 0.14);
+  background: rgba(29, 78, 216, 0.14);
   color: var(--color-accent-hover);
   font-variant-numeric: tabular-nums;
 }
 
 .catBtnActive .catCount {
   background: rgba(229, 200, 120, 0.22);
-  color: #fae498;
+  color: #bfdbfe;
 }
 
 /* SWITCHES & ACTIONS */
@@ -231,16 +231,16 @@
   border-radius: 999px;
   font-size: 12px;
   font-weight: 700;
-  background: linear-gradient(180deg, #fae498 0%, #c9a227 100%);
+  background: linear-gradient(180deg, #bfdbfe 0%, #1d4ed8 100%);
   color: #081527;
-  border: 1px solid #e5c878;
+  border: 1px solid #93c5fd;
   transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
 .addMore:hover {
   transform: translateY(-1px);
   color: #081527;
-  box-shadow: 0 4px 12px rgba(201, 162, 39, 0.25);
+  box-shadow: 0 4px 12px rgba(29, 78, 216, 0.25);
 }
 
 .clearBtn {
@@ -285,8 +285,8 @@
   max-width: 620px;
   padding: 10px 16px;
   border-radius: 10px;
-  background: rgba(201, 162, 39, 0.08);
-  border: 1px solid rgba(201, 162, 39, 0.32);
+  background: rgba(29, 78, 216, 0.08);
+  border: 1px solid rgba(29, 78, 216, 0.32);
   text-align: center;
   font-size: 13px;
   color: var(--color-text);

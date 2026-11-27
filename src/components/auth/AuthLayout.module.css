@@ -5,7 +5,7 @@
   justify-content: center;
   padding: 48px 20px;
   background:
-    radial-gradient(60% 50% at 100% 0%, rgba(201, 162, 39, 0.12) 0%, transparent 60%),
+    radial-gradient(60% 50% at 100% 0%, rgba(29, 78, 216, 0.12) 0%, transparent 60%),
     radial-gradient(50% 50% at 0% 100%, rgba(19, 40, 74, 0.12) 0%, transparent 60%),
     var(--color-bg);
 }
@@ -75,7 +75,7 @@
 
 .eyebrow {
   display: inline-block;
-  color: #d9b84a;
+  color: #60a5fa;
   font-weight: 700;
   letter-spacing: 1.5px;
   text-transform: uppercase;
@@ -91,7 +91,7 @@
 }
 
 .accent {
-  color: #d9b84a;
+  color: #60a5fa;
 }
 
 .highlights {
@@ -121,7 +121,7 @@
   border-radius: 10px;
   background: rgba(217, 184, 74, 0.16);
   border: 1px solid rgba(217, 184, 74, 0.35);
-  color: #d9b84a;
+  color: #60a5fa;
   font-size: 16px;
 }
 

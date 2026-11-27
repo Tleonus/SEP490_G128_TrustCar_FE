@@ -162,7 +162,7 @@ export default function CarImagesModal({ open, car, onClose, onImagesChange }) {
             <figure key={image._id || image.url} className={styles.tile}>
               <img src={image.url} alt={image.caption || `Ảnh xe ${index + 1}`} loading="lazy" />
               {image.isPrimary && (
-                <Tag color="gold" className={styles.primaryTag} icon={<StarFilled />}>
+                <Tag color="blue" className={styles.primaryTag} icon={<StarFilled />}>
                   Ảnh chính
                 </Tag>
               )}

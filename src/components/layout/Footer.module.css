@@ -2,7 +2,7 @@
   position: relative;
   overflow: hidden;
   background:
-    radial-gradient(ellipse 65% 35% at 50% 0%, rgba(201, 162, 39, 0.12) 0%, transparent 72%),
+    radial-gradient(ellipse 65% 35% at 50% 0%, rgba(29, 78, 216, 0.12) 0%, transparent 72%),
     radial-gradient(ellipse 45% 40% at 85% 50%, rgba(56, 189, 248, 0.08) 0%, transparent 70%),
     linear-gradient(180deg, #071324 0%, #091930 48%, #040b16 100%);
   color: #e7e9ef;
@@ -21,11 +21,11 @@
     90deg,
     transparent 0%,
     rgba(56, 189, 248, 0.38) 25%,
-    rgba(244, 216, 121, 0.62) 50%,
+    rgba(147, 197, 253, 0.62) 50%,
     rgba(56, 189, 248, 0.38) 75%,
     transparent 100%
   );
-  box-shadow: 0 0 18px rgba(244, 216, 121, 0.32);
+  box-shadow: 0 0 18px rgba(147, 197, 253, 0.32);
 }
 
 .inner {
@@ -57,7 +57,7 @@
 
 .inner > div:hover {
   transform: translateY(-3px);
-  border-color: rgba(244, 216, 121, 0.38);
+  border-color: rgba(147, 197, 253, 0.38);
 }
 
 @media (max-width: 900px) {
@@ -85,8 +85,8 @@
   padding: 3px;
   border-radius: 13px;
   background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(244, 216, 121, 0.42);
-  border-bottom: 2.5px solid #7d5d09;
+  border: 1px solid rgba(147, 197, 253, 0.42);
+  border-bottom: 2.5px solid #1e3a8a;
   object-fit: contain;
   object-position: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.32);
@@ -96,7 +96,7 @@
   font-size: 20px;
   font-weight: 800;
   letter-spacing: -0.3px;
-  background: linear-gradient(90deg, #ffffff 0%, #fae498 100%);
+  background: linear-gradient(90deg, #ffffff 0%, #bfdbfe 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -111,14 +111,14 @@
 
 .colTitle {
   display: inline-block;
-  color: #fae498;
+  color: #bfdbfe;
   font-size: 14px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.8px;
   margin-bottom: 16px;
   padding-bottom: 6px;
-  border-bottom: 2px solid rgba(244, 216, 121, 0.35);
+  border-bottom: 2px solid rgba(147, 197, 253, 0.35);
 }
 
 .linkList {
@@ -140,7 +140,7 @@
 }
 
 .linkList a:hover {
-  color: #fae498;
+  color: #bfdbfe;
   transform: translateX(4px);
 }
 
@@ -164,7 +164,7 @@
 }
 
 .contactItem a:hover {
-  color: #fae498;
+  color: #bfdbfe;
 }
 
 .contactItem :global(.anticon) {
@@ -175,9 +175,9 @@
   align-items: center;
   justify-content: center;
   border-radius: 8px;
-  background: rgba(201, 162, 39, 0.18);
-  border: 1px solid rgba(244, 216, 121, 0.4);
-  color: #fae498;
+  background: rgba(29, 78, 216, 0.18);
+  border: 1px solid rgba(147, 197, 253, 0.4);
+  color: #bfdbfe;
   font-size: 13px;
 }
 
