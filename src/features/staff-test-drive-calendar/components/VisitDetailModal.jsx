@@ -63,6 +63,9 @@ function buildItems(visit) {
   if (visit.status === 'CANCELLED' && visit.cancellationNote) items.push({ key: 'cnote', label: 'Ghi chú nội bộ', children: visit.cancellationNote })
   if (visit.outcome) items.push({ key: 'outcome', label: 'Phản hồi / kết quả', children: <FeedbackSummary outcome={visit.outcome} /> })
   if (moved) items.push({ key: 'moved', label: 'Đổi lịch', children: moved })
+  if (visit.type !== 'SERVICE') {
+    items.push({ key: 'staff', label: 'Phụ trách', children: visit.assignedTo?.fullName ?? (visit.needsStaff ? 'Thiếu nhân viên' : 'Chưa có') })
+  }
   if (visit.confirmedBy) items.push({ key: 'by', label: 'Xác nhận bởi', children: visit.confirmedBy.fullName })
   return items
 }

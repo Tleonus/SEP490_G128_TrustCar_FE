@@ -69,3 +69,38 @@
   font-size: 13px;
   color: var(--color-text-secondary);
 }
+
+/* Tab "Điểm danh" */
+.attDay {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.attDate {
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+}
+
+.attTable {
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.attName {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.attName span,
+.attSub {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}

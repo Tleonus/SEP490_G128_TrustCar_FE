@@ -246,3 +246,21 @@
 @media (max-width: 760px) {
   .page { padding: 20px 16px 36px; }
 }
+
+/* Người phụ trách lượt lái thử */
+.warnText {
+  color: #b91c1c;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.assigneeList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.modalAlert {
+  margin-top: 12px;
+}

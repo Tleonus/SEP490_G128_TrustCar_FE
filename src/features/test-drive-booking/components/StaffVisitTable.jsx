@@ -3,8 +3,10 @@ import VisitStatusTag from './VisitStatusTag'
 import { formatVnDateTime } from '../utils/vnTime'
 import { hasUnavailableCar, isCarCancelled, isOpenVisit, staffActions } from '../utils/visitRules'
 import { rescheduledText } from '../utils/rescheduleRules'
+import { assigneeText } from '../utils/staffing'
 import {
-  CAR_STATUS_LABEL, LATE_CANCEL_LABEL, OUTCOME_LABEL, PIN_LABEL, REMINDER_LABEL, STAFF_ACTION_LABEL, STAFF_CANCELLATION_TEXT,
+  CAR_STATUS_LABEL, LATE_CANCEL_LABEL, NEEDS_STAFF_LABEL, OUTCOME_LABEL, PIN_LABEL, REMINDER_LABEL, STAFF_ACTION_LABEL,
+  STAFF_CANCELLATION_TEXT,
 } from '../constants/testDriveConstants'
 import FeedbackSummary from '../../test-drive-feedback/components/FeedbackSummary'
 import styles from '../styles/StaffVisits.module.css'
@@ -17,22 +19,26 @@ function CodeCell({ visit }) {
     <div className={styles.stacked}>
       <span className={styles.strong}>{visit.visitCode}</span>
       <span><VisitStatusTag status={visit.status} />{visit.isLateCancellation && <Tag color="orange">{LATE_CANCEL_LABEL}</Tag>}</span>
-      {(visit.isNewRequest || visit.needsReminderCall || visit.needsOutcome) && (
+      {(visit.needsStaff || visit.isNewRequest || visit.needsReminderCall || visit.needsOutcome) && (
         <span>
+          {visit.needsStaff && <Tag color="red">{NEEDS_STAFF_LABEL}</Tag>}
           {visit.isNewRequest && <Tag color="blue">{PIN_LABEL}</Tag>}
           {visit.needsReminderCall && <Tag color="blue">{REMINDER_LABEL}</Tag>}
           {visit.needsOutcome && <Tag color="volcano">{OUTCOME_LABEL}</Tag>}
         </span>
       )}
       {moved && <span className={styles.sub}>{moved}</span>}
+      {visit.type !== 'SERVICE' && (isOpenVisit(visit) || visit.assignedTo) && (
+        <span className={visit.needsStaff ? styles.warnText : styles.sub}>Phụ trách: {assigneeText(visit)}</span>
+      )}
       {visit.confirmedBy && <span className={styles.sub}>Xác nhận: {visit.confirmedBy.fullName}</span>}
     </div>
   )
 }
 
-/** Màu nền dòng: xe không còn bán (đỏ) > cần chốt kết quả (cam) > cần xử lý/ghim (xanh) > cần gọi nhắc (vàng). Luôn kèm nhãn chữ trong ô mã. */
+/** Màu nền dòng: xe không còn bán / thiếu nhân viên (đỏ) > cần chốt kết quả (cam) > cần xử lý/ghim (xanh) > cần gọi nhắc (vàng). Luôn kèm nhãn chữ trong ô mã. */
 const rowClass = (visit) => {
-  if (hasUnavailableCar(visit)) return styles.alertRow
+  if (hasUnavailableCar(visit) || visit.needsStaff) return styles.alertRow
   if (visit.needsOutcome) return styles.outcomeRow
   if (visit.isNewRequest) return styles.newRow
   if (visit.needsReminderCall) return styles.reminderRow
@@ -90,7 +96,8 @@ function NoteCell({ visit }) {
  * @ears .sdd/features/test-drive-booking/SPEC.md#REQ-F30
  * @ears .sdd/features/test-drive-booking/SPEC.md#REQ-F32
  * @param {object[]} items
- * @param {(visit: object, status: string) => void} onAction  `status` là trạng thái đích, hoặc 'RESCHEDULE' (đổi lịch hộ)
+ * @param {(visit: object, status: string) => void} onAction  `status` là trạng thái đích, 'RESCHEDULE' (đổi lịch hộ)
+ *   hoặc 'ASSIGN' (đổi người phụ trách)
  */
 export default function StaffVisitTable({ items, onAction }) {
   const columns = [
@@ -108,6 +115,9 @@ export default function StaffVisitTable({ items, onAction }) {
         <div className={styles.actions}>
           {isOpenVisit(visit) && (
             <Button size="small" onClick={() => onAction(visit, 'RESCHEDULE')}>{STAFF_ACTION_LABEL.RESCHEDULE}</Button>
+          )}
+          {isOpenVisit(visit) && visit.type !== 'SERVICE' && (
+            <Button size="small" danger={visit.needsStaff} onClick={() => onAction(visit, 'ASSIGN')}>{STAFF_ACTION_LABEL.ASSIGN}</Button>
           )}
           {staffActions(visit).map((status) => (
             <Button

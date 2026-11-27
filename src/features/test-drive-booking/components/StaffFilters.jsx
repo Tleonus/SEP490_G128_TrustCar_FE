@@ -1,6 +1,6 @@
 import { Segmented, Select } from 'antd'
 import { isRangeReversed } from '../utils/staffFilters'
-import { OUTCOME_LABEL, REMINDER_LABEL, SORT_OPTIONS, VISIT_STATUS } from '../constants/testDriveConstants'
+import { NEEDS_STAFF_LABEL, OUTCOME_LABEL, REMINDER_LABEL, SORT_OPTIONS, VISIT_STATUS } from '../constants/testDriveConstants'
 import styles from '../styles/StaffVisits.module.css'
 
 const QUICK = [
@@ -8,6 +8,7 @@ const QUICK = [
   { label: 'Chờ xác nhận', value: 'PENDING' },
   { label: REMINDER_LABEL, value: 'REMINDER' },
   { label: OUTCOME_LABEL, value: 'OUTCOME' },
+  { label: NEEDS_STAFF_LABEL, value: 'NEEDS_STAFF' },
   { label: 'Xe không còn bán', value: 'CAR_UNAVAILABLE' },
 ]
 
