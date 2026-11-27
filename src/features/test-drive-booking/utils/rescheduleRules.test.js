@@ -16,6 +16,15 @@ describe('rescheduleHint (AC-F18)', () => {
     expect(result.message).toMatch(/tối đa 2 lần/)
   })
 
+  it('nhân viên đổi 5 lần, khách mới tự đổi 1 lần, còn dưới 12 giờ → câu "dưới 12 giờ", không phải "tối đa"', () => {
+    const result = rescheduleHint(visit({ canReschedule: false, rescheduleCount: 5, customerRescheduleCount: 1, scheduledAt: at(5) }), NOW)
+    expect(result.message).not.toMatch(/tối đa/)
+  })
+
+  it('khách tự đổi đủ 2 lần (tổng 6) → câu "tối đa 2 lần"', () => {
+    expect(rescheduleHint(visit({ canReschedule: false, rescheduleCount: 6, customerRescheduleCount: 2 }), NOW).message).toMatch(/tối đa 2 lần/)
+  })
+
   it('đã đổi 2 lần và còn dưới 12 giờ → vẫn ưu tiên câu "tối đa 2 lần"', () => {
     expect(rescheduleHint(visit({ canReschedule: false, rescheduleCount: 2, scheduledAt: at(5) }), NOW).message).toMatch(/tối đa/)
   })

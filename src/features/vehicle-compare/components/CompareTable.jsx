@@ -256,7 +256,7 @@ export default function CompareTable({
                 <tr
                   className={styles.groupRow}
                   style={{
-                    '--group-accent': group.theme?.accent || '#c9a227',
+                    '--group-accent': group.theme?.accent || '#1d4ed8',
                   }}
                 >
                   <th scope="colgroup" colSpan={cars.length + 1}>

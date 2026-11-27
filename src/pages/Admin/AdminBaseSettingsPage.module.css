@@ -63,7 +63,7 @@
 .eyebrow {
   padding: 4px 12px;
   border-radius: 999px;
-  background: linear-gradient(135deg, rgba(29, 78, 216, 0.1) 0%, rgba(201, 162, 39, 0.14) 100%);
+  background: linear-gradient(135deg, rgba(29, 78, 216, 0.1) 0%, rgba(29, 78, 216, 0.14) 100%);
   border: 1px solid rgba(29, 78, 216, 0.22);
 }
 
@@ -72,8 +72,8 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--gold, #c9a227);
-  box-shadow: 0 0 0 2px rgba(201, 162, 39, 0.24);
+  background: var(--gold, #1d4ed8);
+  box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.24);
 }
 
 .page h1 {
@@ -105,8 +105,8 @@
 .unsavedNote {
   padding: 5px 11px;
   border-radius: 999px;
-  background: #fffbeb;
-  border: 1px solid #fde68a;
+  background: #fff7ed;
+  border: 1px solid #93c5fd;
   color: #92400e;
   font-family: var(--font-display);
   font-size: 12px;
@@ -492,9 +492,9 @@
   align-items: center;
   min-height: 28px;
   padding: 4px 12px;
-  border: 1px solid rgba(201, 162, 39, 0.45);
+  border: 1px solid rgba(29, 78, 216, 0.45);
   border-radius: 999px;
-  background: #fffbeb;
+  background: #fff7ed;
   color: #854d0e;
   font-family: var(--font-display);
   font-size: 11.5px;

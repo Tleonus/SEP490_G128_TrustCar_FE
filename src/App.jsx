@@ -18,9 +18,9 @@ function App() {
       theme={{
         algorithm: mode === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm,
         token: {
-          colorPrimary: '#0b1f3a',
-          colorInfo: '#0b1f3a',
-          colorLink: '#c9a227',
+          colorPrimary: '#1d4ed8',
+          colorInfo: '#1d4ed8',
+          colorLink: '#1d4ed8',
           borderRadius: 8,
           fontFamily:
             "'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif",

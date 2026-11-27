@@ -39,11 +39,11 @@ export default function RobotMascot({ size = 84, className, active = false }) {
           <stop offset="100%" stopColor="#94afd3" />
         </linearGradient>
 
-        {/* Viền Champagne Gold đặc trưng của TrustCar */}
+        {/* Viền Cobalt Highlight đặc trưng của TrustCar */}
         <linearGradient id={goldTrim} x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#fff0a8" />
-          <stop offset="50%" stopColor="#dfb638" />
-          <stop offset="100%" stopColor="#946f0e" />
+          <stop offset="0%" stopColor="#bfdbfe" />
+          <stop offset="50%" stopColor="#60a5fa" />
+          <stop offset="100%" stopColor="#1e40af" />
         </linearGradient>
 
         {/* Kính chắn gió Panoramic tối màu sâu */}
@@ -61,7 +61,7 @@ export default function RobotMascot({ size = 84, className, active = false }) {
 
         {/* Hào quang đèn pha LED */}
         <radialGradient id={headlightGlow} cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#fef08a" stopOpacity="0.95" />
+          <stop offset="0%" stopColor="#bfdbfe" stopOpacity="0.95" />
           <stop offset="55%" stopColor="#38bdf8" stopOpacity="0.45" />
           <stop offset="100%" stopColor="#38bdf8" stopOpacity="0" />
         </radialGradient>
@@ -130,7 +130,7 @@ export default function RobotMascot({ size = 84, className, active = false }) {
           y1="52"
           x2="13"
           y2="53"
-          stroke={active ? '#38bdf8' : '#facc15'}
+          stroke={active ? '#38bdf8' : '#60a5fa'}
           strokeWidth="2.2"
           strokeLinecap="round"
         />
@@ -147,7 +147,7 @@ export default function RobotMascot({ size = 84, className, active = false }) {
           y1="52"
           x2="107"
           y2="53"
-          stroke={active ? '#38bdf8' : '#facc15'}
+          stroke={active ? '#38bdf8' : '#60a5fa'}
           strokeWidth="2.2"
           strokeLinecap="round"
         />
@@ -164,7 +164,7 @@ export default function RobotMascot({ size = 84, className, active = false }) {
         cx="60"
         cy="10"
         r={active ? '4' : '3'}
-        fill={active ? '#38bdf8' : '#fde047'}
+        fill={active ? '#38bdf8' : '#60a5fa'}
       />
 
       {/* Khoang cabin & Nóc xe Coupe 3D */}
@@ -236,7 +236,7 @@ export default function RobotMascot({ size = 84, className, active = false }) {
               cy="42.5"
               r="9"
               fill="none"
-              stroke="#fde047"
+              stroke="#60a5fa"
               strokeWidth="1.3"
               strokeDasharray="4 3"
             />
@@ -245,7 +245,7 @@ export default function RobotMascot({ size = 84, className, active = false }) {
               cy="42.5"
               r="9"
               fill="none"
-              stroke="#fde047"
+              stroke="#60a5fa"
               strokeWidth="1.3"
               strokeDasharray="4 3"
             />
@@ -288,7 +288,7 @@ export default function RobotMascot({ size = 84, className, active = false }) {
           stroke={`url(#${goldTrim})`}
           strokeWidth="1.6"
         />
-        <ellipse cx="23.5" cy="68.5" rx="5.5" ry="3.6" fill={active ? '#38bdf8' : '#fef08a'} />
+        <ellipse cx="23.5" cy="68.5" rx="5.5" ry="3.6" fill={active ? '#38bdf8' : '#bfdbfe'} />
         <ellipse cx="23.5" cy="68.5" rx="2.8" ry="1.8" fill="#ffffff" />
         <path
           d="M 15.5 70.5 Q 24 73 32.5 68.5"
@@ -308,7 +308,7 @@ export default function RobotMascot({ size = 84, className, active = false }) {
           stroke={`url(#${goldTrim})`}
           strokeWidth="1.6"
         />
-        <ellipse cx="96.5" cy="68.5" rx="5.5" ry="3.6" fill={active ? '#38bdf8' : '#fef08a'} />
+        <ellipse cx="96.5" cy="68.5" rx="5.5" ry="3.6" fill={active ? '#38bdf8' : '#bfdbfe'} />
         <ellipse cx="96.5" cy="68.5" rx="2.8" ry="1.8" fill="#ffffff" />
         <path
           d="M 104.5 70.5 Q 96 73 87.5 68.5"
@@ -346,7 +346,7 @@ export default function RobotMascot({ size = 84, className, active = false }) {
       {/* Đường miệng cười sáng trên lưới tản nhiệt */}
       <path
         d="M 42 79 Q 60 88 78 79"
-        stroke={active ? '#38bdf8' : '#f5d97e'}
+        stroke={active ? '#38bdf8' : '#93c5fd'}
         strokeWidth="2.6"
         strokeLinecap="round"
         fill="none"
@@ -388,9 +388,9 @@ export function UserChatAvatar({ size = 32, name = '' }) {
           <stop offset="100%" stopColor="#0b1f3a" />
         </linearGradient>
         <linearGradient id={ringGrad} x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#fae08c" />
-          <stop offset="55%" stopColor="#c9a227" />
-          <stop offset="100%" stopColor="#967210" />
+          <stop offset="0%" stopColor="#93c5fd" />
+          <stop offset="55%" stopColor="#1d4ed8" />
+          <stop offset="100%" stopColor="#1e40af" />
         </linearGradient>
       </defs>
 
@@ -401,7 +401,7 @@ export function UserChatAvatar({ size = 32, name = '' }) {
           x="24"
           y="29.5"
           textAnchor="middle"
-          fill="#f8e396"
+          fill="#bfdbfe"
           fontSize="18"
           fontWeight="800"
           fontFamily="Inter, Segoe UI, sans-serif"
@@ -409,7 +409,7 @@ export function UserChatAvatar({ size = 32, name = '' }) {
           {initial}
         </text>
       ) : (
-        <g fill="none" stroke="#f5d97e" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <g fill="none" stroke="#93c5fd" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="24" cy="17.5" r="5.5" fill="rgba(245, 217, 126, 0.2)" />
           <path d="M13.5 34.5 C14.8 28.5, 33.2 28.5, 34.5 34.5" />
         </g>

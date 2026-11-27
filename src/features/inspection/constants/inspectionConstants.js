@@ -185,11 +185,11 @@ export const CAR_STATUS_META = {
   DRAFT: { label: 'Bản nháp', color: 'default' },
   INCOMING: { label: 'Mới nhập', color: 'blue' },
   UNDER_INSPECTION: { label: 'Đang kiểm định', color: 'processing' },
-  APPROVED_CPO: { label: 'Đạt chuẩn CPO', color: 'gold' },
+  APPROVED_CPO: { label: 'Đạt chuẩn CPO', color: 'blue' },
   REJECTED: { label: 'Kiểm định không đạt', color: 'error' },
   MAINTENANCE: { label: 'Đang bảo dưỡng', color: 'orange' },
   AVAILABLE: { label: 'Đang bán', color: 'success' },
-  RESERVED: { label: 'Đã đặt cọc', color: 'gold' },
+  RESERVED: { label: 'Đã đặt cọc', color: 'blue' },
   SOLD: { label: 'Đã bán', color: 'default' },
   DELISTED: { label: 'Đã gỡ bán', color: 'red' },
 }

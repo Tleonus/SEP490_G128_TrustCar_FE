@@ -27,6 +27,64 @@ const RATE_FIELDS = ['ratePercent']
 const bankNotices = (bank, input) => {
   const misfit = bank && input ? bankFit(bank, loanOf(input)) : []
   return misfit.length > 0 ? [`Khoản vay này chưa đạt điều kiện của ${bank.name}: ${misfit.join('; ')}.`] : []
+const BANKING_NOTE_THEME = {
+  algorithm: antdTheme.defaultAlgorithm,
+  token: {
+    colorPrimary: '#1e40af',
+    colorInfo: '#1e40af',
+    colorSuccess: '#1b5e3c',
+    colorWarning: '#b4690e',
+    colorError: '#b93829',
+    colorBgContainer: '#fffdf8',
+    colorBgElevated: '#fffdf8',
+    colorBgLayout: '#f5efe3',
+    colorText: '#1f1b16',
+    colorTextSecondary: '#655b4d',
+    colorBorder: '#dccbb4',
+    colorBorderSecondary: '#e8decb',
+    borderRadius: 14,
+    borderRadiusLG: 16,
+    fontFamily: "'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif",
+  },
+  components: {
+    InputNumber: {
+      controlHeightLG: 46,
+      activeBorderColor: '#1e40af',
+      hoverBorderColor: '#60a5fa',
+      activeShadow: '0 0 0 4px rgba(30, 64, 175, 0.14)',
+      addonBg: '#eff6ff',
+    },
+    Select: {
+      controlHeightLG: 46,
+      optionSelectedBg: '#eff6ff',
+      optionSelectedColor: '#1f1b16',
+      optionActiveBg: '#f8fbff',
+    },
+    Slider: {
+      trackBg: '#1e40af',
+      trackHoverBg: '#1e40af',
+      handleColor: '#1e40af',
+      handleActiveColor: '#172554',
+      dotActiveBorderColor: '#1e40af',
+      railBg: '#dbeafe',
+      railHoverBg: '#bfdbfe',
+    },
+    Segmented: {
+      trackBg: '#ede3d0',
+      itemColor: '#5c5245',
+      itemHoverColor: '#1f1b16',
+      itemHoverBg: 'rgba(255, 253, 248, 0.55)',
+      itemSelectedBg: '#fffdf8',
+      itemSelectedColor: '#1f1b16',
+    },
+    Table: {
+      headerBg: '#f2e8d5',
+      headerColor: '#3d3428',
+      headerSplitColor: '#e2d5be',
+      rowHoverBg: '#faf4e8',
+      borderColor: '#ebe1cf',
+    },
+  },
 }
 
 /**

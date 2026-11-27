@@ -20,7 +20,7 @@ export const CAR_ID_REGEX = /^[0-9a-f]{24}$/i
 
 /** Trạng thái lượt (BE suy ra từ các lịch con). */
 export const VISIT_STATUS = Object.freeze({
-  PENDING: { label: 'Chờ xác nhận', color: 'gold' },
+  PENDING: { label: 'Chờ xác nhận', color: 'blue' },
   CONFIRMED: { label: 'Đã xác nhận', color: 'green' },
   COMPLETED: { label: 'Đã hoàn tất', color: 'blue' },
   NO_SHOW: { label: 'Vắng mặt', color: 'red' },
@@ -76,6 +76,7 @@ export const STAFF_ACTION_LABEL = Object.freeze({
   COMPLETED: 'Hoàn tất',
   NO_SHOW: 'Vắng mặt',
   RESCHEDULE: 'Đổi lịch',
+  ASSIGN: 'Đổi người',
 })
 
 // ---- 1.1.0 (SPEC FE v1.1.0, API-TEST-DRIVE-BOOKING v1.1.0) ----
@@ -101,6 +102,8 @@ export const CANCEL_REASON_OTHER = 'OTHER'
 
 export const REMINDER_LABEL = 'Gọi nhắc'
 export const OUTCOME_LABEL = 'Cần chốt kết quả'
+/** Lượt sắp tới chưa có nhân viên đi làm phụ trách (BE `needsStaff`). */
+export const NEEDS_STAFF_LABEL = 'Thiếu nhân viên'
 export const CURRENT_SLOT_LABEL = 'Giờ hiện tại'
 export const RESCHEDULE_TITLE = 'Đổi lịch'
 

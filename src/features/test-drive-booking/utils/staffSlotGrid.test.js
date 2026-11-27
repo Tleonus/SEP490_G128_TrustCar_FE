@@ -36,6 +36,11 @@ describe('describeStaffSlot (AC-F25, AC-F26)', () => {
     expect(describeStaffSlot(slot).note).toBe('Xe đã có lịch')
   })
 
+  it('nêu người phụ trách của lượt trong khung', () => {
+    expect(summarizeVisit(visit({ assignedTo: { _id: 's1', fullName: 'Lan Sales' } })).assignee).toBe('Lan Sales')
+    expect(summarizeVisit(visit()).assignee).toBe('')
+  })
+
   it('lý do lạ hoặc thiếu → "Không đặt được", không vỡ', () => {
     expect(describeStaffSlot({ start: '2026-11-12T08:00:00+07:00', available: false, reason: 'NEW' }).note).toBe('Không đặt được')
     expect(describeStaffSlot({ start: '2026-11-12T08:00:00+07:00', available: false }).selectable).toBe(false)
@@ -61,7 +66,7 @@ describe('summarizeVisit', () => {
   it('trả tên, SĐT, xe, nhãn trạng thái tiếng Việt', () => {
     expect(summarizeVisit(visit())).toEqual({
       key: 'v1', code: 'APT-0001', statusLabel: 'Đã xác nhận', statusColor: 'green',
-      name: 'Nguyễn Văn A', phone: '0901234567', cars: 'Mazda CX-5',
+      name: 'Nguyễn Văn A', phone: '0901234567', cars: 'Mazda CX-5', assignee: '',
     })
   })
 

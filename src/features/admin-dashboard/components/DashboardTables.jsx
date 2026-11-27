@@ -27,7 +27,7 @@ const LEAD_STAGE_LABEL = {
 const LEAD_STAGE_COLOR = {
   NEW: 'blue',
   CONTACTED: 'cyan',
-  QUALIFIED: 'gold',
+  QUALIFIED: 'blue',
   NEGOTIATING: 'orange',
   WON: 'green',
   LOST: 'red',

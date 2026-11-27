@@ -33,11 +33,11 @@
     to bottom,
     transparent 0%,
     rgba(56, 189, 248, 0.45) 18%,
-    rgba(244, 216, 121, 0.78) 50%,
+    rgba(147, 197, 253, 0.78) 50%,
     rgba(56, 189, 248, 0.45) 82%,
     transparent 100%
   );
-  box-shadow: 0 0 12px rgba(244, 216, 121, 0.45);
+  box-shadow: 0 0 12px rgba(147, 197, 253, 0.45);
   pointer-events: none;
 }
 
@@ -228,7 +228,7 @@
   padding: 8px 14px;
   color: #ffffff;
   background: linear-gradient(180deg, #1b3a6b 0%, #0b1e3b 100%);
-  border: 1.5px solid rgba(244, 216, 121, 0.72);
+  border: 1.5px solid rgba(147, 197, 253, 0.72);
   border-bottom: 3px solid #050d1a;
   border-radius: 999px;
   box-shadow:
@@ -254,8 +254,8 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #f4d879;
-  box-shadow: 0 0 8px rgba(244, 216, 121, 0.8);
+  background: #93c5fd;
+  box-shadow: 0 0 8px rgba(147, 197, 253, 0.8);
   transform: translateY(-50%);
 }
 
@@ -333,12 +333,12 @@
 
 .phoneChannel {
   --bubble-lip: #6e5005;
-  --bubble-glow: rgba(244, 216, 121, 0.52);
+  --bubble-glow: rgba(147, 197, 253, 0.52);
   background: radial-gradient(
     circle at 32% 24%,
-    #fff7c2 0%,
-    #efd165 30%,
-    #c29616 68%,
+    #bfdbfe 0%,
+    #93c5fd 30%,
+    #2563eb 68%,
     #6e5005 100%
   );
   color: #081527;

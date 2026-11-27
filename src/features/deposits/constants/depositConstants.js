@@ -75,7 +75,7 @@ export const PAYMENT_STATUS = Object.freeze({
 export const ACTIVE_DEPOSIT_STATUSES = [DEPOSIT_STATUS.PENDING_PAYMENT, DEPOSIT_STATUS.DEPOSIT_PAID]
 
 export const DEPOSIT_STATUS_META = {
-  PENDING_PAYMENT: { label: 'Đang giữ xe · chờ chuyển cọc', color: 'gold' },
+  PENDING_PAYMENT: { label: 'Đang giữ xe · chờ chuyển cọc', color: 'blue' },
   DEPOSIT_PAID: { label: 'Đang giữ xe · đã nhận cọc', color: 'blue' },
   COMPLETED: { label: 'Hoàn tất mua xe', color: 'green' },
   EXPIRED: { label: 'Hết hạn giữ xe', color: 'default' },
@@ -92,7 +92,7 @@ export const PAYMENT_STATUS_META = {
 
 export const CAR_STATE_META = {
   AVAILABLE: { label: 'Đang mở bán', color: 'green' },
-  RESERVED: { label: 'Đang được giữ chỗ', color: 'gold' },
+  RESERVED: { label: 'Đang được giữ chỗ', color: 'blue' },
   SOLD: { label: 'Đã bán', color: 'red' },
   UNAVAILABLE: { label: 'Tạm ngưng bán', color: 'default' },
 }

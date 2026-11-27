@@ -57,7 +57,7 @@ function logo(g, logoTexture) {
   const back = new Mesh(new CylinderGeometry(SIGN_R, SIGN_R, 0.08, 96), std('#141518', 0.35, { metalness: 0.4 }))
   back.rotation.x = Math.PI / 2
   back.position.z = -0.05
-  const rim = new Mesh(new TorusGeometry(SIGN_R, 0.035, 16, 160), std('#c9a227', 0.25, { metalness: 0.9 }))
+  const rim = new Mesh(new TorusGeometry(SIGN_R, 0.035, 16, 160), std('#1d4ed8', 0.25, { metalness: 0.9 }))
   const halo = new Mesh(new TorusGeometry(SIGN_R - 0.12, 0.03, 16, 160), glow('#ffffff', 3.2))
   halo.position.z = 0.01
   const emblem = new Mesh(new PlaneGeometry(h * LOGO_ASPECT, h), mat)
@@ -77,10 +77,10 @@ function brandWall(g, wordTexture) {
   const zc = (z0 + z1) / 2
   const panel = box(g, [0.04, 4.6, z1 - z0], std('#1d1f23', 0.55), [x, 3.0, zc])
   panel.name = 'brand_panel'
-  const trim = std('#c9a227', 0.25, { metalness: 0.9 })
+  const trim = std('#1d4ed8', 0.25, { metalness: 0.9 })
   box(g, [0.06, 0.04, z1 - z0], trim, [x + 0.01, 5.3, zc])
   box(g, [0.06, 0.04, z1 - z0], trim, [x + 0.01, 0.7, zc])
-  for (const z of [z0 + 0.25, z1 - 0.25]) box(g, [0.06, 4.3, 0.06], glow('#ffd27a', 2.4), [x + 0.02, 3.0, z])
+  for (const z of [z0 + 0.25, z1 - 0.25]) box(g, [0.06, 4.3, 0.06], glow('#93c5fd', 2.4), [x + 0.02, 3.0, z])
   const word = new Mesh(new PlaneGeometry(3.6, 0.9),
     new MeshStandardMaterial({ map: wordTexture, emissiveMap: wordTexture, emissive: '#ffffff', emissiveIntensity: 0.5, transparent: true }))
   word.position.set(x + 0.03, 1.15, zc + 0.6) // lệch về phía cửa: không bị biển logo (nhô ra) che

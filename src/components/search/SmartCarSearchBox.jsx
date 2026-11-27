@@ -249,7 +249,7 @@ export default function SmartCarSearchBox({
           >
             <div className={styles.smartBannerLeft}>
               <span className={styles.smartBannerTitle}>
-                <ThunderboltFilled style={{ color: '#eab308' }} />
+                <ThunderboltFilled style={{ color: '#2563eb' }} />
                 Gợi ý lọc nhanh:
               </span>
               {smartParsed.recognizedTags.map((tag) => (
@@ -306,7 +306,7 @@ export default function SmartCarSearchBox({
             <div className={styles.sectionBlock}>
               <div className={styles.sectionHeader}>
                 <span>
-                  <FireFilled style={{ color: '#f59e0b' }} /> Gợi ý tìm kiếm nhanh
+                  <FireFilled style={{ color: '#2563eb' }} /> Gợi ý tìm kiếm nhanh
                 </span>
               </div>
               <div className={styles.presetPillsWrap}>
@@ -335,7 +335,7 @@ export default function SmartCarSearchBox({
           <div className={styles.sectionBlock}>
             <div className={styles.sectionHeader}>
               <span>
-                <FireFilled style={{ color: '#f59e0b' }} /> Từ khóa & Dòng xe gợi ý
+                <FireFilled style={{ color: '#2563eb' }} /> Từ khóa & Dòng xe gợi ý
               </span>
             </div>
             <div className={styles.suggestionList}>
