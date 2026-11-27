@@ -5,8 +5,9 @@ import { CheckCircleFilled, InfoCircleOutlined } from '@ant-design/icons'
 import { useAuthStore } from '../../../store/useAuthStore'
 import { CONTACT_INFO } from '../../../config/contactInfo'
 import { useCarHoldStatus } from '../hooks/useCarHoldStatus'
-import { cancelDeposit, createDeposit } from '../api/depositApi'
-import { CAR_STATE, CUSTOMER_ROLE, DEPOSIT_PATHS, DEPOSIT_STATUS } from '../constants/depositConstants'
+import useVnpayPolicy from '../hooks/useVnpayPolicy'
+import { cancelDeposit, createDeposit, createVnpayPaymentUrl } from '../api/depositApi'
+import { CAR_STATE, CUSTOMER_ROLE, DEPOSIT_PATHS, DEPOSIT_STATUS, PAYMENT_PROVIDER, PAYMENT_STATUS } from '../constants/depositConstants'
 import { depositErrorMessage, isStaleStateError } from '../utils/depositErrors'
 import { formatDateTime, formatVnd } from '../utils/depositFormat'
 import CountdownTimer from './CountdownTimer'
@@ -30,12 +31,14 @@ export default function CarDepositPanel({ car: carProp, carKey: carKeyProp }) {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
   const user = useAuthStore((s) => s.user)
   const { status, loading, error, clockOffsetMs, refresh } = useCarHoldStatus(carKey)
+  const vnpay = useVnpayPolicy()
 
   const [modalOpen, setModalOpen] = useState(false)
   const [modalKey, setModalKey] = useState(0)
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState(null)
   const [cancelling, setCancelling] = useState(false)
+  const [payingVnpay, setPayingVnpay] = useState(false)
   const [notice, setNotice] = useState(null) // { type, title, text }
 
   const car = status?.car || carProp
@@ -75,12 +78,46 @@ export default function CarDepositPanel({ car: carProp, carKey: carKeyProp }) {
     setModalOpen(true)
   }
 
-  async function handleConfirm(amount) {
+  /** KAN-99: xin BE ký URL VNPay rồi chuyển trình duyệt sang cổng thanh toán. */
+  const openVnpayCheckout = useCallback(async (depositId) => {
+    if (!depositId) return false
+    try {
+      const data = await createVnpayPaymentUrl(depositId)
+      if (!data?.paymentUrl) throw new Error('Thiếu paymentUrl')
+      window.location.assign(data.paymentUrl)
+      return true
+    } catch (err) {
+      message.error(depositErrorMessage(err, 'Không tạo được liên kết thanh toán VNPay.'))
+      return false
+    }
+  }, [])
+
+  async function handleConfirm(amount, provider) {
     setSubmitting(true)
     setSubmitError(null)
     try {
-      await createDeposit({ carId: status?.carId || carKey, depositAmount: amount, userId: user?._id })
+      const created = await createDeposit({
+        carId: status?.carId || carKey,
+        depositAmount: amount,
+        userId: user?._id,
+        paymentProvider: provider,
+      })
       setModalOpen(false)
+
+      if (provider === PAYMENT_PROVIDER.VNPAY) {
+        message.success('Đã giữ xe cho bạn. Đang mở cổng thanh toán VNPay...')
+        await refresh()
+        const opened = await openVnpayCheckout(created?.id)
+        if (!opened) {
+          setNotice({
+            type: 'warning',
+            title: 'Chưa mở được cổng VNPay',
+            text: 'Lượt giữ xe đã được tạo nhưng chưa tạo được liên kết thanh toán. Bấm "Thanh toán qua VNPay" để thử lại, hoặc chuyển khoản theo hướng dẫn bên dưới.',
+          })
+        }
+        return
+      }
+
       setNotice({
         type: 'success',
         title: 'Đặt cọc giữ xe thành công',
@@ -126,6 +163,13 @@ export default function CarDepositPanel({ car: carProp, carKey: carKeyProp }) {
       setCancelling(false)
       refresh()
     }
+  }
+
+  async function handlePayVnpay(depositId) {
+    setPayingVnpay(true)
+    const opened = await openVnpayCheckout(depositId)
+    if (!opened) await refresh()
+    setPayingVnpay(false)
   }
 
   if (!carKey) return null
@@ -180,6 +224,9 @@ export default function CarDepositPanel({ car: carProp, carKey: carKeyProp }) {
                 <DepositStatusBadge status={myDeposit.status} />
                 <PaymentStatusBadge status={myDeposit.paymentStatus} />
               </div>
+              <div className={styles.muted}>
+                Phương thức thanh toán: {myDeposit.paymentProvider === PAYMENT_PROVIDER.VNPAY ? 'VNPay' : 'Chuyển khoản / tại showroom'}
+              </div>
             </div>
           </div>
 
@@ -194,10 +241,24 @@ export default function CarDepositPanel({ car: carProp, carKey: carKeyProp }) {
           </div>
 
           {myDeposit.status === DEPOSIT_STATUS.PENDING_PAYMENT && (
-            <PaymentInstructions
-              instructions={myDeposit.paymentInstructions}
-              hotline={{ href: CONTACT_INFO.phoneHref, display: CONTACT_INFO.phoneDisplay }}
-            />
+            <>
+              {vnpay.enabled && myDeposit.paymentStatus === PAYMENT_STATUS.UNPAID && (
+                <div className={styles.mineActions}>
+                  <Button type="primary" loading={payingVnpay} onClick={() => handlePayVnpay(myDeposit.id)}>
+                    Thanh toán qua VNPay
+                  </Button>
+                  <span className={styles.muted}>ATM / QR / thẻ quốc tế — trạng thái cập nhật tự động.</span>
+                </div>
+              )}
+              {/* Cọc chọn VNPay (và cổng đang bật) thì không hiện số tài khoản để khỏi chuyển khoản nhầm;
+                  cổng VNPay bị tắt sau đó thì vẫn hiện hướng dẫn chuyển khoản làm phương án dự phòng. */}
+              {!(myDeposit.paymentProvider === PAYMENT_PROVIDER.VNPAY && vnpay.enabled) && (
+                <PaymentInstructions
+                  instructions={myDeposit.paymentInstructions}
+                  hotline={{ href: CONTACT_INFO.phoneHref, display: CONTACT_INFO.phoneDisplay }}
+                />
+              )}
+            </>
           )}
           {myDeposit.status === DEPOSIT_STATUS.DEPOSIT_PAID && (
             <Alert
@@ -249,6 +310,8 @@ export default function CarDepositPanel({ car: carProp, carKey: carKeyProp }) {
         policy={status.policy}
         submitting={submitting}
         error={submitError}
+        vnpayEnabled={vnpay.enabled}
+        vnpayTimeoutMinutes={vnpay.timeoutMinutes}
         onConfirm={handleConfirm}
         onCancel={() => setModalOpen(false)}
       />

@@ -2,20 +2,33 @@ import { useState } from 'react'
 import { Alert, Button, Checkbox, Collapse, InputNumber, Modal } from 'antd'
 import { SafetyCertificateFilled } from '@ant-design/icons'
 import { getCarTitle, getCoverImage } from '../../../utils/car'
-import { depositPolicyText, REFUND_POLICY_TEXT } from '../constants/depositConstants'
+import { depositPolicyText, PAYMENT_PROVIDER, REFUND_POLICY_TEXT } from '../constants/depositConstants'
 import { formatVnd } from '../utils/depositFormat'
+import PaymentProviderSelector from './PaymentProviderSelector'
 import styles from '../styles/Deposit.module.css'
 
 const STEP = 1_000_000
 
 /**
- * Modal xác nhận đặt cọc: ảnh xe, tên xe, giá bán, số tiền cọc, chính sách cọc/hoàn cọc,
- * thời gian giữ xe. policy (min/max/suggested/holdHours) do backend tính theo giá xe.
- * Component cha đổi `key` mỗi lần mở để form về giá trị mặc định.
+ * Modal xác nhận đặt cọc: ảnh xe, tên xe, giá bán, số tiền cọc, phương thức thanh toán,
+ * chính sách cọc/hoàn cọc, thời gian giữ xe. policy (min/max/suggested/holdHours) do
+ * backend tính theo giá xe. Component cha đổi `key` mỗi lần mở để form về giá trị mặc định.
  */
-export default function DepositConfirmModal({ open, car, policy, submitting, error, onConfirm, onCancel }) {
+export default function DepositConfirmModal({
+  open,
+  car,
+  policy,
+  submitting,
+  error,
+  vnpayEnabled = false,
+  vnpayTimeoutMinutes = 15,
+  onConfirm,
+  onCancel,
+}) {
   const [amount, setAmount] = useState(policy?.suggestedAmount ?? null)
   const [agreed, setAgreed] = useState(false)
+  // KAN-99: mặc định VNPay (thanh toán tức thì) khi cổng đã bật, ngược lại chuyển khoản.
+  const [provider, setProvider] = useState(vnpayEnabled ? PAYMENT_PROVIDER.VNPAY : PAYMENT_PROVIDER.MANUAL)
 
   if (!car) return null
   const title = getCarTitle(car)
@@ -41,9 +54,9 @@ export default function DepositConfirmModal({ open, car, policy, submitting, err
           className={styles.depositBtn}
           loading={submitting}
           disabled={!agreed || !amountValid}
-          onClick={() => onConfirm(amount)}
+          onClick={() => onConfirm(amount, provider)}
         >
-          Xác nhận đặt cọc
+          {provider === PAYMENT_PROVIDER.VNPAY ? 'Đặt cọc & thanh toán VNPay' : 'Xác nhận đặt cọc'}
         </Button>,
       ]}
     >
@@ -75,6 +88,16 @@ export default function DepositConfirmModal({ open, car, policy, submitting, err
         <span className={styles.muted}>
           Tối thiểu {formatVnd(min)} – tối đa {formatVnd(max)}. Đề xuất: {formatVnd(policy?.suggestedAmount)}.
         </span>
+      </div>
+
+      <div className={styles.modalField}>
+        <PaymentProviderSelector
+          value={provider}
+          onChange={setProvider}
+          vnpayEnabled={vnpayEnabled}
+          timeoutMinutes={vnpayTimeoutMinutes}
+          disabled={submitting}
+        />
       </div>
 
       <Alert
