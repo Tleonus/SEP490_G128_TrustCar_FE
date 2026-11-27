@@ -76,6 +76,7 @@ export const STAFF_ACTION_LABEL = Object.freeze({
   COMPLETED: 'Hoàn tất',
   NO_SHOW: 'Vắng mặt',
   RESCHEDULE: 'Đổi lịch',
+  ASSIGN: 'Đổi người',
 })
 
 // ---- 1.1.0 (SPEC FE v1.1.0, API-TEST-DRIVE-BOOKING v1.1.0) ----
@@ -101,6 +102,8 @@ export const CANCEL_REASON_OTHER = 'OTHER'
 
 export const REMINDER_LABEL = 'Gọi nhắc'
 export const OUTCOME_LABEL = 'Cần chốt kết quả'
+/** Lượt sắp tới chưa có nhân viên đi làm phụ trách (BE `needsStaff`). */
+export const NEEDS_STAFF_LABEL = 'Thiếu nhân viên'
 export const CURRENT_SLOT_LABEL = 'Giờ hiện tại'
 export const RESCHEDULE_TITLE = 'Đổi lịch'
 

@@ -13,7 +13,8 @@ export const DEFAULT_STAFF_FILTERS = Object.freeze({ quick: 'ALL', status: 'ALL'
  *
  * @ears .sdd/features/test-drive-booking/SPEC.md#REQ-F14
  * @ears .sdd/features/test-drive-booking/SPEC.md#REQ-F30
- * @returns {{ status?: string, cancellationType?: string, needsReminderCall?: true, needsOutcome?: true, from?: string, to?: string, page: number, limit: number }}
+ * "Thiếu nhân viên" (NEEDS_STAFF) gửi `needsStaff=true`.
+ * @returns {{ status?: string, cancellationType?: string, needsReminderCall?: true, needsOutcome?: true, needsStaff?: true, from?: string, to?: string, page: number, limit: number }}
  */
 export function buildStaffParams(filters, page = 1) {
   const { quick, status, from, to, sort } = { ...DEFAULT_STAFF_FILTERS, ...filters }
@@ -23,6 +24,7 @@ export function buildStaffParams(filters, page = 1) {
   else if (quick === 'CAR_UNAVAILABLE') params.cancellationType = 'CAR_UNAVAILABLE'
   else if (quick === 'REMINDER') params.needsReminderCall = true
   else if (quick === 'OUTCOME') params.needsOutcome = true
+  else if (quick === 'NEEDS_STAFF') params.needsStaff = true
   else if (status && status !== 'ALL') params.status = status
 
   if (sort === 'desc') params.sort = 'desc' // mặc định 'asc' không gửi để chạy được cả với BE 1.1.0

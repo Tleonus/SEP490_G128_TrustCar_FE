@@ -17,6 +17,7 @@ export function summarizeVisit(visit) {
     name: visit?.customer?.fullName ?? '',
     phone: visit?.customer?.phone ?? '',
     cars: (visit?.cars ?? []).map(carText).join(', '),
+    assignee: visit?.assignedTo?.fullName ?? '',
   }
 }
 
