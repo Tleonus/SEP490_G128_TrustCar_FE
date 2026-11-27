@@ -1,17 +1,10 @@
 .featured {
   position: relative;
   overflow: hidden;
-  padding: 78px 0 80px;
-  background:
-    radial-gradient(ellipse 70% 45% at 50% 8%, rgba(201, 162, 39, 0.1) 0%, transparent 72%),
-    radial-gradient(ellipse 60% 40% at 88% 55%, rgba(56, 189, 248, 0.08) 0%, transparent 70%),
-    radial-gradient(ellipse 60% 40% at 12% 85%, rgba(201, 162, 39, 0.08) 0%, transparent 70%),
-    linear-gradient(
-      180deg,
-      var(--color-bg) 0%,
-      var(--color-surface-alt) 48%,
-      var(--color-surface) 100%
-    );
+  padding: 72px 0 76px;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .grid {
@@ -19,8 +12,8 @@
   z-index: 2;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-  margin-top: 40px;
+  gap: 22px;
+  margin-top: 36px;
 }
 
 @media (max-width: 1140px) {
@@ -45,31 +38,32 @@
   position: relative;
   z-index: 2;
   text-align: center;
-  margin-top: 52px;
+  margin-top: 44px;
 }
 
 .actions :global(.ant-btn-primary) {
-  height: 48px;
-  padding: 0 32px;
+  height: 46px;
+  padding: 0 30px;
   border-radius: 999px;
-  font-size: 15px;
-  font-weight: 800;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #ffffff !important;
+  background: var(--color-primary) !important;
+  border: 1px solid transparent !important;
+  box-shadow: 0 12px 24px -10px rgba(11, 31, 58, 0.42) !important;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s ease !important;
+}
+
+:root[data-theme='dark'] .actions :global(.ant-btn-primary) {
+  background: linear-gradient(135deg, #93c5fd 0%, #1d4ed8 100%) !important;
   color: #081527 !important;
-  background: linear-gradient(180deg, #fae498 0%, #c9a227 100%) !important;
-  border: 1.5px solid #fff2ba !important;
-  border-bottom: 4px solid #7d5d09 !important;
-  box-shadow:
-    0 6px 0 rgba(11, 31, 58, 0.2),
-    0 14px 28px rgba(201, 162, 39, 0.32),
-    inset 0 1.5px 0 rgba(255, 255, 255, 0.78) !important;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease !important;
 }
 
 .actions :global(.ant-btn-primary:hover) {
-  transform: translateY(-3px);
-  background: linear-gradient(180deg, #fff0b3 0%, #d4ad2d 100%) !important;
-  box-shadow:
-    0 9px 0 rgba(11, 31, 58, 0.24),
-    0 20px 36px rgba(201, 162, 39, 0.42),
-    inset 0 1.5px 0 rgba(255, 255, 255, 0.9) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 16px 30px -10px rgba(11, 31, 58, 0.5) !important;
+}
+
+.actions :global(.ant-btn-primary:active) {
+  transform: scale(0.97);
 }

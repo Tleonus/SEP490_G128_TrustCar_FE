@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { getFeaturedCars } from '../../../services/carService'
 import CarCard from '../../../components/car/CarCard'
 import { LoadingState, ErrorState } from '../../../components/common/StateBlock'
+import ScrollReveal from '../components/ScrollReveal'
 import styles from './FeaturedSection.module.css'
 
 export default function FeaturedSection() {
@@ -30,25 +31,31 @@ export default function FeaturedSection() {
   return (
     <section className={styles.featured}>
       <div className="container">
-        <div className="section-head">
+        <ScrollReveal variant="up" className="section-head">
           <div className="section-eyebrow">Xe nổi bật</div>
           <h2 className="section-title">Xe được quan tâm nhiều nhất</h2>
           <p className="section-desc">
             Những chiếc xe được khách hàng yêu thích, đã qua kiểm định
             CPO nghiêm ngặt với 150+ hạng mục.
           </p>
-        </div>
+        </ScrollReveal>
 
         {loading && <LoadingState text="Đang tải danh sách xe..." />}
         {error && <ErrorState message={error} />}
         {!loading && !error && cars.length > 0 && (
           <>
             <div className={styles.grid}>
-              {cars.map((car) => (
-                <CarCard key={car.vehicleCode || car._id} car={car} />
+              {cars.map((car, idx) => (
+                <ScrollReveal
+                  key={car.vehicleCode || car._id}
+                  variant="up"
+                  delay={(idx % 4) * 65}
+                >
+                  <CarCard car={car} />
+                </ScrollReveal>
               ))}
             </div>
-            <div className={styles.actions}>
+            <ScrollReveal variant="up" delay={80} className={styles.actions}>
               <Button
                 type="primary"
                 size="large"
@@ -58,7 +65,7 @@ export default function FeaturedSection() {
               >
                 Xem tất cả xe
               </Button>
-            </div>
+            </ScrollReveal>
           </>
         )}
       </div>

@@ -35,7 +35,7 @@ export default function InspectionActionBar({
         </span>
         {resultMeta && <Tag color={resultMeta.color}>{resultMeta.label}</Tag>}
         {submitResult?.inspectionRecord?.cpoCertificateId && (
-          <Tag color="gold">Mã CPO: {submitResult.inspectionRecord.cpoCertificateId}</Tag>
+          <Tag color="blue">Mã CPO: {submitResult.inspectionRecord.cpoCertificateId}</Tag>
         )}
       </div>
     )

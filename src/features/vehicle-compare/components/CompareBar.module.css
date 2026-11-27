@@ -6,10 +6,10 @@
   bottom: 0;
   z-index: 800;
   background: var(--color-surface);
-  border-top: 1.5px solid rgba(201, 162, 39, 0.42);
+  border-top: 1.5px solid rgba(29, 78, 216, 0.42);
   box-shadow:
     0 -10px 30px rgba(15, 23, 42, 0.14),
-    0 -2px 12px rgba(201, 162, 39, 0.10);
+    0 -2px 12px rgba(29, 78, 216, 0.10);
 }
 
 .spacer {

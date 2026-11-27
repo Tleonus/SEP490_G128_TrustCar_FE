@@ -1,217 +1,250 @@
 .brands {
   position: relative;
-  overflow: hidden;
-  padding: 78px 0 74px;
-  background:
-    radial-gradient(ellipse 75% 38% at 50% 0%, var(--blend-hero-to-light) 0%, transparent 72%),
-    radial-gradient(ellipse 55% 42% at 15% 28%, rgba(56, 189, 248, 0.08) 0%, transparent 68%),
-    radial-gradient(ellipse 55% 42% at 85% 72%, rgba(201, 162, 39, 0.1) 0%, transparent 68%),
-    linear-gradient(
-      180deg,
-      var(--color-surface-alt) 0%,
-      var(--color-surface) 28%,
-      var(--color-surface) 72%,
-      var(--color-bg) 100%
-    );
+  padding: 64px 0 68px;
+  background: var(--color-bg);
 }
 
-/* Màng sương chuyển sắc ranh giới trên từ dải LED Showroom xuống khu Thương hiệu */
-.brands::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 54px;
-  background: linear-gradient(
-    180deg,
-    rgba(8, 20, 40, 0.18) 0%,
-    rgba(56, 189, 248, 0.05) 48%,
-    transparent 100%
-  );
-  pointer-events: none;
-}
-
-/* Lưới dùng trọn chiều rộng .container để thẳng mép với các section khác;
-   hàng cuối (khi xuống dòng) được căn giữa thay vì dồn trái */
-.grid {
-  position: relative;
-  z-index: 2;
-  --cols: 8;
-  --gap: 16px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.headerRow {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--gap);
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px 32px;
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--color-border);
 }
 
-.item {
-  flex: 0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols));
+.headerLeft {
   min-width: 0;
 }
 
-@media (max-width: 1180px) {
-  .grid {
-    --cols: 4;
-  }
+.kicker {
+  display: inline-block;
+  margin-bottom: 8px;
+  font-family: var(--font-mono, monospace);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--color-accent);
+  text-transform: uppercase;
 }
 
-@media (max-width: 700px) {
-  .grid {
-    --gap: 14px;
-  }
+.heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  font-family: var(--font-display, 'Be Vietnam Pro', sans-serif);
+  font-size: clamp(24px, 2.5vw, 31px);
+  font-weight: 800;
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
 }
 
-@media (max-width: 560px) {
-  .grid {
-    --cols: 2;
-    --gap: 12px;
-  }
+.countTag {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: rgba(29, 78, 216, 0.14);
+  border: 1px solid rgba(29, 78, 216, 0.34);
+  color: var(--color-accent-hover);
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  font-weight: 700;
 }
 
-/* Khối 3D Podium cho từng Thương hiệu xe */
-.brandCard {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  height: 152px;
+:root[data-theme='dark'] .countTag {
+  color: #93c5fd;
+}
+
+.headerRight {
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  max-width: 380px;
+  text-align: right;
+}
+
+.lead {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+
+.allLink {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 18px 10px;
+  gap: 6px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--color-accent-hover);
+  text-decoration: none;
+  transition: gap 0.25s cubic-bezier(0.22, 1, 0.36, 1), color 0.2s ease;
+}
+
+:root[data-theme='dark'] .allLink {
+  color: #93c5fd;
+}
+
+.allLink:hover {
+  gap: 10px;
+}
+
+/* Lưới 4 cột ngang thoáng rộng — không lồng hộp trong hộp */
+.grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .headerRight {
+    align-items: flex-start;
+    text-align: left;
+  }
+}
+
+@media (max-width: 520px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+.item {
+  min-width: 0;
+}
+
+.brandTile {
+  position: relative;
+  width: 100%;
+  height: 84px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 18px;
   font: inherit;
   color: inherit;
-  background: linear-gradient(
-    180deg,
-    var(--color-surface) 0%,
-    var(--color-surface-alt) 100%
-  );
-  border: 1.5px solid var(--color-border);
-  border-bottom: 5px solid var(--card-3d-edge);
-  border-radius: 18px;
-  box-shadow: var(--shadow-card);
-  cursor: pointer;
-  transition:
-    transform 0.24s cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 0.24s ease,
-    box-shadow 0.24s ease;
-}
-
-/* Dải LED Showroom chạy trên đỉnh thẻ hãng xe */
-.brandCard::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, #38bdf8, #f4d879, transparent);
-  transition: left 0.55s ease;
-}
-
-/* Luồng quét ánh sáng Hologram chéo khi hover */
-.brandCard::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    120deg,
-    transparent 30%,
-    rgba(56, 189, 248, 0.1) 50%,
-    rgba(244, 216, 121, 0.14) 58%,
-    transparent 75%
-  );
-  transform: translateX(-120%);
-  transition: transform 0.6s ease;
-  pointer-events: none;
-}
-
-.brandCard:hover {
-  transform: translateY(-7px) scale(1.02);
-  border-color: rgba(201, 162, 39, 0.65);
-  border-bottom-color: var(--card-3d-edge-gold);
-  box-shadow: var(--shadow-card-hover);
-}
-
-.brandCard:hover::before {
-  left: 100%;
-}
-
-.brandCard:hover::after {
-  transform: translateX(120%);
-}
-
-.brandCard:focus-visible {
-  outline: 3px solid var(--color-accent);
-  outline-offset: 3px;
-}
-
-/* Bệ đỡ 3D cho Logo thương hiệu */
-.logoBox {
-  width: 100%;
-  height: 58px;
-  padding: 8px 10px;
-  border-radius: 13px;
+  text-align: left;
   background: var(--color-surface);
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  box-shadow:
-    inset 0 2px 4px rgba(15, 23, 42, 0.05),
-    0 2px 6px rgba(15, 23, 42, 0.04);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.25s ease,
+    box-shadow 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.25s ease;
+}
+
+.brandTile::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 18%;
+  bottom: 18%;
+  width: 3px;
+  border-radius: 0 4px 4px 0;
+  background: var(--color-accent);
+  opacity: 0;
+  transform: scaleY(0.4);
+  transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.brandTile:hover {
+  transform: translateY(-4px);
+  border-color: rgba(29, 78, 216, 0.55);
+  box-shadow: 0 16px 32px -16px rgba(15, 23, 42, 0.22);
+}
+
+.brandTile:hover::before {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+.brandTile:active {
+  transform: scale(0.98);
+}
+
+.brandTile:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.logoWrap {
+  width: 56px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.24s ease, border-color 0.24s ease;
-}
-
-.brandCard:hover .logoBox {
-  border-color: rgba(201, 162, 39, 0.45);
-  transform: translateY(-2px);
+  flex-shrink: 0;
 }
 
 .brandLogo {
-  max-width: min(100%, 104px);
-  max-height: 100%;
+  max-width: 100%;
+  max-height: 36px;
   object-fit: contain;
-  opacity: 0.85;
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  opacity: 0.9;
+  transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 :root[data-theme='dark'] .brandLogo {
   filter: brightness(0) invert(1);
 }
 
-.brandCard:hover .brandLogo {
+.brandTile:hover .brandLogo {
   opacity: 1;
   transform: scale(1.08);
 }
 
+.brandMeta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
 .brandName {
-  font-weight: 700;
-  font-size: 13.5px;
+  font-size: 15px;
+  font-weight: 800;
   color: var(--color-text);
-  text-align: center;
+  line-height: 1.25;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 100%;
 }
 
-@media (max-width: 700px) {
-  .brandCard {
-    height: 130px;
-    padding: 14px 8px;
-  }
+.brandHint {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin-top: 2px;
+}
 
-  .brandName {
-    font-size: 13px;
-  }
+.tileArrow {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  opacity: 0.45;
+  transform: translateX(-4px);
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease, color 0.25s ease;
+}
 
-  .logoBox {
-    height: 46px;
-  }
+.brandTile:hover .tileArrow {
+  opacity: 1;
+  color: var(--color-accent);
+  transform: translateX(2px);
 }

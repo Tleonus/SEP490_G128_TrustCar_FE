@@ -12,7 +12,7 @@
   background:
     radial-gradient(ellipse 55% 85% at 25% 0%, rgba(255, 250, 235, 0.08) 0%, transparent 72%),
     linear-gradient(165deg, #091526 0%, #0e213b 55%, #081322 100%);
-  border: 1px solid rgba(201, 162, 39, 0.32);
+  border: 1px solid rgba(29, 78, 216, 0.32);
   box-shadow: 0 12px 32px rgba(7, 19, 36, 0.18);
   padding: 16px 20px;
   overflow: hidden;
@@ -32,7 +32,7 @@
     90deg,
     transparent 6%,
     rgba(255, 248, 225, 0.45) 28%,
-    #e5c878 50%,
+    #93c5fd 50%,
     rgba(255, 248, 225, 0.45) 72%,
     transparent 94%
   );
@@ -72,9 +72,9 @@
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 1.1px;
-  color: #f3dc93;
-  background: rgba(201, 162, 39, 0.16);
-  border: 1px solid rgba(201, 162, 39, 0.42);
+  color: #93c5fd;
+  background: rgba(29, 78, 216, 0.16);
+  border: 1px solid rgba(29, 78, 216, 0.42);
 }
 
 .onDemandTag {
@@ -105,7 +105,7 @@
 }
 
 .advisorSub strong {
-  color: #fae498;
+  color: #bfdbfe;
 }
 
 /* NÚT ẤN GỢI Ý TỪ AI */
@@ -123,13 +123,13 @@
   padding: 9px 18px;
   border-radius: 999px;
   border: 1px solid #fff3c4;
-  background: linear-gradient(180deg, #fae498 0%, #d4af37 52%, #b88f14 100%);
+  background: linear-gradient(180deg, #bfdbfe 0%, #2563eb 52%, #1e40af 100%);
   color: #071324;
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.2px;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(201, 162, 39, 0.28);
+  box-shadow: 0 4px 14px rgba(29, 78, 216, 0.28);
   transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 
@@ -137,7 +137,7 @@
   transform: translateY(-2px);
   filter: brightness(1.05);
   box-shadow:
-    0 12px 28px rgba(201, 162, 39, 0.48),
+    0 12px 28px rgba(29, 78, 216, 0.48),
     inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
@@ -163,9 +163,9 @@
   gap: 8px;
   padding: 10px 18px;
   border-radius: 999px;
-  border: 1px solid #fff2ba;
-  border-bottom: 3px solid #7d5d09;
-  background: linear-gradient(180deg, #fae498 0%, #c9a227 100%);
+  border: 1px solid #dbeafe;
+  border-bottom: 3px solid #1e3a8a;
+  background: linear-gradient(180deg, #bfdbfe 0%, #1d4ed8 100%);
   color: #081527;
   font-size: 13px;
   font-weight: 800;
@@ -214,7 +214,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.7px;
-  color: #f3dc93;
+  color: #93c5fd;
 }
 
 .personaTabs {
@@ -244,8 +244,8 @@
 }
 
 .personaBtnActive {
-  background: linear-gradient(180deg, rgba(201, 162, 39, 0.26) 0%, rgba(201, 162, 39, 0.12) 100%);
-  border-color: #e5c878;
+  background: linear-gradient(180deg, rgba(29, 78, 216, 0.26) 0%, rgba(29, 78, 216, 0.12) 100%);
+  border-color: #93c5fd;
   color: #ffffff;
   box-shadow:
     0 4px 14px rgba(0, 0, 0, 0.25),
@@ -253,7 +253,7 @@
 }
 
 .personaIcon {
-  color: #e5c878;
+  color: #93c5fd;
   font-size: 13.5px;
 }
 
@@ -272,13 +272,13 @@
   border-radius: 12px;
   background: rgba(245, 158, 11, 0.11);
   border: 1px solid rgba(251, 191, 36, 0.34);
-  color: #fde68a;
+  color: #93c5fd;
   font-size: 12.5px;
   line-height: 1.5;
 }
 
 .cautionStripIcon {
-  color: #fbbf24;
+  color: #60a5fa;
   font-size: 15px;
   margin-top: 2px;
   flex-shrink: 0;
@@ -299,9 +299,9 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: rgba(201, 162, 39, 0.16);
+  background: rgba(29, 78, 216, 0.16);
   border: 1px solid rgba(229, 200, 120, 0.45);
-  color: #fae498;
+  color: #bfdbfe;
   font-size: 20px;
   display: grid;
   place-items: center;
@@ -351,7 +351,7 @@
   border-radius: 10px;
   background: rgba(251, 191, 36, 0.2);
   border: 1px solid rgba(251, 191, 36, 0.48);
-  color: #fde047;
+  color: #60a5fa;
   font-size: 17px;
   display: grid;
   place-items: center;
@@ -367,7 +367,7 @@
 .disclaimerTitle {
   font-size: 13.5px;
   font-weight: 800;
-  color: #fef08a;
+  color: #bfdbfe;
   letter-spacing: 0.1px;
 }
 
@@ -375,7 +375,7 @@
   margin: 0;
   font-size: 12.8px;
   line-height: 1.5;
-  color: #fef3c7;
+  color: #dbeafe;
 }
 
 /* TÓM TẮT & GỢI Ý TỔNG QUAN */
@@ -398,7 +398,7 @@
 
 .aiRecommendCard {
   background:
-    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201, 162, 39, 0.12) 0%, transparent 75%),
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(29, 78, 216, 0.12) 0%, transparent 75%),
     rgba(8, 18, 35, 0.85);
   border-color: rgba(229, 200, 120, 0.42);
 }
@@ -418,7 +418,7 @@
 }
 
 .aiBoxIconGold {
-  color: #facc15;
+  color: #60a5fa;
   font-size: 15px;
 }
 
@@ -497,7 +497,7 @@
   border-radius: 999px;
   font-size: 10px;
   font-weight: 700;
-  color: var(--car-glow, #e5c878);
+  color: var(--car-glow, #93c5fd);
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid var(--car-border, rgba(229, 200, 120, 0.38));
 }
@@ -513,7 +513,7 @@
 .aiCarPrice {
   font-size: 14.5px;
   font-weight: 800;
-  color: #f3dc93;
+  color: #93c5fd;
 }
 
 .aiPointBlock {
@@ -536,7 +536,7 @@
 }
 
 .aiPointHeadingNeutral {
-  color: #fcd34d;
+  color: #93c5fd;
 }
 
 .aiPointList,
@@ -562,7 +562,7 @@
   margin-top: auto;
   padding: 11px 13px;
   border-radius: 11px;
-  background: rgba(201, 162, 39, 0.11);
+  background: rgba(29, 78, 216, 0.11);
   border: 1px solid rgba(229, 200, 120, 0.32);
   display: flex;
   flex-direction: column;
@@ -574,7 +574,7 @@
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: #f3dc93;
+  color: #93c5fd;
 }
 
 .aiBestForText {
@@ -594,7 +594,7 @@
 .aiCarDetailLink {
   font-size: 12.5px;
   font-weight: 700;
-  color: #f3dc93;
+  color: #93c5fd;
 }
 
 .aiCarDetailLink:hover {
@@ -630,9 +630,9 @@
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 1px;
-  background: rgba(201, 162, 39, 0.12);
+  background: rgba(29, 78, 216, 0.12);
   color: var(--color-accent-hover);
-  border: 1px solid rgba(201, 162, 39, 0.35);
+  border: 1px solid rgba(29, 78, 216, 0.35);
 }
 
 .sectionTitle {
@@ -682,7 +682,7 @@
   background:
     radial-gradient(ellipse 70% 50% at 50% 0%, rgba(255, 250, 235, 0.08) 0%, transparent 72%),
     linear-gradient(165deg, #081528 0%, #0e2240 100%);
-  border: 1px solid rgba(201, 162, 39, 0.32);
+  border: 1px solid rgba(29, 78, 216, 0.32);
   border-bottom: 4px solid #040a16;
   padding: 16px;
   display: flex;
@@ -698,9 +698,9 @@
   border-radius: 999px;
   font-size: 11px;
   font-weight: 700;
-  background: rgba(201, 162, 39, 0.16);
-  color: #f3dc93;
-  border: 1px solid rgba(201, 162, 39, 0.38);
+  background: rgba(29, 78, 216, 0.16);
+  color: #93c5fd;
+  border: 1px solid rgba(29, 78, 216, 0.38);
 }
 
 .matchupPair {
@@ -744,7 +744,7 @@
 .matchupCarPrice {
   font-size: 12.5px;
   font-weight: 700;
-  color: #f3dc93;
+  color: #93c5fd;
   margin-top: 2px;
 }
 
@@ -752,9 +752,9 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: rgba(201, 162, 39, 0.2);
+  background: rgba(29, 78, 216, 0.2);
   border: 1px solid rgba(229, 200, 120, 0.5);
-  color: #fae498;
+  color: #bfdbfe;
   font-size: 10.5px;
   font-weight: 800;
   display: grid;
@@ -765,9 +765,9 @@
   width: 100%;
   padding: 9px 14px;
   border-radius: 10px;
-  border: 1px solid #fff2ba;
-  border-bottom: 3px solid #7d5d09;
-  background: linear-gradient(180deg, #fae498 0%, #c9a227 100%);
+  border: 1px solid #dbeafe;
+  border-bottom: 3px solid #1e3a8a;
+  background: linear-gradient(180deg, #bfdbfe 0%, #1d4ed8 100%);
   color: #081527;
   font-size: 13px;
   font-weight: 800;
@@ -781,7 +781,7 @@
 
 .matchupBtn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(201, 162, 39, 0.3);
+  box-shadow: 0 6px 16px rgba(29, 78, 216, 0.3);
 }
 
 /* SIMILAR CARS GRID */
@@ -804,7 +804,7 @@
 
 .simCard:hover {
   transform: translateY(-4px);
-  border-color: rgba(201, 162, 39, 0.6);
+  border-color: rgba(29, 78, 216, 0.6);
   border-bottom-color: var(--card-3d-edge-gold);
   box-shadow: var(--shadow-card-hover);
 }
@@ -845,7 +845,7 @@
   border-radius: 999px;
   font-size: 10.5px;
   font-weight: 700;
-  color: #f3dc93;
+  color: #93c5fd;
   background: rgba(8, 21, 39, 0.86);
   border: 1px solid rgba(229, 200, 120, 0.45);
   backdrop-filter: blur(6px);
@@ -922,26 +922,26 @@
 .simAddBtn {
   background: #0b1f3a;
   color: #f8fafc;
-  border: 1px solid rgba(201, 162, 39, 0.42);
+  border: 1px solid rgba(29, 78, 216, 0.42);
   border-bottom: 3px solid #050e1c;
 }
 
 .simAddBtn:hover {
   transform: translateY(-1px);
-  border-color: #e5c878;
-  color: #fae498;
+  border-color: #93c5fd;
+  color: #bfdbfe;
 }
 
 .simSwapBtn {
-  background: linear-gradient(180deg, #fae498 0%, #c9a227 100%);
+  background: linear-gradient(180deg, #bfdbfe 0%, #1d4ed8 100%);
   color: #081527;
-  border: 1px solid #fff2ba;
-  border-bottom: 3px solid #7d5d09;
+  border: 1px solid #dbeafe;
+  border-bottom: 3px solid #1e3a8a;
 }
 
 .simSwapBtn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 14px rgba(201, 162, 39, 0.28);
+  box-shadow: 0 6px 14px rgba(29, 78, 216, 0.28);
 }
 
 @media (max-width: 1024px) {

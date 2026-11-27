@@ -206,7 +206,7 @@ export default function SavedCarsPage() {
             <div className={styles.stats}>
               <StatCard icon={<HeartFilled />} tone="rose" label="Xe đã lưu" value={stats.total} hint={'Tối đa ' + maxSavedCars + ' xe'} />
               <StatCard icon={<ArrowDownOutlined />} tone="green" label="Đang giảm giá" value={stats.dropped} hint="So với giá lúc lưu" />
-              <StatCard icon={<WalletOutlined />} tone="gold" label="Có thể tiết kiệm" value={stats.savings > 0 ? formatCompactPrice(stats.savings) : '0 ₫'} hint="Tổng mức giảm hiện tại" />
+              <StatCard icon={<WalletOutlined />} tone="blue" label="Có thể tiết kiệm" value={stats.savings > 0 ? formatCompactPrice(stats.savings) : '0 ₫'} hint="Tổng mức giảm hiện tại" />
               <StatCard icon={<BellFilled />} tone="blue" label="Cảnh báo đang bật" value={stats.alerts} hint={stats.reached ? `${stats.reached} xe đã chạm giá mục tiêu` : 'Nhận thông báo tự động'} />
             </div>
 
