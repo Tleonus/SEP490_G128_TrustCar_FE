@@ -1,6 +1,8 @@
 import { METHOD_ANNUITY } from '../constants/installmentConstants'
 
 // Công thức tính trả góp (số nguyên đồng). Ref: .sdd/features/installment-calculator/SPEC.md mục 5.
+// Một mức lãi cho cả kỳ vay (lãi ưu đãi của ngân hàng). Lãi thả nổi sau ưu đãi không tính vì ngân hàng không
+// công bố trước được.
 
 const toRate = (ratePercent) => ratePercent / 12 / 100
 
@@ -61,10 +63,13 @@ const sum = (rows, key) => rows.reduce((total, row) => total + row[key], 0)
 /**
  * Kết quả đầy đủ cho một bộ thông số HỢP LỆ (xem `validateInput`).
  * @ears .sdd/features/installment-calculator/SPEC.md#REQ-F05
- * @param {{ price: number, downPercent: number, termMonths: number, ratePercent: number, method: string }} input
+ * `downAmount` (số tiền khách có, đã hợp lệ) thay cho `downPercent` khi có.
+ * @ears .sdd/features/installment-calculator/SPEC.md#REQ-F18
+ * @param {{ price: number, downPercent: number, downAmount?: number|null, termMonths: number, ratePercent: number,
+ *   method: string }} input
  */
-export function computeInstallment({ price, downPercent, termMonths, ratePercent, method }) {
-  const down = Math.round((price * downPercent) / 100)
+export function computeInstallment({ price, downPercent, downAmount = null, termMonths, ratePercent, method }) {
+  const down = typeof downAmount === 'number' ? downAmount : Math.round((price * downPercent) / 100)
   const loan = price - down
   const rows = method === METHOD_ANNUITY
     ? buildAnnuity(loan, termMonths, ratePercent)
@@ -72,6 +77,7 @@ export function computeInstallment({ price, downPercent, termMonths, ratePercent
   const totalInterest = sum(rows, 'interest')
   return {
     down,
+    downShare: Math.round((down * 1000) / price) / 10, // % giá xe, 1 chữ số thập phân
     loan,
     rows,
     totalInterest,

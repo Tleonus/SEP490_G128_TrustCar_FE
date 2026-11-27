@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { Table } from 'antd'
 import { TableOutlined } from '@ant-design/icons'
-import { METHOD_ANNUITY, PAGE_SIZE } from '../constants/installmentConstants'
+import { PAGE_SIZE } from '../constants/installmentConstants'
 import { formatPrice } from '../../../utils/format'
 import styles from '../styles/Installment.module.css'
 
-const money = (value) => <span className={styles.cellMoney}>{formatPrice(value)}</span>
+const money = (value) => <span className={styles.money}>{formatPrice(value)}</span>
 
 const COLUMNS = [
   {
@@ -14,7 +14,7 @@ const COLUMNS = [
     key: 'period',
     width: 92,
     align: 'center',
-    className: styles.colPeriod,
+    
     render: (period) => (
       <span className={styles.periodBadge}>
         Tháng {String(period).padStart(2, '0')}
@@ -51,7 +51,7 @@ const COLUMNS = [
     key: 'payment',
     width: '20%',
     align: 'right',
-    className: styles.colPaymentHighlight,
+    
     render: (value) => <strong className={styles.paymentCell}>{formatPrice(value)}</strong>,
   },
   {
@@ -60,7 +60,7 @@ const COLUMNS = [
     key: 'closing',
     width: '19%',
     align: 'right',
-    render: (value) => <span className={styles.closingCell}>{formatPrice(value)}</span>,
+    render: (value) => <span className={styles.money}>{formatPrice(value)}</span>,
   },
 ]
 
@@ -68,9 +68,9 @@ const COLUMNS = [
  * Lịch trả nợ từng kỳ, 12 kỳ mỗi trang; bảng cuộn ngang bên trong khung để trang không tràn ở điện thoại.
  *
  * @ears .sdd/features/installment-calculator/SPEC.md#REQ-F07
- * @param {{ rows: Array<object>, termMonths?: number, method?: string }} props
+ * @param {{ rows: Array<object>, termMonths?: number }} props
  */
-export default function ScheduleTable({ rows, termMonths, method }) {
+export default function ScheduleTable({ rows, termMonths }) {
   const totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE))
   const [page, setPage] = useState(1)
   const activePage = Math.min(page, totalPages)
@@ -79,24 +79,16 @@ export default function ScheduleTable({ rows, termMonths, method }) {
   const endPeriod = Math.min(activePage * PAGE_SIZE, rows.length)
 
   return (
-    <section className={`${styles.card} ${styles.noteCard} ${styles.scheduleSheet}`} aria-label="Lịch trả nợ">
-      <div className={styles.scheduleHeader}>
-        <div className={styles.sheetTitleGroup}>
-          <span className={styles.sheetKicker}>
-            <TableOutlined /> SỔ CÁI KHẤU HAO TÍN DỤNG · AMORTIZATION LEDGER
+    <section className={styles.card} aria-label="Lịch trả nợ">
+      <div className={styles.cardHead}>
+        <div className={styles.titleRow}>
+          <h2 className={styles.cardTitle}><TableOutlined /> Lịch trả nợ</h2>
+          <span className={styles.rangeTag}>
+            Tháng {startPeriod}–{endPeriod} / {termMonths ?? rows.length}
           </span>
-          <div className={styles.scheduleTitleRow}>
-            <h2 className={styles.cardTitle}>Lịch trả nợ</h2>
-            <span className={styles.scheduleRangeTag}>
-              Đang xem: Tháng {String(startPeriod).padStart(2, '0')} – Tháng {String(endPeriod).padStart(2, '0')}
-            </span>
-          </div>
-          <p className={styles.scheduleSub}>
-            Bảng kê chi tiết gốc và lãi theo từng tháng ({PAGE_SIZE} tháng / năm tài chính).
-          </p>
         </div>
 
-        <div className={styles.scheduleRightTools}>
+        <div className={styles.scheduleTools}>
           {totalPages > 1 && (
             <div className={styles.yearTabs} role="tablist" aria-label="Chọn nhanh năm trả góp">
               {Array.from({ length: totalPages }, (_, index) => {
@@ -108,7 +100,7 @@ export default function ScheduleTable({ rows, termMonths, method }) {
                     type="button"
                     role="tab"
                     aria-selected={isActive}
-                    className={isActive ? `${styles.yearTabBtn} ${styles.yearTabBtnActive}` : styles.yearTabBtn}
+                    className={isActive ? `${styles.yearTab} ${styles.yearTabActive}` : styles.yearTab}
                     onClick={() => setPage(yr)}
                   >
                     Năm {yr}
@@ -117,15 +109,6 @@ export default function ScheduleTable({ rows, termMonths, method }) {
               })}
             </div>
           )}
-
-          <div className={styles.scheduleBadges}>
-            <span className={styles.scheduleMetaChip}>
-              Tổng kỳ hạn: <strong>{termMonths ?? rows.length} tháng</strong>
-            </span>
-            <span className={styles.scheduleMetaChip}>
-              Biểu lãi: <strong>{method === METHOD_ANNUITY ? 'Niên kim cố định' : 'Dư nợ giảm dần'}</strong>
-            </span>
-          </div>
         </div>
       </div>
 

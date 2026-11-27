@@ -47,6 +47,7 @@ const AuditLogsPage = lazy(() => import('../features/audit-logs/pages/AuditLogsP
 const UserManagementPage = lazy(() => import('../features/user-management/pages/UserManagementPage.jsx'))
 // KAN-61: trang tính trả góp (công khai)
 const InstallmentPage = lazy(() => import('../features/installment-calculator/pages/InstallmentPage.jsx'))
+const AdminLoanSettingsPage = lazy(() => import('../features/installment-calculator/admin/AdminLoanSettingsPage.jsx'))
 // Showroom 3D toàn màn hình (tải lười three.js, không có header/footer)
 const Showroom3DPage = lazy(() => import('../features/showroom-3d/pages/Showroom3DPage.jsx'))
 // KAN-99: thanh toán tiền cọc qua VNPay
@@ -176,6 +177,15 @@ export default function AppRouter() {
           element={
             <AdminOnlyRoute>
               <Suspense fallback={<LoadingState />}><AuditLogsPage /></Suspense>
+            </AdminOnlyRoute>
+          }
+        />
+        {/* Lãi suất trả góp (ngân hàng, lãi ưu đãi/thả nổi): chỉ ADMIN; BE PUT /settings/loan cũng chỉ ADMIN. */}
+        <Route
+          path="lai-suat-tra-gop"
+          element={
+            <AdminOnlyRoute>
+              <Suspense fallback={<LoadingState />}><AdminLoanSettingsPage /></Suspense>
             </AdminOnlyRoute>
           }
         />

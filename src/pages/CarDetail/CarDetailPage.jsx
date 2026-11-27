@@ -528,7 +528,7 @@ export default function CarDetailPage() {
             />
 
             {/* KAN-62: ước tính trả góp theo giá xe; tự ẩn khi xe chưa có giá hợp lệ */}
-            <InstallmentWidget price={car.price} />
+            <InstallmentWidget price={car.price} carCode={car.vehicleCode} />
           </aside>
         </div>
 
