@@ -8,16 +8,15 @@
   max-width: 940px;
 }
 
-/* ── HERO VARIANT (3D Pill-Shaped Floating Search Bar + Running LED Rim) ── */
+/* ── HERO VARIANT (Refined Floating Search Dock) ── */
 .heroBar {
   position: relative;
   pointer-events: auto;
   background:
-    linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%) padding-box,
-    linear-gradient(90deg, #38bdf8, #f4d879, #a855f7, #22d3ee, #f4d879, #38bdf8) border-box;
-  background-size: 100% 100%, 300% 100%;
-  animation: hologramRimFlow 6s linear infinite;
-  border: 2.5px solid transparent;
+    linear-gradient(rgba(255, 255, 255, 0.97), rgba(255, 255, 255, 0.97)) padding-box,
+    linear-gradient(110deg, #1d4ed8 0%, #93c5fd 32%, #60a5fa 58%, #1e40af 82%, #1d4ed8 100%) border-box;
+  background-size: 100% 100%, 260% 100%;
+  border: 1.5px solid transparent;
   border-radius: 999px;
   padding: 7px 8px 7px 10px;
   display: grid;
@@ -25,32 +24,19 @@
   align-items: center;
   gap: 8px;
   box-shadow:
-    0 0 22px rgba(56, 189, 248, 0.35),
-    0 0 38px rgba(244, 216, 121, 0.22),
-    inset 0 2px 2px rgba(255, 255, 255, 1),
-    inset 0 -3px 0 rgba(15, 23, 42, 0.09),
-    0 20px 42px -6px rgba(3, 8, 20, 0.62);
-  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.22s ease;
-}
-
-@keyframes hologramRimFlow {
-  0% {
-    background-position: 0 0, 0% 50%;
-  }
-  100% {
-    background-position: 0 0, 300% 50%;
-  }
+    0 18px 40px -12px rgba(8, 18, 36, 0.22),
+    0 2px 8px rgba(8, 18, 36, 0.06);
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s ease, border-color 0.25s ease;
+  animation: trustcarGradientFlow 9s linear infinite;
 }
 
 .heroBar:hover,
 .heroBar:focus-within {
   transform: translateY(-2px);
+  background-position: 0 0, 100% 50%;
   box-shadow:
-    0 0 28px rgba(56, 189, 248, 0.55),
-    0 0 46px rgba(244, 216, 121, 0.35),
-    inset 0 2px 2px rgba(255, 255, 255, 1),
-    inset 0 -3px 0 rgba(15, 23, 42, 0.1),
-    0 26px 50px -6px rgba(3, 8, 20, 0.68);
+    0 24px 48px -12px rgba(8, 18, 36, 0.28),
+    0 4px 12px rgba(29, 78, 216, 0.16);
 }
 
 .inputBox {
@@ -211,7 +197,7 @@
   border-color: var(--color-accent);
   box-shadow:
     inset 0 1px 2px rgba(15, 23, 42, 0.04),
-    0 0 0 3px rgba(201, 162, 39, 0.18);
+    0 0 0 3px rgba(29, 78, 216, 0.18);
 }
 
 .catalogInput {
@@ -313,9 +299,9 @@
   font-weight: 600;
   padding: 2px 10px;
   border-radius: 999px;
-  background: rgba(201, 162, 39, 0.14);
-  color: #b08914;
-  border: 1px solid rgba(201, 162, 39, 0.35);
+  background: rgba(29, 78, 216, 0.14);
+  color: #1e40af;
+  border: 1px solid rgba(29, 78, 216, 0.35);
 }
 
 /* ── AUTOCOMPLETE SUGGESTION POPOVER (Full Width of Search Bar) ──────────── */
@@ -360,7 +346,7 @@
   flex-wrap: wrap;
   padding: 7px 12px;
   border-radius: 999px;
-  background: linear-gradient(90deg, #eff6ff 0%, #fefce8 100%);
+  background: linear-gradient(90deg, #eff6ff 0%, #eff6ff 100%);
   border: 1px solid #bfdbfe;
   margin-bottom: 8px;
   cursor: pointer;
@@ -455,8 +441,8 @@
 }
 
 .presetPill:hover {
-  border-color: #c9a227;
-  background: #fefce8;
+  border-color: #1d4ed8;
+  background: #eff6ff;
   color: #0b1f3a;
   transform: translateY(-1px);
 }
@@ -581,7 +567,7 @@
 
 .carPreviewItem:hover {
   background: #ffffff;
-  border-color: #c9a227;
+  border-color: #1d4ed8;
 }
 
 .carThumb {
@@ -641,5 +627,11 @@
   .inputBox,
   .submitBtn {
     grid-column: 1 / -1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroBar {
+    animation: none;
   }
 }

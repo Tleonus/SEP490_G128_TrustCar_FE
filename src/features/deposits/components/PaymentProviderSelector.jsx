@@ -38,7 +38,7 @@ export default function PaymentProviderSelector({
         >
           <Radio value={PAYMENT_PROVIDER.VNPAY} disabled={disabled || !vnpayEnabled}>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-              <ThunderboltFilled style={{ color: '#f59e0b' }} />
+              <ThunderboltFilled style={{ color: '#2563eb' }} />
               <strong>{PAYMENT_PROVIDER_META.VNPAY.label}</strong>
               {PAYMENT_PROVIDER_META.VNPAY.recommended && (
                 <Tag color="green" style={{ marginLeft: 6 }}>Khuyến nghị</Tag>

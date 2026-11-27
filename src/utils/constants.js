@@ -55,7 +55,7 @@ export const CAR_STATUS_COLOR = {
   REJECTED: 'volcano',
   MAINTENANCE: 'orange',
   AVAILABLE: 'green',
-  RESERVED: 'gold',
+  RESERVED: 'blue',
   SOLD: 'default',
   DELISTED: 'red',
 }

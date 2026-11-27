@@ -69,7 +69,7 @@ export default function DepositSuccessPage() {
         </Typography.Paragraph>
         <div style={{ marginTop: 24 }}>
           <Statistic
-            prefix={<ClockCircleFilled style={{ color: '#f59e0b' }} />}
+            prefix={<ClockCircleFilled style={{ color: '#2563eb' }} />}
             title="Đã chờ"
             value={Math.round(elapsedMs / 1000)}
             suffix="giây"
@@ -114,7 +114,7 @@ export default function DepositSuccessPage() {
       title="Đã nhận tiền cọc thành công"
       subTitle={(
         <>
-          <CrownFilled style={{ color: '#f59e0b', marginRight: 6 }} />
+          <CrownFilled style={{ color: '#2563eb', marginRight: 6 }} />
           Xe <strong>{deposit?.carTitle || '…'}</strong> đã được giữ cho bạn.
           Showroom sẽ liên hệ trong vòng 24 giờ để hẹn hoàn tất phần còn lại.
         </>

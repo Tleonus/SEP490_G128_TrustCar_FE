@@ -50,7 +50,7 @@ export function wordmarkTexture() {
     g.fillStyle = '#f2f2f2'
     g.font = '700 118px "Inter", "Segoe UI", Arial, sans-serif'
     g.fillText('TRUST CAR', w / 2, 128)
-    g.fillStyle = '#c9a227'
+    g.fillStyle = '#1d4ed8'
     g.font = 'italic 700 46px "Inter", "Segoe UI", Arial, sans-serif'
     g.fillText('XE LÀ PHẢI CHẤT', w / 2, 210)
   })
@@ -101,7 +101,7 @@ export function ledTexture(logo) {
     bg.addColorStop(1, '#1b2b44')
     g.fillStyle = bg
     g.fillRect(0, 0, w, h)
-    g.strokeStyle = 'rgba(201, 162, 39, 0.35)'
+    g.strokeStyle = 'rgba(29, 78, 216, 0.35)'
     g.lineWidth = 2
     for (let i = 0; i < 6; i++) {
       g.beginPath()
@@ -120,7 +120,7 @@ export function ledTexture(logo) {
     g.fillStyle = '#ffffff'
     g.font = '800 88px "Inter", "Segoe UI", Arial, sans-serif'
     g.fillText('TRUST CAR', x, h * 0.42, maxW)
-    g.fillStyle = '#d9b84a'
+    g.fillStyle = '#60a5fa'
     g.font = 'italic 700 38px "Inter", "Segoe UI", Arial, sans-serif'
     g.fillText('XE LÀ PHẢI CHẤT', x, h * 0.53, maxW)
     g.fillStyle = 'rgba(255, 255, 255, 0.8)'
@@ -138,7 +138,7 @@ export function studioWordTexture() {
     g.fillStyle = '#f2f2f2'
     g.font = '800 96px "Inter", "Segoe UI", Arial, sans-serif'
     g.fillText('TRUST CAR', w / 2, 110, w * 0.9)
-    g.fillStyle = '#d9b84a'
+    g.fillStyle = '#60a5fa'
     g.font = '600 44px "Inter", "Segoe UI", Arial, sans-serif'
     g.fillText('P A I N T   S T U D I O', w / 2, 196, w * 0.9)
   })

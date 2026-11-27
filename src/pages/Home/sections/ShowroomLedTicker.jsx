@@ -1,97 +1,63 @@
 import {
-  ThunderboltFilled,
   CheckCircleFilled,
+  SafetyCertificateFilled,
   CarFilled,
-  StarFilled,
+  ThunderboltFilled,
   CrownFilled,
 } from '@ant-design/icons'
-import { useAuthStore } from '../../../store/useAuthStore'
 import styles from './ShowroomLedTicker.module.css'
 
-const BASE_LED_ITEMS = [
+const SLOGAN_ITEMS = [
+  {
+    icon: <CrownFilled />,
+    accent: 'TRUSTCAR CPO',
+    slogan: 'Xe là phải chất — Minh bạch từng km, rõ ràng từng lịch sử',
+  },
+  {
+    icon: <SafetyCertificateFilled />,
+    accent: '150+ HẠNG MỤC',
+    slogan: 'Kiểm định chuẩn hãng trước khi lên sàn trưng bày',
+  },
   {
     icon: <CheckCircleFilled />,
-    tag: '3 Cam kết',
-    text: 'Không đâm đụng khung gầm · Không thủy kích ngập nước · Không tua ODO',
+    accent: '3 CAM KẾT VÀNG',
+    slogan: 'Không đâm đụng khung gầm · Không thủy kích · Không tua ODO',
   },
   {
     icon: <ThunderboltFilled />,
-    tag: 'FINANCE 70%',
-    text: 'Hỗ trợ trả góp ngân hàng lên tới 70% giá trị xe · Duyệt hồ sơ 24h',
+    accent: 'TÀI CHÍNH 70%',
+    slogan: 'Hỗ trợ trả góp ngân hàng linh hoạt · Duyệt hồ sơ trong 24h',
   },
   {
     icon: <CarFilled />,
-    tag: 'TEST DRIVE VIP',
-    text: 'Trải nghiệm & Đặt lịch lái thử miễn phí trực tiếp tại Showroom TrustCar',
-  },
-  {
-    icon: <StarFilled />,
-    tag: 'QR HOLOGRAM CPO',
-    text: 'Mỗi xe đều có Chứng nhận CPO điện tử & Mã QR tra cứu lịch sử minh bạch',
+    accent: 'LÁI THỬ VIP',
+    slogan: 'Trải nghiệm thực tế & kiểm tra xe cùng chuyên viên tại Showroom',
   },
 ]
 
 export default function ShowroomLedTicker() {
-  const user = useAuthStore((state) => state.user)
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
-
-  const userName =
-    isAuthenticated && user
-      ? (
-          user.fullName ||
-          user.full_name ||
-          user.name ||
-          user.username ||
-          user.email?.split('@')[0] ||
-          ''
-        ).trim()
-      : ''
-
-  const greetingTarget = userName || 'Quý khách'
-
-  const ledItems = [
-    {
-      isGreetingBadge: true,
-      icon: <CrownFilled />,
-      badgeText: `Kính chào ${greetingTarget}`,
-      tag: 'WELCOME',
-      text: `Kính chào ${greetingTarget} · Chào mừng Quý khách đến với Showroom TrustCar — Chúc Quý khách chọn được mẫu xe ưng ý!`,
-    },
-    ...BASE_LED_ITEMS,
-  ]
-  const marqueeList = [...ledItems, ...ledItems]
+  const trackItems = [...SLOGAN_ITEMS, ...SLOGAN_ITEMS]
 
   return (
-    <div className={styles.ledBar} role="region" aria-label="Bảng điện tử LED Showroom TrustCar">
-      {/* Dải đèn LED chạy viền trên & viền dưới */}
-      <div className={styles.ledStripTop} aria-hidden="true" />
-      <div className={styles.hologramGrid} aria-hidden="true" />
-
-      <div className={styles.inner}>
-        {/* Toàn bộ dòng chữ và huy hiệu chào mừng đều chạy liên tục từ phải qua trái */}
-        <div className={styles.marqueeViewport}>
-          <div className={styles.marqueeTrack}>
-            {marqueeList.map((item, idx) => (
-              <div key={`${item.tag}-${idx}`} className={styles.tickerItem}>
-                {item.isGreetingBadge && (
-                  <span className={styles.statusBadge}>
-                    <span className={styles.pulseDot} aria-hidden="true" />
-                    <span className={styles.statusText}>{item.badgeText}</span>
-                  </span>
-                )}
-                <span className={styles.itemIcon}>{item.icon}</span>
-                <span className={styles.itemTag}>{item.tag}</span>
-                <span className={styles.itemText}>{item.text}</span>
-                <span className={styles.separator} aria-hidden="true">
-                  ◆
+    <div className={styles.ribbon} role="region" aria-label="Thông điệp và cam kết TrustCar">
+      <div className={styles.marqueeViewport}>
+        <div className={styles.marqueeTrack}>
+          {trackItems.map((item, idx) => (
+            <div key={`${item.accent}-${idx}`} className={styles.tickerItem}>
+              {idx % SLOGAN_ITEMS.length === 0 && (
+                <span className={styles.standardBadge}>
+                  <span className={styles.liveDot} aria-hidden="true" />
+                  <span>TRUSTCAR STANDARD</span>
                 </span>
-              </div>
-            ))}
-          </div>
+              )}
+              <span className={styles.itemIcon} aria-hidden="true">{item.icon}</span>
+              <strong className={styles.itemAccent}>{item.accent}</strong>
+              <span className={styles.itemSlogan}>{item.slogan}</span>
+              <span className={styles.diamond} aria-hidden="true">◆</span>
+            </div>
+          ))}
         </div>
       </div>
-
-      <div className={styles.ledStripBottom} aria-hidden="true" />
     </div>
   )
 }

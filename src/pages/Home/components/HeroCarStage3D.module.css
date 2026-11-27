@@ -1,0 +1,176 @@
+.stageWrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 360px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  touch-action: pan-y;
+}
+
+.canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: grab;
+  opacity: 0;
+  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.canvas:active {
+  cursor: grabbing;
+}
+
+.canvasVisible {
+  opacity: 1;
+}
+
+.previewFallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  padding: 20px;
+}
+
+.previewImg {
+  width: 82%;
+  max-height: 82%;
+  object-fit: contain;
+  border-radius: 18px;
+  opacity: 0.85;
+  filter: drop-shadow(0 20px 36px rgba(8, 18, 36, 0.25));
+}
+
+.loadingPill {
+  position: absolute;
+  bottom: 58px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.stageLight .loadingPill {
+  background: rgba(255, 255, 255, 0.9);
+  color: #0b1f3a;
+  border: 1px solid rgba(11, 31, 58, 0.12);
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+}
+
+.stageDark .loadingPill {
+  background: rgba(11, 24, 46, 0.82);
+  color: #93c5fd;
+  border: 1px solid rgba(147, 197, 253, 0.28);
+}
+
+.loadingSpinner {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  animation: spin3d 0.8s linear infinite;
+}
+
+@keyframes spin3d {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* HUD điều khiển xoay 360° */
+.stageHud {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 6px 5px 13px;
+  border-radius: 999px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 6;
+  transition: background-color 0.35s ease, border-color 0.35s ease;
+}
+
+.stageLight .stageHud {
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(11, 31, 58, 0.12);
+  color: #1e293b;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.07);
+}
+
+.stageDark .stageHud {
+  background: rgba(9, 20, 38, 0.72);
+  border: 1px solid rgba(147, 197, 253, 0.24);
+  color: #e2e8f0;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
+}
+
+.dragHint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.spinBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 28px;
+  padding: 0 11px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.2s ease;
+}
+
+.stageLight .spinBtn {
+  background: #0b1f3a;
+  color: #ffffff;
+}
+
+.stageLight .spinBtn:hover {
+  background: #16355c;
+}
+
+.stageDark .spinBtn {
+  background: rgba(147, 197, 253, 0.16);
+  border-color: rgba(147, 197, 253, 0.35);
+  color: #93c5fd;
+}
+
+.stageDark .spinBtn:hover {
+  background: rgba(147, 197, 253, 0.26);
+}
+
+.spinBtn:active {
+  transform: scale(0.95);
+}
+
+@media (max-width: 768px) {
+  .stageWrap {
+    min-height: 290px;
+  }
+}

@@ -4,7 +4,7 @@ import { RATING_MAX } from '../constants/feedbackConstants'
 
 export const PREVIEW_MAX = 160
 
-const TONES = { Nóng: 'volcano', Ấm: 'gold', Lạnh: 'blue' }
+const TONES = { Nóng: 'volcano', Ấm: 'blue', Lạnh: 'blue' }
 
 /** @ears REQ-F08 Màu thẻ mức quan tâm (luôn kèm chữ ở nơi hiển thị); giá trị lạ → màu mặc định. */
 export function interestTone(label) {
