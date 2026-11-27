@@ -16,5 +16,7 @@ export const ADMIN_PATHS = {
   userManagement: '/admin/nguoi-dung',
   // KAN-96: dịch vụ showroom (CRUD + xem lịch)
   services: '/admin/dich-vu',
+  // Lãi suất các ngân hàng cho trang tính trả góp (chỉ ADMIN)
+  loanSettings: '/admin/lai-suat-tra-gop',
 }
 

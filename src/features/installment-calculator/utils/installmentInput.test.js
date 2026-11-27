@@ -6,7 +6,9 @@ describe('validateInput (AC-F04)', () => {
   it('giá trị mặc định hợp lệ', () => {
     const result = validateInput(DEFAULTS)
     expect(result.ok).toBe(true)
-    expect(result.value).toEqual(DEFAULTS)
+    const { downMode, ...expected } = DEFAULTS // cách nhập không nằm trong kết quả đã kiểm
+    expect(downMode).toBe('AMOUNT')
+    expect(result.value).toEqual(expected)
   })
 
   it.each([
@@ -80,7 +82,9 @@ describe('parseQueryParams / initialInput mở rộng (KAN-62 REQ-F08)', () => {
   it('đọc đủ giá, trả trước, thời hạn, lãi', () => {
     const search = '?price=800000000&down=40&term=36&rate=8.5'
     expect(parseQueryParams(search)).toEqual({ price: 800_000_000, downPercent: 40, termMonths: 36, ratePercent: 8.5 })
-    expect(initialInput(search)).toEqual({ ...DEFAULTS, price: 800_000_000, downPercent: 40, termMonths: 36, ratePercent: 8.5 })
+    // có ?down= (từ khối ở trang chi tiết xe) → giữ cách nhập theo %
+    expect(initialInput(search)).toEqual({ ...DEFAULTS, price: 800_000_000, downPercent: 40, termMonths: 36, ratePercent: 8.5, downMode: 'PERCENT' })
+    expect(initialInput('?price=800000000').downMode).toBe('AMOUNT')
   })
 
   it.each([
