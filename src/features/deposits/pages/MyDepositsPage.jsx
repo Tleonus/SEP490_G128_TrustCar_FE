@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom'
 import { Button, Empty, Pagination, Popconfirm, Segmented, message } from 'antd'
 import { ReloadOutlined } from '@ant-design/icons'
 import { LoadingState, ErrorState } from '../../../components/common/StateBlock'
-import { cancelDeposit, fetchMyDeposits } from '../api/depositApi'
-import { DEPOSIT_PATHS, DEPOSIT_STATUS } from '../constants/depositConstants'
+import { cancelDeposit, createVnpayPaymentUrl, fetchMyDeposits } from '../api/depositApi'
+import { DEPOSIT_PATHS, DEPOSIT_STATUS, PAYMENT_PROVIDER, PAYMENT_STATUS } from '../constants/depositConstants'
+import useVnpayPolicy from '../hooks/useVnpayPolicy'
 import { depositErrorMessage } from '../utils/depositErrors'
 import { formatDateTime, formatVnd } from '../utils/depositFormat'
 import { DepositStatusBadge, PaymentStatusBadge } from '../components/DepositStatusBadge'
@@ -30,6 +31,8 @@ export default function MyDepositsPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [busyId, setBusyId] = useState(null)
+  const [payingId, setPayingId] = useState(null)
+  const vnpay = useVnpayPolicy()
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -63,6 +66,22 @@ export default function MyDepositsPage() {
     }
   }
 
+  /** KAN-99: mở lại cổng VNPay cho lượt cọc chưa trả (khách đóng tab giữa chừng). */
+  async function handlePayVnpay(depositId) {
+    setPayingId(depositId)
+    try {
+      const data = await createVnpayPaymentUrl(depositId)
+      if (!data?.paymentUrl) throw new Error('Thiếu paymentUrl')
+      window.location.assign(data.paymentUrl)
+      return
+    } catch (err) {
+      message.error(depositErrorMessage(err, 'Không tạo được liên kết thanh toán VNPay.'))
+    } finally {
+      setPayingId(null)
+      load()
+    }
+  }
+
   return (
     <div className="container">
       <div className={styles.page}>
@@ -89,6 +108,9 @@ export default function MyDepositsPage() {
                 <strong>{d.carTitle || d.carVehicleCode}</strong>
                 <span className={styles.muted}>Mã đặt cọc: <b>{d.depositCode}</b> · Mã xe: {d.carVehicleCode || '—'}</span>
                 <span>Tiền cọc: <b>{formatVnd(d.depositAmount)}</b> · Giá xe lúc đặt: {formatVnd(d.carPrice)}</span>
+                <span className={styles.muted}>
+                  Phương thức: {d.paymentProvider === PAYMENT_PROVIDER.VNPAY ? 'VNPay' : 'Chuyển khoản / tại showroom'}
+                </span>
                 <span className={styles.muted}>Ngày đặt cọc: {formatDateTime(d.createdAt)} · Hạn giữ xe: {formatDateTime(d.expiresAt)}</span>
                 {d.paidAt && <span className={styles.muted}>Xác nhận nhận cọc: {formatDateTime(d.paidAt)}</span>}
                 {d.completedAt && <span className={styles.muted}>Hoàn tất thanh toán: {formatDateTime(d.completedAt)}</span>}
@@ -99,6 +121,11 @@ export default function MyDepositsPage() {
               <div className={styles.historyActions}>
                 <DepositStatusBadge status={d.status} />
                 <PaymentStatusBadge status={d.paymentStatus} />
+                {vnpay.enabled && d.status === DEPOSIT_STATUS.PENDING_PAYMENT && d.paymentStatus === PAYMENT_STATUS.UNPAID && d.holdActive && (
+                  <Button size="small" type="primary" loading={payingId === d.id} onClick={() => handlePayVnpay(d.id)}>
+                    Thanh toán VNPay
+                  </Button>
+                )}
                 {d.holdActive && (
                   <Link to={DEPOSIT_PATHS.carDeposit(d.carVehicleCode || d.carId)}>
                     <Button size="small">Xem xe đang giữ</Button>

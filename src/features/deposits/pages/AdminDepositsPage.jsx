@@ -9,7 +9,7 @@ import {
   cancelDeposit, completeDeposit, confirmDepositPayment, fetchDeposit, fetchDepositsForStaff, refundDeposit,
 } from '../api/depositApi'
 import {
-  ACTIVE_DEPOSIT_STATUSES, DEPOSIT_STATUS, DEPOSIT_STATUS_META, PAYMENT_STATUS, PAYMENT_STATUS_META, STAFF_ROLES,
+  ACTIVE_DEPOSIT_STATUSES, DEPOSIT_STATUS, DEPOSIT_STATUS_META, PAYMENT_PROVIDER, PAYMENT_STATUS, PAYMENT_STATUS_META, STAFF_ROLES,
 } from '../constants/depositConstants'
 import { depositErrorMessage } from '../utils/depositErrors'
 import { formatDateTime, formatVnd } from '../utils/depositFormat'
@@ -250,6 +250,7 @@ export default function AdminDepositsPage() {
               <dt>Khách hàng</dt><dd>{detail.customer ? `${detail.customer.fullName} · ${detail.customer.phone}${detail.customer.email ? ` · ${detail.customer.email}` : ''}` : '—'}</dd>
               <dt>Giá xe lúc đặt</dt><dd>{formatVnd(detail.carPrice)}</dd>
               <dt>Tiền cọc</dt><dd>{formatVnd(detail.depositAmount)}</dd>
+              <dt>Phương thức</dt><dd>{detail.paymentProvider === PAYMENT_PROVIDER.VNPAY ? 'VNPay' : 'Chuyển khoản / tại showroom'}</dd>
               <dt>Còn lại sau cọc</dt><dd>{formatVnd(detail.remainingAmount)}</dd>
               <dt>Tạo lúc</dt><dd>{formatDateTime(detail.createdAt)}</dd>
               <dt>Bắt đầu giữ xe</dt><dd>{formatDateTime(detail.reservedAt)}</dd>
