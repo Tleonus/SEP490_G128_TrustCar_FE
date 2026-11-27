@@ -8,7 +8,7 @@ import {
 } from '@ant-design/icons'
 import usePaymentPolling from '../hooks/usePaymentPolling'
 import { formatVnd } from '../utils/depositFormat'
-import { DEPOSIT_STATUS } from '../constants/depositConstants'
+import { DEPOSIT_PATHS, DEPOSIT_STATUS } from '../constants/depositConstants'
 
 /**
  * KAN-99 — trang khách thấy sau khi BE redirect từ VNPay return URL. BE pass
@@ -124,7 +124,7 @@ export default function DepositSuccessPage() {
           Số tiền cọc: <strong>{formatVnd(deposit?.depositAmount || 0)}</strong> —
           Mã giao dịch VNPay: <strong>{deposit?.paymentReference || vnpTransactionNo}</strong>
         </div>,
-        <Button key="view" type="primary" onClick={() => navigate('/xe-da-luu')}>
+        <Button key="view" type="primary" onClick={() => navigate(DEPOSIT_PATHS.myDeposits)}>
           Xem các lượt giữ xe của tôi
         </Button>,
         <Button key="home" onClick={() => navigate('/')}>Về trang chủ</Button>,

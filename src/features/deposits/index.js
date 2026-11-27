@@ -8,4 +8,5 @@ export { default as DepositConfirmModal } from './components/DepositConfirmModal
 export { default as CountdownTimer } from './components/CountdownTimer'
 export { CarStateBadge, DepositStatusBadge } from './components/DepositStatusBadge'
 export { useCarHoldStatus } from './hooks/useCarHoldStatus'
+export { default as useVnpayPolicy } from './hooks/useVnpayPolicy'
 export { DEPOSIT_PATHS } from './constants/depositConstants'
